@@ -15,7 +15,8 @@ public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
     FLOOR_INTAKING(new LoggedTunableNumber("Feeder/FloorIntakingVoltage", 3.0)),
     BACKSTOPPING(new LoggedTunableNumber("Feeder/BackstoppingVoltage", -3.0)),
     SHOOTING(new LoggedTunableNumber("Feeder/Shooting", 3.0)),
-    EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -3.0));
+    EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -3.0)),
+    EJECTALIGN(new LoggedTunableNumber("Feeder/EjectingAlignVoltage", -1.0));
 
     private final DoubleSupplier voltageSupplier;
   }

@@ -30,7 +30,7 @@ public class Superstructure extends SubsystemBase {
     INTAKE,
     STATION_INTAKE,
     REVERSE_INTAKE,
-    IDLE
+    IDLE,
   }
 
   public enum GamepieceState {

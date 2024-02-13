@@ -1,5 +1,6 @@
 package frc.robot.subsystems.rollers;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.intake.Intake;
@@ -13,9 +14,9 @@ public class Rollers extends SubsystemBase {
   private final Feeder feeder1;
   private final Feeder feeder2;
   private final Intake intake;
-  // private final RollersSensorsIO sensorsIO;
 
-  // private final RollersSensorsIOInputsAutoLogged inputs = new RollersSensorsIOInputsAutoLogged();
+  // Beambreak on DIO 2
+  DigitalInput beambreak = new DigitalInput(8);
 
   public enum Goal {
     IDLE,
@@ -29,25 +30,31 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // sensorsIO.updateInputs(inputs);
-    // Logger.processInputs("RollersSensors", inputs);
 
     switch (goal) {
       case IDLE -> {
         feeder1.setGoal(Feeder.Goal.IDLE);
         feeder2.setGoal(Feeder.Goal.IDLE);
-
         intake.setGoal(Intake.Goal.IDLE);
       }
       case FLOOR_INTAKE -> {
-        feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
-        feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
+        if (beambreak.get()) {
+          feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
+          feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
+          intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+        } else {
+          goal = Goal.IDLE;
+          // feeder1.setGoal(Feeder.Goal.IDLE);
+          // feeder2.setGoal(Feeder.Goal.IDLE);
+          // intake.setGoal(Intake.Goal.IDLE);
 
-        intake.setGoal(Intake.Goal.FLOOR_INTAKING);
-        // if (inputs.shooterStaged) {
-        //   goal = Goal.IDLE;
-        // }
+          // if (beambreak.get()) {
+          //   goal = Goal.IDLE;
+          // }
+        }
+        break;
       }
+
       case STATION_INTAKE -> {}
       case FEED_SHOOTER -> {
         intake.setGoal(Intake.Goal.SHOOTING);

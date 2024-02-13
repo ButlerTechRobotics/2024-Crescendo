@@ -135,7 +135,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         // arm = new Arm(new ArmIOSparkFlex());
         superstructure = new Superstructure(shooter);
-        rollers = new Rollers(feeder1, feeder2, intake /*, new RollersSensorsIOReal()*/);
+        rollers = new Rollers(feeder1, feeder2, intake);
 
         break;
 
@@ -205,7 +205,7 @@ public class RobotContainer {
     }
 
     // if (rollers == null) {
-    //   rollers = new Rollers(feeder, intake /*, new RollersSensorsIO() {}*/);
+    //   rollers = new Rollers(feeder, intake);
     // }
     // if (arm == null) {
     //   arm = new Arm(new ArmIO() {});
@@ -426,7 +426,7 @@ public class RobotContainer {
 
     operatorController.b().whileTrue(new PositionArmPID(armPID, 100.0));
 
-    operatorController.a().whileTrue(new PositionArmPID(armPID, 4.13));
+    operatorController.a().whileTrue(new PositionArmPID(armPID, 0.0));
 
     // controller.rightBumper().whileTrue(new PositionClimbPID(climberPID, 100));
 
