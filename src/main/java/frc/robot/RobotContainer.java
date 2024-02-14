@@ -316,22 +316,19 @@ public class RobotContainer {
             operatorController
                     .leftTrigger()
                     .whileTrue(
-                            Commands.runOnce(
-                                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
-                                    superstructure)
-                                    .andThen(
-                                            Commands.waitSeconds(0.25),
-                                            Commands.run(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers)
-                                                    .until(() -> !rollers.getBeamBreak()))
-                                    .andThen(
-                                            Commands.run(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN))
-                                                    .until(() -> rollers.getBeamBreak())
-                                                    .finallyDo(
-                                                            () -> {
-                                                                rollers.setGoal(Rollers.Goal.IDLE);
-                                                                superstructure.setGoal(
-                                                                        Superstructure.SystemState.IDLE);
-                                                            })));
+                            Commands.sequence(
+                                    Commands.runOnce(() -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
+                                            superstructure),
+                                    Commands.waitSeconds(0.25),
+                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers)
+                                            .until(() -> !rollers.getBeamBreak()),
+                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN))
+                                            .until(() -> rollers.getBeamBreak()),
+                                    Commands.runOnce(() -> {
+                                        rollers.setGoal(Rollers.Goal.IDLE);
+                                        superstructure.setGoal(
+                                                Superstructure.SystemState.IDLE);
+                                    })));
 
             operatorController
                     .leftBumper()
