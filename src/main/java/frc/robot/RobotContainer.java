@@ -375,12 +375,7 @@ public class RobotContainer {
                 .rightBumper()
                 .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
 
-        // ================================================
-        // DRIVER CONTROLLER - A
-        // PATHFIND TO SELECTED DRIVE MODE
-        // ================================================
-        // driverController.a().whileTrue(new
-        // PathFinderAndFollow(driveMode.getDriveModeType()));
+
 
         // ================================================
         // DRIVER CONTROLLER - LEFT BUMPER
@@ -393,6 +388,13 @@ public class RobotContainer {
                                 DriveCommands::disableDriveHeading));
 
         // ================================================
+        // DRIVER CONTROLLER - A
+        // PATHFIND TO SELECTED DRIVE MODE
+        // ================================================
+        // driverController.a().whileTrue(new
+        // PathFinderAndFollow(driveMode.getDriveModeType()));
+
+        // ================================================
         // OPERATOR CONTROLLER - LEFT TRIGGER
         // AIM SHOOTER AT SPEAKER
         // ================================================
@@ -401,7 +403,9 @@ public class RobotContainer {
                 .whileTrue(
                         Commands.startEnd(
                                 () -> DriveCommands.setSpeakerMode(drive::getPose),
-                                DriveCommands::disableDriveHeading).alongWith());
+                                DriveCommands::disableDriveHeading)
+                                .alongWith(new MultiDistanceArm(drive::getPose,
+                                        FieldConstants.Speaker.centerSpeakerOpening, arm)));
 
         // ================================================
         // DRIVER CONTROLLER - START
@@ -447,10 +451,7 @@ public class RobotContainer {
         // DRIVER CONTROLLER - LEFT BUMPER
         // SPIN UP SHOOTER
         // ================================================
-
-        driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20)); //Climb Up
-
-        driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0)); //Climb Down
+        operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
 
         operatorController.povUp().whileTrue(new PositionArmPID(armPID, 200.00)); // "Sub shoot"
 
