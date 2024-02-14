@@ -308,7 +308,7 @@ public class RobotContainer {
         // ================================================
         driverController
                 .leftBumper()
-                .whileTrue( // Yousef and Toby Fixed This. :)
+                .whileTrue( // Tyler Fixed This. :)
                         Commands.sequence(
                                 Commands.runOnce(
                                         () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
@@ -333,7 +333,7 @@ public class RobotContainer {
         // AMP SCORE
         operatorController
                 .leftBumper()
-                .whileTrue( // Yousef and Toby Fixed This. :)
+                .whileTrue( // Tyler Fixed This. :)
                         Commands.sequence(
                                 Commands.runOnce(
                                         () -> superstructure.setGoal(Superstructure.SystemState.AMP_SHOOTER),
@@ -397,12 +397,7 @@ public class RobotContainer {
                 .whileTrue(
                         Commands.startEnd(
                                 () -> DriveCommands.setSpeakerMode(drive::getPose),
-                                DriveCommands::disableDriveHeading));
-
-        operatorController
-                .leftTrigger()
-                .whileTrue(
-                        new MultiDistanceArm(drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm));
+                                DriveCommands::disableDriveHeading).alongWith());
 
         // ================================================
         // DRIVER CONTROLLER - START
