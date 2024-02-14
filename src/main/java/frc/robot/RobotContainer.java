@@ -371,12 +371,7 @@ public class RobotContainer {
                 .rightBumper()
                 .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
 
-        // ================================================
-        // DRIVER CONTROLLER - A
-        // PATHFIND TO SELECTED DRIVE MODE
-        // ================================================
-        // driverController.a().whileTrue(new
-        // PathFinderAndFollow(driveMode.getDriveModeType()));
+
 
         // ================================================
         // DRIVER CONTROLLER - LEFT BUMPER
@@ -387,6 +382,13 @@ public class RobotContainer {
                 .whileTrue(
                         Commands.startEnd(DriveCommands::setAmpMode,
                                 DriveCommands::disableDriveHeading));
+
+        // ================================================
+        // DRIVER CONTROLLER - A
+        // PATHFIND TO SELECTED DRIVE MODE
+        // ================================================
+        // driverController.a().whileTrue(new
+        // PathFinderAndFollow(driveMode.getDriveModeType()));
 
         // ================================================
         // OPERATOR CONTROLLER - LEFT TRIGGER
@@ -441,10 +443,6 @@ public class RobotContainer {
         // drive)
         // .ignoringDisable(true));
 
-        // ================================================
-        // DRIVER CONTROLLER - LEFT BUMPER
-        // SPIN UP SHOOTER
-        // ================================================
         operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
 
         operatorController.povUp().whileTrue(new PositionArmPID(armPID, 200.00)); // "Sub shoot"
