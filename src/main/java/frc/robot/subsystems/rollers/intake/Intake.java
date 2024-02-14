@@ -15,7 +15,7 @@ public class Intake extends GenericRollerSubsystem<Intake.Goal> {
     IDLE(() -> 0.0),
     FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 6.0)),
     SHOOTING(new LoggedTunableNumber("Intake/Shooting", 0.0)),
-    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -6.0));
+    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -3.0));
 
     private final DoubleSupplier voltageSupplier;
   }
