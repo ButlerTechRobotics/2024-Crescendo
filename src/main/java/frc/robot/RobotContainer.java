@@ -397,7 +397,9 @@ public class RobotContainer {
                 .whileTrue(
                         Commands.startEnd(
                                 () -> DriveCommands.setSpeakerMode(drive::getPose),
-                                DriveCommands::disableDriveHeading).alongWith());
+                                DriveCommands::disableDriveHeading)
+                                .alongWith(new MultiDistanceArm(drive::getPose,
+                                        FieldConstants.Speaker.centerSpeakerOpening, arm)));
 
         // ================================================
         // DRIVER CONTROLLER - START
