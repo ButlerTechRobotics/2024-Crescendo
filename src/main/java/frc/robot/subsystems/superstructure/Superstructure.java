@@ -3,6 +3,7 @@ package frc.robot.subsystems.superstructure;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotState;
+import frc.robot.subsystems.rollers.intake.Intake;
 // import frc.robot.subsystems.superstructure.arm.Arm;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.util.LoggedTunableNumber;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.rollers.Rollers;
 
 @RequiredArgsConstructor
 public class Superstructure extends SubsystemBase {
@@ -26,6 +28,7 @@ public class Superstructure extends SubsystemBase {
   public enum SystemState {
     PREPARE_SHOOT,
     SHOOT,
+    AMP_SHOOTER,
     PREPARE_INTAKE,
     INTAKE,
     STATION_INTAKE,
@@ -48,6 +51,7 @@ public class Superstructure extends SubsystemBase {
 
   // private final Arm arm;
   private final Shooter shooter;
+  private final Rollers rollers;
 
   private final Timer followThroughTimer = new Timer();
 
@@ -57,6 +61,7 @@ public class Superstructure extends SubsystemBase {
       case IDLE -> currentState = SystemState.IDLE;
       case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
       case INTAKE -> currentState = SystemState.INTAKE;
+      case AMP_SHOOTER -> currentState = SystemState.AMP_SHOOTER;
       case PREPARE_SHOOT -> currentState = SystemState.PREPARE_SHOOT;
       case SHOOT -> currentState = SystemState.SHOOT;
     }
@@ -76,6 +81,9 @@ public class Superstructure extends SubsystemBase {
       }
       case REVERSE_INTAKE -> {
         // arm.setSetpoint(Rotation2d.fromDegrees(armIntakeSetpointDegrees.get()));
+      }
+      case  AMP_SHOOTER -> {
+        rollers.setGoal(Rollers.Goal.AMP_SHOOTER);
       }
       case PREPARE_SHOOT -> {
         var aimingParams = RobotState.getInstance().getAimingParameters();
