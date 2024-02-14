@@ -28,7 +28,8 @@ public class Rollers extends SubsystemBase {
     FLOOR_INTAKE,
     EJECT_TO_FLOOR,
     FEED_SHOOTER,
-    EJECTALIGN
+    EJECTALIGN,
+    SHOOT
   }
 
   @Getter @Setter private Goal goal = Goal.IDLE;
@@ -47,6 +48,11 @@ public class Rollers extends SubsystemBase {
         feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
         feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
         intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+      }
+
+      case SHOOT -> {
+        feeder1.setGoal(Feeder.Goal.SHOOT);
+        feeder2.setGoal(Feeder.Goal.SHOOT);
       }
 
       case EJECTALIGN -> {
