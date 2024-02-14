@@ -463,10 +463,6 @@ public class RobotContainer {
         operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 50.0)); // "Amp/Note Shoot"
 
         operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
-
-        // controller.rightBumper().whileTrue(new PositionClimbPID(climberPID, 100));
-
-        // controller.rightBumper().whileFalse(new PositionClimbPID(climberPID, 0));
     }
 
     /**
