@@ -219,12 +219,12 @@ public class RobotContainer {
                         });
                 }
 
-                // if (rollers == null) {
-                // rollers = new Rollers(feeder, intake);
-                // }
-                // if (arm == null) {
-                // arm = new Arm(new ArmIO() {});
-                // }
+    // if (rollers == null) {
+    // rollers = new Rollers(feeder, intake);
+    // }
+    // if (arm == null) {
+    // arm = new Arm(new ArmIO() {});
+    // }
 
                 // Set up auto routines
                 // NamedCommands.registerCommand(
@@ -272,37 +272,29 @@ public class RobotContainer {
                                                 () -> -driverController.getLeftX(),
                                                 () -> -driverController.getRightX()));
 
-                operatorController
-                                .rightBumper()
-                                .whileTrue( // Yousef and Toby Fixed This. :)
-                                                Commands.sequence(
-                                                                Commands.runOnce(
-                                                                                () -> superstructure.setGoal(
-                                                                                                Superstructure.SystemState.PREPARE_SHOOT),
-                                                                                superstructure),
-                                                                Commands.waitUntil(operatorController.rightTrigger()),
-                                                                Commands.runOnce(
-                                                                                () -> superstructure.setGoal(
-                                                                                                Superstructure.SystemState.SHOOT),
-                                                                                superstructure),
-                                                                Commands.runOnce(
-                                                                                () -> rollers.setGoal(
-                                                                                                Rollers.Goal.SHOOT),
-                                                                                rollers),
-                                                                Commands.waitSeconds(1.0),
-                                                                Commands.runOnce(
-                                                                                () -> {
-                                                                                        shooter.setGoal(Shooter.Goal.IDLE);
-                                                                                        superstructure.setGoal(
-                                                                                                        Superstructure.SystemState.IDLE);
-                                                                                })))
-                                .onFalse(
-                                                Commands.runOnce(
-                                                                () -> {
-                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                        superstructure.setGoal(
-                                                                                        Superstructure.SystemState.IDLE);
-                                                                }));
+    operatorController
+        .rightBumper()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                  superstructure.setGoal(Superstructure.SystemState.IDLE);
+                }));
 
                 // +++++++++++++++++++++THIS_IS_THE_CODE_FOR_THE_MULTIPLE_DISTANCE_SHOT++++++++++++++++++++++++++++
                 // driverController
@@ -311,92 +303,51 @@ public class RobotContainer {
                 // new MultiDistanceShot(
                 // drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, shooter));
 
-                // ================================================
-                // DRIVER CONTROLLER - LEFT BUMPER
-                // RUN INTAKE IN
-                // ================================================
-                driverController
-                                .leftBumper()
-                                .whileTrue( // Yousef and Toby Fixed This. :)
-                                                Commands.sequence(
-                                                                Commands.runOnce(
-                                                                                () -> superstructure.setGoal(
-                                                                                                Superstructure.SystemState.INTAKE),
-                                                                                superstructure),
-                                                                Commands.waitSeconds(0.25),
-                                                                Commands.runOnce(() -> rollers
-                                                                                .setGoal(Rollers.Goal.FLOOR_INTAKE),
-                                                                                rollers),
-                                                                Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                                                                Commands.runOnce(() -> rollers
-                                                                                .setGoal(Rollers.Goal.EJECTALIGN)),
-                                                                Commands.waitUntil(() -> rollers.getBeamBreak()),
-                                                                Commands.runOnce(
-                                                                                () -> {
-                                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                                        superstructure.setGoal(
-                                                                                                        Superstructure.SystemState.IDLE);
-                                                                                })))
-                                .onFalse(
-                                                Commands.runOnce(
-                                                                () -> {
-                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                        superstructure.setGoal(
-                                                                                        Superstructure.SystemState.IDLE);
-                                                                }));
-
-                operatorController
-                                .leftBumper()
-                                .whileTrue( // Yousef and Toby Fixed This. :)
-                                                Commands.sequence(
-                                                                Commands.runOnce(
-                                                                                () -> superstructure.setGoal(
-                                                                                                Superstructure.SystemState.INTAKE),
-                                                                                superstructure),
-                                                                Commands.waitSeconds(0.25),
-                                                                Commands.runOnce(() -> rollers
-                                                                                .setGoal(Rollers.Goal.FLOOR_INTAKE),
-                                                                                rollers),
-                                                                Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                                                                Commands.runOnce(() -> rollers
-                                                                                .setGoal(Rollers.Goal.EJECTALIGN)),
-                                                                Commands.waitUntil(() -> rollers.getBeamBreak()),
-                                                                Commands.runOnce(
-                                                                                () -> {
-                                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                                        superstructure.setGoal(
-                                                                                                        Superstructure.SystemState.IDLE);
-                                                                                })))
-                                .onFalse(
-                                                Commands.runOnce(
-                                                                () -> {
-                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                        superstructure.setGoal(
-                                                                                        Superstructure.SystemState.IDLE);
-                                                                }));
-                // ================================================
-                // DRIVER CONTROLLER - LEFT TRIGGER
-                // RUN INTAKE OUT
-                // ================================================
-                driverController
-                                .leftTrigger()
-                                .whileTrue(
-                                                Commands.runOnce(
-                                                                () -> superstructure.setGoal(
-                                                                                Superstructure.SystemState.INTAKE),
-                                                                superstructure)
-                                                                .andThen(
-                                                                                Commands.waitSeconds(0.25),
-                                                                                Commands.runOnce(() -> rollers.setGoal(
-                                                                                                Rollers.Goal.EJECT_TO_FLOOR),
-                                                                                                rollers),
-                                                                                Commands.idle())
-                                                                .finallyDo(
-                                                                                () -> {
-                                                                                        rollers.setGoal(Rollers.Goal.IDLE);
-                                                                                        superstructure.setGoal(
-                                                                                                        Superstructure.SystemState.IDLE);
-                                                                                }));
+    // ================================================
+    // DRIVER CONTROLLER - LEFT BUMPER
+    // RUN INTAKE IN
+    // ================================================
+    driverController
+        .leftBumper()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
+                    superstructure),
+                Commands.waitSeconds(0.25),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+                Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                Commands.waitUntil(() -> rollers.getBeamBreak()),
+                Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                  superstructure.setGoal(Superstructure.SystemState.IDLE);
+                }));
+    // ================================================
+    // DRIVER CONTROLLER - LEFT TRIGGER
+    // RUN INTAKE OUT
+    // ================================================
+    driverController
+        .leftTrigger()
+        .whileTrue(
+            Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE), superstructure)
+                .andThen(
+                    Commands.waitSeconds(0.25),
+                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers),
+                    Commands.idle())
+                .finallyDo(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    }));
 
                 // ================================================
                 // DRIVER CONTROLLER - LEFT BUMPER
@@ -423,22 +374,21 @@ public class RobotContainer {
                                                 Commands.startEnd(DriveCommands::setAmpMode,
                                                                 DriveCommands::disableDriveHeading));
 
-                // ================================================
-                // OPERATOR CONTROLLER - LEFT TRIGGER
-                // AIM SPEAKER A SPEAKER
-                // ================================================
-                operatorController
-                                .leftTrigger()
-                                .whileTrue(
-                                                Commands.startEnd(
-                                                                () -> DriveCommands.setSpeakerMode(drive::getPose),
-                                                                DriveCommands::disableDriveHeading));
+    // ================================================
+    // OPERATOR CONTROLLER - LEFT TRIGGER
+    // AIM SPEAKER A SPEAKER
+    // ================================================
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            Commands.startEnd(
+                () -> DriveCommands.setSpeakerMode(drive::getPose),
+                DriveCommands::disableDriveHeading));
 
-                operatorController
-                                .leftTrigger()
-                                .whileTrue(
-                                                new MultiDistanceArm(drive::getPose,
-                                                                FieldConstants.Speaker.centerSpeakerOpening, arm));
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            new MultiDistanceArm(drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm));
 
                 // ================================================
                 // DRIVER CONTROLLER - START

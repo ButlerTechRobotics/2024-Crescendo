@@ -15,14 +15,15 @@ import frc.robot.Constants;
 public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
-        default -> new DrivetrainConfig(
-            Units.inchesToMeters(2.0),
-            Units.inchesToMeters(26.0),
-            Units.inchesToMeters(26.0),
-            Units.feetToMeters(12.16),
-            Units.feetToMeters(21.32),
-            7.93,
-            29.89);
+        default ->
+            new DrivetrainConfig(
+                Units.inchesToMeters(2.0),
+                Units.inchesToMeters(26.0),
+                Units.inchesToMeters(26.0),
+                Units.feetToMeters(12.16),
+                Units.feetToMeters(21.32),
+                7.93,
+                29.89);
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -63,15 +64,24 @@ public final class DriveConstants {
 
   public static ModuleConfig[] moduleConfigs =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new ModuleConfig[] {
-          new ModuleConfig(
-              1, 2, 9, Rotation2d.fromRotations(0.032).plus(Rotation2d.fromDegrees(180)), true),
-          new ModuleConfig(3, 4, 10, Rotation2d.fromRotations(-0.419), true),
-          new ModuleConfig(
-              5, 6, 11, Rotation2d.fromRotations(-0.253).plus(Rotation2d.fromDegrees(180)), true),
-          new ModuleConfig(
-              7, 8, 12, Rotation2d.fromRotations(-0.235).plus(Rotation2d.fromDegrees(180)), true)
-        };
+        case COMPBOT ->
+            new ModuleConfig[] {
+              new ModuleConfig(
+                  1, 2, 9, Rotation2d.fromRotations(0.032).plus(Rotation2d.fromDegrees(180)), true),
+              new ModuleConfig(3, 4, 10, Rotation2d.fromRotations(-0.419), true),
+              new ModuleConfig(
+                  5,
+                  6,
+                  11,
+                  Rotation2d.fromRotations(-0.253).plus(Rotation2d.fromDegrees(180)),
+                  true),
+              new ModuleConfig(
+                  7,
+                  8,
+                  12,
+                  Rotation2d.fromRotations(-0.235).plus(Rotation2d.fromDegrees(180)),
+                  true)
+            };
           // .plus(Rotation2d.fromDegrees(180))
         case SIMBOT -> {
           ModuleConfig[] configs = new ModuleConfig[4];
@@ -83,24 +93,26 @@ public final class DriveConstants {
 
   public static final ModuleConstants moduleConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new ModuleConstants(
-            0.1,
-            0.13,
-            0.1,
-            0.0,
-            10.0,
-            0.0,
-            Mk4iReductions.L1.reduction,
-            Mk4iReductions.TURN.reduction);
-        case SIMBOT -> new ModuleConstants(
-            0.014,
-            0.134,
-            0.1,
-            0.0,
-            10.0,
-            0.0,
-            Mk4iReductions.L1.reduction,
-            Mk4iReductions.TURN.reduction);
+        case COMPBOT ->
+            new ModuleConstants(
+                0.1,
+                0.13,
+                0.1,
+                0.0,
+                10.0,
+                0.0,
+                Mk4iReductions.L1.reduction,
+                Mk4iReductions.TURN.reduction);
+        case SIMBOT ->
+            new ModuleConstants(
+                0.014,
+                0.134,
+                0.1,
+                0.0,
+                10.0,
+                0.0,
+                Mk4iReductions.L1.reduction,
+                Mk4iReductions.TURN.reduction);
       };
 
   public static HeadingControllerConstants headingControllerConstants =
