@@ -451,7 +451,10 @@ public class RobotContainer {
         // DRIVER CONTROLLER - LEFT BUMPER
         // SPIN UP SHOOTER
         // ================================================
-        operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
+
+        driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20)); //Climb Up
+
+        driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0)); //Climb Down
 
         operatorController.povUp().whileTrue(new PositionArmPID(armPID, 200.00)); // "Sub shoot"
 
