@@ -320,15 +320,20 @@ public class RobotContainer {
                                     Commands.runOnce(() -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                                             superstructure),
                                     Commands.waitSeconds(0.25),
-                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers)
-                                            .until(() -> !rollers.getBeamBreak()),
-                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN))
-                                            .until(() -> rollers.getBeamBreak()),
+                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+                                    Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                                    Commands.run(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                                    Commands.waitUntil(() -> rollers.getBeamBreak()),
                                     Commands.runOnce(() -> {
                                         rollers.setGoal(Rollers.Goal.IDLE);
                                         superstructure.setGoal(
                                                 Superstructure.SystemState.IDLE);
-                                    })));
+                                    })))
+                    .onFalse(Commands.runOnce(() -> {
+                        rollers.setGoal(Rollers.Goal.IDLE);
+                        superstructure.setGoal(
+                                Superstructure.SystemState.IDLE);
+                    }));
 
             operatorController
                     .leftBumper()
