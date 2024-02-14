@@ -1,6 +1,7 @@
 package frc.robot.subsystems.rollers;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.intake.Intake;
@@ -18,18 +19,23 @@ public class Rollers extends SubsystemBase {
   // Beambreak on DIO 2
   DigitalInput beambreak = new DigitalInput(8);
 
+  public boolean getBeamBreak() {
+    return beambreak.get();
+  }
+
   public enum Goal {
     IDLE,
     FLOOR_INTAKE,
-    STATION_INTAKE,
     EJECT_TO_FLOOR,
-    FEED_SHOOTER
+    FEED_SHOOTER,
+    EJECTALIGN
   }
 
   @Getter @Setter private Goal goal = Goal.IDLE;
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("BeamBreak", beambreak.get());
 
     switch (goal) {
       case IDLE -> {
@@ -38,24 +44,17 @@ public class Rollers extends SubsystemBase {
         intake.setGoal(Intake.Goal.IDLE);
       }
       case FLOOR_INTAKE -> {
-        if (beambreak.get()) {
-          feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
-          feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
-          intake.setGoal(Intake.Goal.FLOOR_INTAKING);
-        } else {
-          goal = Goal.IDLE;
-          // feeder1.setGoal(Feeder.Goal.IDLE);
-          // feeder2.setGoal(Feeder.Goal.IDLE);
-          // intake.setGoal(Intake.Goal.IDLE);
-
-          // if (beambreak.get()) {
-          //   goal = Goal.IDLE;
-          // }
-        }
-        break;
+        feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
+        feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
+        intake.setGoal(Intake.Goal.FLOOR_INTAKING);
       }
 
-      case STATION_INTAKE -> {}
+      case EJECTALIGN -> {
+        feeder1.setGoal(Feeder.Goal.EJECTALIGN);
+        feeder2.setGoal(Feeder.Goal.EJECTALIGN);
+        intake.setGoal(Intake.Goal.IDLE);
+      }
+
       case FEED_SHOOTER -> {
         intake.setGoal(Intake.Goal.SHOOTING);
         feeder1.setGoal(Feeder.Goal.SHOOTING);

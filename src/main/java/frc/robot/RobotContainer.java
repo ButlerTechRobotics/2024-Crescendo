@@ -104,8 +104,8 @@ public class RobotContainer {
       new Transform3d(
           new Translation3d(-0.215, -0.215, 0.2), new Rotation3d(0, Math.toRadians(20), 225));
 
-  //   private final LoggedDashboardNumber flywheelSpeedInput =
-  //       new LoggedDashboardNumber("Flywheel Speed", 1500.0);
+  // private final LoggedDashboardNumber flywheelSpeedInput =
+  // new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -130,7 +130,7 @@ public class RobotContainer {
         // new ModuleIOTalonFX(2),
         // new ModuleIOTalonFX(3));
         // aprilTagVision =
-        //     new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
+        // new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
         // robotToCameraFront));
         intake = new Intake(new IntakeIOSparkFlex());
         // arm = new Arm(new ArmIOSparkFlex());
@@ -197,7 +197,7 @@ public class RobotContainer {
     }
 
     // if (feeder == null) {
-    //   feeder = new Feeder(new FeederIO() {});
+    // feeder = new Feeder(new FeederIO() {});
     // }
 
     if (intake == null) {
@@ -205,18 +205,19 @@ public class RobotContainer {
     }
 
     // if (rollers == null) {
-    //   rollers = new Rollers(feeder, intake);
+    // rollers = new Rollers(feeder, intake);
     // }
     // if (arm == null) {
-    //   arm = new Arm(new ArmIO() {});
+    // arm = new Arm(new ArmIO() {});
     // }
 
     // Set up auto routines
     // NamedCommands.registerCommand(
-    //     "Run Fl  ywheel",
-    //     Commands.startEnd(
-    //             () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel)
-    //         .withTimeout(5.0));
+    // "Run Fl ywheel",
+    // Commands.startEnd(
+    // () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
+    // flywheel)
+    // .withTimeout(5.0));
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
@@ -259,29 +260,30 @@ public class RobotContainer {
           .rightBumper()
           .onTrue(
               Commands.runOnce(
-                  () -> superstructure.setGoalState(Superstructure.SystemState.PREPARE_SHOOT)))
-          .onFalse(
-              Commands.runOnce(() -> superstructure.setGoalState(Superstructure.SystemState.IDLE)));
+                  () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT)))
+          .onFalse(Commands.runOnce(() -> superstructure.setGoal(Superstructure.SystemState.IDLE)));
 
-      //   Trigger readyToShootTrigger =
-      //       new Trigger(() -> drive.isAutoAimGoalCompleted() &&
+      // Trigger readyToShootTrigger =
+      // new Trigger(() -> drive.isAutoAimGoalCompleted() &&
       // superstructure.atShootingSetpoint());
-      //   readyToShootTrigger
-      //       .whileTrue(
-      //           Commands.run(
-      //               () ->
-      // operatorController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 1.0)))
-      //       .whileFalse(
-      //           Commands.run(
-      //               () ->
-      // operatorController.getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0.0)));
+      // readyToShootTrigger
+      // .whileTrue(
+      // Commands.run(
+      // () ->
+      // operatorController.getHID().setRumble(GenericHID.RumbleType.kBothRumble,
+      // 1.0)))
+      // .whileFalse(
+      // Commands.run(
+      // () ->
+      // operatorController.getHID().setRumble(GenericHID.RumbleType.kBothRumble,
+      // 0.0)));
       operatorController
           .rightTrigger()
-          //   .and(readyToShootTrigger)
+          // .and(readyToShootTrigger)
           .onTrue(
               Commands.runOnce(
                       () -> {
-                        superstructure.setGoalState(Superstructure.SystemState.SHOOT);
+                        superstructure.setGoal(Superstructure.SystemState.SHOOT);
                         rollers.setGoal(Rollers.Goal.FEED_SHOOTER);
                       },
                       superstructure,
@@ -290,7 +292,7 @@ public class RobotContainer {
                   .andThen(
                       Commands.runOnce(
                           () -> {
-                            superstructure.setGoalState(Superstructure.SystemState.IDLE);
+                            superstructure.setGoal(Superstructure.SystemState.IDLE);
                             rollers.setGoal(Rollers.Goal.IDLE);
                           })));
 
@@ -298,23 +300,28 @@ public class RobotContainer {
           .leftTrigger()
           .whileTrue(
               Commands.runOnce(
-                      () -> superstructure.setGoalState(Superstructure.SystemState.INTAKE),
+                      () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                       superstructure)
                   .andThen(
                       Commands.waitSeconds(0.25),
                       Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                       Commands.idle())
+                  .until(() -> !rollers.getBeamBreak())
+                  .andThen(
+                      Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                      Commands.idle())
+                  .until(() -> rollers.getBeamBreak())
                   .finallyDo(
                       () -> {
                         rollers.setGoal(Rollers.Goal.IDLE);
-                        superstructure.setGoalState(Superstructure.SystemState.IDLE);
+                        superstructure.setGoal(Superstructure.SystemState.IDLE);
                       }));
 
       operatorController
           .leftBumper()
           .whileTrue(
               Commands.runOnce(
-                      () -> superstructure.setGoalState(Superstructure.SystemState.INTAKE),
+                      () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                       superstructure)
                   .andThen(
                       Commands.waitSeconds(0.25),
@@ -323,23 +330,23 @@ public class RobotContainer {
                   .finallyDo(
                       () -> {
                         rollers.setGoal(Rollers.Goal.IDLE);
-                        superstructure.setGoalState(Superstructure.SystemState.IDLE);
+                        superstructure.setGoal(Superstructure.SystemState.IDLE);
                       }));
 
-      //      controller
-      //          .a()
-      //          .onTrue(
-      //              Commands.runOnce(
-      //                  () -> {
-      //                    superstructure.setGoalState(Superstructure.SystemState.REVERSE_INTAKE);
-      //                    rollers.setGoal(Rollers.Goal.STATION_INTAKE);
-      //                  }))
-      //          .onFalse(
-      //              Commands.runOnce(
-      //                  () -> {
-      //                    superstructure.setGoalState(Superstructure.SystemState.IDLE);
-      //                    rollers.setGoal(Rollers.Goal.IDLE);
-      //                  }));
+      // controller
+      // .a()
+      // .onTrue(
+      // Commands.runOnce(
+      // () -> {
+      // superstructure.setGoalState(Superstructure.SystemState.REVERSE_INTAKE);
+      // rollers.setGoal(Rollers.Goal.STATION_INTAKE);
+      // }))
+      // .onFalse(
+      // Commands.runOnce(
+      // () -> {
+      // superstructure.setGoalState(Superstructure.SystemState.IDLE);
+      // rollers.setGoal(Rollers.Goal.IDLE);
+      // }));
     }
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -353,13 +360,14 @@ public class RobotContainer {
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
-    // driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    // driverController.a().whileTrue(new
+    // PathFinderAndFollow(driveMode.getDriveModeType()));
 
     // POSSIBLY UNNECESSARY
     // controller
-    //     .b()
-    //     .whileTrue(
-    //         Commands.startEnd(() -> driveMode.setAmpMode(), () ->
+    // .b()
+    // .whileTrue(
+    // Commands.startEnd(() -> driveMode.setAmpMode(), () ->
     // driveMode.disableDriveHeading()));
     driverController
         .x()
@@ -386,10 +394,10 @@ public class RobotContainer {
                         new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
 
     // controller
-    //     .povDown()
-    //     .whileTrue(
-    //         new ShootPoint(
-    //             drive, new Pose2d(new Translation2d(2.954, 3.621),
+    // .povDown()
+    // .whileTrue(
+    // new ShootPoint(
+    // drive, new Pose2d(new Translation2d(2.954, 3.621),
     // Rotation2d.fromRadians(2.617))));
 
     // ================================================
@@ -409,14 +417,14 @@ public class RobotContainer {
             new MultiDistanceArm(drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm));
 
     // controller
-    //     .b()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //                 () ->
-    //                     drive.setPose(
-    //                         new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-    //                 drive)
-    //             .ignoringDisable(true));
+    // .b()
+    // .onTrue(
+    // Commands.runOnce(
+    // () ->
+    // drive.setPose(
+    // new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+    // drive)
+    // .ignoringDisable(true));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER

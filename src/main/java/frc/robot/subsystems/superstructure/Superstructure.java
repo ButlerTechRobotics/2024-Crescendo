@@ -42,7 +42,7 @@ public class Superstructure extends SubsystemBase {
   }
 
   @Getter private SystemState currentState = SystemState.IDLE;
-  @Getter @Setter private SystemState goalState = SystemState.IDLE;
+  @Getter @Setter private SystemState goal = SystemState.IDLE;
 
   @Getter @Setter private GamepieceState gamepieceState = GamepieceState.NO_GAMEPIECE;
 
@@ -53,7 +53,7 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch (goalState) {
+    switch (goal) {
       case IDLE -> currentState = SystemState.IDLE;
       case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
       case INTAKE -> currentState = SystemState.INTAKE;
@@ -89,7 +89,7 @@ public class Superstructure extends SubsystemBase {
       }
     }
 
-    Logger.recordOutput("Superstructure/GoalState", goalState);
+    Logger.recordOutput("Superstructure/GoalState", goal);
     Logger.recordOutput("Superstructure/CurrentState", currentState);
   }
 
