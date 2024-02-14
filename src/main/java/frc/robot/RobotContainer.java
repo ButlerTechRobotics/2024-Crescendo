@@ -203,12 +203,9 @@ public class RobotContainer {
       intake = new Intake(new IntakeIO() {});
     }
 
-    // if (rollers == null) {
-    // rollers = new Rollers(feeder, intake);
-    // }
-    // if (arm == null) {
-    // arm = new Arm(new ArmIO() {});
-    // }
+    if (rollers == null) {
+    rollers = new Rollers(feeder1, feeder2, intake);
+    }
 
     // Set up auto routines
     // NamedCommands.registerCommand(
@@ -313,6 +310,7 @@ public class RobotContainer {
                                     rollers.setGoal(Rollers.Goal.IDLE);
                                     superstructure.setGoal(Superstructure.SystemState.IDLE);
                                 }));
+
         // ================================================
         // DRIVER CONTROLLER - LEFT TRIGGER
         // RUN INTAKE OUT
@@ -360,20 +358,15 @@ public class RobotContainer {
 
         // ================================================
         // OPERATOR CONTROLLER - LEFT TRIGGER
-        // AIM SPEAKER A SPEAKER
+        // AIM SHOOTER AT SPEAKER
         // ================================================
         operatorController
                 .leftTrigger()
                 .whileTrue(
                         Commands.startEnd(
                                 () -> DriveCommands.setSpeakerMode(drive::getPose),
-                                DriveCommands::disableDriveHeading));
-
-        operatorController
-                .leftTrigger()
-                .whileTrue(
-                        new MultiDistanceArm(
-                                drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm));
+                                DriveCommands::disableDriveHeading).alongWith(new MultiDistanceArm(
+                                drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm)));        
 
     // ================================================
     // DRIVER CONTROLLER - START
