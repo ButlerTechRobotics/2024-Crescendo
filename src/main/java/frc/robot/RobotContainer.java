@@ -32,6 +32,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
+import frc.robot.commands.climber.PositionClimbPID;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.DriveController.DriveModeType;
@@ -55,6 +56,7 @@ import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
+import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
@@ -89,7 +91,7 @@ public class RobotContainer {
     private final CommandXboxController operatorController = new CommandXboxController(1);
 
     private final ArmPositionPID armPID = new ArmPositionPID();
-    // private final Climber climberPID = new Climber();
+    private final Climber climberPID = new Climber();
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -329,7 +331,9 @@ public class RobotContainer {
                                     rollers.setGoal(Rollers.Goal.IDLE);
                                     superstructure.setGoal(Superstructure.SystemState.IDLE);
                                 }));
-
+        
+        // AMP LOCATION
+        operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
         // AMP SCORE
         operatorController
                 .leftBumper()
@@ -390,7 +394,7 @@ public class RobotContainer {
 
         // ================================================
         // OPERATOR CONTROLLER - LEFT TRIGGER
-        // AIM SPEAKER A SPEAKER
+        // AIM SHOOTER AT SPEAKER
         // ================================================
         operatorController
                 .leftTrigger()
@@ -443,7 +447,10 @@ public class RobotContainer {
         // DRIVER CONTROLLER - LEFT BUMPER
         // SPIN UP SHOOTER
         // ================================================
-        operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
+
+        driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20)); //Climb Up
+
+        driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0)); //Climb Down
 
         operatorController.povUp().whileTrue(new PositionArmPID(armPID, 200.00)); // "Sub shoot"
 
