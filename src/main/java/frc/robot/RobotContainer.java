@@ -33,7 +33,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
-import frc.robot.commands.climber.PositionClimbPID;
+// import frc.robot.commands.climber.PositionClimbPID;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.DriveController.DriveModeType;
@@ -53,14 +53,14 @@ import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-import frc.robot.subsystems.superstructure.climber.Climber;
+// import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
-import frc.robot.subsystems.vision.AprilTagVision;
-import frc.robot.subsystems.vision.AprilTagVisionIO;
-import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+// import frc.robot.subsystems.vision.AprilTagVision;
+// import frc.robot.subsystems.vision.AprilTagVisionIO;
+// import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -74,7 +74,7 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Shooter shooter;
-  private AprilTagVision aprilTagVision;
+  //   private AprilTagVision aprilTagVision;
   private static DriveController driveMode = new DriveController();
   private Intake intake;
   private Feeder feeder1;
@@ -89,7 +89,7 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final ArmPositionPID armPID = new ArmPositionPID();
-  private final Climber climberPID = new Climber();
+  //   private final Climber climberPID = new Climber();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -106,24 +106,23 @@ public class RobotContainer {
       new Transform3d(
           new Translation3d(-0.215, -0.215, 0.2), new Rotation3d(0, Math.toRadians(20), 225));
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        switch (Constants.getMode()) {
-            case REAL:
-                // Real robot, instantiate hardware IO implementations
-                drive = new Drive(
-                        new GyroIOPigeon2(),
-                        new ModuleIOSparkFlex(moduleConfigs[0]),
-                        new ModuleIOSparkFlex(moduleConfigs[1]),
-                        new ModuleIOSparkFlex(moduleConfigs[2]),
-                        new ModuleIOSparkFlex(moduleConfigs[3]));
-                shooter = new Shooter(new ShooterIOSparkFlex());
-                feeder1 = new Feeder(new FeederIOSparkFlexFront());
-                feeder2 = new Feeder(new FeederIOSparkFlexBack());
-                intake = new Intake(new IntakeIOSparkFlex());
-                superstructure = new Superstructure(shooter, rollers);
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    switch (Constants.getMode()) {
+      case REAL:
+        // Real robot, instantiate hardware IO implementations
+        drive =
+            new Drive(
+                new GyroIOPigeon2(),
+                new ModuleIOSparkFlex(moduleConfigs[0]),
+                new ModuleIOSparkFlex(moduleConfigs[1]),
+                new ModuleIOSparkFlex(moduleConfigs[2]),
+                new ModuleIOSparkFlex(moduleConfigs[3]));
+        shooter = new Shooter(new ShooterIOSparkFlex());
+        feeder1 = new Feeder(new FeederIOSparkFlexFront());
+        feeder2 = new Feeder(new FeederIOSparkFlexBack());
+        intake = new Intake(new IntakeIOSparkFlex());
+        superstructure = new Superstructure(shooter, rollers);
 
         // new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
         // robotToCameraFront));
@@ -141,12 +140,12 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         shooter = new Shooter(new ShooterIOSim());
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVisionSIM(
-                    "photonCamera1",
-                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-                    drive::getDrive));
+        // aprilTagVision =
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonVisionSIM(
+        //             "photonCamera1",
+        //             new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+        //             drive::getDrive));
 
         break;
 
@@ -163,7 +162,7 @@ public class RobotContainer {
         feeder1 = new Feeder(new FeederIO() {});
         feeder2 = new Feeder(new FeederIO() {});
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        // aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
         intake = new Intake(new IntakeIO() {});
     }
 
@@ -213,7 +212,7 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    aprilTagVision.setDataInterfaces(drive::addVisionData);
+    // aprilTagVision.setDataInterfaces(drive::addVisionData);
     driveMode.disableHeadingSupplier();
     configureButtonBindings();
   }
@@ -329,13 +328,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20));
+    // driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
+    // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
     // AMP LOCATION
     operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
