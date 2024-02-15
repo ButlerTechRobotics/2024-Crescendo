@@ -7,6 +7,7 @@ package frc.robot.subsystems.superstructure.arm;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +29,8 @@ public class ArmPositionPID extends SubsystemBase {
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
     pidController = motor.getPIDController();
+    //mySparkMax.getPIDController().setFeedbackDevice(mySparkMax.getAbsoluteEncoder( SparkMaxAbsoluteEncoder.Type.kDutyCycle));
+    // pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
     pidController.setP(kP.get(), 0);
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
