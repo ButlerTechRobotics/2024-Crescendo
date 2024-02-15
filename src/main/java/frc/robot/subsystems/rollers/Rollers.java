@@ -75,7 +75,7 @@ public class Rollers extends SubsystemBase {
       case EJECT_TO_FLOOR -> {
         feeder1.setGoal(Feeder.Goal.EJECTING);
         feeder2.setGoal(Feeder.Goal.EJECTING);
-        intake.setGoal(Intake.Goal.EJECTING);
+        intake.setGoal(Intake.Goal.IDLE);
       }
     }
 
