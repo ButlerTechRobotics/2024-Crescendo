@@ -3,8 +3,8 @@ package frc.robot.subsystems.superstructure;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotState;
-import frc.robot.subsystems.rollers.intake.Intake;
 // import frc.robot.subsystems.superstructure.arm.Arm;
+import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.util.LoggedTunableNumber;
 import lombok.Getter;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.subsystems.rollers.Rollers;
 
 @RequiredArgsConstructor
 public class Superstructure extends SubsystemBase {
@@ -82,7 +81,7 @@ public class Superstructure extends SubsystemBase {
       case REVERSE_INTAKE -> {
         // arm.setSetpoint(Rotation2d.fromDegrees(armIntakeSetpointDegrees.get()));
       }
-      case  AMP_SHOOTER -> {
+      case AMP_SHOOTER -> {
         rollers.setGoal(Rollers.Goal.AMP_SHOOTER);
       }
       case PREPARE_SHOOT -> {
