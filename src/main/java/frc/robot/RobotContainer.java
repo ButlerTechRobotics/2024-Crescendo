@@ -45,8 +45,11 @@ import frc.robot.subsystems.drive.ModuleIOSparkFlex;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.feeder.FeederIO;
+import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexBack;
+import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexFront;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
+import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
@@ -117,9 +120,10 @@ public class RobotContainer {
                         new ModuleIOSparkFlex(moduleConfigs[2]),
                         new ModuleIOSparkFlex(moduleConfigs[3]));
                 shooter = new Shooter(new ShooterIOSparkFlex());
-                // feeder1 = new Feeder(new FeederIOSparkFlexFront());
-                // feeder2 = new Feeder(new FeederIOSparkFlexBack());
-                // intake = new Intake(new IntakeIOSparkFlex());
+                feeder1 = new Feeder(new FeederIOSparkFlexFront());
+                feeder2 = new Feeder(new FeederIOSparkFlexBack());
+                intake = new Intake(new IntakeIOSparkFlex());
+                superstructure = new Superstructure(shooter, rollers);
 
         // new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
         // robotToCameraFront));
