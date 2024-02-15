@@ -74,7 +74,7 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Shooter shooter;
-  //   private AprilTagVision aprilTagVision;
+  // private AprilTagVision aprilTagVision;
   private static DriveController driveMode = new DriveController();
   private Intake intake;
   private Feeder feeder1;
@@ -89,7 +89,7 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final ArmPositionPID armPID = new ArmPositionPID();
-  //   private final Climber climberPID = new Climber();
+  // private final Climber climberPID = new Climber();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -122,7 +122,7 @@ public class RobotContainer {
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
         intake = new Intake(new IntakeIOSparkFlex());
-        superstructure = new Superstructure(shooter, rollers);
+        superstructure = new Superstructure(shooter);
 
         // new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
         // robotToCameraFront));
@@ -141,11 +141,11 @@ public class RobotContainer {
                 new ModuleIOSim());
         shooter = new Shooter(new ShooterIOSim());
         // aprilTagVision =
-        //     new AprilTagVision(
-        //         new AprilTagVisionIOPhotonVisionSIM(
-        //             "photonCamera1",
-        //             new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-        //             drive::getDrive));
+        // new AprilTagVision(
+        // new AprilTagVisionIOPhotonVisionSIM(
+        // "photonCamera1",
+        // new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+        // drive::getDrive));
 
         break;
 
@@ -252,7 +252,6 @@ public class RobotContainer {
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                     superstructure),
-                Commands.waitSeconds(0.25),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                 Commands.waitUntil(() -> !rollers.getBeamBreak()),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
@@ -279,7 +278,6 @@ public class RobotContainer {
             Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.INTAKE), superstructure)
                 .andThen(
-                    Commands.waitSeconds(0.25),
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers),
                     Commands.idle())
                 .finallyDo(
@@ -337,15 +335,14 @@ public class RobotContainer {
     // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
     // AMP LOCATION
-    operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
+    // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
     // AMP SCORE
     operatorController
         .leftBumper()
         .whileTrue(
             Commands.sequence(
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.AMP_SHOOTER),
-                    superstructure)))
+                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
+                .alongWith(new PositionArmPID(armPID, 170)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -428,7 +425,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 50.0)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 170.0)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

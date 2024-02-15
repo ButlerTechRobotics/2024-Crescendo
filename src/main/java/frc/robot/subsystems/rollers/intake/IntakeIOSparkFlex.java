@@ -9,6 +9,6 @@ public class IntakeIOSparkFlex extends GenericRollerSystemIOSparkFlex implements
   private static final boolean inverted = true;
 
   public IntakeIOSparkFlex() {
-    super(id, currentLimitAmps, inverted, true, reduction);
+    super(id, currentLimitAmps, inverted, false, reduction);
   }
 }
