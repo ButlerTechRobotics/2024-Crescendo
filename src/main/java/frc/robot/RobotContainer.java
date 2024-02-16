@@ -58,9 +58,9 @@ import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
-// import frc.robot.subsystems.vision.AprilTagVision;
+import frc.robot.subsystems.vision.AprilTagVision;
+import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 // import frc.robot.subsystems.vision.AprilTagVisionIO;
-// import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -94,17 +94,20 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraFront =
+  private static final Transform3d robotToCameraFL =
       new Transform3d(
-          new Translation3d(0.254, 0.203, 0.178), new Rotation3d(0, Math.toRadians(20), 0));
+          new Translation3d(-0.24, 0.3, 0.31),
+          new Rotation3d(0, Math.toRadians(20), Math.toRadians(-50)));
 
-  private static final Transform3d robotToCameraBL =
+  private static final Transform3d robotToCameraFR =
       new Transform3d(
-          new Translation3d(-0.215, 0.215, 0.2), new Rotation3d(0, Math.toRadians(20), 135));
+          new Translation3d(0.24, 0.3, 0.31),
+          new Rotation3d(0, Math.toRadians(20), Math.toRadians(50)));
 
-  private static final Transform3d robotToCameraBR =
+  private static final Transform3d robotToCameraBack =
       new Transform3d(
-          new Translation3d(-0.215, -0.215, 0.2), new Rotation3d(0, Math.toRadians(20), 225));
+          new Translation3d(0.23, -0.25, 0.31),
+          new Rotation3d(0, Math.toRadians(15), Math.toRadians(180)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -124,8 +127,10 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         superstructure = new Superstructure(shooter);
 
-        // new AprilTagVision(new AprilTagVisionIOPhotonVision("FrontCamera",
-        // robotToCameraFront));
+        new AprilTagVision(
+            new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
+            new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
+            new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
         rollers = new Rollers(feeder1, feeder2, intake);
 
         break;
@@ -173,6 +178,12 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
                 superstructure),
+            Commands.startEnd(
+                    () -> DriveCommands.setSpeakerMode(drive::getPose),
+                    DriveCommands::disableDriveHeading)
+                .alongWith(
+                    new MultiDistanceArm(
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm)),
             Commands.waitSeconds(1),
             Commands.runOnce(
                 () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
@@ -342,7 +353,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 170)))
+                .alongWith(new PositionArmPID(armPID, 175)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -425,7 +436,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 170.0)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 175.0)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
