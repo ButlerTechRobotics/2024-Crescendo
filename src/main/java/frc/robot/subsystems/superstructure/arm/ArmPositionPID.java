@@ -5,9 +5,14 @@
 package frc.robot.subsystems.superstructure.arm;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
