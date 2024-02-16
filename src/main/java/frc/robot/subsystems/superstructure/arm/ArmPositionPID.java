@@ -5,9 +5,13 @@
 package frc.robot.subsystems.superstructure.arm;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +20,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
-  DutyCycleEncoder thruBore = new DutyCycleEncoder(0);
+  // private CANSparkFlex thruBore = new CANSparkFlex(AbsoluteEncoder::motor);
   SparkPIDController pidController;
   private double targetAngle = 0;
 
@@ -28,9 +32,8 @@ public class ArmPositionPID extends SubsystemBase {
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
     pidController = motor.getPIDController();
-    // mySparkMax.getPIDController().setFeedbackDevice(mySparkMax.getAbsoluteEncoder(
-    // SparkMaxAbsoluteEncoder.Type.kDutyCycle));
-    // pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
+    pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
+    motor.getPIDController().setFeedbackDevice(motor.getAbsoluteEncoder(thruBore.Type.kDutyCycle));
     pidController.setP(kP.get(), 0);
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
