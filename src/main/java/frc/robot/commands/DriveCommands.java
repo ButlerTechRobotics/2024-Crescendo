@@ -37,7 +37,7 @@ public class DriveCommands {
   private static DriveController driveMode = new DriveController();
 
   static {
-    driveMode.disableHeadingSupplier();
+    driveMode.disableHeadingControl();
   }
 
   private DriveCommands() {}
@@ -64,7 +64,7 @@ public class DriveCommands {
             omega =
                 Drive.getThetaController()
                     .calculate(
-                        drive.getPose().getRotation().getRadians(), targetAngle.getRadians());
+                        drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
             if (Drive.getThetaController().atGoal()) {
               omega = 0;
             }
@@ -122,7 +122,7 @@ public class DriveCommands {
   }
 
   public static void disableDriveHeading() {
-    driveMode.disableHeadingSupplier();
+    driveMode.disableHeadingControl();
     driveMode.setDriveMode(DriveController.DriveModeType.SPEAKER);
   }
 }

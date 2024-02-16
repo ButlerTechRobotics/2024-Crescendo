@@ -16,11 +16,11 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
   Pose2d targetPose;
-  ArmPositionPID arm;
+  ArmPositionPID armPID;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
-  double angle;
+  double targetAngle;
 
   /**
    * Creates a new MultiDistanceArm command.
@@ -29,18 +29,18 @@ public class MultiDistanceArm extends Command {
    * @param targetPose The target pose to aim at.
    * @param armPID The arm subsystem.
    */
-  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID arm) {
+  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
     this.targetPose = targetPose;
-    this.arm = arm;
+    this.armPID = armPID;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.0, 100.0);
-    distanceMap.put(2.3, 90.0);
-    distanceMap.put(3.6, 80.0);
-    distanceMap.put(4.9, 70.0);
-    distanceMap.put(6.2, 60.0);
-    distanceMap.put(7.5, 50.0);
+    distanceMap.put(1.0, 0.0);
+    distanceMap.put(2.3, 20.0);
+    distanceMap.put(3.6, 40.0);
+    distanceMap.put(4.9, 60.0);
+    distanceMap.put(6.2, 80.0);
+    distanceMap.put(7.5, 100.0);
   }
 
   @Override
@@ -55,16 +55,16 @@ public class MultiDistanceArm extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
     // Get the corresponding angle from the distance-speed map
-    angle = distanceMap.get(angle);
+    targetAngle = distanceMap.get(targetAngle);
 
     // Run the shooter at the calculated speed
-    arm.setPosition(angle);
+    armPID.setPosition(targetAngle);
   }
 
   @Override
   public void end(boolean interrupted) {
     // Stop the shooter when the command ends
-    arm.setPosition(0);
+    armPID.setPosition(0);
   }
 
   @Override
@@ -90,6 +90,6 @@ public class MultiDistanceArm extends Command {
    */
   @AutoLogOutput(key = "Arm/Angle")
   public double getAngle() {
-    return angle;
+    return targetAngle;
   }
 }

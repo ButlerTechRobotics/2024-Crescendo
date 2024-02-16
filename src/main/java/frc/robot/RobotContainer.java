@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 // import frc.robot.commands.climber.PositionClimbPID;
@@ -59,8 +60,9 @@ import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
+import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
-// import frc.robot.subsystems.vision.AprilTagVisionIO;
+import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -74,13 +76,12 @@ public class RobotContainer {
   // Subsystems
   private Drive drive;
   private Shooter shooter;
-  // private AprilTagVision aprilTagVision;
+  private AprilTagVision aprilTagVision;
   private static DriveController driveMode = new DriveController();
   private Intake intake;
   private Feeder feeder1;
   private Feeder feeder2;
   private Rollers rollers;
-  private ArmPositionPID arm;
 
   private Superstructure superstructure;
 
@@ -88,7 +89,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
-  private final ArmPositionPID armPID = new ArmPositionPID();
+  private ArmPositionPID armPID = new ArmPositionPID();
   // private final Climber climberPID = new Climber();
 
   // Dashboard inputs
@@ -96,18 +97,18 @@ public class RobotContainer {
 
   private static final Transform3d robotToCameraFL =
       new Transform3d(
-          new Translation3d(-0.24, 0.3, 0.31),
-          new Rotation3d(0, Math.toRadians(20), Math.toRadians(-50)));
+          new Translation3d(0.20, 0.3, 0.21),
+          new Rotation3d(0, Math.toRadians(-17), Math.toRadians(40)));
 
   private static final Transform3d robotToCameraFR =
       new Transform3d(
-          new Translation3d(0.24, 0.3, 0.31),
-          new Rotation3d(0, Math.toRadians(20), Math.toRadians(50)));
+          new Translation3d(-0.20, -0.3, 0.21),
+          new Rotation3d(0, Math.toRadians(-15), Math.toRadians(-40)));
 
   private static final Transform3d robotToCameraBack =
       new Transform3d(
-          new Translation3d(0.23, -0.25, 0.31),
-          new Rotation3d(0, Math.toRadians(15), Math.toRadians(180)));
+          new Translation3d(-0.23, 0.25, 0.21),
+          new Rotation3d(0, Math.toRadians(-30), Math.toRadians(180)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -127,10 +128,11 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         superstructure = new Superstructure(shooter);
 
-        new AprilTagVision(
-            new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
-            new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
-            new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
+        aprilTagVision =
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
+                new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
         rollers = new Rollers(feeder1, feeder2, intake);
 
         break;
@@ -145,12 +147,12 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         shooter = new Shooter(new ShooterIOSim());
-        // aprilTagVision =
-        // new AprilTagVision(
-        // new AprilTagVisionIOPhotonVisionSIM(
-        // "photonCamera1",
-        // new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-        // drive::getDrive));
+        aprilTagVision =
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonVisionSIM(
+                    "photonCamera1",
+                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+                    drive::getDrive));
 
         break;
 
@@ -167,7 +169,7 @@ public class RobotContainer {
         feeder1 = new Feeder(new FeederIO() {});
         feeder2 = new Feeder(new FeederIO() {});
 
-        // aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
         intake = new Intake(new IntakeIO() {});
     }
 
@@ -183,7 +185,7 @@ public class RobotContainer {
                     DriveCommands::disableDriveHeading)
                 .alongWith(
                     new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm)),
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)),
             Commands.waitSeconds(1),
             Commands.runOnce(
                 () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
@@ -223,8 +225,8 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    // aprilTagVision.setDataInterfaces(drive::addVisionData);
-    driveMode.disableHeadingSupplier();
+    aprilTagVision.setDataInterfaces(drive::addVisionData);
+    driveMode.disableHeadingControl();
     configureButtonBindings();
   }
 
@@ -244,6 +246,7 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
+    driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // +++++++++++++++++++++THIS_IS_THE_CODE_FOR_THE_MULTIPLE_DISTANCE_SHOT++++++++++++++++++++++++++++
     // driverController
@@ -306,20 +309,11 @@ public class RobotContainer {
         .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
 
     // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // SET DRIVE MODE TO AMP
-    // ================================================
-    driverController
-        .x()
-        .whileTrue(
-            Commands.startEnd(DriveCommands::setAmpMode, DriveCommands::disableDriveHeading));
-
-    // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
-    // driverController.a().whileTrue(new
-    // PathFinderAndFollow(driveMode.getDriveModeType()));
+    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    ;
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -331,7 +325,7 @@ public class RobotContainer {
             Commands.run(
                 () ->
                     drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
+                        new Pose2d(new Translation2d(10, 1), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -401,7 +395,7 @@ public class RobotContainer {
                     DriveCommands::disableDriveHeading)
                 .alongWith(
                     new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, arm)));
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
 
     // controller
     // .povDown()
@@ -410,15 +404,15 @@ public class RobotContainer {
     // drive, new Pose2d(new Translation2d(2.954, 3.621),
     // Rotation2d.fromRadians(2.617))));
 
-    // controller
-    // .b()
-    // .onTrue(
-    // Commands.runOnce(
-    // () ->
-    // drive.setPose(
-    // new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-    // drive)
-    // .ignoringDisable(true));
+    driverController
+        .b()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                    drive)
+                .ignoringDisable(true));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
