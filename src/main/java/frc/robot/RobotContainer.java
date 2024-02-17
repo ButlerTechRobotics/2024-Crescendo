@@ -173,28 +173,50 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
     }
 
-    // Set up auto routines
+    // Register a new command named "Shoot"
     NamedCommands.registerCommand(
         "Shoot",
+        // Create a sequence of commands to be executed
         Commands.sequence(
+            // Run the following command once
             Commands.runOnce(
-                () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
-                superstructure),
-            Commands.startEnd(
-                    () -> DriveCommands.setSpeakerMode(drive::getPose),
-                    DriveCommands::disableDriveHeading)
+                    // Set the superstructure's goal to PREPARE_SHOOT
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+                    superstructure)
                 .alongWith(
+                    // Start and end the following command
+                    Commands.startEnd(
+                        // Set the speaker mode
+                        // to the current pose
+                        // of the drive
+                        () -> DriveCommands.setSpeakerMode(drive::getPose),
+                        // Disable the drive
+                        // heading
+                        DriveCommands::disableDriveHeading))
+                .alongWith(
+                    // Create a new MultiDistanceArm with
+                    // the current pose of the drive, the
+                    // center speaker opening, and the
+                    // armPID
                     new MultiDistanceArm(
                         drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)),
+            // Wait for 1 second
             Commands.waitSeconds(1),
+            // Run the following command once
             Commands.runOnce(
-                () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
-            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-            Commands.waitSeconds(1.0),
+                // Set the rollers' goal to FLOOR_INTAKE
+                () -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+            // Wait for 1 second
+            Commands.waitSeconds(1),
+            // Run the following command once
             Commands.runOnce(
                 () -> {
+                  // Set the shooter's goal to IDLE
                   shooter.setGoal(Shooter.Goal.IDLE);
+                  // Set the superstructure's goal to IDLE
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
+                  // Set the rollers' goal to IDLE
+                  rollers.setGoal(Rollers.Goal.IDLE);
                 })));
 
     NamedCommands.registerCommand(

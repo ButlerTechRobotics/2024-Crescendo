@@ -55,7 +55,7 @@ public class MultiDistanceArm extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
     // Get the corresponding angle from the distance-speed map
-    targetAngle = distanceMap.get(targetAngle);
+    targetAngle = distanceMap.get(distance);
 
     // Run the shooter at the calculated speed
     armPID.setPosition(targetAngle);
