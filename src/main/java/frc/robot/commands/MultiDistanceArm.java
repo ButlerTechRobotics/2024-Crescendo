@@ -4,26 +4,30 @@
 
 package frc.robot.commands;
 
+// Import necessary libraries and packages
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-/** A command that shoots game piece from multi-distance position from the target. */
+/** A command that controls the arm position based on the distance from the target. */
 public class MultiDistanceArm extends Command {
-  Supplier<Pose2d> poseSupplier;
-  Pose2d targetPose;
-  ArmPositionPID armPID;
-  InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
+  // Declare variables
+  Supplier<Pose2d> poseSupplier; // Supplier for the robot's current pose
+  Pose2d targetPose; // The target pose to aim at
+  ArmPositionPID armPID; // The arm subsystem
+  InterpolatingDoubleTreeMap distanceMap =
+      new InterpolatingDoubleTreeMap(); // Map to hold distance-angle pairs
 
-  double distance;
-  double targetAngle;
+  double distance; // Distance from the current pose to the target pose
+  double targetAngle; // The angle to set the arm to
 
   /**
-   * Creates a new MultiDistanceArm command.
+   * Constructor for the MultiDistanceArm command.
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to aim at.
@@ -54,16 +58,19 @@ public class MultiDistanceArm extends Command {
     // Calculate the distance from the current pose to the target pose
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
-    // Get the corresponding angle from the distance-speed map
+    // Log the distance to the Shuffleboard
+    SmartDashboard.putNumber("Distance", distance);
+
+    // Get the corresponding angle from the distance-angle map
     targetAngle = distanceMap.get(distance);
 
-    // Run the shooter at the calculated speed
+    // Set the arm position to the calculated angle
     armPID.setPosition(targetAngle);
   }
 
   @Override
   public void end(boolean interrupted) {
-    // Stop the shooter when the command ends
+    // Reset the arm position when the command ends
     armPID.setPosition(0);
   }
 
@@ -84,9 +91,9 @@ public class MultiDistanceArm extends Command {
   }
 
   /**
-   * Gets the speed of the shooter.
+   * Gets the current target angle of the arm.
    *
-   * @return The speed in units per second.
+   * @return The target angle in degrees.
    */
   @AutoLogOutput(key = "Arm/Angle")
   public double getAngle() {

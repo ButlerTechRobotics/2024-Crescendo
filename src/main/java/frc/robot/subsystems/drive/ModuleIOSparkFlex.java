@@ -21,6 +21,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -56,15 +57,27 @@ public class ModuleIOSparkFlex implements ModuleIO {
     driveSparkMax.restoreFactoryDefaults();
     turnSparkMax.restoreFactoryDefaults();
 
-    driveSparkMax.setCANTimeout(250);
-    turnSparkMax.setCANTimeout(250);
+    driveSparkMax.setCANTimeout(500);
+    turnSparkMax.setCANTimeout(500);
 
     driveEncoder = driveSparkMax.getEncoder();
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 65535);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 65535);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 65535);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 65535);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 65535);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 65535);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 65535);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 65535);
+
     turnSparkMax.setInverted(config.turnMotorInverted());
-    driveSparkMax.setSmartCurrentLimit(40);
-    turnSparkMax.setSmartCurrentLimit(30);
+    driveSparkMax.setSmartCurrentLimit(80);
+    turnSparkMax.setSmartCurrentLimit(20);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
 
@@ -84,7 +97,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
     cancoder.getConfigurator().apply(new CANcoderConfiguration());
     turnAbsolutePosition = cancoder.getAbsolutePosition();
-    turnAbsolutePosition.setUpdateFrequency(50.0);
+    turnAbsolutePosition.setUpdateFrequency(100.0);
     cancoder.optimizeBusUtilization();
   }
 

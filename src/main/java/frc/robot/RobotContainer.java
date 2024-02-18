@@ -61,7 +61,6 @@ import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
-import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -128,11 +127,11 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         superstructure = new Superstructure(shooter);
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
-                new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
+        // aprilTagVision =
+        //     new AprilTagVision(
+        //         new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
+        //         new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
+        //         new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
         rollers = new Rollers(feeder1, feeder2, intake);
 
         break;
@@ -247,7 +246,7 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    aprilTagVision.setDataInterfaces(drive::addVisionData);
+    // aprilTagVision.setDataInterfaces(drive::addVisionData);
     driveMode.disableHeadingControl();
     configureButtonBindings();
   }
