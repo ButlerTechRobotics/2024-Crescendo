@@ -13,6 +13,7 @@ import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 /** A command that controls the arm position based on the distance from the target. */
 public class MultiDistanceArm extends Command {
@@ -56,6 +57,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void execute() {
     // Calculate the distance from the current pose to the target pose
+    Logger.recordOutput("Speaker Pose", targetPose);
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
     // Log the distance to the Shuffleboard

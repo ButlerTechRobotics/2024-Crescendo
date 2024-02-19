@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -94,20 +95,21 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraFL =
-      new Transform3d(
-          new Translation3d(0.20, 0.3, 0.21),
-          new Rotation3d(0, Math.toRadians(-17), Math.toRadians(40)));
+  private static final Transform3d robotToCameraBL =
+  new Transform3d(
+      new Translation3d(Units.inchesToMeters(-13.), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
+      new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(225.)));
 
-  private static final Transform3d robotToCameraFR =
-      new Transform3d(
-          new Translation3d(-0.20, -0.3, 0.21),
-          new Rotation3d(0, Math.toRadians(-15), Math.toRadians(-40)));
+private static final Transform3d robotToCameraBR =
+  new Transform3d(
+      new Translation3d(Units.inchesToMeters(-13.), Units.inchesToMeters(-12.), Units.inchesToMeters(10.)),
+      new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(315.)));
 
-  private static final Transform3d robotToCameraBack =
-      new Transform3d(
-          new Translation3d(-0.23, 0.25, 0.21),
-          new Rotation3d(0, Math.toRadians(-30), Math.toRadians(180)));
+private static final Transform3d robotToCameraFront =
+  new Transform3d(
+      new Translation3d(Units.inchesToMeters(11), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
+      new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0.)));
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -127,11 +129,19 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         superstructure = new Superstructure(shooter);
 
+<<<<<<< HEAD
         // aprilTagVision =
         //     new AprilTagVision(
         //         new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
         //         new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR),
         //         new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
+=======
+        aprilTagVision =
+            new AprilTagVision(
+                // new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
+                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
+                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
+>>>>>>> d9cc4a2 (camera workie)
         rollers = new Rollers(feeder1, feeder2, intake);
 
         break;
