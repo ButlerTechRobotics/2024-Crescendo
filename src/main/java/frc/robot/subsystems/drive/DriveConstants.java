@@ -83,18 +83,35 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
+<<<<<<< HEAD
                   Rotation2d.fromRotations(0.022949).plus(Rotation2d.fromDegrees(180)),
                   true), // Front right module
               new ModuleConfig(
                   3, 4, 10, Rotation2d.fromRotations(-0.412842), true), // Front left module
+=======
+                  Rotation2d.fromRotations(0.028809 - 0.01).plus(Rotation2d.fromDegrees(180)),
+                  true),
+              new ModuleConfig(
+                  3,
+                  4,
+                  10,
+                  Rotation2d.fromRotations(0.088623 - 0.01).plus(Rotation2d.fromDegrees(180)),
+                  true),
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
               new ModuleConfig(
                   5,
                   6,
                   11,
+<<<<<<< HEAD
                   Rotation2d.fromRotations(-0.245117).plus(Rotation2d.fromDegrees(180)),
                   true), // Rear right module
               new ModuleConfig(
                   7, 8, 12, Rotation2d.fromRotations(0.260742), true) // Rear left module
+=======
+                  Rotation2d.fromRotations(-0.246582).plus(Rotation2d.fromDegrees(180)),
+                  true),
+              new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(0.255859), true)
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
             };
         case SIMBOT -> { // For simulation robot
           ModuleConfig[] configs = new ModuleConfig[4];
@@ -140,15 +157,25 @@ public final class DriveConstants {
   // Define the PID constants for the path planner translation based on the robot type
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
+<<<<<<< HEAD
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0); // For competition robot
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0); // For simulation robot
+=======
+        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
       };
 
   // Define the PID constants for the path planner rotation based on the robot type
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
+<<<<<<< HEAD
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0); // For competition robot
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0); // For simulation robot
+=======
+        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
       };
 
   // Define the drivetrain configuration

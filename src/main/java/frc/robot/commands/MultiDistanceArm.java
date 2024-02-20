@@ -13,7 +13,6 @@ import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 /** A command that controls the arm position based on the distance from the target. */
 public class MultiDistanceArm extends Command {
@@ -24,28 +23,36 @@ public class MultiDistanceArm extends Command {
   InterpolatingDoubleTreeMap distanceMap =
       new InterpolatingDoubleTreeMap(); // Map to hold distance-angle pairs
 
+<<<<<<< HEAD
   double distance; // Distance from the current pose to the target pose
   double targetAngle; // The angle to set the arm to
 
   /**
    * Constructor for the MultiDistanceArm command.
+=======
+  double distance;
+  double angle;
+
+  /**
+   * Creates a new MultiDistanceShot command.
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
    *
    * @param poseSupplier The supplier for the robot's current pose.
-   * @param targetPose The target pose to aim at.
-   * @param armPID The arm subsystem.
+   * @param targetPose The target pose to shoot at.
+   * @param armPID The flywheel subsystem.
    */
   public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
     this.targetPose = targetPose;
     this.armPID = armPID;
 
-    // Populate the distance map with distance-angle pairs
+    // Populate the distance map with distance-speed pairs
     distanceMap.put(1.0, 0.0);
-    distanceMap.put(2.3, 20.0);
-    distanceMap.put(3.6, 40.0);
-    distanceMap.put(4.9, 60.0);
-    distanceMap.put(6.2, 80.0);
-    distanceMap.put(7.5, 100.0);
+    distanceMap.put(2.3, -2.0);
+    distanceMap.put(3.6, -4.0);
+    distanceMap.put(4.9, -6.0);
+    distanceMap.put(6.2, -8.0);
+    distanceMap.put(7.5, -10.0);
   }
 
   @Override
@@ -57,9 +64,9 @@ public class MultiDistanceArm extends Command {
   @Override
   public void execute() {
     // Calculate the distance from the current pose to the target pose
-    Logger.recordOutput("Speaker Pose", targetPose);
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
+<<<<<<< HEAD
     // Log the distance to the Shuffleboard
     SmartDashboard.putNumber("Distance", distance);
 
@@ -68,12 +75,24 @@ public class MultiDistanceArm extends Command {
 
     // Set the arm position to the calculated angle
     armPID.setPosition(targetAngle);
+=======
+    // Get the corresponding speed from the distance-speed map
+    angle = distanceMap.get(distance);
+
+    // Run the flywheel at the calculated speed
+    armPID.setPosition(angle);
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
   }
 
   @Override
   public void end(boolean interrupted) {
+<<<<<<< HEAD
     // Reset the arm position when the command ends
     armPID.setPosition(0);
+=======
+    // Stop the flywheel when the command ends
+    armPID.setPosition(0.0);
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
   }
 
   @Override
@@ -93,12 +112,16 @@ public class MultiDistanceArm extends Command {
   }
 
   /**
+<<<<<<< HEAD
    * Gets the current target angle of the arm.
+=======
+   * Gets the speed of the flywheel.
+>>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
    *
    * @return The target angle in degrees.
    */
   @AutoLogOutput(key = "Arm/Angle")
-  public double getAngle() {
-    return targetAngle;
+  public double getSpeed() {
+    return angle;
   }
 }
