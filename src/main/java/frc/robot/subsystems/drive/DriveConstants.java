@@ -170,10 +170,14 @@ public final class DriveConstants {
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0); // For competition robot
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0); // For simulation robot
 =======
         case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+=======
+        case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
+>>>>>>> 942dc9f (Stuff)
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
       };
