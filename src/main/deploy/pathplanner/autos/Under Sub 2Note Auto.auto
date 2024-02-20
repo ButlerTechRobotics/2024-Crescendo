@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.335622956146197,
-      "y": 3.192504162786104
+      "x": 0.7275269251393202,
+      "y": 4.397002070357417
     },
     "rotation": -57.95041732446152
   },
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos1toNote8"
+                  "pathName": "Pos0toNote6"
                 }
               }
             ]
@@ -61,7 +61,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note8toPos1"
+                  "pathName": "Note6toPos0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pos0.5toNote5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note5toPos0.5"
                 }
               },
               {
