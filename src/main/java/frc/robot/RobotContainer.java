@@ -131,7 +131,6 @@ public class RobotContainer {
                 superstructure = new Superstructure(shooter);
 
                 aprilTagVision = new AprilTagVision(
-                        // new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
                         new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
                         new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
                 rollers = new Rollers(feeder1, feeder2, intake);
@@ -171,13 +170,16 @@ public class RobotContainer {
                         });
                 shooter = new Shooter(new ShooterIO() {
                 });
+
                 feeder1 = new Feeder(new FeederIO() {
+                    
                 });
                 feeder2 = new Feeder(new FeederIO() {
                 });
 
                 aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {
                 });
+
                 intake = new Intake(new IntakeIO() {
                 });
         }
@@ -229,7 +231,7 @@ public class RobotContainer {
                         }));
 
         // ================================================
-        // Register the Auto Command Intake Reset
+        // Register the Auto Command Intake
         // ================================================
         NamedCommands.registerCommand(
                 "Intake",
@@ -261,20 +263,6 @@ public class RobotContainer {
                                 })));
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
-        // Set up SysId routines
-        // autoChooser.addOption(
-        // "Drive SysId (Quasistatic Forward)",
-        // drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // autoChooser.addOption(
-        // "Drive SysId (Quasistatic Reverse)",
-        // drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // autoChooser.addOption(
-        // "Drive SysId (Dynamic Forward)",
-        // drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // autoChooser.addOption(
-        // "Drive SysId (Dynamic Reverse)",
-        // drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         // Configure the button bindings
         aprilTagVision.setDataInterfaces(drive::addVisionData);
