@@ -21,7 +21,6 @@ public class ArmPositionPID extends SubsystemBase {
   private double targetAngle = 0;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
-  private final ArmVisualizer goalVisualizer;
 
   TunableNumber kP = new TunableNumber("Arm P Gain", 1.0); // .000008
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
@@ -60,8 +59,11 @@ public class ArmPositionPID extends SubsystemBase {
 =======
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
+<<<<<<< HEAD
     goalVisualizer = new ArmVisualizer("goal", Color.kBlue);
 >>>>>>> a1cdcc7 (Added arm pivot 3d visualizer)
+=======
+>>>>>>> b36c8b5 (Removed unused arm stuff)
   }
 
   public double getTargetPosition() {
