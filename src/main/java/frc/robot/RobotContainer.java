@@ -337,7 +337,6 @@ public class RobotContainer {
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
     driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
-    ;
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -371,7 +370,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, -16)))
+                .alongWith(new PositionArmPID(armPID, -29)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -442,7 +441,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -16.00)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -32)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
@@ -454,9 +453,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController
-        .povLeft()
-        .whileTrue(new PositionArmPID(armPID, -11.4878)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -29)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

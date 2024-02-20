@@ -133,7 +133,7 @@ public final class DriveConstants {
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 

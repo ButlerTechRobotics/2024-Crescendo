@@ -35,7 +35,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(-0.25, 0.25, 0);
+    pidController.setOutputRange(-0.5, 0.5, 0);
 
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
