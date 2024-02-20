@@ -66,15 +66,25 @@ public final class DriveConstants {
       switch (Constants.getRobot()) {
         case COMPBOT ->
             new ModuleConfig[] {
-              new ModuleConfig(1, 2, 9, Rotation2d.fromRotations(0.482178), true),
-              new ModuleConfig(3, 4, 10, Rotation2d.fromRotations(-0.419), true),
+              new ModuleConfig(
+                  1,
+                  2,
+                  9,
+                  Rotation2d.fromRotations(0.028809 - 0.01).plus(Rotation2d.fromDegrees(180)),
+                  true),
+              new ModuleConfig(
+                  3,
+                  4,
+                  10,
+                  Rotation2d.fromRotations(0.088623 - 0.01).plus(Rotation2d.fromDegrees(180)),
+                  true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(-0.253),
+                  Rotation2d.fromRotations(-0.246582).plus(Rotation2d.fromDegrees(180)),
                   true),
-              new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(0.268), true)
+              new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(0.255859), true)
             };
           // .plus(Rotation2d.fromDegrees(180))
         case SIMBOT -> {
@@ -117,13 +127,13 @@ public final class DriveConstants {
 
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(10, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(10, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 

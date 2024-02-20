@@ -27,7 +27,7 @@ public class MultiDistanceShot extends Command {
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to shoot at.
-   * @param shooter The shooter subsystem.
+   * @param flywheel The flywheel subsystem.
    */
   public MultiDistanceShot(Supplier<Pose2d> poseSupplier, Pose2d targetPose, Shooter shooter) {
     this.poseSupplier = poseSupplier;
@@ -35,12 +35,12 @@ public class MultiDistanceShot extends Command {
     this.shooter = shooter;
 
     // Populate the distance map with distance-speed pairs
-    distanceMap.put(1.0, 10.0);
-    distanceMap.put(2.3, 15.7);
-    distanceMap.put(3.6, 21.9);
-    distanceMap.put(4.9, 27.8);
-    distanceMap.put(6.2, 33.6);
-    distanceMap.put(7.5, 39.4);
+    distanceMap.put(1.0, 500.0);
+    distanceMap.put(2.3, 1000.0);
+    distanceMap.put(3.6, 1500.0);
+    distanceMap.put(4.9, 2000.0);
+    distanceMap.put(6.2, 2500.0);
+    distanceMap.put(7.5, 3000.0);
   }
 
   @Override
@@ -57,13 +57,13 @@ public class MultiDistanceShot extends Command {
     // Get the corresponding speed from the distance-speed map
     speed = distanceMap.get(distance);
 
-    // Run the shooter at the calculated speed
+    // Run the flywheel at the calculated speed
     shooter.setSetpoint(speed, speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    // Stop the shooter when the command ends
+    // Stop the flywheel when the command ends
     shooter.stop();
   }
 
@@ -84,7 +84,7 @@ public class MultiDistanceShot extends Command {
   }
 
   /**
-   * Gets the speed of the shooter.
+   * Gets the speed of the flywheel.
    *
    * @return The speed in units per second.
    */

@@ -29,9 +29,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.MultiDistanceShot;
 import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
@@ -86,6 +86,9 @@ public class RobotContainer {
 
   private Superstructure superstructure;
 
+  private boolean hasRun = false;
+  private boolean hasEjected = false; // New flag for the EJECTALIGN command
+
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
@@ -96,21 +99,17 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraBL =
-  new Transform3d(
-      new Translation3d(Units.inchesToMeters(-13.), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
-      new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(225.)));
+  private static final Transform3d robotToCameraBack =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-13.), Units.inchesToMeters(-12.), Units.inchesToMeters(10.)),
+          new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(315.)));
 
-private static final Transform3d robotToCameraBR =
-  new Transform3d(
-      new Translation3d(Units.inchesToMeters(-13.), Units.inchesToMeters(-12.), Units.inchesToMeters(10.)),
-      new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(315.)));
-
-private static final Transform3d robotToCameraFront =
-  new Transform3d(
-      new Translation3d(Units.inchesToMeters(11), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
-      new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0.)));
-
+  private static final Transform3d robotToCameraFront =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(11), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
+          new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -133,7 +132,7 @@ private static final Transform3d robotToCameraFront =
         aprilTagVision =
             new AprilTagVision(
                 // new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
-                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
                 new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
         rollers = new Rollers(feeder1, feeder2, intake);
 
@@ -175,56 +174,104 @@ private static final Transform3d robotToCameraFront =
         intake = new Intake(new IntakeIO() {});
     }
 
-    // Set up auto routines
+    // // Set up auto routines
+    // NamedCommands.registerCommand(
+    // "Shoot",
+    // Commands.sequence(
+    // Commands.runOnce(
+    // () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+    // superstructure),
+    // // Commands.startEnd(
+    // // () -> DriveCommands.setSpeakerMode(drive::getPose),
+    // // DriveCommands::disableDriveHeading),
+    // // .alongWith(
+    // // new MultiDistanceArm(
+    // // drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)),
+    // Commands.waitSeconds(0.5),
+    // Commands.runOnce(
+    // () -> superstructure.setGoal(Superstructure.SystemState.SHOOT),
+    // superstructure),
+    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+    // Commands.waitSeconds(0.5),
+    // Commands.runOnce(
+    // () -> {
+    // shooter.setGoal(Shooter.Goal.IDLE);
+    // superstructure.setGoal(Superstructure.SystemState.IDLE);
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // })));
+
+    // Register the PreShoot command
+    NamedCommands.registerCommand(
+        "PreShoot",
+        Commands.runOnce(
+            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+            superstructure));
+
+    // Modify the Shoot command
     NamedCommands.registerCommand(
         "Shoot",
         Commands.sequence(
-            Commands.runOnce(
-                () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
-                superstructure),
-            Commands.startEnd(
-                    () -> DriveCommands.setSpeakerMode(drive::getPose),
-                    DriveCommands::disableDriveHeading)
-                .alongWith(
-                    new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)),
-            Commands.waitSeconds(1),
-            Commands.runOnce(
-                () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-            Commands.waitSeconds(1.0),
+            Commands.waitSeconds(0.5),
             Commands.runOnce(
                 () -> {
                   shooter.setGoal(Shooter.Goal.IDLE);
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
+                  rollers.setGoal(Rollers.Goal.IDLE);
                 })));
+
+    NamedCommands.registerCommand(
+        "Intake Reset",
+        Commands.runOnce(
+            () -> {
+              hasRun = false;
+              hasEjected = false;
+            }));
 
     NamedCommands.registerCommand(
         "Intake",
         Commands.sequence(
             Commands.runOnce(
-                () -> superstructure.setGoal(Superstructure.SystemState.INTAKE), superstructure),
-            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+                () -> {
+                  if (!hasRun) {
+                    superstructure.setGoal(Superstructure.SystemState.INTAKE);
+                    rollers.setGoal(Rollers.Goal.FLOOR_INTAKE);
+                    hasRun = true;
+                  }
+                },
+                superstructure,
+                rollers),
             Commands.waitUntil(() -> !rollers.getBeamBreak()),
             Commands.runOnce(
                 () -> {
-                  shooter.setGoal(Shooter.Goal.IDLE);
+                  if (!hasEjected) {
+                    rollers.setGoal(Rollers.Goal.EJECTALIGN);
+                    hasEjected = true;
+                  }
+                },
+                rollers),
+            Commands.waitUntil(() -> rollers.getBeamBreak()),
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 })));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addOption(
+    // "Drive SysId (Quasistatic Forward)",
+    // drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addOption(
+    // "Drive SysId (Quasistatic Reverse)",
+    // drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    // autoChooser.addOption(
+    // "Drive SysId (Dynamic Forward)",
+    // drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // autoChooser.addOption(
+    // "Drive SysId (Dynamic Reverse)",
+    // drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
@@ -327,7 +374,7 @@ private static final Transform3d robotToCameraFront =
             Commands.run(
                 () ->
                     drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(10, 1), Rotation2d.fromDegrees(0)))));
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -349,7 +396,7 @@ private static final Transform3d robotToCameraFront =
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 175)))
+                .alongWith(new PositionArmPID(armPID, -16)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -407,6 +454,12 @@ private static final Transform3d robotToCameraFront =
     // Rotation2d.fromRadians(2.617))));
 
     driverController
+        .povUp()
+        .whileTrue(
+            new MultiDistanceShot(
+                drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, shooter));
+
+    driverController
         .b()
         .onTrue(
             Commands.runOnce(
@@ -420,19 +473,21 @@ private static final Transform3d robotToCameraFront =
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 200.00)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -16.00)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 100.0)); // "Midfield Shoot"
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, -14.0)); // "Midfield Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 175.0)); // "Amp/Note Shoot"
+    operatorController
+        .povLeft()
+        .whileTrue(new PositionArmPID(armPID, -11.4878)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
