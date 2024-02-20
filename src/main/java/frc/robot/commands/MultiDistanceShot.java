@@ -36,11 +36,11 @@ public class MultiDistanceShot extends Command {
 
     // Populate the distance map with distance-speed pairs
     distanceMap.put(1.0, 500.0);
-    distanceMap.put(2.3, 1000.0);
-    distanceMap.put(3.6, 1500.0);
-    distanceMap.put(4.9, 2000.0);
-    distanceMap.put(6.2, 2500.0);
-    distanceMap.put(7.5, 3000.0);
+    distanceMap.put(2.3, 6000.0);
+    distanceMap.put(3.6, 6000.0);
+    distanceMap.put(4.9, 6000.0);
+    distanceMap.put(6.2, 6000.0);
+    distanceMap.put(7.5, 6000.0);
   }
 
   @Override
