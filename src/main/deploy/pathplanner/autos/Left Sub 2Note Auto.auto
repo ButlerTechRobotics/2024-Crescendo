@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2,
-      "y": 6.75
+      "x": 0.93,
+      "y": 4.34
     },
-    "rotation": 45.0
+    "rotation": -57.95041732446152
   },
   "command": {
     "type": "sequential",
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos2toNote2"
+                  "pathName": "Pos1toNote3"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2toPos2"
+                  "pathName": "Note3toPos1"
                 }
               },
               {
