@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
-import frc.robot.commands.MultiDistanceShot;
 import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
@@ -206,6 +205,11 @@ public class RobotContainer {
         Commands.runOnce(
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
             superstructure));
+
+    NamedCommands.registerCommand(
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
+
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(0.0)));
 
     // Modify the Shoot command
     NamedCommands.registerCommand(
@@ -452,12 +456,6 @@ public class RobotContainer {
     // new ShootPoint(
     // drive, new Pose2d(new Translation2d(2.954, 3.621),
     // Rotation2d.fromRadians(2.617))));
-
-    driverController
-        .povUp()
-        .whileTrue(
-            new MultiDistanceShot(
-                drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, shooter));
 
     driverController
         .b()
