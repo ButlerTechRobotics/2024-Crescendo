@@ -525,7 +525,7 @@ public class RobotContainer {
     // ================================================
     operatorController
         .rightBumper()
-        .whileTrue( // Yousef and Toby Fixed This. :)
+        .onTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
@@ -633,7 +633,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -29)); // "Amp/Note Shoot"
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, -29)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
