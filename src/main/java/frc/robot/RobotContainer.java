@@ -34,7 +34,7 @@ import frc.robot.commands.MultiDistanceArm;
 import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
-// import frc.robot.commands.climber.PositionClimbPID;
+import frc.robot.commands.climber.PositionClimbPID;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.DriveController.DriveModeType;
@@ -54,7 +54,7 @@ import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-// import frc.robot.subsystems.superstructure.climber.Climber;
+import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
@@ -93,7 +93,7 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private ArmPositionPID armPID = new ArmPositionPID();
-  // private final Climber climberPID = new Climber();
+  private final Climber climberPID = new Climber();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -354,13 +354,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    // driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 5));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
     // AMP LOCATION
     // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
