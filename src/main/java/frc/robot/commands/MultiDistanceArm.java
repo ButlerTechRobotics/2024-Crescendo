@@ -12,7 +12,7 @@ import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-/** A command that shoots game piece from multi-distance position from the target. */
+/** A command that angles the arm from multi-distance position from the target. */
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
   Pose2d targetPose;
@@ -23,18 +23,18 @@ public class MultiDistanceArm extends Command {
   double angle;
 
   /**
-   * Creates a new MultiDistanceShot command.
+   * Creates a new MultiDistanceArm command.
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to shoot at.
-   * @param armPID The flywheel subsystem.
+   * @param armPID The arm subsystem.
    */
   public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
     this.targetPose = targetPose;
     this.armPID = armPID;
 
-    // Populate the distance map with distance-speed pairs
+    // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
     distanceMap.put(2.3, 2.0);
     distanceMap.put(3.6, 4.0);
@@ -54,16 +54,16 @@ public class MultiDistanceArm extends Command {
     // Calculate the distance from the current pose to the target pose
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
-    // Get the corresponding speed from the distance-speed map
+    // Get the corresponding angle from the distance-angle map
     angle = distanceMap.get(distance);
 
-    // Run the flywheel at the calculated speed
+    // Run the flywheel at the calculated angle
     armPID.setPosition(angle);
   }
 
   @Override
   public void end(boolean interrupted) {
-    // Stop the flywheel when the command ends
+    // Sets the arm to home when the command ends
     armPID.setPosition(0.0);
   }
 
@@ -84,9 +84,9 @@ public class MultiDistanceArm extends Command {
   }
 
   /**
-   * Gets the speed of the flywheel.
+   * Gets the angle of the arm.
    *
-   * @return The speed in units per second.
+   * @return The angle in units per second.
    */
   @AutoLogOutput(key = "Arm/Angle")
   public double getSpeed() {
