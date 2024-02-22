@@ -122,18 +122,21 @@ public class RobotContainer {
                 new ModuleIOSparkFlex(moduleConfigs[1]),
                 new ModuleIOSparkFlex(moduleConfigs[2]),
                 new ModuleIOSparkFlex(moduleConfigs[3]));
+
         shooter = new Shooter(new ShooterIOSparkFlex());
+        superstructure = new Superstructure(shooter);
+
+
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
         intake = new Intake(new IntakeIOSparkFlex());
-        superstructure = new Superstructure(shooter);
+        rollers = new Rollers(feeder1, feeder2, intake);
+
 
         aprilTagVision =
             new AprilTagVision(
                 new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
                 new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
-        rollers = new Rollers(feeder1, feeder2, intake);
-
         break;
 
       case SIM:
@@ -145,7 +148,9 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+
         shooter = new Shooter(new ShooterIOSim());
+
         aprilTagVision =
             new AprilTagVision(
                 new AprilTagVisionIOPhotonVisionSIM(
@@ -420,12 +425,6 @@ public class RobotContainer {
                     new MultiDistanceArm(
                         drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
 
-    // controller
-    // .povDown()
-    // .whileTrue(
-    // new ShootPoint(
-    // drive, new Pose2d(new Translation2d(2.954, 3.621),
-    // Rotation2d.fromRadians(2.617))));
 
     driverController
         .b()
