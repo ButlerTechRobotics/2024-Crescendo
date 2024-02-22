@@ -45,7 +45,6 @@ public class Superstructure extends SubsystemBase {
   // private final Arm arm;
   private final Shooter shooter;
 
-
   @Override
   public void periodic() {
     switch (goal) {

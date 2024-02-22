@@ -82,6 +82,10 @@ public class FieldConstants {
         new Translation2d(topLeftSpeaker.getX() / 2, fieldWidth - Units.inchesToMeters(104.0));
 
     /** Center of the speaker opening (blue alliance) */
+    public static Translation3d centerSpeakerOpening2 =
+        bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
+
+    /** Center of the speaker opening (blue alliance) */
     public static Pose2d centerSpeakerOpening =
         new Pose2d(
             topLeftSpeaker.getX() / 2, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());

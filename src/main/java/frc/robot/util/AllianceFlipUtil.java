@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.Optional;
@@ -62,6 +63,15 @@ public class AllianceFlipUtil {
       return new Pose2d(apply(pose.getTranslation()), apply(pose.getRotation()));
     } else {
       return pose;
+    }
+  }
+
+  public static Translation3d apply(Translation3d translation3d) {
+    if (shouldFlip()) {
+      return new Translation3d(
+          apply(translation3d.getX()), translation3d.getY(), translation3d.getZ());
+    } else {
+      return translation3d;
     }
   }
 

@@ -24,6 +24,7 @@ public class ArmVisualizer {
   private final String key;
 
   public static Translation2d armOrigin = new Translation2d(-0.238, 0.298);
+  public static double armLength = 28.0;
 
   public ArmVisualizer(String key, Color color) {
     this.key = key;
