@@ -5,6 +5,7 @@
 package frc.robot.subsystems.superstructure.arm;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
@@ -36,6 +37,8 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
     pidController.setOutputRange(-0.5, 0.5, 0);
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
