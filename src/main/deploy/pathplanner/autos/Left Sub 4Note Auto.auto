@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7626093884666401,
-      "y": 6.7241388044029655
+      "x": 0.9263275506607991,
+      "y": 4.3385312981452175
     },
-    "rotation": -121.15930450834435
+    "rotation": -57.95041732446152
   },
   "command": {
     "type": "sequential",
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos3toNote6"
+                  "pathName": "Pos1toNote8"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note6toPos0"
+                  "pathName": "Note4toPos4"
                 }
               },
               {
@@ -92,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos0toNote5"
+                  "pathName": "Pos4toNote5"
                 }
               },
               {
@@ -111,7 +111,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note5toPos0.5"
+                  "pathName": "Note5toPos4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pos4toNote6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note6toPos4"
                 }
               },
               {

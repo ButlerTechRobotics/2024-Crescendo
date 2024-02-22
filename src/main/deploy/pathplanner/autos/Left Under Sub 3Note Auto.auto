@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos1toNote8"
+                  "pathName": "Pos1toNote6"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note4toPos4"
+                  "pathName": "Note6toPos0"
                 }
               },
               {
@@ -92,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos4toNote5"
+                  "pathName": "Pos0toNote5"
                 }
               },
               {
@@ -111,7 +111,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note5toPos4"
+                  "pathName": "Note5toPos0.5"
                 }
               },
               {
