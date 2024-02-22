@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.superstructure.climber;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;

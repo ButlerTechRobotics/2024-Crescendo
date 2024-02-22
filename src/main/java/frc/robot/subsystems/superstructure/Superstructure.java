@@ -1,8 +1,6 @@
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotState;
 // import frc.robot.subsystems.superstructure.arm.Arm;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.util.LoggedTunableNumber;
@@ -36,9 +34,7 @@ public class Superstructure extends SubsystemBase {
   public enum GamepieceState {
     NO_GAMEPIECE,
 
-    HOLDING_SHOOTER,
-
-    HOLDING_BACKPACK
+    HOLDING_SHOOTER
   }
 
   @Getter private SystemState currentState = SystemState.IDLE;
@@ -49,7 +45,6 @@ public class Superstructure extends SubsystemBase {
   // private final Arm arm;
   private final Shooter shooter;
 
-  private final Timer followThroughTimer = new Timer();
 
   @Override
   public void periodic() {
@@ -78,12 +73,10 @@ public class Superstructure extends SubsystemBase {
         // arm.setSetpoint(Rotation2d.fromDegrees(armIntakeSetpointDegrees.get()));
       }
       case PREPARE_SHOOT -> {
-        var aimingParams = RobotState.getInstance().getAimingParameters();
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTING);
       }
       case SHOOT -> {
-        var aimingParams = RobotState.getInstance().getAimingParameters();
         shooter.setGoal(Shooter.Goal.SHOOTING);
         // arm.setSetpoint(aimingParams.armAngle());
       }
