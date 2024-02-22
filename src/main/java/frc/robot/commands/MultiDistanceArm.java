@@ -20,35 +20,34 @@ public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier; // Supplier for the robot's current pose
   Pose2d targetPose; // The target pose to aim at
   ArmPositionPID armPID; // The arm subsystem
-  InterpolatingDoubleTreeMap distanceMap =
-      new InterpolatingDoubleTreeMap(); 
-      // Map to hold distance-angle pairs
+  InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
+  // Map to hold distance-angle pairs
 
   double distance; // Distance from the current pose to the target pose
   double targetAngle; // The angle to set the arm to
   double angle;
 
   /*
-   * Constructor for the MultiDistanceArm command.
-=======
-  double distance;
-  double angle;
+     * Constructor for the MultiDistanceArm command.
+  =======
+    double distance;
+    double angle;
 
-  /**
-   * Creates a new MultiDistanceShot command.
->>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
-=======
-  double distance;
-  double angle;
+    /**
+     * Creates a new MultiDistanceShot command.
+  >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+  =======
+    double distance;
+    double angle;
 
-  /**
-   * Creates a new MultiDistanceShot command.
->>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
-   *
-   * @param poseSupplier The supplier for the robot's current pose.
-   * @param targetPose The target pose to shoot at.
-   * @param armPID The flywheel subsystem.
-   */
+    /**
+     * Creates a new MultiDistanceShot command.
+  >>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
+     *
+     * @param poseSupplier The supplier for the robot's current pose.
+     * @param targetPose The target pose to shoot at.
+     * @param armPID The flywheel subsystem.
+     */
   public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
     this.targetPose = targetPose;
@@ -82,7 +81,7 @@ public class MultiDistanceArm extends Command {
 
     // Set the arm position to the calculated angle
     armPID.setPosition(targetAngle);
-   
+
     // Get the corresponding speed from the distance-speed map
     angle = distanceMap.get(distance);
 
@@ -123,15 +122,9 @@ public class MultiDistanceArm extends Command {
   }
 
   /**
-<<<<<<< HEAD
-<<<<<<< HEAD
-   * Gets the current target angle of the arm.
-=======
-   * Gets the speed of the flywheel.
->>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
-=======
-   * Gets the speed of the flywheel.
->>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
+   * <<<<<<< HEAD <<<<<<< HEAD Gets the current target angle of the arm. ======= Gets the speed of
+   * the flywheel. >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+   * ======= Gets the speed of the flywheel. >>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
    *
    * @return The target angle in degrees.
    */
