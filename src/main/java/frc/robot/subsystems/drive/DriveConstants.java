@@ -84,11 +84,14 @@ public final class DriveConstants {
                   2,
                   9,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   Rotation2d.fromRotations(0.022949).plus(Rotation2d.fromDegrees(180)),
                   true), // Front right module
               new ModuleConfig(
                   3, 4, 10, Rotation2d.fromRotations(-0.412842), true), // Front left module
 =======
+=======
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
                   Rotation2d.fromRotations(0.028809 - 0.01).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
@@ -97,11 +100,15 @@ public final class DriveConstants {
                   10,
                   Rotation2d.fromRotations(0.088623 - 0.01).plus(Rotation2d.fromDegrees(180)),
                   true),
+<<<<<<< HEAD
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
               new ModuleConfig(
                   5,
                   6,
                   11,
+<<<<<<< HEAD
 <<<<<<< HEAD
                   Rotation2d.fromRotations(-0.245117).plus(Rotation2d.fromDegrees(180)),
                   true), // Rear right module
@@ -112,6 +119,11 @@ public final class DriveConstants {
                   true),
               new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(0.255859), true)
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+                  Rotation2d.fromRotations(-0.246582).plus(Rotation2d.fromDegrees(180)),
+                  true),
+              new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(0.255859), true)
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
             };
         case SIMBOT -> { // For simulation robot
           ModuleConfig[] configs = new ModuleConfig[4];
@@ -158,9 +170,12 @@ public final class DriveConstants {
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0); // For competition robot
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0); // For simulation robot
 =======
+=======
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
         case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
@@ -171,6 +186,7 @@ public final class DriveConstants {
       switch (Constants.getRobot()) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0); // For competition robot
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0); // For simulation robot
 =======
@@ -178,6 +194,9 @@ public final class DriveConstants {
 =======
         case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
 >>>>>>> 942dc9f (Stuff)
+=======
+        case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
       };

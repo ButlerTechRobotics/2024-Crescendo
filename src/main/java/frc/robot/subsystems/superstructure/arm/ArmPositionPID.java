@@ -39,6 +39,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setOutputRange(-0.5, 0.5, 0);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     motor.restoreFactoryDefaults();
 
     motor.setCANTimeout(500);
@@ -64,6 +65,10 @@ public class ArmPositionPID extends SubsystemBase {
 >>>>>>> a1cdcc7 (Added arm pivot 3d visualizer)
 =======
 >>>>>>> b36c8b5 (Removed unused arm stuff)
+=======
+    measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
+    setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
   }
 
   public double getTargetPosition() {

@@ -24,6 +24,7 @@ public class MultiDistanceArm extends Command {
       new InterpolatingDoubleTreeMap(); // Map to hold distance-angle pairs
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   double distance; // Distance from the current pose to the target pose
   double targetAngle; // The angle to set the arm to
 
@@ -36,6 +37,13 @@ public class MultiDistanceArm extends Command {
   /**
    * Creates a new MultiDistanceShot command.
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+  double distance;
+  double angle;
+
+  /**
+   * Creates a new MultiDistanceShot command.
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to shoot at.
@@ -67,6 +75,7 @@ public class MultiDistanceArm extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // Log the distance to the Shuffleboard
     SmartDashboard.putNumber("Distance", distance);
 
@@ -82,10 +91,18 @@ public class MultiDistanceArm extends Command {
     // Run the flywheel at the calculated speed
     armPID.setPosition(angle);
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+    // Get the corresponding speed from the distance-speed map
+    angle = distanceMap.get(distance);
+
+    // Run the flywheel at the calculated speed
+    armPID.setPosition(angle);
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
   }
 
   @Override
   public void end(boolean interrupted) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     // Reset the arm position when the command ends
     armPID.setPosition(0);
@@ -93,6 +110,10 @@ public class MultiDistanceArm extends Command {
     // Stop the flywheel when the command ends
     armPID.setPosition(0.0);
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+    // Stop the flywheel when the command ends
+    armPID.setPosition(0.0);
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
   }
 
   @Override
@@ -113,10 +134,14 @@ public class MultiDistanceArm extends Command {
 
   /**
 <<<<<<< HEAD
+<<<<<<< HEAD
    * Gets the current target angle of the arm.
 =======
    * Gets the speed of the flywheel.
 >>>>>>> b05b67a (Auton Path and working arm distance (Arm positions need tuned))
+=======
+   * Gets the speed of the flywheel.
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
    *
    * @return The target angle in degrees.
    */

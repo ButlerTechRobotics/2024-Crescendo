@@ -138,10 +138,15 @@ public class RobotContainer {
 =======
         aprilTagVision =
             new AprilTagVision(
+<<<<<<< HEAD
                 // new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
                 new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
                 new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
 >>>>>>> d9cc4a2 (camera workie)
+=======
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
+                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
         rollers = new Rollers(feeder1, feeder2, intake);
 =======
                 aprilTagVision = new AprilTagVision(
@@ -424,7 +429,10 @@ public class RobotContainer {
                 () ->
                     drive.setAutoStartPose(
                         new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+<<<<<<< HEAD
 >>>>>>> 4501100 (Yousef's autons)
+=======
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -627,7 +635,10 @@ public class RobotContainer {
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
     operatorController.povRight().whileTrue(new PositionArmPID(armPID, -14.0)); // "Midfield Shoot"
+<<<<<<< HEAD
 >>>>>>> 4501100 (Yousef's autons)
+=======
+>>>>>>> 369a2a5ecb2539ba6897e38a3373fa7779399062
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
