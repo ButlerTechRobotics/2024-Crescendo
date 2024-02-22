@@ -21,7 +21,7 @@ public class Climber extends SubsystemBase {
   SparkPIDController pidController;
   private double targetDistance = 0;
 
-  TunableNumber kP = new TunableNumber("Climber P Gain", -1.0); // .000008
+  TunableNumber kP = new TunableNumber("Climber P Gain", 1.0); // .000008
   TunableNumber kI = new TunableNumber("Climber I Gain", 0.0);
   TunableNumber kD = new TunableNumber("Climber D Gain", 0.0);
   TunableNumber kFF = new TunableNumber("Climber FF Gain", 0.0); // .000107
