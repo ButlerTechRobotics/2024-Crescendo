@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems.superstructure.climber;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
@@ -32,6 +34,10 @@ public class Climber extends SubsystemBase {
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
     pidController.setOutputRange(-0.6, 0.6, 0);
+
+    motor.setSmartCurrentLimit(40);
+    motor.setInverted(true);
+    motor.setIdleMode(IdleMode.kBrake);
   }
 
   public double getTargetPosition() {
