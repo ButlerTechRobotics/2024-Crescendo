@@ -27,6 +27,12 @@ public class Shooter extends SubsystemBase {
       new LoggedTunableNumber("Superstructure/IntakingTopRPM", -2000.0);
   private static LoggedTunableNumber intakingBottomRPM =
       new LoggedTunableNumber("Superstructure/IntakingBottomRPM", -2000.0);
+
+  private static LoggedTunableNumber idleTopRPM =
+      new LoggedTunableNumber("Superstructure/IdleTopRPM", 200.0);
+  private static LoggedTunableNumber idleBottomRPM =
+      new LoggedTunableNumber("Superstructure/IdleBottomRPM", 200.0);
+
   private static final LoggedTunableNumber shooterTolerance =
       new LoggedTunableNumber("Flywheels/ToleranceRPM", shooterToleranceRPM);
 
@@ -78,7 +84,7 @@ public class Shooter extends SubsystemBase {
       setGoal(Goal.IDLE);
     } else {
       switch (goal) {
-        case IDLE -> io.stop();
+        case IDLE -> setSetpoint(idleTopRPM.get(), idleBottomRPM.get());
         case INTAKING -> setSetpoint(intakingTopRPM.get(), intakingBottomRPM.get());
         case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
       }
