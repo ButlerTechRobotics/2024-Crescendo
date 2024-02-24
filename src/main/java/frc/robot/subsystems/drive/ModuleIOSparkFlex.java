@@ -63,8 +63,8 @@ public class ModuleIOSparkFlex implements ModuleIO {
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
     turnSparkMax.setInverted(config.turnMotorInverted());
-    driveSparkMax.setSmartCurrentLimit(40);
-    turnSparkMax.setSmartCurrentLimit(30);
+    driveSparkMax.setSmartCurrentLimit(80);
+    turnSparkMax.setSmartCurrentLimit(20);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
 
@@ -84,7 +84,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
     cancoder.getConfigurator().apply(new CANcoderConfiguration());
     turnAbsolutePosition = cancoder.getAbsolutePosition();
-    turnAbsolutePosition.setUpdateFrequency(50.0);
+    turnAbsolutePosition.setUpdateFrequency(10.0);
     cancoder.optimizeBusUtilization();
   }
 

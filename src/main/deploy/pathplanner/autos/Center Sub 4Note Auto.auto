@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PreShoot"
           }
         },
@@ -177,6 +183,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Gyro Reset"
           }
         }
       ]

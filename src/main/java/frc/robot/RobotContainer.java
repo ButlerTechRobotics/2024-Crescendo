@@ -114,7 +114,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Constants.getMode()) {
       case REAL:
-        // Real robot, instantiate hardware IO implementations
+        // Real robot, instantiate hardware I` implementations
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -177,6 +177,17 @@ public class RobotContainer {
 
         intake = new Intake(new IntakeIO() {});
     }
+
+    // ================================================
+    // Register the Auto Command Gyro
+    // ================================================
+
+    NamedCommands.registerCommand(
+        "Gyro Reset",
+        Commands.run(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -277,9 +288,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> driverController.getRightX()));
+            () -> driverController.getLeftY(),
+            () -> driverController.getLeftX(),
+            () -> -driverController.getRightX()));
     driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
