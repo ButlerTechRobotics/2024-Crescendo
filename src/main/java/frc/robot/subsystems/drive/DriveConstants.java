@@ -67,13 +67,29 @@ public final class DriveConstants {
         case COMPBOT ->
             new ModuleConfig[] {
               new ModuleConfig(
-                  1, 2, 9, Rotation2d.fromRotations(0.0).plus(Rotation2d.fromDegrees(180)), true),
+                  1,
+                  2,
+                  9,
+                  Rotation2d.fromRotations(-0.426514).plus(Rotation2d.fromDegrees(0)),
+                  true),
               new ModuleConfig(
-                  3, 4, 10, Rotation2d.fromRotations(0.0).plus(Rotation2d.fromDegrees(180)), true),
+                  3,
+                  4,
+                  10,
+                  Rotation2d.fromRotations(-0.226562).plus(Rotation2d.fromDegrees(180)),
+                  true),
               new ModuleConfig(
-                  5, 6, 11, Rotation2d.fromRotations(0.0).plus(Rotation2d.fromDegrees(180)), true),
+                  5,
+                  6,
+                  11,
+                  Rotation2d.fromRotations(0.238770).plus(Rotation2d.fromDegrees(0)),
+                  true),
               new ModuleConfig(
-                  7, 8, 12, Rotation2d.fromRotations(0.0).plus(Rotation2d.fromDegrees(180)), true)
+                  7,
+                  8,
+                  12,
+                  Rotation2d.fromRotations(-0.370361).plus(Rotation2d.fromDegrees(180)),
+                  true)
             };
           // .plus(Rotation2d.fromDegrees(180))
         case SIMBOT -> {

@@ -84,7 +84,7 @@ public class Shooter extends SubsystemBase {
       setGoal(Goal.IDLE);
     } else {
       switch (goal) {
-        case IDLE -> setSetpoint(idleTopRPM.get(), idleBottomRPM.get());
+        case IDLE -> io.stop();
         case INTAKING -> setSetpoint(intakingTopRPM.get(), intakingBottomRPM.get());
         case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
       }

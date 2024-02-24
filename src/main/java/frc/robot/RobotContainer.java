@@ -279,7 +279,7 @@ public class RobotContainer {
             drive,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
+            () -> driverController.getRightX()));
     driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
