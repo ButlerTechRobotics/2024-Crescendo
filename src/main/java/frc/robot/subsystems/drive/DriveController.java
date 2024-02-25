@@ -109,16 +109,19 @@ public class DriveController {
   /** Turns on heading control and sets the heading to SPEAKER mode. */
   private void enableSpeakerHeading() {
     setHeadingSupplier(
-        () ->
-            new Rotation2d(
-                poseSupplier.get().getX()
-                    - AllianceFlipUtil.apply(
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
-                        .getX(),
-                poseSupplier.get().getY()
-                    - AllianceFlipUtil.apply(
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
-                        .getY()));
+        () -> {
+          double dx =
+              poseSupplier.get().getX()
+                  - AllianceFlipUtil.apply(
+                          FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
+                      .getX();
+          double dy =
+              poseSupplier.get().getY()
+                  - AllianceFlipUtil.apply(
+                          FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
+                      .getY();
+          return Rotation2d.fromDegrees(Math.toDegrees(Math.atan2(dy, dx)));
+        });
   }
 
   /** Possible Drive Modes. */

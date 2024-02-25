@@ -30,8 +30,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.MultiDistanceArm;
 import frc.robot.commands.PathFinderAndFollow;
+import frc.robot.commands.RotateToSpeaker;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
@@ -57,13 +57,11 @@ import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
-import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
-import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -112,6 +110,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -147,7 +146,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
 
-        shooter = new Shooter(new ShooterIOSim());
+        // shooter = new Shooter(new ShooterIOSim());
 
         aprilTagVision =
             new AprilTagVision(
@@ -191,7 +190,7 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
@@ -413,15 +412,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM SHOOTER AT SPEAKER
     // ================================================
-    operatorController
-        .leftTrigger()
-        .whileTrue(
-            Commands.startEnd(
-                    () -> DriveCommands.setSpeakerMode(drive::getPose),
-                    DriveCommands::disableDriveHeading)
-                .alongWith(
-                    new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+    // operatorController
+    // .leftTrigger()
+    // .whileTrue(
+    // Commands.startEnd(
+    // () -> DriveCommands.setSpeakerMode(drive::getPose),
+    // DriveCommands::disableDriveHeading)
+    // .alongWith(
+    // new MultiDistanceArm(
+    // drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+
+    RotateToSpeaker rotateToSpeaker = new RotateToSpeaker(drive, aprilTagVision);
+
+    operatorController.leftTrigger().whileTrue(rotateToSpeaker);
 
     driverController
         .b()
@@ -435,27 +438,27 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION SUB SHOOT
+    // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -32)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 34)); // "Midfield shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION MIDFIELD SHOOT
+    // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, -14.0)); // "Midfield Shoot"
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 14.0)); // "Pillar Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -29)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 29)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION PILLAR SHOOT
+    // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Sub Shoot"
   }
 
   /**

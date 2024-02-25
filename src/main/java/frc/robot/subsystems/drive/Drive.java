@@ -23,6 +23,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,6 +63,9 @@ public class Drive extends SubsystemBase {
           headingControllerConstants.Kd(),
           new TrapezoidProfile.Constraints(
               drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));
+
+  private final PIDController rotationController =
+      new PIDController(0.01, 0, 0); // You'll need to tune these PID values
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -283,6 +287,26 @@ public class Drive extends SubsystemBase {
   /** Returns the current poseEstimator rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();
+  }
+
+  public void rotateTo(double angle) {
+    // Convert the angle to a rotation
+    Rotation2d targetRotation = Rotation2d.fromDegrees(angle);
+
+    // Get the current rotation from the pose estimator
+    Rotation2d currentRotation = poseEstimator.getEstimatedPosition().getRotation();
+
+    // Calculate the rotation error
+    double error = targetRotation.minus(currentRotation).getDegrees();
+
+    // Create a swerve module state for each wheel, using the error as the desired rotation
+    SwerveModuleState desiredState =
+        new SwerveModuleState(2, new Rotation2d(Math.toRadians(error)));
+
+    // Apply the desired state to the swerve modules
+    for (int i = 0; i < 4; i++) {
+      modules[i].runSetpoint(desiredState);
+    }
   }
 
   /**
