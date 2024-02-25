@@ -30,8 +30,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.MultiDistanceArm;
 import frc.robot.commands.PathFinderAndFollow;
-import frc.robot.commands.RotateToSpeaker;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
@@ -62,6 +62,7 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -412,19 +413,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM SHOOTER AT SPEAKER
     // ================================================
-    // operatorController
-    // .leftTrigger()
-    // .whileTrue(
-    // Commands.startEnd(
-    // () -> DriveCommands.setSpeakerMode(drive::getPose),
-    // DriveCommands::disableDriveHeading)
-    // .alongWith(
-    // new MultiDistanceArm(
-    // drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            Commands.startEnd(
+                    () -> DriveCommands.setSpeakerMode(drive::getPose),
+                    DriveCommands::disableDriveHeading)
+                .alongWith(
+                    new MultiDistanceArm(
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
 
-    RotateToSpeaker rotateToSpeaker = new RotateToSpeaker(drive, aprilTagVision);
+    // RotateToSpeaker rotateToSpeaker = new RotateToSpeaker(drive, aprilTagVision);
 
-    operatorController.leftTrigger().whileTrue(rotateToSpeaker);
+    // operatorController.leftTrigger().whileTrue(rotateToSpeaker);
 
     driverController
         .b()
