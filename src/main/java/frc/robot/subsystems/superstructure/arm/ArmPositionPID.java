@@ -38,7 +38,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setFF(kFF.get(), 0);
     pidController.setOutputRange(-0.4, 0.5, 0);
 
-    motor.setIdleMode(IdleMode.kBrake)
+    motor.setIdleMode(IdleMode.kBrake);
 
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
