@@ -98,17 +98,17 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraBack =
+  private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-13.), Units.inchesToMeters(-12.), Units.inchesToMeters(10.)),
-          new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(315.)));
+              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(30.)));
 
-  private static final Transform3d robotToCameraFront =
+  private static final Transform3d robotToCameraFR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(11), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
-          new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0.)));
+              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-30.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -133,8 +133,8 @@ public class RobotContainer {
 
         aprilTagVision =
             new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
-                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
+                new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
+                new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR));
         break;
 
       case SIM:
