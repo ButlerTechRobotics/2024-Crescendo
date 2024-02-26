@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
@@ -74,11 +75,12 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     pidController.setReference(targetAngle, ControlType.kPosition, 0);
-    // SmartDashboard.putNumber("ArmAngle", getPosition()); //**************NEEDS UNCOMMENTED*************
+    SmartDashboard.putNumber("ArmAngle", getPosition()); // **************NEEDS
+    // UNCOMMENTED*************
     // SmartDashboard.putNumber("ENCODER?",
     // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
-    // measuredVisualizer.update(getPosition()); //**************NEEDS UNCOMMENTED*************
+    measuredVisualizer.update(getPosition()); // **************NEEDS UNCOMMENTED*************
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/Angle", targetAngle);
   }

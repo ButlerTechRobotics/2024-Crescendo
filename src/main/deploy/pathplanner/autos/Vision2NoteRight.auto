@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8221644973960404,
-      "y": 6.686887667641241
+      "x": 0.8104536608502588,
+      "y": 6.698598504187022
     },
-    "rotation": 62.81888891452277
+    "rotation": 60.255118703057796
   },
   "command": {
     "type": "sequential",
@@ -36,7 +36,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote3"
+                  "pathName": "leavingPos3"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote4"
                 }
               },
               {
@@ -82,6 +88,6 @@
       ]
     }
   },
-  "folder": "Vision Autons",
+  "folder": null,
   "choreoAuto": false
 }

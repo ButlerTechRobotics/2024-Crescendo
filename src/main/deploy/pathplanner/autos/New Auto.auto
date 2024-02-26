@@ -14,18 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "toNote3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "toNote8"
+            "pathName": "toNote4"
           }
         }
       ]
     }
   },
-  "folder": "Vision Autons",
+  "folder": null,
   "choreoAuto": false
 }
