@@ -34,7 +34,7 @@ public class PositionArmPID extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setPosition(m_arm.getPostion());
+    m_arm.setPosition(m_arm.getPosition());
   }
 
   // Returns true when the command should end.
