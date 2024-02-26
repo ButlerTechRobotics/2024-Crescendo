@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3952042110521514,
+      "y": 5.5182103704939935
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toNote3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toNote8"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Vision Autons",
+  "choreoAuto": false
+}
