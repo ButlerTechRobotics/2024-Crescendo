@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9263275506607991,
-      "y": 4.3385312981452175
+      "x": 1.3725738150477713,
+      "y": 5.550936522700434
     },
-    "rotation": -57.95041732446152
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -36,22 +30,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos1toNote8"
-                }
-              }
-            ]
+            "name": "Intake Reset"
           }
         },
         {
@@ -61,7 +42,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note4toPos4"
+                  "pathName": "toNote2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -80,19 +86,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos4toNote5"
+                  "pathName": "toNote1"
                 }
               },
               {
@@ -105,13 +105,69 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note5toPos4"
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -132,6 +188,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Vision Autons",
   "choreoAuto": false
 }

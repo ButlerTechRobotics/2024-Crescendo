@@ -2,15 +2,21 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3676672858340169,
-      "y": 5.545747295712128
+      "x": 0.6933452953924437,
+      "y": 4.461828723942754
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -42,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos2toNote2"
+                  "pathName": "toNote8"
                 }
               }
             ]
@@ -55,63 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2toPos2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos2toNote1"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note1toPos2"
+                  "pathName": "toPos1"
                 }
               },
               {
@@ -132,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Vision Autons",
   "choreoAuto": false
 }

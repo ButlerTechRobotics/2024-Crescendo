@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.868036409396641,
-        "y": 1.206216164215495
+        "x": 2.098645680886225,
+        "y": 4.403274541213847
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.535554092506189,
-        "y": 1.2179270007612752
+        "x": 2.3328624118018553,
+        "y": 4.2978770123018135
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 15.34360181416511,
-        "y": 1.0188427794829902
+        "x": 2.7661633639957715,
+        "y": 4.20419031993556
       },
       "prevControl": {
-        "x": 14.86345751578807,
-        "y": 1.1945053276697124
+        "x": 2.4499707772596713,
+        "y": 4.227611993027122
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,17 +33,20 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 411.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -57.994616791916535,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Vision Paths",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }
