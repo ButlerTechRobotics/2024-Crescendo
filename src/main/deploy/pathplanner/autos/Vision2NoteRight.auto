@@ -30,15 +30,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "leavingPos3"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "leavingPos3"
-                }
-              },
               {
                 "type": "path",
                 "data": {
