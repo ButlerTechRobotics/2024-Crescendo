@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7275269251393202,
-      "y": 4.397002070357417
+      "x": 0.8221644973960404,
+      "y": 6.686887667641241
     },
-    "rotation": -57.95041732446152
+    "rotation": 62.81888891452277
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -26,32 +20,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos1toNote6"
-                }
-              }
-            ]
           }
         },
         {
@@ -61,22 +36,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note6toPos0"
+                  "pathName": "toNote3"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": "Intake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -92,26 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos0toNote5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note5toPos0.5"
+                  "pathName": "toPos3"
                 }
               },
               {
@@ -132,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Vision Autons",
   "choreoAuto": false
 }

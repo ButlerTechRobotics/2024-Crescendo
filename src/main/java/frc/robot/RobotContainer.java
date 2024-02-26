@@ -30,8 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.PathFinderAndFollow;
-import frc.robot.commands.RotateToSpeaker;
+import frc.robot.commands.MultiDistanceArm;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
@@ -62,6 +61,7 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -110,7 +110,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -259,6 +258,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
+    driveMode.setPoseSupplier(drive::getPose);
     driveMode.disableHeadingControl();
     configureButtonBindings();
   }
@@ -276,9 +276,10 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
+            driveMode,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
-            () -> driverController.getRightX()));
+            () -> -driverController.getRightX()));
     driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
@@ -325,20 +326,21 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }));
+    // driverController.a().toggleOnTrue(new RotateToSpeaker(drive));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
     // SET DRIVE MODE TO AMP
     // ================================================
     driverController
-        .rightBumper()
+        .rightTrigger()
         .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
 
     // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    // driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -364,8 +366,6 @@ public class RobotContainer {
     // ================================================
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
-    // AMP LOCATION
-    // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
     // AMP SCORE
     operatorController
         .leftBumper()
@@ -412,19 +412,14 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM SHOOTER AT SPEAKER
     // ================================================
-    // operatorController
-    //     .leftTrigger()
-    //     .whileTrue(
-    //         Commands.startEnd(
-    //                 () -> DriveCommands.setSpeakerMode(drive::getPose),
-    //                 DriveCommands::disableDriveHeading)
-    //             .alongWith(
-    //                 new MultiDistanceArm(
-    //                     drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
-
-    RotateToSpeaker rotateToSpeaker = new RotateToSpeaker(drive, aprilTagVision);
-
-    operatorController.leftTrigger().whileTrue(rotateToSpeaker);
+    driverController
+        .a()
+        .whileTrue(
+            Commands.startEnd(
+                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                .alongWith(
+                    new MultiDistanceArm(
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
 
     driverController
         .b()

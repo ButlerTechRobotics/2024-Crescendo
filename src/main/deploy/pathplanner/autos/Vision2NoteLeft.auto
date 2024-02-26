@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9263275506607991,
-      "y": 4.3385312981452175
+      "x": 0.6933452953924437,
+      "y": 4.461828723942754
     },
-    "rotation": -57.95041732446152
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos1toNote8"
+                  "pathName": "toNote8"
                 }
               }
             ]
@@ -61,57 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note4toPos4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos4toNote5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note5toPos4"
+                  "pathName": "toPos1"
                 }
               },
               {
@@ -132,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Vision Autons",
   "choreoAuto": false
 }

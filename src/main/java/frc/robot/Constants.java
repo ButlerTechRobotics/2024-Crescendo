@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.util.Alert;
 
@@ -25,6 +27,11 @@ import frc.robot.util.Alert;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final Pose2d SPEAKER_TARGET = new Pose2d(1.37, 5.56, new Rotation2d(Math.PI));
+  public static final Pose2d SPEAKER_DISTANCE_TARGET =
+      new Pose2d(0.2, 5.52, new Rotation2d(Math.PI));
+  public static final Pose2d AMP_TARGET = new Pose2d(1.83, 7.27, new Rotation2d(Math.PI / 2.));
+
   public static final int loopPeriodMs = 20;
   private static RobotType robotType = RobotType.COMPBOT;
   public static final boolean tuningMode = true;

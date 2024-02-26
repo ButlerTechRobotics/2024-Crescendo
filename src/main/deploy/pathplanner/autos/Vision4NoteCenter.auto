@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3676672858340169,
-      "y": 5.545747295712128
+      "x": 1.3725738150477713,
+      "y": 5.550936522700434
     },
     "rotation": 0
   },
@@ -30,22 +30,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos2toNote2"
-                }
-              }
-            ]
+            "name": "Intake Reset"
           }
         },
         {
@@ -55,44 +42,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2toPos2"
+                  "pathName": "toNote2"
                 }
               },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pos2toNote1"
                 }
               }
             ]
@@ -111,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note1toPos2"
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -136,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos2toNote3"
+                  "pathName": "toNote1"
                 }
               },
               {
@@ -161,7 +117,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note3toPos2"
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -182,6 +188,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Vision Autons",
   "choreoAuto": false
 }
