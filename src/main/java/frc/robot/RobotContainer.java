@@ -129,7 +129,7 @@ public class RobotContainer {
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
         intake = new Intake(new IntakeIOSparkFlex());
-        rollers = new Rollers(armPID, feeder1, feeder2, intake);
+        rollers = new Rollers(feeder1, feeder2, intake);
 
         aprilTagVision =
             new AprilTagVision(
@@ -234,6 +234,16 @@ public class RobotContainer {
               hasRun = false;
               hasEjected = false;
             }));
+
+    // ================================================
+    // Register the Auto Command Heading Reset
+    // ================================================
+    NamedCommands.registerCommand(
+        "Heading Reset",
+        Commands.runOnce(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // Register the Auto Command Intake

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
+// import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor()
 public class Rollers extends SubsystemBase {
-  private final ArmPositionPID armPID;
+  // private final ArmPositionPID armPID;
   private final Feeder feeder1;
   private final Feeder feeder2;
   private final Intake intake;
@@ -48,16 +48,16 @@ public class Rollers extends SubsystemBase {
         intake.setGoal(Intake.Goal.IDLE);
       }
       case FLOOR_INTAKE -> {
-        if (armPID.isAtHomePosition()) {
-          feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
-          feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
-          intake.setGoal(Intake.Goal.FLOOR_INTAKING);
-        } else {
-          // The arm is not at its home position, so set the goals to IDLE
-          feeder1.setGoal(Feeder.Goal.IDLE);
-          feeder2.setGoal(Feeder.Goal.IDLE);
-          intake.setGoal(Intake.Goal.IDLE);
-        }
+        // if (armPID.isAtHomePosition()) {
+        feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
+        feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
+        intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+        // } else {
+        //   // The arm is not at its home position, so set the goals to IDLE
+        //   feeder1.setGoal(Feeder.Goal.IDLE);
+        //   feeder2.setGoal(Feeder.Goal.IDLE);
+        //   intake.setGoal(Intake.Goal.IDLE);
+        // }
       }
 
       case SHOOT -> {

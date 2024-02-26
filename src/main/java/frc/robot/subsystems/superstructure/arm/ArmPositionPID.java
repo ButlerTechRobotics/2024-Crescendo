@@ -40,6 +40,8 @@ public class ArmPositionPID extends SubsystemBase {
 
     armMotor.setIdleMode(IdleMode.kBrake);
 
+    armMotor.setSmartCurrentLimit(80);
+
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
   }
@@ -71,17 +73,16 @@ public class ArmPositionPID extends SubsystemBase {
     }
   }
 
-  public boolean isAtHomePosition() {
-    double position = getPosition();
-    return position >= -0.2 && position <= 0.2;
-  }
+  // public boolean isAtHomePosition() {
+  //   return targetAngle >= -0.2 && targetAngle <= 0.2;
+  // }
 
   @Override
   public void periodic() {
     setPID();
     pidController.setReference(targetAngle, ControlType.kPosition, 0);
-    SmartDashboard.putNumber("ArmAngle", getPosition());
-    SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
+    SmartDashboard.putNumber("ArmAngle", armMotor.getEncoder().getPosition());
+    // SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
     // SmartDashboard.putNumber("ENCODER?",
     // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
