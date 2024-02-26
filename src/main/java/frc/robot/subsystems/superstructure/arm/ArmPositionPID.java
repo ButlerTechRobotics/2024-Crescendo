@@ -71,16 +71,21 @@ public class ArmPositionPID extends SubsystemBase {
     }
   }
 
+  public boolean isAtHomePosition() {
+    double position = getPosition();
+    return position >= -0.2 && position <= 0.2;
+  }
+
   @Override
   public void periodic() {
     setPID();
     pidController.setReference(targetAngle, ControlType.kPosition, 0);
-    SmartDashboard.putNumber("ArmAngle", getPosition()); // **************NEEDS
-    // UNCOMMENTED*************
+    SmartDashboard.putNumber("ArmAngle", getPosition());
+    SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
     // SmartDashboard.putNumber("ENCODER?",
     // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
-    measuredVisualizer.update(getPosition()); // **************NEEDS UNCOMMENTED*************
+    measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/Angle", targetAngle);
   }
