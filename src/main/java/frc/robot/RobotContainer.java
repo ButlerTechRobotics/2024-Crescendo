@@ -129,7 +129,7 @@ public class RobotContainer {
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
         intake = new Intake(new IntakeIOSparkFlex());
-        rollers = new Rollers(feeder1, feeder2, intake);
+        rollers = new Rollers(armPID, feeder1, feeder2, intake);
 
         aprilTagVision =
             new AprilTagVision(
