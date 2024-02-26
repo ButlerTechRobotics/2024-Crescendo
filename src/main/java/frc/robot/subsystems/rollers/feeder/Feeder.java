@@ -12,12 +12,12 @@ public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
   @Getter
   public enum Goal implements GenericRollerSubsystem.VoltageGoal {
     IDLE(() -> 0.0),
-    FLOOR_INTAKING(new LoggedTunableNumber("Feeder/FloorIntakingVoltage", 3.0)),
+    FLOOR_INTAKING(new LoggedTunableNumber("Feeder/FloorIntakingVoltage", 6.0)),
     BACKSTOPPING(new LoggedTunableNumber("Feeder/BackstoppingVoltage", -3.0)),
-    SHOOTING(new LoggedTunableNumber("Feeder/Shooting", 3.0)),
-    EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -3.0)),
+    SHOOTING(new LoggedTunableNumber("Feeder/Shooting", 12.0)),
+    EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -6.0)),
     EJECTALIGN(new LoggedTunableNumber("Feeder/EjectingAlignVoltage", -1.0)),
-    SHOOT(new LoggedTunableNumber("Feeder/ShootVoltage", 6.0)),
+    SHOOT(new LoggedTunableNumber("Feeder/ShootVoltage", 12.0)),
     AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", -1.5));
 
     private final DoubleSupplier voltageSupplier;

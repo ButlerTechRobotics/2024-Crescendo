@@ -10,9 +10,7 @@ package frc.robot.subsystems.vision;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.AprilTagVisionIO.AprilTagVisionIOInputs;
@@ -41,25 +39,6 @@ public class AprilTagVision extends SubsystemBase {
 
   // Path for logging vision data
   private static final String VISION_PATH = "AprilTagVision/Inst";
-
-  /**
-   * Calculate the angle from the robot's current pose to a specific target.
-   *
-   * @param currentPose The current pose of the robot
-   * @param targetPose The pose of the target
-   * @return The angle to the target in degrees
-   */
-  public double calculateAngleToTarget(Pose2d currentPose, Pose2d targetPose) {
-    // Calculate the difference in x and y coordinates
-    double dx = targetPose.getTranslation().getX() - currentPose.getTranslation().getX();
-    double dy = targetPose.getTranslation().getY() - currentPose.getTranslation().getY();
-
-    // Calculate the angle to the target
-    Rotation2d angleToTarget = new Rotation2d(dx, dy);
-
-    // Return the angle in degrees
-    return angleToTarget.getDegrees();
-  }
 
   private boolean enableVisionUpdates = true;
 

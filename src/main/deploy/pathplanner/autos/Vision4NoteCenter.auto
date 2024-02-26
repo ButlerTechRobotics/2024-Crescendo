@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.25
           }
         },
         {
@@ -184,10 +184,16 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
+          }
         }
       ]
     }
   },
-  "folder": "Vision Autons",
+  "folder": null,
   "choreoAuto": false
 }
