@@ -2,14 +2,10 @@
   "robotWidth": 0.907,
   "robotLength": 0.926,
   "holonomicMode": true,
-  "pathFolders": [
-    "Vision Paths"
-  ],
-  "autoFolders": [
-    "Vision Autons"
-  ],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 1.0,
+  "pathFolders": [],
+  "autoFolders": [],
+  "defaultMaxVel": 4.0,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 411.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.42

@@ -185,8 +185,7 @@ public class RobotState {
   @AutoLogOutput(key = "Odometry/FieldVelocity")
   public Twist2d fieldVelocity() {
     Translation2d linearFieldVelocity =
-        new Translation2d(robotVelocity.dx, -robotVelocity.dy)
-            .rotateBy(estimatedPose.getRotation());
+        new Translation2d(robotVelocity.dx, robotVelocity.dy).rotateBy(estimatedPose.getRotation());
     return new Twist2d(
         linearFieldVelocity.getX(), linearFieldVelocity.getY(), robotVelocity.dtheta);
   }

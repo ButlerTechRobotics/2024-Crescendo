@@ -55,8 +55,8 @@ public class ShooterIOSparkFlex implements ShooterIO {
     setFF(gains.kS(), gains.kV(), gains.kA());
 
     // Disable brake mode
-    topMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
-    bottomMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+    topMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+    bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
     topMotor.burnFlash();
     bottomMotor.burnFlash();

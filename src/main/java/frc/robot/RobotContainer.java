@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
@@ -56,6 +57,7 @@ import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
+import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
@@ -96,23 +98,23 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraBack =
+  private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-13.), Units.inchesToMeters(-12.), Units.inchesToMeters(10.)),
-          new Rotation3d(0, Math.toRadians(-15.), Math.toRadians(315.)));
+              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(30.)));
 
-  private static final Transform3d robotToCameraFront =
+  private static final Transform3d robotToCameraFR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(11), Units.inchesToMeters(12.), Units.inchesToMeters(10.)),
-          new Rotation3d(0, Math.toRadians(-15), Math.toRadians(0.)));
+              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-30.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.getMode()) {
       case REAL:
-        // Real robot, instantiate hardware IO implementations
+        // Real robot, instantiate hardware I` implementations
         drive =
             new Drive(
                 new GyroIOPigeon2(),
@@ -131,8 +133,8 @@ public class RobotContainer {
 
         aprilTagVision =
             new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
-                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
+                new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
+                new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR));
         break;
 
       case SIM:
@@ -145,7 +147,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
 
-        // shooter = new Shooter(new ShooterIOSim());
+        shooter = new Shooter(new ShooterIOSim());
 
         aprilTagVision =
             new AprilTagVision(
@@ -177,6 +179,17 @@ public class RobotContainer {
     }
 
     // ================================================
+    // Register the Auto Command Gyro
+    // ================================================
+
+    NamedCommands.registerCommand(
+        "Gyro Reset",
+        Commands.run(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+
+    // ================================================
     // Register the Auto Command PreShoot
     // ================================================
     NamedCommands.registerCommand(
@@ -189,7 +202,7 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
@@ -221,6 +234,16 @@ public class RobotContainer {
               hasRun = false;
               hasEjected = false;
             }));
+
+    // ================================================
+    // Register the Auto Command Heading Reset
+    // ================================================
+    NamedCommands.registerCommand(
+        "Heading Reset",
+        Commands.runOnce(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // Register the Auto Command Intake
@@ -258,7 +281,6 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
-    driveMode.setPoseSupplier(drive::getPose);
     driveMode.disableHeadingControl();
     configureButtonBindings();
   }
@@ -276,9 +298,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            driveMode,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
+            () -> driverController.getLeftY(),
+            () -> driverController.getLeftX(),
             () -> -driverController.getRightX()));
     driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
@@ -326,21 +347,20 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }));
-    // driverController.a().toggleOnTrue(new RotateToSpeaker(drive));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
     // SET DRIVE MODE TO AMP
     // ================================================
     driverController
-        .rightTrigger()
+        .rightBumper()
         .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
 
     // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
-    // driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -366,13 +386,15 @@ public class RobotContainer {
     // ================================================
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
+    // AMP LOCATION
+    // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
     // AMP SCORE
     operatorController
         .leftBumper()
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 22)))
+                .alongWith(new PositionArmPID(armPID, 22.75)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -412,11 +434,12 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM SHOOTER AT SPEAKER
     // ================================================
-    driverController
-        .a()
+    operatorController
+        .leftTrigger()
         .whileTrue(
             Commands.startEnd(
-                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                    () -> DriveCommands.setSpeakerMode(drive::getPose),
+                    DriveCommands::disableDriveHeading)
                 .alongWith(
                     new MultiDistanceArm(
                         drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
@@ -433,27 +456,27 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION MIDFIELD SHOOT
+    // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 34)); // "Midfield shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 32)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION PILLAR SHOOT
+    // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 14.0)); // "Pillar Shoot"
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 14.0)); // "Midfield Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22.75)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION SUB SHOOT
+    // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Sub Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
   }
 
   /**
