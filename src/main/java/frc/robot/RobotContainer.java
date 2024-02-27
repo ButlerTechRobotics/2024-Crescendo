@@ -101,13 +101,13 @@ public class RobotContainer {
   private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(30.)));
 
   private static final Transform3d robotToCameraFR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-30.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -378,13 +378,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 1000));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -1000));
 
     // AMP LOCATION
     // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
