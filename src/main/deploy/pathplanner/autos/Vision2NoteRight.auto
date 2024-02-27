@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "PreShoot"
           }
         },
@@ -77,6 +83,18 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toParkPosRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
           }
         }
       ]
