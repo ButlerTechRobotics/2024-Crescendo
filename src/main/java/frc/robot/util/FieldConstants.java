@@ -65,6 +65,8 @@ public class FieldConstants {
         new Pose2d(0.0, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
   }
 
+  // Alliance.apply(FieldConstants.Speaker.centerSpeakerOpening1);
+
   // corners (blue alliance origin)
   public static Translation3d topRightSpeaker =
       new Translation3d(

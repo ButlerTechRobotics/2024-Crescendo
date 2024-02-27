@@ -17,6 +17,8 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -26,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -63,6 +66,7 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -376,7 +380,7 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 20));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 100));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
@@ -392,7 +396,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 22.75)))
+                .alongWith(new PositionArmPID(armPID, 26)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -439,12 +443,14 @@ public class RobotContainer {
                     () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+                        drive::getPose,
+                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                        armPID)));
     // driverController
-    //     .rightBumper()
-    //     .whileTrue(
-    //         Commands.startEnd(
-    //             () -> driveMode.enableHeadingControl(), () ->
+    // .rightBumper()
+    // .whileTrue(
+    // Commands.startEnd(
+    // () -> driveMode.enableHeadingControl(), () ->
     // driveMode.disableHeadingControl()));
 
     driverController
@@ -456,6 +462,13 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    PathConstraints pathConstraints = new PathConstraints(4, 4, 540, 720);
+
+    SmartDashboard.putData(
+        "Pathfind to Trap Score 3",
+        AutoBuilder.pathfindThenFollowPath(
+            PathPlannerPath.fromPathFile("TrapScore3"), pathConstraints));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
@@ -473,7 +486,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22.75)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 26)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
