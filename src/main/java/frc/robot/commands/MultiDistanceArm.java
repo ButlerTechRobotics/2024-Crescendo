@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.util.AllianceFlipUtil;
@@ -36,11 +37,14 @@ public class MultiDistanceArm extends Command {
 
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
-    distanceMap.put(2.3, 2.0);
-    distanceMap.put(3.6, 4.0);
-    distanceMap.put(4.9, 6.0);
-    distanceMap.put(6.2, 8.0);
-    distanceMap.put(7.5, 10.0);
+    distanceMap.put(1.5, 0.0);
+    distanceMap.put(2.0, 8.75);
+    distanceMap.put(2.5, 12.3);
+    distanceMap.put(3.0, 13.4);
+    distanceMap.put(3.5, 14.25);
+    distanceMap.put(4.0, 15.011);
+    distanceMap.put(4.5, 15.625);
+    distanceMap.put(5.0, 16.2);
   }
 
   @Override
@@ -59,6 +63,9 @@ public class MultiDistanceArm extends Command {
 
     // Run the flywheel at the calculated angle
     armPID.setPosition(angle);
+
+    // Put the distance on the SmartDashboard
+    SmartDashboard.putNumber("Distance", getDistance());
   }
 
   @Override

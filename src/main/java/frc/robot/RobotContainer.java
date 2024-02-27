@@ -35,9 +35,9 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
+import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
-import frc.robot.subsystems.drive.DriveController.DriveModeType;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -83,6 +83,8 @@ public class RobotContainer {
   private Feeder feeder2;
   private Rollers rollers;
 
+  private final SwagLights swagLights = SwagLights.getInstance();
+
   private Superstructure superstructure;
 
   private boolean hasRun = false;
@@ -101,14 +103,16 @@ public class RobotContainer {
   private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(30.)));
+              Units.inchesToMeters(-14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
   private static final Transform3d robotToCameraFR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-30.)));
+              Units.inchesToMeters(-14.75),
+              Units.inchesToMeters(-10.75),
+              Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -281,6 +285,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
+    driveMode.setPoseSupplier(drive::getPose);
     driveMode.disableHeadingControl();
     configureButtonBindings();
   }
@@ -298,10 +303,11 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> driverController.getLeftY(),
-            () -> driverController.getLeftX(),
+            driveMode,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
+    driverController.back().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -349,14 +355,6 @@ public class RobotContainer {
                     }));
 
     // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // SET DRIVE MODE TO AMP
-    // ================================================
-    driverController
-        .rightBumper()
-        .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
-
-    // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
@@ -372,7 +370,7 @@ public class RobotContainer {
             Commands.run(
                 () ->
                     drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -438,11 +436,16 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(
             Commands.startEnd(
-                    () -> DriveCommands.setSpeakerMode(drive::getPose),
-                    DriveCommands::disableDriveHeading)
+                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
                         drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+    // driverController
+    //     .rightBumper()
+    //     .whileTrue(
+    //         Commands.startEnd(
+    //             () -> driveMode.enableHeadingControl(), () ->
+    // driveMode.disableHeadingControl()));
 
     driverController
         .b()
