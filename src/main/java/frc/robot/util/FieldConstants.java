@@ -60,36 +60,30 @@ public class FieldConstants {
   /** Each corner of the speaker * */
   public static final class Speaker {
 
-    // corners (blue alliance origin)
-    public static Translation3d topRightSpeaker =
-        new Translation3d(
-            Units.inchesToMeters(18.055),
-            Units.inchesToMeters(238.815),
-            Units.inchesToMeters(13.091));
-
-    public static Translation3d topLeftSpeaker =
-        new Translation3d(
-            Units.inchesToMeters(18.055),
-            Units.inchesToMeters(197.765),
-            Units.inchesToMeters(83.091));
-
-    public static Translation3d bottomRightSpeaker =
-        new Translation3d(0.0, Units.inchesToMeters(238.815), Units.inchesToMeters(78.324));
-    public static Translation3d bottomLeftSpeaker =
-        new Translation3d(0.0, Units.inchesToMeters(197.765), Units.inchesToMeters(78.324));
-
-    public static Translation2d centerSpeakerOpening1 =
-        new Translation2d(topLeftSpeaker.getX() / 2, fieldWidth - Units.inchesToMeters(104.0));
-
-    /** Center of the speaker opening (blue alliance) */
-    public static Translation3d centerSpeakerOpening2 =
-        bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
-
     /** Center of the speaker opening (blue alliance) */
     public static Pose2d centerSpeakerOpening =
-        new Pose2d(
-            topLeftSpeaker.getX() / 2, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
+        new Pose2d(0.0, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
   }
+
+  // Alliance.apply(FieldConstants.Speaker.centerSpeakerOpening1);
+
+  // corners (blue alliance origin)
+  public static Translation3d topRightSpeaker =
+      new Translation3d(
+          Units.inchesToMeters(18.055),
+          Units.inchesToMeters(238.815),
+          Units.inchesToMeters(13.091));
+
+  public static Translation3d topLeftSpeaker =
+      new Translation3d(
+          Units.inchesToMeters(18.055),
+          Units.inchesToMeters(197.765),
+          Units.inchesToMeters(83.091));
+
+  public static Translation3d bottomRightSpeaker =
+      new Translation3d(0.0, Units.inchesToMeters(238.815), Units.inchesToMeters(78.324));
+  public static Translation3d bottomLeftSpeaker =
+      new Translation3d(0.0, Units.inchesToMeters(197.765), Units.inchesToMeters(78.324));
 
   public static double aprilTagWidth = Units.inchesToMeters(6.50);
   public static AprilTagFieldLayout aprilTags;

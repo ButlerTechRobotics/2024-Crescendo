@@ -17,6 +17,8 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -26,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -35,9 +38,9 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
+import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
-import frc.robot.subsystems.drive.DriveController.DriveModeType;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -63,6 +66,7 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -83,6 +87,8 @@ public class RobotContainer {
   private Feeder feeder2;
   private Rollers rollers;
 
+  private final SwagLights swagLights = SwagLights.getInstance();
+
   private Superstructure superstructure;
 
   private boolean hasRun = false;
@@ -101,14 +107,16 @@ public class RobotContainer {
   private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(-10.75), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(30.)));
+              Units.inchesToMeters(-14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
   private static final Transform3d robotToCameraFR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-30.)));
+              Units.inchesToMeters(-14.75),
+              Units.inchesToMeters(-10.75),
+              Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -281,6 +289,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
+    driveMode.setPoseSupplier(drive::getPose);
     driveMode.disableHeadingControl();
     configureButtonBindings();
   }
@@ -298,10 +307,11 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> driverController.getLeftY(),
-            () -> driverController.getLeftX(),
+            driveMode,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.leftBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
+    driverController.back().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -349,14 +359,6 @@ public class RobotContainer {
                     }));
 
     // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // SET DRIVE MODE TO AMP
-    // ================================================
-    driverController
-        .rightBumper()
-        .whileTrue(Commands.runOnce(() -> driveMode.setDriveMode(DriveModeType.AMP)));
-
-    // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
@@ -372,19 +374,19 @@ public class RobotContainer {
             Commands.run(
                 () ->
                     drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 1000));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 100));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -1000));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
 
     // AMP LOCATION
     // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
@@ -394,7 +396,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 22.75)))
+                .alongWith(new PositionArmPID(armPID, 26)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -438,11 +440,18 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(
             Commands.startEnd(
-                    () -> DriveCommands.setSpeakerMode(drive::getPose),
-                    DriveCommands::disableDriveHeading)
+                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
-                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+                        drive::getPose,
+                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                        armPID)));
+    // driverController
+    // .rightBumper()
+    // .whileTrue(
+    // Commands.startEnd(
+    // () -> driveMode.enableHeadingControl(), () ->
+    // driveMode.disableHeadingControl()));
 
     driverController
         .b()
@@ -453,6 +462,13 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    PathConstraints pathConstraints = new PathConstraints(4, 4, 540, 720);
+
+    SmartDashboard.putData(
+        "Pathfind to Trap Score 3",
+        AutoBuilder.pathfindThenFollowPath(
+            PathPlannerPath.fromPathFile("TrapScore3"), pathConstraints));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
@@ -470,7 +486,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22.75)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 26)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

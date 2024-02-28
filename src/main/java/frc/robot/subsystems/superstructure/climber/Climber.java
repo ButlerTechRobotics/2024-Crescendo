@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(-1.0, 1.0, 0);
+    pidController.setOutputRange(-1, 0.25);
 
     motor.setSmartCurrentLimit(80);
     motor.setInverted(true);
@@ -71,7 +71,7 @@ public class Climber extends SubsystemBase {
     setPID();
     pidController.setReference(targetDistance, ControlType.kPosition, 0);
     SmartDashboard.putNumber("ClimberDistance", motor.getEncoder().getPosition());
-    // SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getAbsolutePosition());
+    SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getAbsolutePosition());
     // This method will be called once per scheduler run
   }
 }
