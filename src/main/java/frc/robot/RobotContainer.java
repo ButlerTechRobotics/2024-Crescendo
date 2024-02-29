@@ -380,28 +380,27 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 100));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
 
     // AMP LOCATION
-    // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
-    // AMP SCORE
+    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID, 250));
+    // AMP
     operatorController
         .leftBumper()
         .whileTrue(
             Commands.sequence(
-                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 26)))
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+        // .alongWith(new PositionArmPID(armPID, 26)))
         .onFalse(
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
                 }));
 
     // ================================================
