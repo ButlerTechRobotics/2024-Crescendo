@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(-1, 0.25);
+    pidController.setOutputRange(-1, 1);
 
     motor.setSmartCurrentLimit(80);
     motor.setInverted(true);
