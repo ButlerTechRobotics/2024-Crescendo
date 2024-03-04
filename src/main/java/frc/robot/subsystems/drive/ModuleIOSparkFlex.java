@@ -86,6 +86,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
     turnAbsolutePosition = cancoder.getAbsolutePosition();
     turnAbsolutePosition.setUpdateFrequency(10.0);
     cancoder.optimizeBusUtilization();
+    // Waiting 1 second before flashing the e-prom
+    try {
+      Thread.sleep(1000);
+    } catch (Exception e) {
+    }
   }
 
   @Override
