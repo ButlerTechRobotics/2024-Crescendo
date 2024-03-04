@@ -389,7 +389,8 @@ public class RobotContainer {
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
 
     // AMP LOCATION
-    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID, 250));
+    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
+    // 250));
     // AMP
     operatorController
         .leftBumper()
@@ -479,13 +480,17 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 0.0)); // "Midfield Shoot"
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(
+                armPID, -17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -60.0)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -61.0)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

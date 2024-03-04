@@ -79,6 +79,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
     driveSparkMax.setCANTimeout(0);
     turnSparkMax.setCANTimeout(0);
 
+    // //Wait 1 second before flashing NEO eprom memory
+    // try {
+    //   Thread.sleep(1000);
+    // } catch (Exception e) {}
+
     driveSparkMax.burnFlash();
     turnSparkMax.burnFlash();
 

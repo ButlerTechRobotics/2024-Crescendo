@@ -116,6 +116,12 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
+          }
         }
       ]
     }
