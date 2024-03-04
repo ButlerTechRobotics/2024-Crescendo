@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7636103146670059,
-      "y": 6.745441850377372
+      "x": 1.5695060449949958,
+      "y": 5.550936522700434
     },
-    "rotation": 59.03624346769725
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote3Amp"
+                  "pathName": "toNote1"
                 }
               },
               {
@@ -67,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos3Amp"
+                  "pathName": "toPos2SourceStart"
                 }
               },
               {
@@ -77,12 +77,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
           }
         },
         {
@@ -98,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote4"
+                  "pathName": "toNote2"
                 }
               },
               {
@@ -117,19 +111,13 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "leavingPos3"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos3"
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -142,9 +130,53 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.25
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -154,22 +186,9 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "AllignmentAmp"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Heading Reset"
-                }
-              }
-            ]
+            "name": "Heading Reset"
           }
         }
       ]

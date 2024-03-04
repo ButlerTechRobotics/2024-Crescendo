@@ -14,9 +14,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
 import org.littletonrobotics.junction.Logger;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex armMotor = new CANSparkFlex(20, MotorType.kBrushless);
+  DutyCycleEncoder thruBore = new DutyCycleEncoder(0);
   SparkPIDController pidController;
   private double targetAngle = 0;
   private final ArmVisualizer measuredVisualizer;
@@ -90,5 +93,6 @@ public class ArmPositionPID extends SubsystemBase {
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/Angle", targetAngle);
     SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getAbsolutePosition());
   }
 }

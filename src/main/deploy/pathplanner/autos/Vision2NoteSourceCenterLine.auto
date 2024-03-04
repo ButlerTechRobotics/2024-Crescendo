@@ -2,15 +2,21 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
+      "x": 0.6933452953924437,
+      "y": 4.461828723942754
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -20,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -30,44 +36,32 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote2"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote8"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos2"
+                  "pathName": "toPos1"
                 }
               },
               {
@@ -80,33 +74,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Pittsburg special left stage"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Heading Reset"
           }
         }
       ]
