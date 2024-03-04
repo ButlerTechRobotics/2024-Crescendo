@@ -72,8 +72,8 @@ public class Rollers extends SubsystemBase {
       }
 
       case AMP_SHOOTER -> {
-        feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
-        feeder2.setGoal(Feeder.Goal.AMP_SHOOTER);
+        feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
+        feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
       }
 
       case FEED_SHOOTER -> {
@@ -84,7 +84,7 @@ public class Rollers extends SubsystemBase {
       case EJECT_TO_FLOOR -> {
         feeder1.setGoal(Feeder.Goal.EJECTING);
         feeder2.setGoal(Feeder.Goal.EJECTING);
-        intake.setGoal(Intake.Goal.IDLE);
+        intake.setGoal(Intake.Goal.EJECTING);
       }
     }
 

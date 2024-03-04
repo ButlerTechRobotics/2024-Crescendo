@@ -13,7 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static frc.robot.subsystems.drive.DriveConstants.gyroID;
 import static frc.robot.subsystems.drive.DriveConstants.odometryFrequency;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -26,7 +25,7 @@ import edu.wpi.first.math.util.Units;
 
 /** IO implementation for Pigeon2 */
 public class GyroIOPigeon2 implements GyroIO {
-  private final Pigeon2 pigeon = new Pigeon2(gyroID);
+  private final Pigeon2 pigeon = new Pigeon2(30);
   private final StatusSignal<Double> yaw = pigeon.getYaw();
   private final StatusSignal<Double> yawVelocity = pigeon.getAngularVelocityZWorld();
 

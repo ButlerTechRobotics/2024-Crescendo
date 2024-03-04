@@ -70,25 +70,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.372314).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.399170).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.181885).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.180176).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.238770).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.250488).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(-0.385498).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(-0.378662).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
@@ -126,19 +126,19 @@ public final class DriveConstants {
 
   public static HeadingControllerConstants headingControllerConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new HeadingControllerConstants(4.0, 0.0);
+        case COMPBOT -> new HeadingControllerConstants(2.0, .25);
         case SIMBOT -> new HeadingControllerConstants(4.0, 0.0);
       };
 
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(1, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 

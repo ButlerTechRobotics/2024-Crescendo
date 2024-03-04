@@ -22,7 +22,7 @@ public class ArmPositionPID extends SubsystemBase {
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 1.0); // .000008
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.1); // .000008
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
   TunableNumber kD = new TunableNumber("Arm D Gain", 0.0);
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
@@ -36,7 +36,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(-0.30, 0.5);
+    pidController.setOutputRange(-0.40, 0.35);
 
     armMotor.setIdleMode(IdleMode.kBrake);
 
@@ -89,5 +89,6 @@ public class ArmPositionPID extends SubsystemBase {
     measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/Angle", targetAngle);
+    SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
   }
 }

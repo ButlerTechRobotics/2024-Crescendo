@@ -63,7 +63,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
     turnSparkMax.setInverted(config.turnMotorInverted());
-    driveSparkMax.setSmartCurrentLimit(80);
+    driveSparkMax.setSmartCurrentLimit(40);
     turnSparkMax.setSmartCurrentLimit(20);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
@@ -86,6 +86,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
     turnAbsolutePosition = cancoder.getAbsolutePosition();
     turnAbsolutePosition.setUpdateFrequency(10.0);
     cancoder.optimizeBusUtilization();
+    // Waiting 1 second before flashing the e-prom
+    try {
+      Thread.sleep(1000);
+    } catch (Exception e) {
+    }
   }
 
   @Override

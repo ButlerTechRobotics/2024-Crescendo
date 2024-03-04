@@ -231,20 +231,12 @@ public class Drive extends SubsystemBase {
     stop();
   }
 
-  /**
-   * Returns a command to run a quasistatic test in the specified direction.
-   *
-   * @param direction The direction to run the quasistatic test.
-   */
+  /** Returns a command to run a quasistatic test in the specified direction. */
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return sysId.quasistatic(direction);
   }
 
-  /**
-   * Returns a command to run a dynamic test in the specified direction.
-   *
-   * @param direction The direction to run the dynamic test.
-   */
+  /** Returns a command to run a dynamic test in the specified direction. */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysId.dynamic(direction);
   }

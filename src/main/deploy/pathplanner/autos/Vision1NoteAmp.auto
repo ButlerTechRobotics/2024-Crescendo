@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6933452953924437,
-      "y": 4.461828723942754
+      "x": 0.7636103146670059,
+      "y": 6.745441850377372
     },
-    "rotation": -60.0
+    "rotation": 58.756795327318706
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -26,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
@@ -38,13 +32,25 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 10.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "toParkPosLeft"
+            "pathName": "leavingPos3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
           }
         }
       ]
