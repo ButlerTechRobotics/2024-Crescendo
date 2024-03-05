@@ -38,7 +38,7 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
-import frc.robot.subsystems.SwagLights;
+// import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -87,7 +87,7 @@ public class RobotContainer {
   private Feeder feeder2;
   private Rollers rollers;
 
-  private final SwagLights swagLights = SwagLights.getInstance();
+  //   private final SwagLights swagLights = SwagLights.getInstance();
 
   private Superstructure superstructure;
 
@@ -490,9 +490,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController
-        .povLeft()
-        .whileTrue(new PositionArmPID(armPID, 78.3 + 2.8)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
