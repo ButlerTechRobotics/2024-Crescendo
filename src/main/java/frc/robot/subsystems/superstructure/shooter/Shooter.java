@@ -82,6 +82,12 @@ public class Shooter extends SubsystemBase {
     if (DriverStation.isDisabled()) {
       stop();
       setGoal(Goal.IDLE);
+    } else {
+      switch (goal) {
+        case IDLE -> io.stop();
+        case INTAKING -> setSetpoint(intakingTopRPM.get(), intakingBottomRPM.get());
+        case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
+      }
     }
 
     Logger.recordOutput("Flywheels/Goal", goal);
