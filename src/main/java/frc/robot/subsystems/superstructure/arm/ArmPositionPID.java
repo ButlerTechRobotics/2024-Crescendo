@@ -4,11 +4,11 @@
 
 package frc.robot.subsystems.superstructure.arm;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
@@ -16,9 +16,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
+  private AbsoluteEncoder encoder = motor.getAbsoluteEncoder();
   private PIDController pidController;
   private double targetAngle = 0;
-  private DutyCycleEncoder encoder = new DutyCycleEncoder(1); // Replace 0 with the actual channel
+  // private DutyCycleEncoder TOBY = new DutyCycleEncoder(1); // Replace 0 with the actual channel
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
@@ -54,7 +55,7 @@ public class ArmPositionPID extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (encoder.getAbsolutePosition() * 360) - 239.5;
+    return (encoder.getPosition() * 360) - 239.5;
   }
 
   private void setPID() {
