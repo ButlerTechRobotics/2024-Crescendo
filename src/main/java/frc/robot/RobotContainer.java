@@ -210,12 +210,12 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
     // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(0.0)));
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -474,7 +474,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -96.0)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
@@ -484,19 +484,21 @@ public class RobotContainer {
         .povRight()
         .whileTrue(
             new PositionArmPID(
-                armPID, -17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
+                armPID, 17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -78.3)); // "Amp/Note Shoot"
+    operatorController
+        .povLeft()
+        .whileTrue(new PositionArmPID(armPID, 78.3 + 2.8)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.8)); // "Pillar Shoot"
   }
 
   /**

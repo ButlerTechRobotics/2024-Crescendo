@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.superstructure.arm;
 
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
@@ -16,9 +14,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
-  private AbsoluteEncoder encoder = motor.getAbsoluteEncoder();
   private PIDController pidController;
-  private double targetAngle = 0;
+  private double targetAngle = 2.8;
   // private DutyCycleEncoder TOBY = new DutyCycleEncoder(1); // Replace 0 with the actual channel
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
@@ -38,9 +35,9 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(false);
+    motor.setInverted(true);
 
-    motor.setIdleMode(IdleMode.kBrake);
+    // motor.setIdleMode(IdleMode.kBrake);
 
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
@@ -55,7 +52,7 @@ public class ArmPositionPID extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (encoder.getPosition() * 360) - 239.5;
+    return (motor.getAbsoluteEncoder().getPosition() * 360);
   }
 
   private void setPID() {
@@ -77,9 +74,9 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.15; // Adjust this value to control the down speed
-    double upSpeedFactor = 0.225; // Adjust this value to control the up speed
-    double speedFactor = (output > 0) ? downSpeedFactor : upSpeedFactor;
+    double downSpeedFactor = 0.1; // Adjust this value to control the down speed
+    double upSpeedFactor = 0.2; // Adjust this value to control the up speed
+    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
     // This method will be called once per scheduler run
     measuredVisualizer.update(getPosition());
