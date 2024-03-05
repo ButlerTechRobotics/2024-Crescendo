@@ -1,0 +1,11 @@
+{
+  "NTProvider": {
+    "types": {
+      "/AdvantageKit/RealOutputs/arm/mech2d": "Mechanism2d",
+      "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

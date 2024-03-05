@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.270256540513081,
+        "y": 0.7575570785569251
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 10.688611829752498,
+        "y": 1.0270725776589094
+      },
+      "isLocked": false,
+      "linkedName": "Ring 8"
+    },
+    {
+      "anchor": {
+        "x": 14.673070694854786,
+        "y": 3.124922949047318
+      },
+      "prevControl": {
+        "x": 12.961283065423276,
+        "y": 2.0104399392472256
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Source Side Starting Line"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 45.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Starts at Ring",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

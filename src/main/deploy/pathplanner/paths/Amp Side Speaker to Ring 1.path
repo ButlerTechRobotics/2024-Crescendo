@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 15.730059420175902,
+        "y": 6.862550215827963
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 15.21288103000723,
+        "y": 7.336023389926042
+      },
+      "isLocked": false,
+      "linkedName": "Amp Side Speaker"
+    },
+    {
+      "anchor": {
+        "x": 13.69237386120992,
+        "y": 7.003080254377342
+      },
+      "prevControl": {
+        "x": 14.607512870748899,
+        "y": 7.00011877397313
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Ring 1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": -59.9186802542158,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Starts at Speaker",
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}
