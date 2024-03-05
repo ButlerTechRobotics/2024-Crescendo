@@ -33,7 +33,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
         this.angleOffset = angleOffset;
 
         /* Angle Encoder Config */
-        absoluteEncoder = new CANcoder(cancoderID);
+        absoluteEncoder = new CANcoder(cancoderID, "rio");
         configCANCoder();
 
         /** Angle motor config */

@@ -1,108 +1,124 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.Constants.ShooterConstants.*;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.LoggedTunableNumber;
+import lombok.Getter;
+import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ShooterConstants;
-
 public class Shooter extends SubsystemBase {
-    private ShooterIO io;
-    private ShooterIOInputsAutoLogged inputs;
+  private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
+  private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
+  private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
+  private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
+  private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
+  private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-    /** PID controller for the top motor and flywheels.
-     * The PID constants for this use a velocity of rotations per second
-     * in order to be compatable with WPILib's PIDController class.
-     */
-    private PIDController topFlywheelsPID;
+  private static LoggedTunableNumber shootingTopRPM =
+      new LoggedTunableNumber("Shooter/ShootingTopRPM", 3500.0);
+  private static LoggedTunableNumber shootingBottomRPM =
+      new LoggedTunableNumber("Shooter/ShootingBottomRPM", 3500.0);
 
-    /** PID controller for the bottom motor and flywheels.
-     * The PID constants for this use a velocity of rotations per second
-     * in order to be compatable with WPILib's PIDController class.
-     */
-    private PIDController bottomFlywheelsPID;
+  private static final LoggedTunableNumber shooterTolerance =
+      new LoggedTunableNumber("Shooter/ToleranceRPM", shooterToleranceRPM);
 
-    /** Feedforward model for an individual set of flywheels. 
-     * This assumes that the shooter's flywheel physics is 
-     * symmetric on the top and bottom sides.
-     * The feedforward constants for this use a velocity of rotations per second
-     * in order to be compatable with WPILib's SimpleMotorFeedforward class.
-     */
-    private SimpleMotorFeedforward flywheelsFeedforward;
+  private final ShooterIO io;
+  private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
 
+  private Double topSetpointRpm = null;
+  private Double bottomSetpointRPM = null;
 
-    public Shooter(ShooterIO io) {
-        this.io = io;
-        inputs = new ShooterIOInputsAutoLogged();
-        
-        topFlywheelsPID = new PIDController(
-            ShooterConstants.kPFlywheelsVoltsSecondsPerMeter, 
-            ShooterConstants.kIFlywheelsVoltsPerMeter, 
-            ShooterConstants.kDFlywheelsVoltsSecondsSquaredPerMeter);
+  public enum Goal {
+    IDLE,
+    SHOOTING,
+    INTAKING,
 
-        bottomFlywheelsPID = new PIDController(
-            ShooterConstants.kPFlywheelsVoltsSecondsPerMeter, 
-            ShooterConstants.kIFlywheelsVoltsPerMeter, 
-            ShooterConstants.kDFlywheelsVoltsSecondsSquaredPerMeter);
+    CHARACTERIZATION
+  }
 
+  @Getter @Setter private Goal goal = Goal.IDLE;
 
-        flywheelsFeedforward = new SimpleMotorFeedforward(
-            ShooterConstants.kSFlywheelsVolts,
-            ShooterConstants.kVFlywheelsVoltsSecondsPerMeter,
-            ShooterConstants.kAFlywheelsVoltsSecondsSquaredPerMeter);
+  public void setSetpoint(double top, double bottom) {
+    topSetpointRpm = top;
+    bottomSetpointRPM = bottom;
+    io.runVelocity(top, bottom);
+  }
+
+  public void stop() {
+    topSetpointRpm = null;
+    bottomSetpointRPM = null;
+    io.stop();
+  }
+
+  public Shooter(ShooterIO io) {
+    System.out.println("[Init] Creating Shooter");
+    this.io = io;
+  }
+
+  @Override
+  public void periodic() {
+    // check controllers
+    LoggedTunableNumber.ifChanged(hashCode(), pid -> io.setPID(pid[0], pid[1], pid[2]), kP, kI, kD);
+    LoggedTunableNumber.ifChanged(
+        hashCode(), kSVA -> io.setFF(kSVA[0], kSVA[1], kSVA[2]), kS, kV, kA);
+
+    io.updateInputs(inputs);
+    Logger.processInputs("Shooter", inputs);
+
+    if (DriverStation.isDisabled()) {
+      stop();
+      setGoal(Goal.IDLE);
+    } else {
+      switch (goal) {
+        case IDLE -> io.stop();
+        case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
+      }
     }
 
-    /**
-     * Sets the surface speed of the top set of flywheels.
-     * This is theoretically the speed that this side of the note will have when exiting the shooter.
-     * @param metersPerSecond - Desired surface speed in meters per second.
-     */
-    public void setTopFlywheelsMetersPerSecond(double metersPerSecond) {
-        double feedforwardOutput = flywheelsFeedforward.calculate(metersPerSecond);
-        double pidOutput = topFlywheelsPID.calculate(inputs.topFlywheelsMetersPerSecond, metersPerSecond);
-        io.setTopMotorVolts(feedforwardOutput + pidOutput);
-    }
+    Logger.recordOutput("Shooter/Goal", goal);
+    Logger.recordOutput("Shooter/TopSetpointRPM", topSetpointRpm != null ? topSetpointRpm : 0.0);
+    Logger.recordOutput(
+        "Shooter/BottomSetpointRPM", bottomSetpointRPM != null ? bottomSetpointRPM : 0.0);
+    Logger.recordOutput("Shooter/TopRPM", inputs.topVelocityRpm);
+    Logger.recordOutput("Shooter/BottomRPM", inputs.bottomVelocityRpm);
+  }
 
-    /**
-     * @return - The shooter's top flywheel surface speed in meters per second
-     */
-    public double getTopFlywheelsMetersPerSecond() {
-        return inputs.topFlywheelsMetersPerSecond;
-    }
+  public void runTopCharacterizationVolts(double volts) {
+    io.runCharacterizationTopVolts(volts);
+  }
 
-    /**
-     * Sets the surface speed of the bottom set of flywheels.
-     * This is theoretically the speed that this side of the note will have when exiting the shooter.
-     * @param metersPerSecond - Desired surface speed in meters per second.
-     */
-    public void setBottomFlywheelsMetersPerSecond(double metersPerSecond) {
-        double feedforwardOutput = flywheelsFeedforward.calculate(metersPerSecond);
-        double pidOutput = bottomFlywheelsPID.calculate(inputs.bottomFlywheelsMetersPerSecond, metersPerSecond);
-        io.setBottomMotorVolts(feedforwardOutput + pidOutput);
-    }
+  public void runBottomCharacterizationVolts(double volts) {
+    io.runCharacterizationBottomVolts(volts);
+  }
 
+  public double getTopCharacterizationVelocity() {
+    return inputs.topVelocityRpm;
+  }
 
-    /**
+  public double getBottomCharacterizationVelocity() {
+    return inputs.bottomVelocityRpm;
+  }
+
+  /**
      * Returns true if both flywheels are spinning within some threshold of their target speeds.
      * @param rpmThreshold - Max distance from the setpoint for this function to still return true, in meters per second.
      */
-    public boolean flywheelsAtSetpoints(double topSetpointMetersPerSecond, double bottomSetpointMetersPerSecond, double thresholdMetersPerSecond) {
+    public boolean flywheelsAtSetpoints(double topVelocityRpm, double bottomVelocityRpm, double thresholdRPM) {
 
         return 
-            Math.abs(topSetpointMetersPerSecond - inputs.topFlywheelsMetersPerSecond) < thresholdMetersPerSecond
-                && Math.abs(bottomSetpointMetersPerSecond - inputs.bottomFlywheelsMetersPerSecond) < thresholdMetersPerSecond;
+            Math.abs(topVelocityRpm - inputs.topVelocityRpm) < thresholdRPM
+                && Math.abs(bottomVelocityRpm - inputs.bottomVelocityRpm) < thresholdRPM;
     }
-    
 
-    @Override
-    public void periodic() {
-        io.updateInputs(inputs);
-        
-        Logger.processInputs("shooterInputs", inputs);
-
-        Logger.recordOutput("shooter/topFlywheelsSetpoint", topFlywheelsPID.getSetpoint());
-        Logger.recordOutput("shooter/bottomFlywheelsSetpoint", bottomFlywheelsPID.getSetpoint());
-
-    };
+  @AutoLogOutput(key = "Shooter/AtSetpoint")
+  public boolean atSetpoint() {
+    return topSetpointRpm != null
+        && bottomSetpointRPM != null
+        && Math.abs(inputs.topVelocityRpm - topSetpointRpm) <= shooterTolerance.get()
+        && Math.abs(inputs.bottomVelocityRpm - bottomSetpointRPM) <= shooterTolerance.get();
+  }
 }

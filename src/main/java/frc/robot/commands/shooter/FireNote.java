@@ -18,7 +18,7 @@ public class FireNote extends Command {
 
     @Override
     public void initialize() {
-        feeder.setVolts(2);
+        feeder.setVolts(12);
         timer.restart();
     }
 
@@ -32,6 +32,6 @@ public class FireNote extends Command {
     
     @Override
     public boolean isFinished() {
-        return timer.get() > 0.5;
+        return timer.get() > 1.0;
     }
 }

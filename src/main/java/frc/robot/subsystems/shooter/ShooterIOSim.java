@@ -1,44 +1,98 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.Constants.*;
+import static frc.robot.Constants.ShooterConstants.*;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
-    private FlywheelSim leftSim;
-    private FlywheelSim rightSim;
+  private final FlywheelSim topSim =
+      new FlywheelSim(DCMotor.getNeoVortex(1), reduction, 0.00363458292);
+  private final FlywheelSim bottomSim =
+      new FlywheelSim(DCMotor.getNeoVortex(1), reduction, 0.00363458292);
 
-    public ShooterIOSim() {
+  private final PIDController topController = new PIDController(gains.kP(), gains.kI(), gains.kD());
+  private final PIDController bottomController =
+      new PIDController(gains.kP(), gains.kI(), gains.kD());
+  private SimpleMotorFeedforward ff =
+      new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
-        leftSim = new FlywheelSim(
-            DCMotor.getKrakenX60(1),
-            ShooterConstants.flywheelGearReduction,
-            0.000374);
+  private double topAppliedVolts = 0.0;
+  private double bottomAppliedVolts = 0.0;
 
-        rightSim = new FlywheelSim(
-            DCMotor.getKrakenX60(1),
-            ShooterConstants.flywheelGearReduction,
-            0.000374);
-            
+  private Double topSetpointRPM = null;
+  private Double bottomSetpointRPM = null;
+
+  @Override
+  public void updateInputs(ShooterIOInputs inputs) {
+    topSim.update(0.02);
+    bottomSim.update(0.02);
+    // control to setpoint
+    if (topSetpointRPM != null && bottomSetpointRPM != null) {
+      runVolts(
+          topController.calculate(topSim.getAngularVelocityRPM(), topSetpointRPM)
+              + ff.calculate(topSetpointRPM),
+          bottomController.calculate(bottomSim.getAngularVelocityRPM(), bottomSetpointRPM)
+              + ff.calculate(bottomSetpointRPM));
     }
 
-    @Override
-    public void updateInputs(ShooterIOInputs inputs) {
-        leftSim.update(0.02);
-        rightSim.update(0.02);
+    inputs.topPositionRads += Units.radiansToRotations(topSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.topVelocityRpm = topSim.getAngularVelocityRPM();
+    inputs.topAppliedVolts = topAppliedVolts;
+    inputs.topOutputCurrent = topSim.getCurrentDrawAmps();
 
-        inputs.topFlywheelsMetersPerSecond = leftSim.getAngularVelocityRPM()/60.*ShooterConstants.flywheelCircumferenceMeters;
-        inputs.bottomFlywheelsMetersPerSecond = rightSim.getAngularVelocityRPM()/60.*ShooterConstants.flywheelCircumferenceMeters;
-    }
+    inputs.bottomPositionRads +=
+        Units.radiansToRotations(bottomSim.getAngularVelocityRadPerSec() * 0.02);
+    inputs.bottomVelocityRpm = bottomSim.getAngularVelocityRPM();
+    inputs.bottomAppliedVolts = bottomAppliedVolts;
+    inputs.bottomOutputCurrent = bottomSim.getCurrentDrawAmps();
+  }
 
-    @Override
-    public void setTopMotorVolts(double volts) {
-        leftSim.setInputVoltage(volts);
-    }
+  @Override
+  public void runVolts(double topVolts, double bottomVolts) {
+    topAppliedVolts = MathUtil.clamp(topVolts, -12.0, 12.0);
+    bottomAppliedVolts = MathUtil.clamp(bottomVolts, -12.0, 12.0);
+    topSim.setInputVoltage(topAppliedVolts);
+    bottomSim.setInputVoltage(bottomAppliedVolts);
+  }
 
-    @Override
-    public void setBottomMotorVolts(double volts) {
-        rightSim.setInputVoltage(volts);
-    }
+  @Override
+  public void runVelocity(double topRpm, double bottomRpm) {
+    topSetpointRPM = topRpm;
+    bottomSetpointRPM = bottomRpm;
+  }
+
+  @Override
+  public void setPID(double kP, double kI, double kD) {
+    topController.setPID(kP, kI, kD);
+    bottomController.setPID(kP, kI, kD);
+  }
+
+  @Override
+  public void setFF(double kS, double kV, double kA) {
+    ff = new SimpleMotorFeedforward(kS, kV, kA);
+  }
+
+  @Override
+  public void stop() {
+    runVelocity(0.0, 0.0);
+  }
+
+  @Override
+  public void runCharacterizationTopVolts(double volts) {
+    topSetpointRPM = null;
+    bottomSetpointRPM = null;
+    runVolts(volts, 0.0);
+  }
+
+  @Override
+  public void runCharacterizationBottomVolts(double volts) {
+    topSetpointRPM = null;
+    bottomSetpointRPM = null;
+    runVolts(0.0, volts);
+  }
 }

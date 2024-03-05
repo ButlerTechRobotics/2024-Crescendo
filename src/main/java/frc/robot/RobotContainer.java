@@ -162,12 +162,6 @@ public class RobotContainer {
     // composition (the same instance of a command cannot be used in multiple
     // compositions).
 
-    Command ejectNote() {
-        return new ParallelRaceGroup(
-                new ReverseIntake(intake, feeder),
-                new SolidBlue(leds));
-    }
-
     Command intakeNote() {
         return new ParallelRaceGroup(
                 new IntakeNote(intake),
@@ -180,10 +174,10 @@ public class RobotContainer {
                 new SolidBlue(leds));
     }
 
-    Command spinFlywheels(double topFlywheelMetersPerSecond, double bottomFlywheelsMetersPerSecond) {
+    Command spinFlywheels(double topFlywheelRPM, double bottomFlywheelRPM) {
         return new ParallelRaceGroup(
-                new SpinFlywheels(topFlywheelMetersPerSecond, bottomFlywheelsMetersPerSecond, shooter),
-                new ShooterChargeUp(leds, shooter, topFlywheelMetersPerSecond));
+                new SpinFlywheels(topFlywheelRPM, bottomFlywheelRPM, shooter),
+                new ShooterChargeUp(leds, shooter, topFlywheelRPM));
     }
 
     /**
@@ -202,17 +196,10 @@ public class RobotContainer {
     }
 
     /** Moves the arm back and spins up the flywheels to prepare for a trap shot. */
-    Command ampShot() {
-        return new ParallelCommandGroup(
-                spinFlywheels(20, 20),
-                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
-    }
-
-    /** Moves the arm back and spins up the flywheels to prepare for a trap shot. */
     Command prepTrapShot() {
         return new ParallelCommandGroup(
-                spinFlywheels(20, 20),
-                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
+                spinFlywheels(3000, 3000),
+                aimShooterAtAngle(0));
     }
 
     /**
@@ -221,14 +208,14 @@ public class RobotContainer {
      */
     Command prepSubwooferShot() {
         return new ParallelCommandGroup(
-                spinFlywheels(27, 27),
-                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
+                spinFlywheels(3000, 3000),
+                aimShooterAtAngle(0));
     }
 
     Command prepShart() {
         return new ParallelCommandGroup(
-                spinFlywheels(25, 25),
-                aimShooterAtAngle(57));
+                spinFlywheels(3000, 3000),
+                aimShooterAtAngle(70));
     }
 
     /**
@@ -237,7 +224,7 @@ public class RobotContainer {
      */
     Command prepShotFromAnywhereWaitForDrivetrain() {
         return new ParallelCommandGroup(
-                spinFlywheels(27, 27),
+                spinFlywheels(3000, 3000),
                 new AimShooterAtSpeaker(arm, drivetrain),
                 new AimDriveAtSpeaker(drivetrain));
     }
@@ -252,7 +239,7 @@ public class RobotContainer {
     Command prepShotFromAnywhere() {
         return new ParallelRaceGroup(
                 new ParallelCommandGroup(
-                        spinFlywheels(27, 27),
+                        spinFlywheels(3500, 3500),
                         new AimShooterAtSpeaker(arm, drivetrain)),
                 new AimAtSpeakerWhileJoystickDrive(drivetrain));
     }
@@ -265,7 +252,7 @@ public class RobotContainer {
      */
     Command continuousPrepShotFromAnywhere() {
         return new ParallelCommandGroup(
-                spinFlywheels(27, 27),
+                spinFlywheels(3500, 3500),
                 new ContinuousAimShooterAtSpeaker(arm, drivetrain));
     }
 
@@ -328,7 +315,7 @@ public class RobotContainer {
         controller.rightBumper().whileTrue(shootFromAnywhere());
         controller.leftBumper()
                 .whileTrue(prepAmpShot())
-                .onFalse(ampShot().andThen(resetShooter()));
+                .onFalse(fireNote().andThen(resetShooter()));
         controller.b().whileTrue(shart());
         controller.a().onTrue(shootFromSubwoofer());
 

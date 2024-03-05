@@ -32,7 +32,7 @@ public class SwerveModuleIOKraken implements SwerveModuleIO {
             boolean isDriveMotorOnTop, boolean isAngleMotorOnTop) {
 
         /* Angle Encoder Config */
-        absoluteEncoder = new CANcoder(cancoderID, "CTRENetwork");
+        absoluteEncoder = new CANcoder(cancoderID, "rio");
         configCANCoder(angleOffsetDegrees);
 
         /* Angle Motor Config */
@@ -44,7 +44,7 @@ public class SwerveModuleIOKraken implements SwerveModuleIO {
         }
 
         /* Drive Motor Config */
-        driveMotor = new Kraken(driveMotorID, "CTRENetwork");
+        driveMotor = new Kraken(driveMotorID, "rio");
         if (isDriveMotorOnTop) {
             configDriveMotor(InvertedValue.CounterClockwise_Positive);
         } else {

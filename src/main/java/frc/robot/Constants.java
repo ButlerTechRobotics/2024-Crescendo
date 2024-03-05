@@ -29,22 +29,22 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final boolean tuningMode = true;
+
     public final static class ShooterConstants {
         /**
          * Rotations of the motor per rotations of the wheel; a number greater than 1
          * represents a reduction.
          */
-        public final static double flywheelGearReduction = 1.;
+        // encoder / flywheelReduction = flywheel
+        public static double reduction = (1.0 / 1.0);
+        public static double shooterToleranceRPM = 100.0;
 
-        public static final double flywheelCircumferenceMeters = Units.inchesToMeters(4.) * Math.PI;
+        public static Gains gains = new Gains(0.0006, 0.0, 0.05, 0.33329, 0.00083, 0.0);
 
-        public final static double kPFlywheelsVoltsSecondsPerMeter = .00009;
-        public final static double kIFlywheelsVoltsPerMeter = 0.0000002;
-        public final static double kDFlywheelsVoltsSecondsSquaredPerMeter = 0.05;
-
-        public final static double kSFlywheelsVolts = 8.75;
-        public final static double kVFlywheelsVoltsSecondsPerMeter = 0.0027;
-        public final static double kAFlywheelsVoltsSecondsSquaredPerMeter = 0.;
+        public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {
+        }
 
         public final static int topMotorID = 22;
         public final static int bottomMotorID = 23;

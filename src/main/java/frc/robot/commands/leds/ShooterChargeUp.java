@@ -30,7 +30,7 @@ public class ShooterChargeUp extends Command {
 
     @Override
     public void execute() {
-        double leftFlywheelMetersPerSecond = shooter.getTopFlywheelsMetersPerSecond();
+        double leftFlywheelMetersPerSecond = shooter.getTopCharacterizationVelocity();
         leftFlywheelMetersPerSecond = MathUtil.clamp(leftFlywheelMetersPerSecond, 0., 27.);
         int expectedColor = (int)(510 * Math.sin(((2*Math.PI)/(desiredMaxLeftFlywheelSpeed*4)) * leftFlywheelMetersPerSecond));
         for(int i = 0; i < buffer.getLength(); i++) {
