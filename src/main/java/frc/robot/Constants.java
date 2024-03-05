@@ -36,33 +36,18 @@ public final class Constants {
          */
         public final static double flywheelGearReduction = 1.;
 
-        public static final double flywheelCircumferenceMeters = Units.inchesToMeters(3.875) * Math.PI;
+        public static final double flywheelCircumferenceMeters = Units.inchesToMeters(4.) * Math.PI;
 
-        public final static double kPFlywheelsVoltsSecondsPerMeter = .2;
-        public final static double kIFlywheelsVoltsPerMeter = 0.;
-        public final static double kDFlywheelsVoltsSecondsSquaredPerMeter = 0.;
+        public final static double kPFlywheelsVoltsSecondsPerMeter = .00009;
+        public final static double kIFlywheelsVoltsPerMeter = 0.0000002;
+        public final static double kDFlywheelsVoltsSecondsSquaredPerMeter = 0.05;
 
-        public final static double kSFlywheelsVolts = 0.0;
-        public final static double kVFlywheelsVoltsSecondsPerMeter = 0.4185;
+        public final static double kSFlywheelsVolts = 8.75;
+        public final static double kVFlywheelsVoltsSecondsPerMeter = 0.0027;
         public final static double kAFlywheelsVoltsSecondsSquaredPerMeter = 0.;
 
-        public final static int topMotorID = 6;
-        public final static int bottomMotorID = 5;
-
-        public final static int indexerMotorID = 4;
-
-        public static final int indexerProximitySwitchID = 1;
-
-        public static final double kPIndexerVoltsPerRPM = 0.0001;
-
-        public static final double kSIndexerVolts = 0;
-        public static final double kVIndexerVoltsPerRPM = 0.0031;
-
-        /**
-         * Rotations of the motor per rotations of the indexer wheel; a number greater
-         * than 1 represents a reduction.
-         */
-        public static final double indexerGearReduction = 24. / 18.;
+        public final static int topMotorID = 22;
+        public final static int bottomMotorID = 23;
 
         public static final double motorMaxTempCelsius = 70;
     }
@@ -195,13 +180,13 @@ public final class Constants {
          * Rotations of the motor per rotations of the arm; a number greater than 1
          * represents a reduction.
          */
-        public final static double armGearReduction = 460. / 3.;
+        public final static double armGearReduction = 125. / 1.;
 
         /**
          * Minimum angle of the arm, in degrees. This value should be negative, as it is
          * below the horizontal.
          */
-        public final static double armMinAngleDegrees = 0.0;
+        public final static double armMinAngleDegrees = 2.45;
 
         public final static double absoluteEncoderCPR = 4096;
 
@@ -209,17 +194,17 @@ public final class Constants {
          * Maximum angle of the arm, in degrees. This value should be positive and
          * greater than 90, as it is beyond the vertical.
          */
-        public final static double armMaxAngleDegrees = 145.;
+        public final static double armMaxAngleDegrees = 102.45;
 
-        public final static double armMaxVelDegreesPerSecond = 240.;
+        public final static double armMaxVelDegreesPerSecond = 20.;
 
-        public final static double armMaxAccelDegreesPerSecondSquared = 480.;
+        public final static double armMaxAccelDegreesPerSecondSquared = 20.;
 
         /** temporary ids for motors and CANcoder of the shooting arm */
         public final static int motorID = 20;
-        public final static int absoluteEncoderID = 8;
+        // public final static int absoluteEncoderID = 8;
 
-        public final static double armOffset = -0.431;
+        public final static double armOffset = 0.0;
 
         /***** REAL CONSTANTS ******/
         public final static double kSArmVolts = 0.005;
@@ -247,8 +232,8 @@ public final class Constants {
         /**
          * temp motor ids for climbing motors
          */
-        public final static int leftMotorID = 26;
-        public final static int rightMotorID = 27;
+        // public final static int leftMotorID = 26;
+        // public final static int rightMotorID = 27;
 
         /**
          * Use this value as the conversion factor between the motors rotations and
@@ -314,7 +299,7 @@ public final class Constants {
     public final static class FeederConstants {
         public final static int frontFeederMotorID = 24;
         public final static int backFeederMotorID = 21;
-        public static final int FeederBeamBreakID = 1;
+        public static final int FeederBeamBreakID = 8;
 
         public static final double kSFrontFeederVolts = 0;
         public static final double kVFrontFeederVoltsPerRPM = 0;

@@ -19,7 +19,7 @@ public class ArmIONeo implements ArmIO {
         configMotors();
 
         armAbsoluteEncoder = motor.getAbsoluteEncoder();
-        configEncoders();
+        // configEncoders();
     }
 
     @Override
@@ -57,15 +57,15 @@ public class ArmIONeo implements ArmIO {
 
     private void configMotors() {
         motor.restoreFactoryDefaults();
-        motor.setSmartCurrentLimit(80);
+        motor.setSmartCurrentLimit(40);
         motor.setInverted(false);
-        motor.setIdleMode(IdleMode.kBrake);
+        motor.setIdleMode(IdleMode.kCoast);
         motor.burnFlash();
     }
 
     private void configEncoders() {
-        armAbsoluteEncoder.setPositionConversionFactor(0.5);
-        armAbsoluteEncoder.setZeroOffset(0.0);
+        armAbsoluteEncoder.setPositionConversionFactor(360);
+        armAbsoluteEncoder.setZeroOffset(119);
     }
 
 }

@@ -82,10 +82,10 @@ public class RobotContainer {
         if (RobotBase.isReal()) {
             drivetrain = new Drivetrain(
                     new GyroIOPigeon(),
-                    new SwerveModuleIONeo(1, 2, 0.0, 9),
-                    new SwerveModuleIONeo(3, 4, 0.0, 10),
-                    new SwerveModuleIONeo(5, 6, 0.0, 11),
-                    new SwerveModuleIONeo(7, 8, 0.0, 12),
+                    new SwerveModuleIONeo(1, 2, 0.132812, 9),
+                    new SwerveModuleIONeo(3, 4, 0.021729, 10),
+                    new SwerveModuleIONeo(5, 6, 0.273682, 11),
+                    new SwerveModuleIONeo(7, 8, 0.057861, 12),
                     new VisionIOPhotonLib("FLCamera", VisionConstants.robotToCameraFL),
                     new VisionIOPhotonLib("FRCamera", VisionConstants.robotToCameraFR));
 
@@ -162,6 +162,12 @@ public class RobotContainer {
     // composition (the same instance of a command cannot be used in multiple
     // compositions).
 
+    Command ejectNote() {
+        return new ParallelRaceGroup(
+                new ReverseIntake(intake, feeder),
+                new SolidBlue(leds));
+    }
+
     Command intakeNote() {
         return new ParallelRaceGroup(
                 new IntakeNote(intake),
@@ -192,15 +198,21 @@ public class RobotContainer {
     /** Moves the arm back and spins up the flywheels to prepare for an amp shot. */
     Command prepAmpShot() {
         return new ParallelCommandGroup(
+                aimShooterAtAngle(78));
+    }
+
+    /** Moves the arm back and spins up the flywheels to prepare for a trap shot. */
+    Command ampShot() {
+        return new ParallelCommandGroup(
                 spinFlywheels(20, 20),
-                aimShooterAtAngle(110));
+                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
     }
 
     /** Moves the arm back and spins up the flywheels to prepare for a trap shot. */
     Command prepTrapShot() {
         return new ParallelCommandGroup(
                 spinFlywheels(20, 20),
-                aimShooterAtAngle(90));
+                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
     }
 
     /**
@@ -210,13 +222,13 @@ public class RobotContainer {
     Command prepSubwooferShot() {
         return new ParallelCommandGroup(
                 spinFlywheels(27, 27),
-                aimShooterAtAngle(0));
+                aimShooterAtAngle(ArmConstants.armMinAngleDegrees));
     }
 
     Command prepShart() {
         return new ParallelCommandGroup(
                 spinFlywheels(25, 25),
-                aimShooterAtAngle(-15));
+                aimShooterAtAngle(57));
     }
 
     /**
@@ -316,7 +328,7 @@ public class RobotContainer {
         controller.rightBumper().whileTrue(shootFromAnywhere());
         controller.leftBumper()
                 .whileTrue(prepAmpShot())
-                .onFalse(fireNote().andThen(resetShooter()));
+                .onFalse(ampShot().andThen(resetShooter()));
         controller.b().whileTrue(shart());
         controller.a().onTrue(shootFromSubwoofer());
 
