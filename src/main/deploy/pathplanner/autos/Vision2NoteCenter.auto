@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7859976973515199,
-      "y": 4.403274541213847
+      "x": 1.4896821805055864,
+      "y": 5.574358195791997
     },
-    "rotation": -58.924268030699224
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -36,13 +30,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote1Source"
+                  "pathName": "toNote2"
                 }
               },
               {
@@ -67,7 +67,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos1"
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -92,9 +92,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "toParkPosLeft"
+            "pathName": "toParkPosCenter"
           }
         },
         {
