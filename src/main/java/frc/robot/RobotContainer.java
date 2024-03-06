@@ -477,29 +477,33 @@ public class RobotContainer {
         AutoBuilder.pathfindThenFollowPath(
             PathPlannerPath.fromPathFile("TrapScore3"), pathConstraints));
 
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION SUB SHOOT
-    // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 32)); // "Sub shoot"
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD UP
+        // ARM POSITION SUB SHOOT
+        // ================================================
+        operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8)); // "Sub shoot"
 
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION MIDFIELD SHOOT
-    // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 4)); // "Midfield Shoot"
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD RIGHT
+        // ARM POSITION MIDFIELD SHOOT
+        // ================================================
+        operatorController
+                .povRight()
+                .whileTrue(
+                        new PositionArmPID(
+                                armPID, 17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
 
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD LEFT
-    // ARM POSITION AMP SHOOT
-    // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22.7)); // "Amp/Note Shoot"
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD LEFT
+        // ARM POSITION AMP SHOOT
+        // ================================================
+        operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78)); // "Amp/Note Shoot"
 
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION PILLAR SHOOT
-    // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD DOWN
+        // ARM POSITION PILLAR SHOOT
+        // ================================================
+        operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.8)); // "Pillar Shoot"
   }
 
   /**
