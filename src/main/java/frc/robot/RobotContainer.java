@@ -210,7 +210,7 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
@@ -400,7 +400,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 22.7)))
+                .alongWith(new PositionArmPID(armPID, -50)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -481,19 +481,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 32)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -100)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 4)); // "Midfield Shoot"
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, -4)); // "Midfield Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 22.7)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, -50)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

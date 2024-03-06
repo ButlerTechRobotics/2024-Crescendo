@@ -18,13 +18,13 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex armMotor = new CANSparkFlex(20, MotorType.kBrushless);
-  DutyCycleEncoder thruBore = new DutyCycleEncoder(0);
+  DutyCycleEncoder encoder = new DutyCycleEncoder(0);
   SparkPIDController pidController;
   private double targetAngle = 0;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.1); // .000008
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.05); // .000008
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
   TunableNumber kD = new TunableNumber("Arm D Gain", 0.0);
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
@@ -44,6 +44,8 @@ public class ArmPositionPID extends SubsystemBase {
 
     armMotor.setSmartCurrentLimit(80);
 
+    armMotor.setInverted(true);
+
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
   }
@@ -57,7 +59,7 @@ public class ArmPositionPID extends SubsystemBase {
   }
 
   public double getPosition() {
-    return armMotor.getEncoder().getPosition();
+    return (encoder.getAbsolutePosition() * 360) - 221.23;
   }
 
   private void setPID() {
@@ -83,15 +85,14 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     pidController.setReference(targetAngle, ControlType.kPosition, 0);
-    SmartDashboard.putNumber("ArmAngle", armMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("ArmAngle", getPosition());
     // SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
     // SmartDashboard.putNumber("ENCODER?",
     // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
     measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);
-    Logger.recordOutput("Arm/Angle", targetAngle);
+    Logger.recordOutput("ArmTarget", targetAngle);
     SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
-    SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getAbsolutePosition());
   }
 }
