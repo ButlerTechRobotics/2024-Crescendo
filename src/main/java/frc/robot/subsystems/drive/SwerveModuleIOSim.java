@@ -11,50 +11,48 @@ import frc.robot.Constants.SwerveModuleConstants;
 
 /** Add your docs here. */
 public class SwerveModuleIOSim implements SwerveModuleIO {
-    private FlywheelSim angleSim = new FlywheelSim(DCMotor.getNEO(1), 1./SwerveModuleConstants.steerGearReduction, 0.025);
-    private FlywheelSim driveSim = new FlywheelSim(DCMotor.getNEO(1), 1./SwerveModuleConstants.driveGearReduction, 0.004);
+  private FlywheelSim angleSim =
+      new FlywheelSim(DCMotor.getNEO(1), 1. / SwerveModuleConstants.steerGearReduction, 0.025);
+  private FlywheelSim driveSim =
+      new FlywheelSim(DCMotor.getNEO(1), 1. / SwerveModuleConstants.driveGearReduction, 0.004);
 
-    @Override
-    public void updateInputs(SwerveModuleIOInputs inputs) {
-        angleSim.update(0.02);
-        driveSim.update(0.02);
+  @Override
+  public void updateInputs(SwerveModuleIOInputs inputs) {
+    angleSim.update(0.02);
+    driveSim.update(0.02);
 
-        //DRIVE MOTOR ----
-        //converts rpm of wheel into m/s of wheel
-        double driveVelocityConversionFactor =  
-            1./60. * SwerveModuleConstants.wheelCircumferenceMeters;
-        
-        inputs.driveVelocityMetersPerSecond = 
-            driveSim.getAngularVelocityRPM()*driveVelocityConversionFactor;
+    // DRIVE MOTOR ----
+    // converts rpm of wheel into m/s of wheel
+    double driveVelocityConversionFactor =
+        1. / 60. * SwerveModuleConstants.wheelCircumferenceMeters;
 
-        //calculate wheel position from (wheel velocity)*dt
-        inputs.drivePositionMeters +=
-            inputs.driveVelocityMetersPerSecond*0.02;
+    inputs.driveVelocityMetersPerSecond =
+        driveSim.getAngularVelocityRPM() * driveVelocityConversionFactor;
 
-        
-        //ANGLE MOTOR ----
+    // calculate wheel position from (wheel velocity)*dt
+    inputs.drivePositionMeters += inputs.driveVelocityMetersPerSecond * 0.02;
 
-        //converts rpm of module into deg/s of swerve module
-        double angleVelocityConversionFactor =
-            360.0/60.0;
+    // ANGLE MOTOR ----
 
-        double angleVelocityDegreesPerSecond = 
-            angleSim.getAngularVelocityRPM()*angleVelocityConversionFactor;
+    // converts rpm of module into deg/s of swerve module
+    double angleVelocityConversionFactor = 360.0 / 60.0;
 
-        //calculate module angle from (angular velocity)*dt, then mod to keep within -180 and 180
-        inputs.angleAbsolutePositionDegrees += angleVelocityDegreesPerSecond*0.02;
-        inputs.angleAbsolutePositionDegrees = 
-            MathUtil.inputModulus(inputs.angleAbsolutePositionDegrees, -180, 180);
+    double angleVelocityDegreesPerSecond =
+        angleSim.getAngularVelocityRPM() * angleVelocityConversionFactor;
 
-    }
+    // calculate module angle from (angular velocity)*dt, then mod to keep within -180 and 180
+    inputs.angleAbsolutePositionDegrees += angleVelocityDegreesPerSecond * 0.02;
+    inputs.angleAbsolutePositionDegrees =
+        MathUtil.inputModulus(inputs.angleAbsolutePositionDegrees, -180, 180);
+  }
 
-    @Override
-    public void setDriveVoltage(double volts) {
-        driveSim.setInputVoltage(volts);
-    }
+  @Override
+  public void setDriveVoltage(double volts) {
+    driveSim.setInputVoltage(volts);
+  }
 
-    @Override
-    public void setAngleVoltage(double volts) {
-        angleSim.setInputVoltage(volts);
-    }
+  @Override
+  public void setAngleVoltage(double volts) {
+    angleSim.setInputVoltage(volts);
+  }
 }

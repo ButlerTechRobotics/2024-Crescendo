@@ -4,119 +4,103 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.REVLibError;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.SwerveModuleConstants;
 import frc.robot.VendorWrappers.Neo;
-import frc.robot.subsystems.drive.SwerveModuleIO.SwerveModuleIOInputs;
 
-public class SwerveModuleIONeo implements SwerveModuleIO{
+public class SwerveModuleIONeo implements SwerveModuleIO {
+  private CANcoder absoluteEncoder;
+  private Neo angleMotor;
+  private Neo driveMotor;
 
-    /**
-     * This angle offset is added directly to the raw angle read by the absolute encoder.
-     */
-    private double angleOffset;
-    private CANcoder absoluteEncoder;
-    private Neo angleMotor;
-    private Neo driveMotor;
+  /**
+   * @param driveMotorID - ID of the drive motor
+   * @param angleMotorID - ID of the angle motor
+   * @param angleOffsetDegrees - Offset of the angle motor, in degrees
+   * @param cancoderID - ID of the absolute CANcoder mounted ontop of the swerve
+   * @param isDriveMotorOnTop - Is drive motor mounted on top
+   * @param isAngleMotorOnTop - Is angle motor mounted on top
+   */
+  public SwerveModuleIONeo(
+      int driveMotorID,
+      int angleMotorID,
+      double angleOffsetDegrees,
+      int cancoderID,
+      boolean isDriveMotorOnTop,
+      boolean isAngleMotorOnTop,
+      String name) {
 
+    /* Angle Encoder Config */
+    absoluteEncoder = new CANcoder(cancoderID, "rio");
+    configCANCoder(angleOffsetDegrees);
 
-    /**
-     * Constructs the hardware implementation for each swerve module
-     * @param driveMotorID - ID of the motor controller to the drive motor 
-     * @param angleMotorID - ID of the motor controller to the angle motor
-     * @param angleOffset - Offset for the individual CANcoders on each swerve module, in +-1
-     * @param cancoderID - ID of the CANcoders mounted on each swerve module
-     */
-    public SwerveModuleIONeo(int driveMotorID, int angleMotorID, double angleOffset, int cancoderID){
-        this.angleOffset = angleOffset;
-        
-        /* Angle Encoder Config */
-        absoluteEncoder = new CANcoder(cancoderID);
-        configCANCoder();
-
-        /** Angle motor config */
-        angleMotor = new Neo(angleMotorID);
-        configAngleMotor();
-
-        /** Drive motor config */
-        driveMotor = new Neo(driveMotorID);
-        configDriveMotor();
-
+    /* Angle Motor Config */
+    angleMotor = new Neo(name + "Steer", angleMotorID);
+    if (isAngleMotorOnTop) {
+      configAngleMotor(false);
+    } else {
+      configAngleMotor(true);
     }
 
-    @Override
-    public void updateInputs(SwerveModuleIOInputs inputs) {
-        inputs.drivePositionMeters = driveMotor.getPosition();
-        inputs.driveVelocityMetersPerSecond = driveMotor.getVelocity();
-        inputs.angleAbsolutePositionDegrees = absoluteEncoder.getAbsolutePosition().getValueAsDouble()*360;
+    /* Drive Motor Config */
+    driveMotor = new Neo(name + "Drive", driveMotorID);
+    if (isDriveMotorOnTop) {
+      configDriveMotor(false);
+    } else {
+      configDriveMotor(true);
     }
+  }
 
-    @Override
-    public void setDriveVoltage(double volts) {
-        driveMotor.setVoltage(volts);
-    }
+  @Override
+  public void updateInputs(SwerveModuleIOInputs inputs) {
+    inputs.drivePositionMeters =
+        driveMotor.getPosition()
+            * (SwerveModuleConstants.driveGearReduction
+                * SwerveModuleConstants.wheelCircumferenceMeters);
+    inputs.driveVelocityMetersPerSecond =
+        driveMotor.getVelocity()
+            * (SwerveModuleConstants.driveGearReduction
+                * SwerveModuleConstants.wheelCircumferenceMeters);
+    inputs.angleAbsolutePositionDegrees =
+        absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 360;
 
-    @Override
-    public void setAngleVoltage(double volts) {
-        angleMotor.setVoltage(volts);
-    }
+    inputs.driveAppliedVoltage = driveMotor.getBusVoltage();
+    inputs.driveCurrent = driveMotor.getOutputCurrent();
+  }
 
-    private void configCANCoder() {
-        CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
-        cancoderConfigs.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-        cancoderConfigs.MagnetSensor.MagnetOffset = angleOffset;
-        cancoderConfigs.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+  @Override
+  public void setDriveVoltage(double volts) {
+    driveMotor.setVoltage(volts);
+  }
 
-        absoluteEncoder.getConfigurator().apply(cancoderConfigs);
-    }
+  @Override
+  public void setAngleVoltage(double volts) {
+    angleMotor.setVoltage(volts);
+  }
 
-    private void configAngleMotor() {
-        angleMotor.restoreFactoryDefaults();
-        angleMotor.setSmartCurrentLimit(MotorConstants.angleContinuousCurrentLimit);
-        angleMotor.setInverted(MotorConstants.angleInvert);
-        angleMotor.setIdleMode(MotorConstants.angleNeutralMode);
-        //converts rotations of motor into deg of wheel
-        angleMotor.setPositionConversionFactor(SwerveModuleConstants.steerGearReduction*360.0);
-        //converts rpm of motor into deg/s of wheel
-        angleMotor.setVelocityConversionFactor(SwerveModuleConstants.steerGearReduction*360.0/60.0);
-        angleMotor.burnFlash();
-    }
+  private void configCANCoder(double angleOffsetDegrees) {
+    CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
+    cancoderConfigs.MagnetSensor.AbsoluteSensorRange =
+        AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    cancoderConfigs.MagnetSensor.MagnetOffset = angleOffsetDegrees;
+    cancoderConfigs.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
-    private void configDriveMotor() {
-        driveMotor.restoreFactoryDefaults();
-        driveMotor.setSmartCurrentLimit(MotorConstants.driveContinuousCurrentLimit);
-        driveMotor.setInverted(MotorConstants.driveInvert);
-        driveMotor.setIdleMode(MotorConstants.driveNeutralMode);
-        
-        driveMotor.setPosition(0.0);
+    absoluteEncoder.getConfigurator().apply(cancoderConfigs);
+  }
 
-        // Converts rotations of motor to meters traveled of wheel.
-        driveMotor.setPositionConversionFactor(
-            SwerveModuleConstants.driveGearReduction
-            * SwerveModuleConstants.wheelCircumferenceMeters
-        );
+  private void configDriveMotor(boolean invertedValue) {
+    // Neo is automatically reset to factory defaults upon construction
+    driveMotor.setSmartCurrentLimit(MotorConstants.driveContinuousCurrentLimit);
+    driveMotor.setInverted(invertedValue);
+    driveMotor.setIdleMode(MotorConstants.driveNeutralMode);
+    driveMotor.burnFlash();
+  }
 
-        // Converts rpm of motor to m/s of wheel.
-        driveMotor.setVelocityConversionFactor(
-            1./60. * SwerveModuleConstants.driveGearReduction
-            * SwerveModuleConstants.wheelCircumferenceMeters
-        );
-
-        // REVLibError err = driveMotor.setMeasurementPeriod(10);
-        // if (err == REVLibError.kOk) {
-        //     System.out.println("successfully set drive encoder measurement period");
-        // }
-        
-        // err = driveMotor.setAverageDepth(2);
-        // if (err == REVLibError.kOk) {
-        //     System.out.println("successfully set drive encoder window size");
-        // }
-
-        driveMotor.burnFlash();
-    }
+  private void configAngleMotor(boolean invertedValue) {
+    // Neo is automatically reset to factory defaults upon construction
+    angleMotor.setSmartCurrentLimit(MotorConstants.angleContinuousCurrentLimit);
+    angleMotor.setInverted(invertedValue);
+    angleMotor.setIdleMode(MotorConstants.angleNeutralMode);
+    angleMotor.burnFlash();
+  }
 }
