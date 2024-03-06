@@ -38,7 +38,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(-0.40, 0.35);
+    pidController.setOutputRange(0.10, 0.1);
 
     armMotor.setIdleMode(IdleMode.kBrake);
 
