@@ -1,28 +1,44 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface GyroIO {
-  @AutoLog
-  public static class GyroIOInputs {
-    public boolean connected = false;
-    public Rotation2d yawPosition = new Rotation2d();
-    public double yawVelocityRadPerSec = 0.0;
-  }
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-  public default void updateInputs(GyroIOInputs inputs) {}
+public interface GyroIO {
+
+    @AutoLog
+    public class GyroIOInputs {
+        /** 
+         * The yaw rotation of the robot, as a Rotation2d.
+         * A counterclockwise rotation will result in a positive increase in this value.
+         * An angle of 0 represents the robot facing away from the blue alliance wall. 
+         * */
+        public Rotation2d robotYawRotation2d = new Rotation2d(0.0);
+        
+
+        /**
+         * The angular velocity of the robot's yaw, as a Rotation2d per second.
+         * A counterclockwise rotation will result in a positive value.
+         */
+        public Rotation2d robotYawRotation2dPerSecond = new Rotation2d(0.0);
+
+        
+
+        //temporary values, may be used for climbing
+        public Rotation2d robotPitchRotation2d = new Rotation2d(0.0);
+        public Rotation2d robotRollRotation2d = new Rotation2d(0.0);
+    }
+    
+    public default void updateInputs(GyroIOInputs inputs) {};
+
+    /**
+     * Sets the saved yaw position of the robot, in degrees.
+     * Your robot will now read its current angular position as the value you pass into this function.
+     * Typically, an angle of 0 should be facing away from the blue alliance wall.
+     */
+    public default void setRobotYaw(double degrees) {};
+
+    //this shouldn't need to be implemented by anything besides the sim implementation
+    public default void calculateYaw(SwerveModulePosition[] modulePositions) {};
 }
