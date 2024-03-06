@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
-import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex armMotor = new CANSparkFlex(20, MotorType.kBrushless);
@@ -24,7 +23,7 @@ public class ArmPositionPID extends SubsystemBase {
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.05); // .000008
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.0000000000000000000000000001); // .000008
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
   TunableNumber kD = new TunableNumber("Arm D Gain", 0.0);
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
@@ -38,7 +37,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setI(kI.get(), 0);
     pidController.setD(kD.get(), 0);
     pidController.setFF(kFF.get(), 0);
-    pidController.setOutputRange(0.10, 0.1);
+    pidController.setOutputRange(0.10, 0.2);
 
     armMotor.setIdleMode(IdleMode.kBrake);
 
@@ -85,14 +84,14 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     pidController.setReference(targetAngle, ControlType.kPosition, 0);
-    SmartDashboard.putNumber("ArmAngle", getPosition());
+    SmartDashboard.putNumber("ArmAngleee", getPosition());
     // SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
     // SmartDashboard.putNumber("ENCODER?",
     // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
     measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);
-    Logger.recordOutput("ArmTarget", targetAngle);
+    SmartDashboard.putNumber("ArmTarget", targetAngle);
     SmartDashboard.putNumber("Arm Current", armMotor.getOutputCurrent());
   }
 }
