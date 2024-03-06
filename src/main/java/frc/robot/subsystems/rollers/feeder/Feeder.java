@@ -1,6 +1,5 @@
 package frc.robot.subsystems.rollers.feeder;
 
-import com.ctre.phoenix.led.CANdle;
 import frc.robot.subsystems.rollers.GenericRollerSubsystem;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
-  public static CANdle LIGHTS = new CANdle(32);
 
   @RequiredArgsConstructor
   @Getter

@@ -74,15 +74,15 @@ public class Candle extends SubsystemBase {
   }
 
   public FireAnimation burnyBurn() {
-    return new FireAnimation(1, .5, NUM_LEDS, .5, .5);
+    return new FireAnimation(1, 0.75, NUM_LEDS, 1.0, 0.3);
   }
 
-  public StrobeAnimation prepareShoot() {
+  public StrobeAnimation shoot() {
     return new StrobeAnimation(254, 254, 254, 254, 0.5, NUM_LEDS);
   }
 
-  public ColorFlowAnimation shoot() {
-    return new ColorFlowAnimation(254, 55, 0, 0, 0.5, NUM_LEDS, Direction.Forward);
+  public ColorFlowAnimation prepareShoot() {
+    return new ColorFlowAnimation(254, 55, 0, 0, 0.75, NUM_LEDS, Direction.Forward);
   }
 
   public RainbowAnimation rainbow() {
