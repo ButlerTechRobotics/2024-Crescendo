@@ -38,7 +38,6 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
-import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -46,6 +45,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.feeder.FeederIO;
@@ -87,7 +87,7 @@ public class RobotContainer {
   private Feeder feeder2;
   private Rollers rollers;
 
-  private final SwagLights swagLights = SwagLights.getInstance();
+  private Candle candle = new Candle();
 
   private Superstructure superstructure;
 
@@ -321,18 +321,21 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
+                candle.runBurnyBurnCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                     superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                 Commands.waitUntil(() -> !rollers.getBeamBreak()),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                candle.setColorGreenCommand(),
                 Commands.waitUntil(() -> rollers.getBeamBreak()),
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
+                    }),
+                candle.setColorOperationIdle()))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -389,7 +392,8 @@ public class RobotContainer {
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -100));
 
     // AMP LOCATION
-    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID, 250));
+    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
+    // 250));
     // AMP
     operatorController
         .leftBumper()
@@ -412,10 +416,12 @@ public class RobotContainer {
         .rightBumper()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
+                candle.runPrepareShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
                     superstructure),
                 Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
@@ -427,10 +433,11 @@ public class RobotContainer {
                     })))
         .onFalse(
             Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                }));
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
