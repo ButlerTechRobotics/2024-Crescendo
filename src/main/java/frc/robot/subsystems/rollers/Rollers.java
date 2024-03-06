@@ -46,12 +46,15 @@ public class Rollers extends SubsystemBase {
         feeder1.setGoal(Feeder.Goal.IDLE);
         feeder2.setGoal(Feeder.Goal.IDLE);
         intake.setGoal(Intake.Goal.IDLE);
+        Feeder.LIGHTS.setLEDs(252, 161, 3);
       }
       case FLOOR_INTAKE -> {
         // if (armPID.isAtHomePosition()) {
         feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
         feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
         intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+        Feeder.LIGHTS.setLEDs(57, 252, 3);
+
         // } else {
         //   // The arm is not at its home position, so set the goals to IDLE
         //   feeder1.setGoal(Feeder.Goal.IDLE);
