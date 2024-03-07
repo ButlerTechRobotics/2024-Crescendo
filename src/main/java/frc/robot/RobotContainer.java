@@ -383,13 +383,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 3000));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -100));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -1000));
 
     // AMP LOCATION
     // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
