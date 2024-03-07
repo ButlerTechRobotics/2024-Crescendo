@@ -21,9 +21,9 @@ public class ArmPositionPID extends SubsystemBase {
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.055); // .000008
-  TunableNumber kI = new TunableNumber("Arm I Gain", 0.00001);
-  TunableNumber kD = new TunableNumber("Arm D Gain", 0.000);
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.032); // .035
+  TunableNumber kI = new TunableNumber("Arm I Gain", 0.0003); // 0.001
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0012); // 0.0012
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
 
   /** Creates a new SparkMaxClosedLoop. */
@@ -75,8 +75,8 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.25; // Adjust this value to control the up speed
-    double upSpeedFactor = 0.12; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.2; // Adjust this value to control the up speed
+    double upSpeedFactor = 0.13; // Adjust this value to control the down speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
     // This method will be called once per scheduler run
@@ -84,5 +84,6 @@ public class ArmPositionPID extends SubsystemBase {
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/SetAngle", targetAngle);
     Logger.recordOutput("ArmCurrentAngle", getPosition());
+    Logger.recordOutput("ArmVoltage", motor.getBusVoltage());
   }
 }

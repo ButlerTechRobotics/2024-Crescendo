@@ -495,7 +495,7 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povLeft()
-        .whileTrue(new PositionArmPID(armPID, -30)); // "Amp/Note Shoot" -50!!!!
+        .whileTrue(new PositionArmPID(armPID, -69)); // "Amp/Note Shoot" -50!!!!
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
