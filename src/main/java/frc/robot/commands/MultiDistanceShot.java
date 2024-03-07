@@ -21,14 +21,14 @@ public class MultiDistanceShot extends Command {
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
-  double speed;
+  double speedRPM;
 
   /**
    * Creates a new MultiDistanceArm command.
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to shoot at.
-   * @param shooter The arm subsystem.
+   * @param shooter The shooter subsystem.
    */
   public MultiDistanceShot(Supplier<Pose2d> poseSupplier, Pose2d targetPose, Shooter shooter) {
     this.poseSupplier = poseSupplier;
@@ -36,12 +36,17 @@ public class MultiDistanceShot extends Command {
     this.shooter = shooter;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.0, 3000.);
-    distanceMap.put(2.3, 3500.);
-    distanceMap.put(4.0, 4000.);
-    distanceMap.put(4.9, 4500.);
-    distanceMap.put(6.2, 5000.);
-    distanceMap.put(7.5, 5500.);
+    distanceMap.put(1.0, 2500.0);
+    distanceMap.put(1.5, 2500.0);
+    distanceMap.put(2.0, 3000.0);
+    distanceMap.put(2.5, 3000.0);
+    distanceMap.put(3.0, 4000.0);
+    distanceMap.put(3.5, 4500.7);
+    distanceMap.put(4.0, 5000.53);
+    distanceMap.put(4.5, 5000.3);
+    distanceMap.put(5.0, 5000.0);
+    distanceMap.put(5.5, 5000.19);
+    distanceMap.put(6.0, 5000.475);
   }
 
   @Override
@@ -55,11 +60,14 @@ public class MultiDistanceShot extends Command {
     // Calculate the distance from the current pose to the target pose
     distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
 
-    // Get the corresponding angle from the distance-angle map
-    speed = distanceMap.get(distance);
-
-    // Run the flywheel at the calculated angle
-    shooter.setSetpoint(speed, speed);
+    // Set the shooter goal based on the distance
+    if (distance < 5) {
+      shooter.setGoal(Shooter.Goal.SHOOTING);
+    } else if (distance < 20) {
+      shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
+    } else {
+      shooter.setGoal(Shooter.Goal.IDLE);
+    }
 
     // Put the distance on the SmartDashboard
     SmartDashboard.putNumber("Distance", getDistance());
@@ -92,8 +100,8 @@ public class MultiDistanceShot extends Command {
    *
    * @return The angle in units per second.
    */
-  @AutoLogOutput(key = "Shooter/Speed")
+  @AutoLogOutput(key = "Shooter/SpeedRPM")
   public double getSpeed() {
-    return speed;
+    return speedRPM;
   }
 }

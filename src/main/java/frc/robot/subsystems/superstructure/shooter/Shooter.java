@@ -23,6 +23,11 @@ public class Shooter extends SubsystemBase {
   private static LoggedTunableNumber shootingBottomRPM =
       new LoggedTunableNumber("Superstructure/ShootingBottomRPM", 3500.0);
 
+  private static LoggedTunableNumber shootingFarTopRPM =
+      new LoggedTunableNumber("Superstructure/ShootingFarTopRPM", 5000.0);
+  private static LoggedTunableNumber shootingFarBottomRPM =
+      new LoggedTunableNumber("Superstructure/ShootingFarBottomRPM", 5000.0);
+
   private static LoggedTunableNumber intakingTopRPM =
       new LoggedTunableNumber("Superstructure/IntakingTopRPM", -2000.0);
   private static LoggedTunableNumber intakingBottomRPM =
@@ -45,6 +50,7 @@ public class Shooter extends SubsystemBase {
   public enum Goal {
     IDLE,
     SHOOTING,
+    SHOOTINGFAR,
     INTAKING,
 
     CHARACTERIZATION
@@ -87,6 +93,7 @@ public class Shooter extends SubsystemBase {
         case IDLE -> io.stop();
         case INTAKING -> setSetpoint(intakingTopRPM.get(), intakingBottomRPM.get());
         case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
+        case SHOOTINGFAR -> setSetpoint(shootingFarTopRPM.get(), shootingFarBottomRPM.get());
       }
     }
 

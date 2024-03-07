@@ -15,8 +15,7 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 2.8;
-  // private DutyCycleEncoder TOBY = new DutyCycleEncoder(1); // Replace 0 with the actual channel
+  private double targetAngle = 0.25;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
@@ -28,8 +27,6 @@ public class ArmPositionPID extends SubsystemBase {
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
     pidController = new PIDController(kP.get(), kI.get(), kD.get());
-    // mySparkMax.getPIDController().setFeedbackDevice(mySparkMax.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle));
-    // pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
     pidController.setP(kP.get());
     pidController.setI(kI.get());
     pidController.setD(kD.get());
@@ -74,7 +71,7 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.1; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.15; // Adjust this value to control the down speed
     double upSpeedFactor = 0.2; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);

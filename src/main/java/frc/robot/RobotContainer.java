@@ -284,6 +284,12 @@ public class RobotContainer {
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 })));
 
+    // ================================================
+    // Register the Auto Command ShooterPosLeft
+    // ================================================
+    NamedCommands.registerCommand(
+        "ArmPositionAmp", Commands.runOnce(() -> armPID.setPosition(78.0)));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Configure the button bindings
@@ -400,7 +406,6 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
-        // .alongWith(new PositionArmPID(armPID, 26)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -502,7 +507,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.8)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.5)); // "Pillar Shoot"
   }
 
   /**

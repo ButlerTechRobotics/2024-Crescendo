@@ -61,7 +61,7 @@ public class PathFinderAndFollow extends Command {
         driveMode == DriveModeType.SPEAKER ? "Speaker Placement Path" : "Amp Placement Path";
     PathPlannerPath ampPath = PathPlannerPath.fromPathFile(pathName);
     PathConstraints constraints =
-        new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        new PathConstraints(4.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
     pathRun = AutoBuilder.pathfindThenFollowPath(ampPath, constraints, 0.0);
     scoreCommand = Commands.sequence(pathRun);
     scoreCommand.schedule();
