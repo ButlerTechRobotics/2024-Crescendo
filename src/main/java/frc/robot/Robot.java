@@ -1,24 +1,28 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright 2021-2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// version 3 as published by the Free Software Foundation or
+// available in the root directory of this project.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.LocalADStarAK;
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,52 +32,7 @@ import org.littletonrobotics.junction.LoggedRobot;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-
   private RobotContainer robotContainer;
-  private Drive drive;
-
-  private SendableChooser<Command> autoChooser;
-
-  private void configAutoBuilder() {
-    AutoBuilder.configureHolonomic(
-        drive::getPoseMeters, // Robot pose supplier
-        drive
-            ::setPoseMeters, // Method to reset odometry (will be called if your auto has a starting
-        // pose)
-        drive::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        (ChassisSpeeds speeds) ->
-            drive.drive(speeds, true), // Method that will drive the robot given ROBOT RELATIVE
-        // ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
-            // your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(4.0, 0.0, 0.0), // Rotation PID constants
-            DrivetrainConstants.maxAchievableVelocityMetersPerSecond, // Max module speed, in m/s
-            DrivetrainConstants
-                .drivetrainRadiusMeters, // Drive base radius in meters. Distance from robot center
-            // to
-            // furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options
-            // here
-            ),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored
-          // We by default draw the paths on the red side of the field, mirroring them if
-          // we are on the blue alliance.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Blue;
-          }
-          return false;
-        },
-        drive // Reference to this subsystem to set requirements
-        );
-
-    // TODO: set override when prep shot is active
-    PPHolonomicDriveController.setRotationTargetOverride(null);
-  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -81,60 +40,81 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
+    Pathfinding.setPathfinder(new LocalADStarAK());
+    // Record metadata
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        Logger.recordMetadata("GitDirty", "All changes committed");
+        break;
+      case 1:
+        Logger.recordMetadata("GitDirty", "Uncomitted changes");
+        break;
+      default:
+        Logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    // Set up data receivers & replay source
+    switch (Constants.getMode()) {
+      case REAL:
+        // Running on a real robot, log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case SIM:
+        // Running a physics simulator, log to NT
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case REPLAY:
+        // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
+
+    // See http://bit.ly/3YIzFZ6 for more information on timestamps in AdvantageKit.
+    // Logger.disableDeterministicTimestamps()
+
+    // Start AdvantageKit logger
+    Logger.start();
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
+    // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
-    drive = robotContainer.drive;
-
-    configAutoBuilder();
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
+  /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
+    // newly-scheduled commands, running already-scheduled commands, removing
+    // finished or interrupted commands, and running subsystem periodic() methods.
+    // This must be called from the robot's periodic block in order for anything in
+    // the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
 
-  Timer flashTimer = new Timer();
-  Timer timeBetweenFlashes = new Timer();
-  Timer slingshotTimer = new Timer();
-
-  /** This function is called once each time the robot enters Disabled mode. */
+  /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {
-    flashTimer.restart();
-    timeBetweenFlashes.restart();
-    slingshotTimer.restart();
-  }
+  public void disabledInit() {}
 
+  /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    robotContainer.drive.setPoseToVisionMeasurement();
-
-    autonomousCommand = autoChooser.getSelected();
+    autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -146,6 +126,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousPeriodic() {}
 
+  /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -161,10 +142,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {}
 
+  /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    // TODO: should we put this in disabledInit() too?
     CommandScheduler.getInstance().cancelAll();
   }
 

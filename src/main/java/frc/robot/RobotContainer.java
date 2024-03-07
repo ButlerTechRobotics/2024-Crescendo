@@ -13,42 +13,63 @@
 
 package frc.robot;
 
+import static frc.robot.subsystems.drive.DriveConstants.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DriveCommands;
+import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
-import frc.robot.commands.drive.JoystickDrive;
 // import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveController;
+import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.GyroIOSim;
+import frc.robot.subsystems.drive.SwerveModuleIO;
 import frc.robot.subsystems.drive.SwerveModuleIONeo;
 import frc.robot.subsystems.drive.SwerveModuleIOSim;
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
+import frc.robot.subsystems.rollers.feeder.FeederIO;
 import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexBack;
 import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexFront;
 import frc.robot.subsystems.rollers.intake.Intake;
+import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.subsystems.superstructure.climber.Climber;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
+import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
-import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOPhotonLib;
+import frc.robot.subsystems.vision.AprilTagVision;
+import frc.robot.subsystems.vision.AprilTagVisionIO;
+import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
+import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.FieldConstants;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -58,12 +79,14 @@ import frc.robot.subsystems.vision.VisionIOPhotonLib;
  */
 public class RobotContainer {
   // Subsystems
-  public Drive drive;
-  public Shooter shooter;
-  public Intake intake;
-  public Feeder feeder1;
-  public Feeder feeder2;
-  public Rollers rollers;
+  private Drive drive;
+  private Shooter shooter;
+  private AprilTagVision aprilTagVision;
+  private static DriveController driveMode = new DriveController();
+  private Intake intake;
+  private Feeder feeder1;
+  private Feeder feeder2;
+  private Rollers rollers;
 
   private Candle candle = new Candle();
 
@@ -73,24 +96,25 @@ public class RobotContainer {
   private boolean hasEjected = false; // New flag for the EJECTALIGN command
 
   // Controller
-  public static final CommandXboxController driverController = new CommandXboxController(0);
-  public static final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private ArmPositionPID armPID = new ArmPositionPID();
   private final Climber climberPID = new Climber();
 
-  private static final Transform3d robotToCameraFL =
+  // Dashboard inputs
+  private final LoggedDashboardChooser<Command> autoChooser;
+
+  private static final Transform3d robotToCameraBL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
-  private static final Transform3d robotToCameraFR =
+  private static final Transform3d robotToCameraBR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14.75),
-              Units.inchesToMeters(-10.75),
-              Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -101,12 +125,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new SwerveModuleIONeo(1, 2, 0.0, 9, false, false, "FL"),
-                new SwerveModuleIONeo(3, 4, 0.0, 10, false, false, "FR"),
-                new SwerveModuleIONeo(5, 6, 0.0, 11, false, false, "BL"),
-                new SwerveModuleIONeo(7, 8, 0.0, 12, false, false, "BR"),
-                new VisionIOPhotonLib("FLCamera", robotToCameraFL),
-                new VisionIOPhotonLib("FRCamera", robotToCameraFR));
+                new SwerveModuleIONeo(moduleConfigs[0]),
+                new SwerveModuleIONeo(moduleConfigs[1]),
+                new SwerveModuleIONeo(moduleConfigs[2]),
+                new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         superstructure = new Superstructure(shooter);
@@ -116,36 +138,63 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         rollers = new Rollers(feeder1, feeder2, intake);
 
+        aprilTagVision =
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
+                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         drive =
             new Drive(
-                new GyroIOSim(),
+                new GyroIO() {},
                 new SwerveModuleIOSim(),
                 new SwerveModuleIOSim(),
                 new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new VisionIO() {},
-                new VisionIO() {});
+                new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
 
+        aprilTagVision =
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonVisionSIM(
+                    "photonCamera1",
+                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+                    drive::getDrive));
+
         break;
+
+      default:
+        // Replayed robot, disable IO implementations
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {});
+        shooter = new Shooter(new ShooterIO() {});
+
+        feeder1 = new Feeder(new FeederIO() {});
+
+        feeder2 = new Feeder(new FeederIO() {});
+
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+
+        intake = new Intake(new IntakeIO() {});
     }
 
     // ================================================
     // Register the Auto Command Gyro
     // ================================================
 
-    // NamedCommands.registerCommand(
-    // "Gyro Reset",
-    // Commands.run(
-    // () -> drive.setAutoStartPose(
-    // new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
-
-    drive.setDefaultCommand(new JoystickDrive(true, drive));
+    NamedCommands.registerCommand(
+        "Gyro Reset",
+        Commands.run(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -196,11 +245,12 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Command Heading Reset
     // ================================================
-    // NamedCommands.registerCommand(
-    // "Heading Reset",
-    // Commands.runOnce(
-    // () -> drive.setAutoStartPose(
-    // new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+    NamedCommands.registerCommand(
+        "Heading Reset",
+        Commands.runOnce(
+            () ->
+                drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
 
     // ================================================
     // Register the Auto Command Intake
@@ -234,7 +284,12 @@ public class RobotContainer {
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 })));
 
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
     // Configure the button bindings
+    aprilTagVision.setDataInterfaces(drive::addVisionData);
+    driveMode.setPoseSupplier(drive::getPose);
+    driveMode.disableHeadingControl();
     configureButtonBindings();
   }
 
@@ -245,6 +300,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // ==================
+    // DEFAULT COMMANDS
+    // ==================
+    drive.setDefaultCommand(
+        DriveCommands.joystickDrive(
+            drive,
+            driveMode,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+    driverController.back().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
+
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
     // RUN INTAKE IN
@@ -295,18 +362,34 @@ public class RobotContainer {
                     }));
 
     // ================================================
+    // DRIVER CONTROLLER - A
+    // PATHFIND TO SELECTED DRIVE MODE
+    // ================================================
+    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+
+    // ================================================
+    // DRIVER CONTROLLER - START
+    // SET AUTO START POSE (i think it sets the heading)
+    // ================================================
+    driverController
+        .start()
+        .whileTrue(
+            Commands.run(
+                () ->
+                    drive.setAutoStartPose(
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+
+    // ================================================
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    operatorController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
-
-    driverController.start().onTrue(new InstantCommand(() -> drive.setRobotFacingForward()));
 
     // AMP LOCATION
     // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
@@ -355,12 +438,43 @@ public class RobotContainer {
                     })
                 .alongWith(candle.setColorRespawnIdle()));
 
+    // ================================================
+    // OPERATOR CONTROLLER - LEFT TRIGGER
+    // AIM SHOOTER AT SPEAKER
+    // ================================================
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            Commands.startEnd(
+                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                .alongWith(
+                    new MultiDistanceArm(
+                        drive::getPose,
+                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                        armPID)));
     // driverController
     // .rightBumper()
     // .whileTrue(
     // Commands.startEnd(
     // () -> driveMode.enableHeadingControl(), () ->
     // driveMode.disableHeadingControl()));
+
+    driverController
+        .b()
+        .onTrue(
+            Commands.runOnce(
+                    () ->
+                        drive.setPose(
+                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                    drive)
+                .ignoringDisable(true));
+
+    PathConstraints pathConstraints = new PathConstraints(4, 4, 540, 720);
+
+    SmartDashboard.putData(
+        "Pathfind to Trap Score 3",
+        AutoBuilder.pathfindThenFollowPath(
+            PathPlannerPath.fromPathFile("TrapScore3"), pathConstraints));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
@@ -389,5 +503,14 @@ public class RobotContainer {
     // ARM POSITION PILLAR SHOOT
     // ================================================
     operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.8)); // "Pillar Shoot"
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.get();
   }
 }

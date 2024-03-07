@@ -27,15 +27,11 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.util.Alert;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -122,11 +118,13 @@ public final class Constants {
 
     // PID for angle motors.
     public static final double anglekPVoltsPerDegree = 0.08;
-    public static final double anglekIVoltsPerDegreeSeconds = 0.; // this might be the wrong unit idk
+    public static final double anglekIVoltsPerDegreeSeconds =
+        0.; // this might be the wrong unit idk
     public static final double anglekDVoltsPerDegreePerSecond = 0.;
 
     public static final double drivekSVolts = 0.;
-    public static final double drivekVVoltsSecondsPerMeter = 2.69; // 12.0/DrivetrainConstants.maxAchievableVelocityMetersPerSecond;
+    public static final double drivekVVoltsSecondsPerMeter =
+        2.69; // 12.0/DrivetrainConstants.maxAchievableVelocityMetersPerSecond;
     // // TODO: this is a placeholder
     public static final double drivekAVoltsSecondsSquaredPerMeter = 0.;
   }
@@ -144,83 +142,82 @@ public final class Constants {
     // KINEMATICS CONSTANTS
 
     /**
-     * Distance between the center point of the left wheels and the center point of
-     * the right
+     * Distance between the center point of the left wheels and the center point of the right
      * wheels.
      */
     public static final double trackwidthMeters = Units.inchesToMeters(23.75);
 
     /**
-     * Distance between the center point of the front wheels and the center point of
-     * the back
+     * Distance between the center point of the front wheels and the center point of the back
      * wheels.
      */
     public static final double wheelbaseMeters = Units.inchesToMeters(22.75);
 
     /** Distance from the center of the robot to each swerve module. */
-    public static final double drivetrainRadiusMeters = Math.hypot(wheelbaseMeters / 2.0, trackwidthMeters / 2.0);
+    public static final double drivetrainRadiusMeters =
+        Math.hypot(wheelbaseMeters / 2.0, trackwidthMeters / 2.0);
 
-    public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-        new Translation2d(wheelbaseMeters / 2.0, trackwidthMeters / 2.0),
-        new Translation2d(wheelbaseMeters / 2.0, -trackwidthMeters / 2.0),
-        new Translation2d(-wheelbaseMeters / 2.0, trackwidthMeters / 2.0),
-        new Translation2d(-wheelbaseMeters / 2.0, -trackwidthMeters / 2.0));
+    public static final SwerveDriveKinematics swerveKinematics =
+        new SwerveDriveKinematics(
+            new Translation2d(wheelbaseMeters / 2.0, trackwidthMeters / 2.0),
+            new Translation2d(wheelbaseMeters / 2.0, -trackwidthMeters / 2.0),
+            new Translation2d(-wheelbaseMeters / 2.0, trackwidthMeters / 2.0),
+            new Translation2d(-wheelbaseMeters / 2.0, -trackwidthMeters / 2.0));
 
     /**
      * The maximum possible velocity of the robot in meters per second. <br>
-     * This is a measure of how fast the robot will be able to drive in a straight
-     * line, based off
+     * This is a measure of how fast the robot will be able to drive in a straight line, based off
      * of the empirical free speed of the drive Krakens.
      */
     public static final double krakenFreeSpeedRPM = 6784;
 
     public static final double krakenFreeSpeedRotationsPerSecond = krakenFreeSpeedRPM / 60.;
-    public static final double maxAchievableVelocityMetersPerSecond = krakenFreeSpeedRotationsPerSecond
-        * SwerveModuleConstants.driveGearReduction
-        * SwerveModuleConstants.wheelCircumferenceMeters;
+    public static final double maxAchievableVelocityMetersPerSecond =
+        krakenFreeSpeedRotationsPerSecond
+            * SwerveModuleConstants.driveGearReduction
+            * SwerveModuleConstants.wheelCircumferenceMeters;
 
     /**
      * This is the max desired speed that will be achievable in teleop. <br>
-     * If the controller joystick is maxed in one direction, it will drive at this
-     * speed. <br>
-     * This value will be less than or equal to the
-     * maxAchievableVelocityMetersPerSecond, depending
+     * If the controller joystick is maxed in one direction, it will drive at this speed. <br>
+     * This value will be less than or equal to the maxAchievableVelocityMetersPerSecond, depending
      * on driver preference.
      */
-    public static final double maxDesiredTeleopVelocityMetersPerSecond = maxAchievableVelocityMetersPerSecond; // TODO:
+    public static final double maxDesiredTeleopVelocityMetersPerSecond =
+        maxAchievableVelocityMetersPerSecond; // TODO:
 
     // placeholder
 
     /**
-     * The maximum achievable angular velocity of the robot in radians per second.
-     * <br>
+     * The maximum achievable angular velocity of the robot in radians per second. <br>
      * This is a measure of how fast the robot can rotate in place, based off of
      * maxAchievableVelocityMetersPerSecond.
      */
-    public static final double maxAchievableAngularVelocityRadiansPerSecond = maxAchievableVelocityMetersPerSecond
-        / Math.hypot(trackwidthMeters / 2.0, wheelbaseMeters / 2.0);
+    public static final double maxAchievableAngularVelocityRadiansPerSecond =
+        maxAchievableVelocityMetersPerSecond
+            / Math.hypot(trackwidthMeters / 2.0, wheelbaseMeters / 2.0);
 
     /**
-     * This is the max desired angular velocity that will be achievable in teleop.
-     * <br>
-     * If the controller rotation joystick is maxed in one direction, it will rotate
-     * at this speed.
+     * This is the max desired angular velocity that will be achievable in teleop. <br>
+     * If the controller rotation joystick is maxed in one direction, it will rotate at this speed.
      * <br>
      * This value will be tuned based off of driver preference.
      */
     public static final double maxDesiredTeleopAngularVelocityRadiansPerSecond = 5.4;
 
-    public static final double maxDesiredTeleopAccelMetersPerSecondSquared = 100.0; // TODO: placeholder
+    public static final double maxDesiredTeleopAccelMetersPerSecondSquared =
+        100.0; // TODO: placeholder
   }
 
   public static final class VisionConstants {
 
-    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo
-        .loadAprilTagLayoutField();
+    public static final AprilTagFieldLayout aprilTagFieldLayout =
+        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
-    public static final Transform3d robotToCamera = new Transform3d(
-        new Translation3d(Units.inchesToMeters(8), 0, Units.inchesToMeters(11.5)),
-        new Rotation3d(0, Math.toRadians(-28), 0));
+    public static final Transform3d robotToCamera =
+        new Transform3d(
+            new Translation3d(Units.inchesToMeters(8), 0, Units.inchesToMeters(11.5)),
+            new Rotation3d(0, Math.toRadians(-28), 0));
   }
 
   public static final class FieldConstants {
@@ -228,20 +225,16 @@ public final class Constants {
     /** Distance from the front edge of the speaker structure to the carpet. */
     public static final double speakerHeightMeters = 2.09;
 
-    /**
-     * X-Y position of the center of 30 cm behind the front edge of the red speaker.
-     */
-    public static final Translation2d blueSpeakerTranslation2d = new Translation2d(0.46 - 0.3, 5.55);
+    /** X-Y position of the center of 30 cm behind the front edge of the red speaker. */
+    public static final Translation2d blueSpeakerTranslation2d =
+        new Translation2d(0.46 - 0.3, 5.55);
+
+    /** X-Y position of the center of 30 cm behind the front edge of the blue speaker. */
+    public static final Translation2d redSpeakerTranslation2d =
+        new Translation2d(16.08 + 0.3, 5.55);
 
     /**
-     * X-Y position of the center of 30 cm behind the front edge of the blue
-     * speaker.
-     */
-    public static final Translation2d redSpeakerTranslation2d = new Translation2d(16.08 + 0.3, 5.55);
-
-    /**
-     * Distance from the floor to the center of the pivot. This is used for angle
-     * cal;culations for
+     * Distance from the floor to the center of the pivot. This is used for angle cal;culations for
      * shoot from anywhere.
      */
     public static final double pivotHeightMeters = Units.inchesToMeters(22);

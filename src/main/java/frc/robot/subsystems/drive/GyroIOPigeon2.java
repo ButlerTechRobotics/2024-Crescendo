@@ -1,41 +1,46 @@
+// Copyright 2021-2024 FRC 6328
+// http://github.com/Mechanical-Advantage
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// version 3 as published by the Free Software Foundation or
+// available in the root directory of this project.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+
 package frc.robot.subsystems.drive;
 
+import static frc.robot.subsystems.drive.DriveConstants.odometryFrequency;
+
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants.GyroConstants;
+import edu.wpi.first.math.util.Units;
 
+/** IO implementation for Pigeon2 */
 public class GyroIOPigeon2 implements GyroIO {
-  private Pigeon2 pigeon;
+  private final Pigeon2 pigeon = new Pigeon2(30);
+  private final StatusSignal<Double> yaw = pigeon.getYaw();
+  private final StatusSignal<Double> yawVelocity = pigeon.getAngularVelocityZWorld();
 
   public GyroIOPigeon2() {
-
-    pigeon = new Pigeon2(GyroConstants.pigeonID, "rio");
-    configPigeon();
-  }
-
-  private void configPigeon() {
-    Pigeon2Configuration configs = new Pigeon2Configuration();
-
-    /** Setting the 'mountpose' or orientation the gyroscope is mounted on the robot */
-    configs.MountPose.MountPoseYaw = GyroConstants.mountPoseYawDegrees;
-    configs.MountPose.MountPosePitch = GyroConstants.mountPosePitchDegrees;
-    configs.MountPose.MountPoseRoll = GyroConstants.mountPoseRollDegrees;
-
-    pigeon.getConfigurator().apply(configs);
-  }
-
-  @Override
-  public void setRobotYaw(double degrees) {
-    pigeon.setYaw(degrees);
+    pigeon.getConfigurator().apply(new Pigeon2Configuration());
+    pigeon.getConfigurator().setYaw(0.0);
+    yaw.setUpdateFrequency(odometryFrequency);
+    yawVelocity.setUpdateFrequency(odometryFrequency);
+    pigeon.optimizeBusUtilization();
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.robotYawRotation2d = Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble());
-    inputs.robotPitchRotation2d = Rotation2d.fromDegrees(pigeon.getPitch().getValueAsDouble());
-    inputs.robotRollRotation2d = Rotation2d.fromDegrees(pigeon.getRoll().getValueAsDouble());
-    inputs.robotYawRotation2dPerSecond =
-        Rotation2d.fromDegrees(pigeon.getAngularVelocityZWorld().getValueAsDouble());
+    inputs.connected = BaseStatusSignal.refreshAll(yaw, yawVelocity).equals(StatusCode.OK);
+    inputs.yawPosition = Rotation2d.fromDegrees(yaw.getValueAsDouble());
+    inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity.getValueAsDouble());
   }
 }

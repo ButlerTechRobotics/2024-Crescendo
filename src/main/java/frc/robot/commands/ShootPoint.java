@@ -14,7 +14,8 @@
 // import frc.robot.util.AllianceFlipUtil;
 
 // public class ShootPoint extends Command {
-//   // THIS IS JUST A DOCUMENT FOR TESTING pathfindToPose. I RECOMMEND YOU USE pathfindThenFollowPath
+//   // THIS IS JUST A DOCUMENT FOR TESTING pathfindToPose. I RECOMMEND YOU USE
+// pathfindThenFollowPath
 //   // INSTEAD
 //   Drive drive;
 //   Pose2d targetPose;
@@ -35,7 +36,8 @@
 //     pathRun =
 //         AutoBuilder.pathfindToPose(
 //             AllianceFlipUtil.apply(targetPose),
-//             new PathConstraints(4.0, 4.0, Units.degreesToRadians(360), Units.degreesToRadians(540)),
+//             new PathConstraints(4.0, 4.0, Units.degreesToRadians(360),
+// Units.degreesToRadians(540)),
 //             0,
 //             0.0);
 //     scoreCommand = Commands.sequence(pathRun);
