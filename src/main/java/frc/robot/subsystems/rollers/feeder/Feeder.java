@@ -16,19 +16,11 @@ public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
     FLOOR_INTAKING(new LoggedTunableNumber("Feeder/FloorIntakingVoltage", 6.0)),
     BACKSTOPPING(new LoggedTunableNumber("Feeder/BackstoppingVoltage", -3.0)),
     SHOOTING(new LoggedTunableNumber("Feeder/Shooting", 12.0)),
-<<<<<<< HEAD
-    EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -8.0)),
-    EJECTALIGN(new LoggedTunableNumber("Feeder/EjectingAlignVoltage", -1.0)),
-    SHOOT(new LoggedTunableNumber("Feeder/ShootVoltage", 12.0)),
-    AMPSHOOTER(new LoggedTunableNumber("AmpVoltage", -3.0)),
-    AMPSHOOTER2(new LoggedTunableNumber("AmpVoltage2", -12.0));
-=======
     EJECTING(new LoggedTunableNumber("Feeder/EjectingVoltage", -6.0)),
     EJECTALIGN(new LoggedTunableNumber("Feeder/EjectingAlignVoltage", -1.0)),
     SHOOT(new LoggedTunableNumber("Feeder/ShootVoltage", 12.0)),
     AMPSHOOTER(new LoggedTunableNumber("AmpVoltage", -3)),
     AMPSHOOTER2(new LoggedTunableNumber("Amp2Voltage", -12));
->>>>>>> Sonic
 
     private final DoubleSupplier voltageSupplier;
   }

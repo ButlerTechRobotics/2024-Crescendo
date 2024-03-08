@@ -70,41 +70,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-<<<<<<< HEAD
-                  Rotation2d.fromRotations(-0.399170).plus(Rotation2d.fromDegrees(180)),
-=======
                   Rotation2d.fromRotations(0.132812).plus(Rotation2d.fromDegrees(180)),
->>>>>>> Sonic
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-<<<<<<< HEAD
-                  Rotation2d.fromRotations(0.180176).plus(Rotation2d.fromDegrees(0)),
-=======
                   Rotation2d.fromRotations(0.021729).plus(Rotation2d.fromDegrees(0)),
->>>>>>> Sonic
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-<<<<<<< HEAD
                   Rotation2d.fromRotations(0.250488).plus(Rotation2d.fromDegrees(180)),
-=======
-                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
->>>>>>> Sonic
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-<<<<<<< HEAD
                   Rotation2d.fromRotations(-0.378662).plus(Rotation2d.fromDegrees(0)),
-=======
-                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
->>>>>>> Sonic
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
