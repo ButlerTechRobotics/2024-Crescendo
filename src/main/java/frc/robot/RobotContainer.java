@@ -400,7 +400,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 88)))
+                .alongWith(new PositionArmPID(armPID, 89)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -495,7 +495,7 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povLeft()
-        .whileTrue(new PositionArmPID(armPID, 88)); // "Amp/Note Shoot" -50!!!!
+        .whileTrue(new PositionArmPID(armPID, 89)); // "Amp/Note Shoot" -50!!!!
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
