@@ -191,16 +191,23 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "Auto Aim",
-        Commands.run(
-            () ->
-                Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(),
-                        () -> driveMode.disableHeadingControl())
-                    .alongWith(
-                        new MultiDistanceArm(
-                            drive::getPose,
-                            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
-                            armPID))));
+        // Commands.runOnce(
+        //     () ->
+        //         Commands.startEnd(
+        //                 () -> driveMode.enableHeadingControl(),
+        //                 () -> driveMode.disableHeadingControl())
+        //             .alongWith(
+        //                 new MultiDistanceArm(
+        //                     drive::getPose,
+        //                     AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+        //                     armPID))));
+        Commands.startEnd(
+                () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+            .alongWith(
+                new MultiDistanceArm(
+                    drive::getPose,
+                    AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                    armPID)));
 
     // ================================================
     // Register the Auto Command Gyro
