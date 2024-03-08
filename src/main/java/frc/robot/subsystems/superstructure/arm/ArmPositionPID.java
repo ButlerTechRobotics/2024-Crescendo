@@ -4,18 +4,18 @@
 
 package frc.robot.subsystems.superstructure.arm;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.VendorWrappers.Neo;
 import frc.robot.util.TunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
-  private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
+  private Neo motor = new Neo(20);
+
   private PIDController pidController;
-  private double targetAngle = 0.25;
+  private double targetAngle = 3.5;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
@@ -33,6 +33,10 @@ public class ArmPositionPID extends SubsystemBase {
     // pidController.setFF(kFF.get());
 
     motor.setInverted(true);
+
+    motor.getAbsoluteEncoder().setPositionConversionFactor(1);
+    motor.getAbsoluteEncoder().setVelocityConversionFactor(1);
+    motor.getAbsoluteEncoder().setZeroOffset(117.657);
 
     // motor.setIdleMode(IdleMode.kBrake);
 
@@ -71,8 +75,8 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.15; // Adjust this value to control the down speed
-    double upSpeedFactor = 0.2; // Adjust this value to control the up speed
+    double downSpeedFactor = 0.15; // Adjust this value to control the down speed 0.15
+    double upSpeedFactor = 0.2; // Adjust this value to control the up speed 0.2
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
     // This method will be called once per scheduler run

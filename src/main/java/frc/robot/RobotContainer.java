@@ -186,6 +186,23 @@ public class RobotContainer {
     }
 
     // ================================================
+    // Register the Auto Aim Command
+    // ================================================
+
+    NamedCommands.registerCommand(
+        "Auto Aim",
+        Commands.run(
+            () ->
+                Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl())
+                    .alongWith(
+                        new MultiDistanceArm(
+                            drive::getPose,
+                            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                            armPID))));
+
+    // ================================================
     // Register the Auto Command Gyro
     // ================================================
 
@@ -417,7 +434,7 @@ public class RobotContainer {
     // BUMPER CHARGES SHOOTER, TRIGGER SHOOTS
     // ================================================
     operatorController
-        .rightBumper()
+        .a()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
@@ -428,6 +445,34 @@ public class RobotContainer {
                 candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorRespawnIdle()));
+
+    operatorController
+        .b()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
+                    superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
                 Commands.waitSeconds(1.0),
                 Commands.runOnce(
@@ -507,7 +552,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.5)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5)); // "Pillar Shoot"
   }
 
   /**
