@@ -69,6 +69,10 @@ public class Climber extends SubsystemBase {
     setPID();
     pidController.setReference(targetDistance, ControlType.kPosition, 0);
     SmartDashboard.putNumber("ClimberDistance", motor.getEncoder().getPosition());
+<<<<<<< HEAD
+=======
+    SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getDistance());
+>>>>>>> Sonic
     // This method will be called once per scheduler run
   }
 }

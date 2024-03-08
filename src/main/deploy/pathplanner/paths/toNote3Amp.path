@@ -32,8 +32,13 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
+<<<<<<< HEAD
     "maxVelocity": 4.0,
     "maxAcceleration": 3.25,
+=======
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+>>>>>>> Sonic
     "maxAngularVelocity": 411.0,
     "maxAngularAcceleration": 720.0
   },
@@ -48,5 +53,9 @@
     "rotation": 1.487867528827792,
     "velocity": 0
   },
+<<<<<<< HEAD
   "useDefaultConstraints": true
+=======
+  "useDefaultConstraints": false
+>>>>>>> Sonic
 }

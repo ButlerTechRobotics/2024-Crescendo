@@ -16,9 +16,9 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ModuleIO {
+public interface SwerveModuleIO {
   @AutoLog
-  public static class ModuleIOInputs {
+  public static class SwerveModuleIOInputs {
     public double drivePositionRad = 0.0;
     public double driveVelocityRadPerSec = 0.0;
     public double driveAppliedVolts = 0.0;
@@ -32,7 +32,7 @@ public interface ModuleIO {
   }
 
   /** Updates the set of loggable inputs. */
-  public default void updateInputs(ModuleIOInputs inputs) {}
+  public default void updateInputs(SwerveModuleIOInputs inputs) {}
 
   /** Run the drive motor at the specified voltage. */
   public default void setDriveVoltage(double volts) {}

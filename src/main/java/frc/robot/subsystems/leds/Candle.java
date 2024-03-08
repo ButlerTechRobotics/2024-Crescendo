@@ -16,7 +16,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Candle extends SubsystemBase {
   private final CANdle candle;
+<<<<<<< HEAD
   private final int NUM_LEDS = 69;
+=======
+  private final int NUM_LEDS = 75;
+>>>>>>> Sonic
   private Color color;
 
   enum Color {
@@ -44,7 +48,11 @@ public class Candle extends SubsystemBase {
     candle = new CANdle(32, "rio");
     candle.configBrightnessScalar(.5);
     candle.configLEDType(LEDStripType.GRB);
+<<<<<<< HEAD
     setColor(Color.ORANGE);
+=======
+    setColor(Color.BLUE);
+>>>>>>> Sonic
   }
 
   public void setColor(Color color) {
@@ -77,12 +85,23 @@ public class Candle extends SubsystemBase {
     return new FireAnimation(1, 0.75, NUM_LEDS, 1.0, 0.3);
   }
 
+<<<<<<< HEAD
+=======
+  public RainbowAnimation prettyLights() {
+    return new RainbowAnimation(1, 1, NUM_LEDS);
+  }
+
+>>>>>>> Sonic
   public StrobeAnimation shoot() {
     return new StrobeAnimation(254, 254, 254, 254, 0.5, NUM_LEDS);
   }
 
   public ColorFlowAnimation prepareShoot() {
+<<<<<<< HEAD
     return new ColorFlowAnimation(254, 55, 0, 0, 0.75, NUM_LEDS, Direction.Forward);
+=======
+    return new ColorFlowAnimation(254, 55, 0, 0, 0.75, NUM_LEDS, Direction.Backward);
+>>>>>>> Sonic
   }
 
   public RainbowAnimation rainbow() {
@@ -93,6 +112,13 @@ public class Candle extends SubsystemBase {
     return runOnce(() -> candle.animate(burnyBurn()));
   }
 
+<<<<<<< HEAD
+=======
+  public Command runPrettyLightsCommand() {
+    return runOnce(() -> candle.animate(prettyLights()));
+  }
+
+>>>>>>> Sonic
   public Command runRainbowAnimationCommand() {
     return runOnce(() -> candle.animate(rainbow()));
   }

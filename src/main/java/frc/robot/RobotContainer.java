@@ -38,13 +38,20 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
+// import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
+<<<<<<< HEAD
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+=======
+import frc.robot.subsystems.drive.SwerveModuleIO;
+import frc.robot.subsystems.drive.SwerveModuleIONeo;
+import frc.robot.subsystems.drive.SwerveModuleIOSim;
+>>>>>>> Sonic
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
@@ -104,6 +111,7 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+<<<<<<< HEAD
   private static final Transform3d robotToCameraFL =
       new Transform3d(
           new Translation3d(
@@ -116,6 +124,18 @@ public class RobotContainer {
               Units.inchesToMeters(-14.75),
               Units.inchesToMeters(-10.75),
               Units.inchesToMeters(9.5)),
+=======
+  private static final Transform3d robotToCameraBL =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
+
+  private static final Transform3d robotToCameraBR =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
+>>>>>>> Sonic
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -126,10 +146,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOSparkFlex(moduleConfigs[0]),
-                new ModuleIOSparkFlex(moduleConfigs[1]),
-                new ModuleIOSparkFlex(moduleConfigs[2]),
-                new ModuleIOSparkFlex(moduleConfigs[3]));
+                new SwerveModuleIONeo(moduleConfigs[0]),
+                new SwerveModuleIONeo(moduleConfigs[1]),
+                new SwerveModuleIONeo(moduleConfigs[2]),
+                new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         superstructure = new Superstructure(shooter);
@@ -141,8 +161,13 @@ public class RobotContainer {
 
         aprilTagVision =
             new AprilTagVision(
+<<<<<<< HEAD
                 new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
                 new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR));
+=======
+                new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
+                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR));
+>>>>>>> Sonic
         break;
 
       case SIM:
@@ -150,10 +175,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
 
@@ -171,10 +196,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {});
         shooter = new Shooter(new ShooterIO() {});
 
         feeder1 = new Feeder(new FeederIO() {});
@@ -210,12 +235,20 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
+<<<<<<< HEAD
         "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(4.5)));
+=======
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
+>>>>>>> Sonic
 
     // ================================================
     // Register the Auto Command Shooter Reset
     // ================================================
+<<<<<<< HEAD
     NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(4.5)));
+=======
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
+>>>>>>> Sonic
 
     // ================================================
     // Register the Auto Command Shoot
@@ -285,6 +318,12 @@ public class RobotContainer {
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 })));
 
+    // ================================================
+    // Register the Auto Command ShooterPosLeft
+    // ================================================
+    NamedCommands.registerCommand(
+        "ArmPositionAmp", Commands.runOnce(() -> armPID.setPosition(78.0)));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Configure the button bindings
@@ -321,7 +360,11 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
+<<<<<<< HEAD
                 candle.runBurnyBurnCommand(),
+=======
+                candle.runPrettyLightsCommand(),
+>>>>>>> Sonic
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                     superstructure),
@@ -335,7 +378,12 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
+<<<<<<< HEAD
                 candle.setColorOperationIdle()))
+=======
+                Commands.waitSeconds(0.5),
+                candle.setColorRespawnIdle()))
+>>>>>>> Sonic
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -383,13 +431,21 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
+<<<<<<< HEAD
     driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 3000));
+=======
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+>>>>>>> Sonic
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
+<<<<<<< HEAD
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -1000));
+=======
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
+>>>>>>> Sonic
 
     // AMP LOCATION
     // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
@@ -399,13 +455,16 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(
             Commands.sequence(
+<<<<<<< HEAD
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
                 .alongWith(new PositionArmPID(armPID, 89)))
+=======
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+>>>>>>> Sonic
         .onFalse(
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
                 }));
 
     // ================================================
@@ -437,7 +496,11 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
+<<<<<<< HEAD
                 .alongWith(candle.setColorOperationIdle()));
+=======
+                .alongWith(candle.setColorRespawnIdle()));
+>>>>>>> Sonic
 
     // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
@@ -481,27 +544,47 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
+<<<<<<< HEAD
     operatorController.povUp().whileTrue(new PositionArmPID(armPID, 105)); // "Sub shoot"
+=======
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8)); // "Sub shoot"
+>>>>>>> Sonic
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
+<<<<<<< HEAD
     operatorController.povRight().whileTrue(new PositionArmPID(armPID, 8.5)); // "Midfield Shoot"
+=======
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(
+                armPID, 17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
+>>>>>>> Sonic
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
+<<<<<<< HEAD
     operatorController
         .povLeft()
         .whileTrue(new PositionArmPID(armPID, 89)); // "Amp/Note Shoot" -50!!!!
+=======
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78)); // "Amp/Note Shoot"
+>>>>>>> Sonic
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
+<<<<<<< HEAD
     operatorController.povDown().whileTrue(new PositionArmPID(armPID, 4.25)); // "Pillar Shoot"
+=======
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.5)); // "Pillar Shoot"
+>>>>>>> Sonic
   }
 
   /**

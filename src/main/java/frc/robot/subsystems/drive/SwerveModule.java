@@ -23,9 +23,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
-public class Module {
-  private final ModuleIO io;
-  private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+public class SwerveModule {
+  private final SwerveModuleIO io;
+  private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
   private final int index;
 
   private final SimpleMotorFeedforward driveFeedforward;
@@ -35,7 +35,7 @@ public class Module {
   private Double speedSetpoint = null; // Setpoint for closed loop control, null for open loop
   private Rotation2d turnRelativeOffset = null; // Relative + Offset = Absolute
 
-  public Module(ModuleIO io, int index) {
+  public SwerveModule(SwerveModuleIO io, int index) {
     this.io = io;
     this.index = index;
 

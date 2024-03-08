@@ -19,11 +19,10 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.VendorWrappers.Neo;
 import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
 
 /**
@@ -35,9 +34,9 @@ import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
  * absolute encoders using AdvantageScope. These values are logged under
  * "/Drive/ModuleX/TurnAbsolutePositionRad"
  */
-public class ModuleIOSparkFlex implements ModuleIO {
-  private final CANSparkFlex driveSparkMax;
-  private final CANSparkFlex turnSparkMax;
+public class SwerveModuleIONeo implements SwerveModuleIO {
+  private final Neo driveSparkMax;
+  private final Neo turnSparkMax;
   private final CANcoder cancoder;
 
   private final RelativeEncoder driveEncoder;
@@ -46,10 +45,10 @@ public class ModuleIOSparkFlex implements ModuleIO {
 
   private final Rotation2d absoluteEncoderOffset;
 
-  public ModuleIOSparkFlex(ModuleConfig config) {
+  public SwerveModuleIONeo(ModuleConfig config) {
 
-    driveSparkMax = new CANSparkFlex(config.driveID(), MotorType.kBrushless);
-    turnSparkMax = new CANSparkFlex(config.turnID(), MotorType.kBrushless);
+    driveSparkMax = new Neo(config.driveID());
+    turnSparkMax = new Neo(config.turnID());
     cancoder = new CANcoder(config.absoluteEncoderChannel(), canbus);
     absoluteEncoderOffset = config.absoluteEncoderOffset(); // MUST BE CALIBRATED
 
@@ -79,6 +78,11 @@ public class ModuleIOSparkFlex implements ModuleIO {
     driveSparkMax.setCANTimeout(0);
     turnSparkMax.setCANTimeout(0);
 
+    // //Wait 1 second before flashing NEO eprom memory
+    // try {
+    //   Thread.sleep(1000);
+    // } catch (Exception e) {}
+
     driveSparkMax.burnFlash();
     turnSparkMax.burnFlash();
 
@@ -94,7 +98,7 @@ public class ModuleIOSparkFlex implements ModuleIO {
   }
 
   @Override
-  public void updateInputs(ModuleIOInputs inputs) {
+  public void updateInputs(SwerveModuleIOInputs inputs) {
     inputs.drivePositionRad =
         Units.rotationsToRadians(driveEncoder.getPosition()) / moduleConstants.driveReduction();
     inputs.driveVelocityRadPerSec =

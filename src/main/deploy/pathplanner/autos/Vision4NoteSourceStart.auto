@@ -42,7 +42,11 @@
               {
                 "type": "path",
                 "data": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteSourceStart.auto
                   "pathName": "toNote1"
+========
+                  "pathName": "toNote3"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                 }
               },
               {
@@ -67,7 +71,11 @@
               {
                 "type": "path",
                 "data": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteSourceStart.auto
                   "pathName": "toPos2SourceStart"
+========
+                  "pathName": "toPos2AmpStart"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                 }
               },
               {
@@ -142,7 +150,11 @@
               {
                 "type": "path",
                 "data": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteSourceStart.auto
                   "pathName": "toNote3"
+========
+                  "pathName": "toNote1"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                 }
               },
               {

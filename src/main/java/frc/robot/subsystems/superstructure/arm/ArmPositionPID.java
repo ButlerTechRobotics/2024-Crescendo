@@ -15,6 +15,7 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
+<<<<<<< HEAD
   private double targetAngle = 4.25;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
@@ -22,19 +23,35 @@ public class ArmPositionPID extends SubsystemBase {
   TunableNumber kP = new TunableNumber("Arm P Gain", 0.05); // .035
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.000); // 0.001
   TunableNumber kD = new TunableNumber("Arm D Gain", 0.0); // 0.0012
+=======
+  private double targetAngle = 0.25;
+  private final ArmVisualizer measuredVisualizer;
+  private final ArmVisualizer setpointVisualizer;
+
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.05); // .000008
+  TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0);
+>>>>>>> Sonic
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
 
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
     pidController = new PIDController(kP.get(), kI.get(), kD.get());
+<<<<<<< HEAD
     // mySparkMax.getPIDController().setFeedbackDevice(mySparkMax.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle));
     // pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
+=======
+>>>>>>> Sonic
     pidController.setP(kP.get());
     pidController.setI(kI.get());
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
+<<<<<<< HEAD
     motor.setInverted(false);
+=======
+    motor.setInverted(true);
+>>>>>>> Sonic
 
     // motor.setIdleMode(IdleMode.kBrake);
 
@@ -73,8 +90,13 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
+<<<<<<< HEAD
     double downSpeedFactor = 0.1; // Adjust this value to control the up speed
     double upSpeedFactor = 0.2; // Adjust this value to control the down speed
+=======
+    double downSpeedFactor = 0.15; // Adjust this value to control the down speed
+    double upSpeedFactor = 0.2; // Adjust this value to control the up speed
+>>>>>>> Sonic
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
     // This method will be called once per scheduler run
@@ -82,6 +104,9 @@ public class ArmPositionPID extends SubsystemBase {
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/SetAngle", targetAngle);
     Logger.recordOutput("ArmCurrentAngle", getPosition());
+<<<<<<< HEAD
     Logger.recordOutput("ArmVoltage", motor.getBusVoltage());
+=======
+>>>>>>> Sonic
   }
 }
