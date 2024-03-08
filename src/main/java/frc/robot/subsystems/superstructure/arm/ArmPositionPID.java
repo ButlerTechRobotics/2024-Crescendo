@@ -7,7 +7,6 @@ package frc.robot.subsystems.superstructure.arm;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
@@ -16,14 +15,13 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 0;
-  private DutyCycleEncoder encoder = new DutyCycleEncoder(0); // Replace 0 with the actual channel
+  private double targetAngle = 4.25;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.0038); // .035
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.05); // .035
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.000); // 0.001
-  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0018); // 0.0012
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0); // 0.0012
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
 
   /** Creates a new SparkMaxClosedLoop. */
@@ -36,7 +34,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(true);
+    motor.setInverted(false);
 
     // motor.setIdleMode(IdleMode.kBrake);
 
@@ -53,7 +51,7 @@ public class ArmPositionPID extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (motor.getAbsoluteEncoder().getAbsolutePosition() * 360) - 221.25;
+    return (motor.getAbsoluteEncoder().getPosition() * 360);
   }
 
   private void setPID() {
@@ -75,8 +73,8 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.15; // Adjust this value to control the up speed
-    double upSpeedFactor = 0.1; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.1; // Adjust this value to control the up speed
+    double upSpeedFactor = 0.2; // Adjust this value to control the down speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
     // This method will be called once per scheduler run

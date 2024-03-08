@@ -210,12 +210,12 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(4.5)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
     // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(0.0)));
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(4.5)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -400,7 +400,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.sequence(
                     Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, -50)))
+                .alongWith(new PositionArmPID(armPID, 88)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -481,13 +481,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, -100)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 105)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, -4)); // "Midfield Shoot"
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 8.5)); // "Midfield Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
@@ -495,13 +495,13 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povLeft()
-        .whileTrue(new PositionArmPID(armPID, -69)); // "Amp/Note Shoot" -50!!!!
+        .whileTrue(new PositionArmPID(armPID, 88)); // "Amp/Note Shoot" -50!!!!
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 4.25)); // "Pillar Shoot"
   }
 
   /**
