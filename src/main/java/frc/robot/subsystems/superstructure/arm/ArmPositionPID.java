@@ -15,14 +15,14 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 4.25;
+  private double targetAngle = 3.5;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.045); // .035
-  TunableNumber kI = new TunableNumber("Arm I Gain", 0.00035); // 0.001
-  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0012); // 0.0012
-  TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.057); // .00566
+  TunableNumber kI = new TunableNumber("Arm I Gain", 0.00023); // 0.000228
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0013); // 0.00134
+  TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.000); // .0
 
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
@@ -32,7 +32,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(false);
+    motor.setInverted(true);
 
     // motor.setIdleMode(IdleMode.kBrake);
 
@@ -62,15 +62,17 @@ public class ArmPositionPID extends SubsystemBase {
     if (kD.hasChanged()) {
       pidController.setD(kD.get());
     }
+
     // if (kFF.hasChanged()) {
     // pidController.setFF(kFF.get());
     // }
-  U
+  }
+
   @Override
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.11; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.12; // Adjust this value to control the down speed
     double upSpeedFactor = 0.2; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);

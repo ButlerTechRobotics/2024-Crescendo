@@ -200,15 +200,10 @@ public class RobotContainer {
                     armPID)));
 
     // ================================================
-    // Register the Auto Command Gyro
+    // Register the Arm Reset Command
     // ================================================
 
-    NamedCommands.registerCommand(
-        "Gyro Reset",
-        Commands.run(
-            () ->
-                drive.setAutoStartPose(
-                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(3.5)));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -218,17 +213,6 @@ public class RobotContainer {
         Commands.runOnce(
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
             superstructure));
-
-    // ================================================
-    // Register the Auto Command ShooterPosLeft
-    // ================================================
-    NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
-
-    // ================================================
-    // Register the Auto Command Shooter Reset
-    // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -330,7 +314,7 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.back().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
+    driverController.rightBumper().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -496,9 +480,7 @@ public class RobotContainer {
                     () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
-                        drive::getPose,
-                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
-                        armPID)));
+                        drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
     // driverController
     // .rightBumper()
     // .whileTrue(

@@ -30,21 +30,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 7.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "toParkPosLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Heading Reset"
           }
         }
       ]
