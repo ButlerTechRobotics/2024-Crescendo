@@ -9,14 +9,12 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
 
 public class Climber extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(26, MotorType.kBrushless);
-  DutyCycleEncoder thruBore = new DutyCycleEncoder(0);
   SparkPIDController pidController;
   private double targetDistance = 0;
 
@@ -71,7 +69,7 @@ public class Climber extends SubsystemBase {
     setPID();
     pidController.setReference(targetDistance, ControlType.kPosition, 0);
     SmartDashboard.putNumber("ClimberDistance", motor.getEncoder().getPosition());
-    SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getDistance());
+    //SmartDashboard.putNumber("Thru Bore Encoder", thruBore.getDistance());
     // This method will be called once per scheduler run
   }
 }

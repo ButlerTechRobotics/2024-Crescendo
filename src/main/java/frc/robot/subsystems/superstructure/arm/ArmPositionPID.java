@@ -4,7 +4,12 @@
 
 package frc.robot.subsystems.superstructure.arm;
 
-import edu.wpi.first.math.controller.PIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.VendorWrappers.Neo;
@@ -12,33 +17,31 @@ import frc.robot.util.TunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
-  private Neo motor = new Neo(20);
-
-  private PIDController pidController;
-  private double targetAngle = 4.25;
+  private CANSparkFlex armMotor = new CANSparkFlex(20, MotorType.kBrushless);
+  SparkPIDController pidController;
+  private double targetAngle = 0;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.045); // .0045
-  TunableNumber kI = new TunableNumber("Arm I Gain", 0.00035); // 0.00035
-  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0012); // 0.0012
-  TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107 (0 for precomp V2)
+  TunableNumber kP = new TunableNumber("Arm P Gain", 1.0); // .000008
+  TunableNumber kI = new TunableNumber("Arm I Gain", 0.0);
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0);
+  TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.0); // .000107
 
   /** Creates a new SparkMaxClosedLoop. */
   public ArmPositionPID() {
-    pidController = new PIDController(kP.get(), kI.get(), kD.get());
-    pidController.setP(kP.get());
-    pidController.setI(kI.get());
-    pidController.setD(kD.get());
-    // pidController.setFF(kFF.get());
+    pidController = armMotor.getPIDController();
+    // mySparkMax.getPIDController().setFeedbackDevice(mySparkMax.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle));
+    // pidController.setFeedbackDevice(DutyCycleEncoder.thruBore);
+    pidController.setP(kP.get(), 0);
+    pidController.setI(kI.get(), 0);
+    pidController.setD(kD.get(), 0);
+    pidController.setFF(kFF.get(), 0);
+    pidController.setOutputRange(-0.30, 0.5);
 
-    motor.setInverted(false);
+    armMotor.setIdleMode(IdleMode.kBrake);
 
-    motor.getAbsoluteEncoder().setPositionConversionFactor(1);
-    motor.getAbsoluteEncoder().setVelocityConversionFactor(1);
-    motor.getAbsoluteEncoder().setZeroOffset(117.657);
-
-    // motor.setIdleMode(IdleMode.kBrake);
+    armMotor.setSmartCurrentLimit(80);
 
     measuredVisualizer = new ArmVisualizer("measured", Color.kBlack);
     setpointVisualizer = new ArmVisualizer("setpoint", Color.kGreen);
@@ -74,11 +77,11 @@ public class ArmPositionPID extends SubsystemBase {
   @Override
   public void periodic() {
     setPID();
-    double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.11; // Adjust this value to control the down speed 0.12
-    double upSpeedFactor = 0.2; // Adjust this value to control the up speed 0.2
-    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
-    motor.set(output * speedFactor);
+    pidController.setReference(targetAngle, ControlType.kPosition, 0);
+    SmartDashboard.putNumber("ArmAngle", armMotor.getEncoder().getPosition());
+    // SmartDashboard.putBoolean("IsAtHomePosition", isAtHomePosition());
+    // SmartDashboard.putNumber("ENCODER?",
+    // motor.getExternalEncoder().getAbsolutePosition());
     // This method will be called once per scheduler run
     measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);

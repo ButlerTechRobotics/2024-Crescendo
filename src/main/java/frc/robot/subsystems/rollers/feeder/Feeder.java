@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
+
   @RequiredArgsConstructor
   @Getter
   public enum Goal implements GenericRollerSubsystem.VoltageGoal {

@@ -78,14 +78,14 @@ public class Superstructure extends SubsystemBase {
       }
       case PREPARE_SHOOT -> {
         // arm.setSetpoint(aimingParams.armAngle());
-        shooter.setGoal(Shooter.Goal.SHOOTING);
+        shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
       }
       case PREPARE_SHOOTFAR -> {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
       }
       case SHOOT -> {
-        shooter.setGoal(Shooter.Goal.SHOOTING);
+        shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
         // arm.setSetpoint(aimingParams.armAngle());
       }
       case SHOOTFAR -> {
