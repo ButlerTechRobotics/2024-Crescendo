@@ -38,14 +38,15 @@ import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbPID;
-import frc.robot.subsystems.SwagLights;
+// import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOSparkFlex;
+import frc.robot.subsystems.drive.SwerveModuleIO;
+import frc.robot.subsystems.drive.SwerveModuleIONeo;
+import frc.robot.subsystems.drive.SwerveModuleIOSim;
+import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.feeder.FeederIO;
@@ -87,7 +88,7 @@ public class RobotContainer {
   private Feeder feeder2;
   private Rollers rollers;
 
-  private final SwagLights swagLights = SwagLights.getInstance();
+  private Candle candle = new Candle();
 
   private Superstructure superstructure;
 
@@ -104,18 +105,16 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraFL =
+  private static final Transform3d robotToCameraBL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14.75), Units.inchesToMeters(10.75), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
-  private static final Transform3d robotToCameraFR =
+  private static final Transform3d robotToCameraBR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-14.75),
-              Units.inchesToMeters(-10.75),
-              Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -126,10 +125,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOSparkFlex(moduleConfigs[0]),
-                new ModuleIOSparkFlex(moduleConfigs[1]),
-                new ModuleIOSparkFlex(moduleConfigs[2]),
-                new ModuleIOSparkFlex(moduleConfigs[3]));
+                new SwerveModuleIONeo(moduleConfigs[0]),
+                new SwerveModuleIONeo(moduleConfigs[1]),
+                new SwerveModuleIONeo(moduleConfigs[2]),
+                new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         superstructure = new Superstructure(shooter);
@@ -141,8 +140,8 @@ public class RobotContainer {
 
         aprilTagVision =
             new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("FLCamera", robotToCameraFL),
-                new AprilTagVisionIOPhotonVision("FRCamera", robotToCameraFR));
+                new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
+                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR));
         break;
 
       case SIM:
@@ -150,10 +149,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim(),
+                new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
 
@@ -171,10 +170,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {},
+                new SwerveModuleIO() {});
         shooter = new Shooter(new ShooterIO() {});
 
         feeder1 = new Feeder(new FeederIO() {});
@@ -185,6 +184,23 @@ public class RobotContainer {
 
         intake = new Intake(new IntakeIO() {});
     }
+
+    // ================================================
+    // Register the Auto Aim Command
+    // ================================================
+
+    NamedCommands.registerCommand(
+        "Auto Aim",
+        Commands.run(
+            () ->
+                Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl())
+                    .alongWith(
+                        new MultiDistanceArm(
+                            drive::getPose,
+                            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                            armPID))));
 
     // ================================================
     // Register the Auto Command Gyro
@@ -210,12 +226,12 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(-11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
     // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(0.0)));
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -285,6 +301,12 @@ public class RobotContainer {
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 })));
 
+    // ================================================
+    // Register the Auto Command ShooterPosLeft
+    // ================================================
+    NamedCommands.registerCommand(
+        "ArmPositionAmp", Commands.runOnce(() -> armPID.setPosition(78.0)));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Configure the button bindings
@@ -321,18 +343,22 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
+                candle.runPrettyLightsCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
                     superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                 Commands.waitUntil(() -> !rollers.getBeamBreak()),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                candle.setColorGreenCommand(),
                 Commands.waitUntil(() -> rollers.getBeamBreak()),
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
+                    }),
+                Commands.waitSeconds(0.5),
+                candle.setColorOperationIdle()))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -380,28 +406,27 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 100));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, 0));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
 
     // AMP LOCATION
-    // operatorController.leftBumper().whileTrue(new PositionArmPID(armPID, 250));
-    // AMP SCORE
+    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
+    // 250));
+    // AMP
     operatorController
         .leftBumper()
         .whileTrue(
             Commands.sequence(
-                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
-                .alongWith(new PositionArmPID(armPID, 26)))
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
         .onFalse(
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
                 }));
 
     // ================================================
@@ -409,13 +434,15 @@ public class RobotContainer {
     // BUMPER CHARGES SHOOTER, TRIGGER SHOOTS
     // ================================================
     operatorController
-        .rightBumper()
+        .a()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
+                candle.runPrepareShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
                     superstructure),
                 Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
@@ -427,10 +454,39 @@ public class RobotContainer {
                     })))
         .onFalse(
             Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                }));
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
+
+    operatorController
+        .b()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
+                    superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
@@ -474,25 +530,29 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 32)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 90.0)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 14.0)); // "Midfield Shoot"
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(
+                armPID, 8.5)); // "Stage Shoot" // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 26)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 89)); // "Amp/Note Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION PILLAR SHOOT
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 0.0)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 4.25)); // "Pillar Shoot"
   }
 
   /**

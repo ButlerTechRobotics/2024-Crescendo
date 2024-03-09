@@ -52,7 +52,7 @@ public class Drive extends SubsystemBase {
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-  private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+  private final SwerveModule[] modules = new SwerveModule[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
 
   private static ProfiledPIDController thetaController =
@@ -87,15 +87,15 @@ public class Drive extends SubsystemBase {
 
   public Drive(
       GyroIO gyroIO,
-      ModuleIO flModuleIO,
-      ModuleIO frModuleIO,
-      ModuleIO blModuleIO,
-      ModuleIO brModuleIO) {
+      SwerveModuleIO flModuleIO,
+      SwerveModuleIO frModuleIO,
+      SwerveModuleIO blModuleIO,
+      SwerveModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
-    modules[0] = new Module(flModuleIO, 0);
-    modules[1] = new Module(frModuleIO, 1);
-    modules[2] = new Module(blModuleIO, 2);
-    modules[3] = new Module(brModuleIO, 3);
+    modules[0] = new SwerveModule(flModuleIO, 0);
+    modules[1] = new SwerveModule(frModuleIO, 1);
+    modules[2] = new SwerveModule(blModuleIO, 2);
+    modules[3] = new SwerveModule(brModuleIO, 3);
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
