@@ -174,9 +174,71 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toIntakePosCenter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2Return5Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
           }
         },
         {

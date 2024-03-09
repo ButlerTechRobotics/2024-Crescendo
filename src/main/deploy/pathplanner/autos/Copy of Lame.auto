@@ -8,19 +8,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "PreShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -30,22 +24,34 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote2"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote8"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
           }
         },
         {
@@ -53,9 +59,9 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "toPos1"
+                  "name": "Auto Aim"
                 }
               },
               {
@@ -65,6 +71,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {

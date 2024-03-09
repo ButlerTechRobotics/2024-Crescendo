@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -30,22 +30,28 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote3Amp"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote8"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
           }
         },
         {
@@ -55,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos1"
+                  "pathName": "toPos3Amp"
                 }
               },
               {
@@ -68,9 +74,27 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toParkPosRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
           }
         }
       ]

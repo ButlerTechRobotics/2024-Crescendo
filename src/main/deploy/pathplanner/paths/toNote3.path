@@ -16,21 +16,12 @@
     },
     {
       "anchor": {
-<<<<<<< HEAD
-        "x": 2.9301150756367123,
-        "y": 6.991369417831561
-      },
-      "prevControl": {
-        "x": 2.5085249599885784,
-        "y": 6.9445260716484345
-=======
         "x": 2.8909454969907094,
         "y": 7.051575128791284
       },
       "prevControl": {
         "x": 2.4693553813425755,
         "y": 7.004731782608157
->>>>>>> Sonic
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,13 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-<<<<<<< HEAD
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.25,
-=======
     "maxVelocity": 3.0,
     "maxAcceleration": 2.0,
->>>>>>> Sonic
     "maxAngularVelocity": 411.0,
     "maxAngularAcceleration": 720.0
   },
@@ -62,9 +48,5 @@
     "rotation": 34.330217195503316,
     "velocity": 0
   },
-<<<<<<< HEAD
-  "useDefaultConstraints": true
-=======
   "useDefaultConstraints": false
->>>>>>> Sonic
 }

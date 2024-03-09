@@ -82,13 +82,13 @@ public final class DriveConstants {
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.250488).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(-0.378662).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))

@@ -1,134 +1,16 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.7636103146670059,
+      "y": 6.745441850377372
+    },
+    "rotation": 59.03624346769725
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "PreShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2SourceStart"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -161,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toPos2"
+                  "pathName": "toPos3"
                 }
               },
               {
@@ -180,9 +62,59 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Heading Reset"
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leavingPos3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

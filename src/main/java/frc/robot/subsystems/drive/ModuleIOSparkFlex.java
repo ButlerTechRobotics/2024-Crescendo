@@ -19,10 +19,11 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.VendorWrappers.Neo;
 import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
 
 /**
@@ -34,9 +35,9 @@ import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
  * absolute encoders using AdvantageScope. These values are logged under
  * "/Drive/ModuleX/TurnAbsolutePositionRad"
  */
-public class SwerveModuleIONeo implements SwerveModuleIO {
-  private final Neo driveSparkMax;
-  private final Neo turnSparkMax;
+public class ModuleIOSparkFlex implements ModuleIO {
+  private final CANSparkFlex driveSparkMax;
+  private final CANSparkFlex turnSparkMax;
   private final CANcoder cancoder;
 
   private final RelativeEncoder driveEncoder;
@@ -45,10 +46,10 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
 
   private final Rotation2d absoluteEncoderOffset;
 
-  public SwerveModuleIONeo(ModuleConfig config) {
+  public ModuleIOSparkFlex(ModuleConfig config) {
 
-    driveSparkMax = new Neo(config.driveID());
-    turnSparkMax = new Neo(config.turnID());
+    driveSparkMax = new CANSparkFlex(config.driveID(), MotorType.kBrushless);
+    turnSparkMax = new CANSparkFlex(config.turnID(), MotorType.kBrushless);
     cancoder = new CANcoder(config.absoluteEncoderChannel(), canbus);
     absoluteEncoderOffset = config.absoluteEncoderOffset(); // MUST BE CALIBRATED
 
@@ -62,7 +63,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
     turnSparkMax.setInverted(config.turnMotorInverted());
-    driveSparkMax.setSmartCurrentLimit(40);
+    driveSparkMax.setSmartCurrentLimit(80);
     turnSparkMax.setSmartCurrentLimit(20);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
@@ -78,11 +79,6 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
     driveSparkMax.setCANTimeout(0);
     turnSparkMax.setCANTimeout(0);
 
-    // //Wait 1 second before flashing NEO eprom memory
-    // try {
-    //   Thread.sleep(1000);
-    // } catch (Exception e) {}
-
     driveSparkMax.burnFlash();
     turnSparkMax.burnFlash();
 
@@ -93,7 +89,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
   }
 
   @Override
-  public void updateInputs(SwerveModuleIOInputs inputs) {
+  public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
         Units.rotationsToRadians(driveEncoder.getPosition()) / moduleConstants.driveReduction();
     inputs.driveVelocityRadPerSec =

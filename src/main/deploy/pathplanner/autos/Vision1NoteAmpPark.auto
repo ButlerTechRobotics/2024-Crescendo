@@ -24,21 +24,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 7.0
+            "waitTime": 10.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "toParkPosCenter"
+            "pathName": "leavingPos3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
           }
         },
         {

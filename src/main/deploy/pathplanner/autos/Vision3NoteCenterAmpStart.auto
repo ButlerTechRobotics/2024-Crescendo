@@ -1,22 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-<<<<<<< HEAD
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
-=======
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
-      "x": 1.4896821805055864,
-      "y": 5.574358195791997
-========
-      "x": 1.5461177361101157,
-      "y": 5.55472336015897
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
->>>>>>> Sonic
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -30,15 +14,7 @@
         {
           "type": "wait",
           "data": {
-<<<<<<< HEAD
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
             "waitTime": 0.5
-========
-            "waitTime": 0.25
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenter.auto
-=======
-            "waitTime": 0.5
->>>>>>> Sonic
           }
         },
         {
@@ -60,16 +36,7 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<< HEAD
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
                   "pathName": "toNote3"
-=======
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
-                  "pathName": "toNote1"
-========
-                  "pathName": "toNote3"
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
->>>>>>> Sonic
                 }
               },
               {
@@ -94,15 +61,7 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<< HEAD
                   "pathName": "toPos2AmpStart"
-=======
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
-                  "pathName": "toPos2SourceStart"
-========
-                  "pathName": "toPos2AmpStart"
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
->>>>>>> Sonic
                 }
               },
               {
@@ -127,11 +86,6 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<< HEAD
-========
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenter.auto
-=======
->>>>>>> Sonic
                   "pathName": "toNote2"
                 }
               },
@@ -158,62 +112,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "toPos2"
-<<<<<<< HEAD
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
-========
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenter.auto
-=======
->>>>>>> Sonic
                 }
               },
               {

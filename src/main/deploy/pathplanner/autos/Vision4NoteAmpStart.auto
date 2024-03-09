@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.5695060449949958,
-      "y": 5.550936522700434
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -20,11 +14,7 @@
         {
           "type": "wait",
           "data": {
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
             "waitTime": 0.5
-========
-            "waitTime": 0.25
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
           }
         },
         {
@@ -46,11 +36,7 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                   "pathName": "toNote3"
-========
-                  "pathName": "toNote2"
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
                 }
               },
               {
@@ -75,11 +61,7 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                   "pathName": "toPos2AmpStart"
-========
-                  "pathName": "toPos2"
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
                 }
               },
               {
@@ -104,7 +86,6 @@
               {
                 "type": "path",
                 "data": {
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
                   "pathName": "toNote2"
                 }
               },
@@ -155,8 +136,6 @@
               {
                 "type": "path",
                 "data": {
-========
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
                   "pathName": "toNote1"
                 }
               },
@@ -201,59 +180,6 @@
           }
         },
         {
-<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
-========
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
->>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
           "type": "named",
           "data": {
             "name": "Heading Reset"

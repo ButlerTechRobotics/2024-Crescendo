@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8267774427286747,
-        "y": 6.991369417831561
+        "x": 1.335622956146197,
+        "y": 6.770915422172725
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1776020760018726,
-        "y": 7.016492665463964
+        "x": 1.6162826627647557,
+        "y": 6.958021893251764
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 6.991369417831561
       },
       "prevControl": {
-        "x": 2.5167325548326307,
-        "y": 7.0398809743488435
+        "x": 2.4582617826204314,
+        "y": 6.993104356579084
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,19 +32,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-<<<<<<< HEAD
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.25,
-=======
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
->>>>>>> Sonic
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 411.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.273662687609405,
+    "rotation": 0.972495902829454,
     "rotateFast": false
   },
   "reversed": false,
@@ -53,9 +48,5 @@
     "rotation": 1.487867528827792,
     "velocity": 0
   },
-<<<<<<< HEAD
   "useDefaultConstraints": true
-=======
-  "useDefaultConstraints": false
->>>>>>> Sonic
 }
