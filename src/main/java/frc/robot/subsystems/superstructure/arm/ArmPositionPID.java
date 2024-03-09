@@ -56,7 +56,7 @@ public class ArmPositionPID extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (motor.getAbsoluteEncoder().getPosition() * 360);
+    return (armMotor.getAbsoluteEncoder().getPosition() * 360);
   }
 
   private void setPID() {
