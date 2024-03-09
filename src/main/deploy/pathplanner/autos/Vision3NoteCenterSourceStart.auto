@@ -1,0 +1,341 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+<<<<<<< HEAD
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+      "x": 1.4896821805055864,
+      "y": 5.574358195791997
+========
+      "x": 1.5461177361101157,
+      "y": 5.55472336015897
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
+    },
+    "rotation": 0
+=======
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteAmp.auto
+      "x": 0.7636103146670059,
+      "y": 6.745441850377372
+    },
+    "rotation": 59.03624346769725
+========
+      "x": 1.4896821805055864,
+      "y": 5.574358195791997
+    },
+    "rotation": 0
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+>>>>>>> Sonic
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PreShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteAmp.auto
+========
+>>>>>>> Sonic
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+<<<<<<< HEAD
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+                  "pathName": "toNote1"
+========
+                  "pathName": "toNote3"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
+=======
+                  "pathName": "toNote1Source"
+>>>>>>> Sonic
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+<<<<<<< HEAD
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+                  "pathName": "toPos2SourceStart"
+========
+                  "pathName": "toPos2AmpStart"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterAmpStart.auto
+=======
+                  "pathName": "toPos2SourceStart"
+>>>>>>> Sonic
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+<<<<<<< HEAD
+=======
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+>>>>>>> Sonic
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+<<<<<<< HEAD
+            "pathName": "toParkPosCenter"
+=======
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision3NoteAmp.auto
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote3Amp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos3Amp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+========
+            "pathName": "toParkPosCenter"
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision3NoteCenterSourceStart.auto
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+>>>>>>> Sonic
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Heading Reset"
+          }
+<<<<<<< HEAD
+=======
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "leavingPos3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PreShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "AllignmentAmp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Heading Reset"
+                }
+              }
+            ]
+          }
+>>>>>>> Sonic
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

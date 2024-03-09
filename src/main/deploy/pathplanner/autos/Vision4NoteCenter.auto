@@ -20,7 +20,11 @@
         {
           "type": "wait",
           "data": {
+<<<<<<<< HEAD:src/main/deploy/pathplanner/autos/Vision4NoteAmpStart.auto
+            "waitTime": 0.5
+========
             "waitTime": 0.25
+>>>>>>>> Sonic:src/main/deploy/pathplanner/autos/Vision4NoteCenter.auto
           }
         },
         {

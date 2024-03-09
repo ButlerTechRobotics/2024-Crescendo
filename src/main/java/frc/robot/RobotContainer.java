@@ -186,23 +186,6 @@ public class RobotContainer {
     }
 
     // ================================================
-    // Register the Auto Aim Command
-    // ================================================
-
-    NamedCommands.registerCommand(
-        "Auto Aim",
-        Commands.run(
-            () ->
-                Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(),
-                        () -> driveMode.disableHeadingControl())
-                    .alongWith(
-                        new MultiDistanceArm(
-                            drive::getPose,
-                            AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
-                            armPID))));
-
-    // ================================================
     // Register the Auto Command Gyro
     // ================================================
 
@@ -226,12 +209,12 @@ public class RobotContainer {
     // Register the Auto Command ShooterPosLeft
     // ================================================
     NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
+        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(4.5)));
 
     // ================================================
     // Register the Auto Command Shooter Reset
     // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
+    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(4.5)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -406,13 +389,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 3000));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
+    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -1000));
 
     // AMP LOCATION
     // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
@@ -422,7 +405,8 @@ public class RobotContainer {
         .leftBumper()
         .whileTrue(
             Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers))
+                .alongWith(new PositionArmPID(armPID, 89)))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -434,7 +418,7 @@ public class RobotContainer {
     // BUMPER CHARGES SHOOTER, TRIGGER SHOOTS
     // ================================================
     operatorController
-        .a()
+        .rightBumper()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
@@ -445,34 +429,6 @@ public class RobotContainer {
                 candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    operatorController
-        .b()
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
-                    superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
-                    superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
                 Commands.waitSeconds(1.0),
                 Commands.runOnce(
@@ -530,23 +486,21 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION SUB SHOOT
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 90.0)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 105)); // "Sub shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION MIDFIELD SHOOT
     // ================================================
-    operatorController
-        .povRight()
-        .whileTrue(
-            new PositionArmPID(
-                armPID, 8.5)); // "Stage Shoot" // Was -16.25 and shot a little too high
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 8.5)); // "Midfield Shoot"
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP SHOOT
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 89)); // "Amp/Note Shoot"
+    operatorController
+        .povLeft()
+        .whileTrue(new PositionArmPID(armPID, 89)); // "Amp/Note Shoot" -50!!!!
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

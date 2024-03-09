@@ -32,12 +32,27 @@
     },
     {
       "anchor": {
-        "x": 7.169437905209619,
-        "y": 1.042264452574553
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/TrapScore3.path
+        "x": 4.0777770571233,
+        "y": 2.728624915167091
       },
       "prevControl": {
-        "x": 6.169437905209619,
-        "y": 1.042264452574553
+        "x": 4.2768612784015865,
+        "y": 2.459275674614116
+========
+>>>>>>> Sonic
+        "x": 7.521830656196924,
+        "y": 0.7601200387585969
+      },
+      "prevControl": {
+        "x": 6.521830656196924,
+        "y": 0.7601200387585969
+<<<<<<< HEAD
+=======
+>>>>>>>> Sonic:src/main/deploy/pathplanner/paths/toParkPosLeft.path
+>>>>>>> Sonic
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,6 +73,14 @@
 <<<<<<< HEAD
     "rotation": 0,
     "rotateFast": false
+=======
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/TrapScore3.path
+    "rotation": 58.928341939153725,
+========
+    "rotation": 0,
+>>>>>>>> Sonic:src/main/deploy/pathplanner/paths/toParkPosLeft.path
+    "rotateFast": true
+>>>>>>> Sonic
   },
   "reversed": false,
   "folder": null,
