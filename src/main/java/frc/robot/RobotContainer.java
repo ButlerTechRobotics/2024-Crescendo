@@ -369,7 +369,7 @@ public class RobotContainer {
     // DRIVER CONTROLLER - A
     // PATHFIND TO SELECTED DRIVE MODE
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
 
     // ================================================
     // DRIVER CONTROLLER - START
