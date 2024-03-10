@@ -347,6 +347,36 @@ public class RobotContainer {
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 }));
 
+    // delete later, temporary button for practice
+    // Intake in
+
+    driverController
+        .x()
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                candle.runPrettyLightsCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
+                    superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+                Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                candle.setColorGreenCommand(),
+                Commands.waitUntil(() -> rollers.getBeamBreak()),
+                Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    }),
+                Commands.waitSeconds(0.5),
+                candle.setColorRespawnIdle()))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                  superstructure.setGoal(Superstructure.SystemState.IDLE);
+                }));
+
     // ================================================
     // DRIVER CONTROLLER - LEFT TRIGGER
     // RUN INTAKE OUT
