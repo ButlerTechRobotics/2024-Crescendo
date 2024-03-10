@@ -7,106 +7,64 @@ import frc.robot.util.FieldConstants;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/**
- * The DriveController class represents a controller for the robot's drive system. It provides
- * methods to control the heading and drive mode of the robot.
- */
+// DriveController class handles the driving logic for the robot
 public class DriveController {
+  // Supplier for the heading angle of the robot
   private Optional<Supplier<Rotation2d>> headingSupplier = Optional.empty();
+  // Supplier for the pose of the robot
   private Supplier<Pose2d> poseSupplier = Pose2d::new;
+  // Current drive mode of the robot
   private DriveModeType driveModeType = DriveModeType.SPEAKER;
 
-  /**
-   * Sets the heading supplier that provides the desired heading for the robot.
-   *
-   * @param headingSupplier The supplier that provides the desired heading.
-   */
+  // Sets the supplier for the heading angle of the robot
   public void setHeadingSupplier(Supplier<Rotation2d> headingSupplier) {
     this.headingSupplier = Optional.of(headingSupplier);
   }
 
-  /**
-   * Sets the pose supplier that provides the current pose of the robot.
-   *
-   * @param poseSupplier The supplier that provides the current pose.
-   */
+  // Sets the supplier for the pose of the robot
   public void setPoseSupplier(Supplier<Pose2d> poseSupplier) {
     this.poseSupplier = poseSupplier;
   }
 
-  /**
-   * Checks if the heading is being controlled.
-   *
-   * @return True if the heading is being controlled, false otherwise.
-   */
+  // Checks if the heading of the robot is controlled
   public boolean isHeadingControlled() {
     return this.headingSupplier.isPresent();
   }
 
-  /**
-   * Gets the current drive mode.
-   *
-   * @return The supplier that provides the current drive mode.
-   */
+  // Returns the current drive mode of the robot
   public Supplier<DriveModeType> getDriveModeType() {
     return () -> this.driveModeType;
   }
 
-  /**
-   * Gets the current heading angle.
-   *
-   * @return The supplier that provides the current heading angle.
-   */
+  // Returns the current heading angle of the robot
   public Supplier<Rotation2d> getHeadingAngle() {
     return headingSupplier.get();
   }
 
-  /**
-   * Sets the drive mode.
-   *
-   * @param driveModeType The drive mode to set.
-   */
+  // Sets the drive mode of the robot
   public void setDriveMode(DriveModeType driveModeType) {
     this.driveModeType = driveModeType;
     updateHeading();
   }
 
-  /** Toggles the drive mode between AMP and SPEAKER. */
-  public void toggleDriveMode() {
-    if (getDriveModeType().get() == DriveModeType.AMP) {
-      setDriveMode(DriveController.DriveModeType.SPEAKER);
-    } else {
-      setDriveMode(DriveController.DriveModeType.AMP);
-    }
-  }
-
-  /** Enables heading control based on the current drive mode. */
+  // Enables heading control for the robot
   public void enableHeadingControl() {
-    if (this.driveModeType == DriveModeType.AMP) {
-      enableAmpHeading();
-    } else {
-      enableSpeakerHeading();
-    }
+    enableSpeakerHeading();
   }
 
-  /** Disables heading control (heading control is disabled). */
+  // Disables heading control for the robot
   public void disableHeadingControl() {
     this.headingSupplier = Optional.empty();
   }
 
-  /** Updates the heading if it is being controlled. */
+  // Updates the heading of the robot based on the current drive mode
   private void updateHeading() {
     if (isHeadingControlled()) {
       enableHeadingControl();
     }
   }
 
-  /** Turns on heading control and sets the heading to AMP mode (90 degrees). */
-  private void enableAmpHeading() {
-    setHeadingSupplier(() -> Rotation2d.fromDegrees(90));
-  }
-
-  /** Turns on heading control and sets the heading to SPEAKER mode. */
+  // Enables speaker heading for the robot
   private void enableSpeakerHeading() {
     setHeadingSupplier(
         () ->
@@ -121,9 +79,8 @@ public class DriveController {
                         .getY()));
   }
 
-  /** Possible Drive Modes. */
+  // Enum for the drive modes of the robot
   public enum DriveModeType {
-    AMP,
     SPEAKER,
   }
 }
