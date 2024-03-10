@@ -194,16 +194,16 @@ public class RobotContainer {
         // ================================================
         // Register the Auto Aim Command
         // ================================================
-
-        NamedCommands.registerCommand(
-                "Auto Aim",
-                Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-                        .alongWith(
-                                new MultiDistanceArm(
-                                        drive::getPose,
-                                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
-                                        armPID)));
+NamedCommands.registerCommand(
+        "Auto Aim",
+        Commands.startEnd(
+                () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                .alongWith(
+                        new MultiDistanceArm(
+                                drive::getPose,
+                                FieldConstants.Speaker.redSpeakerOpening,
+                                FieldConstants.Speaker.blueSpeakerOpening,
+                                armPID)));
 
         // ================================================
         // Register the Arm Reset Command
@@ -489,7 +489,10 @@ public class RobotContainer {
                                 () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                                 .alongWith(
                                         new MultiDistanceArm(
-                                                drive::getPose, FieldConstants.Speaker.centerSpeakerOpening, armPID)));
+                                                drive::getPose,
+                                                FieldConstants.Speaker.redSpeakerOpening,
+                                                FieldConstants.Speaker.blueSpeakerOpening,
+                                                armPID)));
         // driverController
         // .rightBumper()
         // .whileTrue(

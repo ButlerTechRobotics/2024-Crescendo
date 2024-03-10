@@ -6,33 +6,42 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-import frc.robot.util.AllianceFlipUtil;
+
+import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
-/** A command that angles the arm from multi-distance position from the target. */
+/**
+ * A command that angles the arm from multi-distance position from the target.
+ */
 public class MultiDistanceArm extends Command {
-  Supplier<Pose2d> poseSupplier;
-  Pose2d targetPose;
-  ArmPositionPID armPID;
-  InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
+  private final Supplier<Pose2d> poseSupplier;
+  private final Pose2d redSpeakerPose;
+  private final Pose2d blueSpeakerPose;
+  private final ArmPositionPID armPID;
+  private Pose2d targetPose;
+  private InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
-  double distance;
-  double angle;
+  private double distance;
+  private double angle;
 
   /**
    * Creates a new MultiDistanceArm command.
    *
-   * @param poseSupplier The supplier for the robot's current pose.
-   * @param targetPose The target pose to shoot at.
-   * @param armPID The arm subsystem.
+   * @param poseSupplier    The supplier for the robot's current pose.
+   * @param redSpeakerPose  The pose of the red speaker.
+   * @param blueSpeakerPose The pose of the blue speaker.
+   * @param armPID          The arm subsystem.
    */
-  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
+  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d redSpeakerPose, Pose2d blueSpeakerPose,
+      ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
-    this.targetPose = targetPose;
+    this.redSpeakerPose = redSpeakerPose;
+    this.blueSpeakerPose = blueSpeakerPose;
     this.armPID = armPID;
 
     // Populate the distance map with distance-angle pairs
@@ -51,8 +60,23 @@ public class MultiDistanceArm extends Command {
 
   @Override
   public void initialize() {
-    // Apply any necessary transformations to the target pose
-    targetPose = AllianceFlipUtil.apply(targetPose);
+    // Get the alliance color
+    Optional<DriverStation.Alliance> colorOptional = DriverStation.getAlliance();
+
+    // Check if the alliance color is present
+    if (colorOptional.isPresent()) {
+      DriverStation.Alliance color = colorOptional.get();
+
+      // Select the target pose based on the alliance color
+      if (color == DriverStation.Alliance.Red) {
+        targetPose = redSpeakerPose;
+      } else if (color == DriverStation.Alliance.Blue) {
+        targetPose = blueSpeakerPose;
+      }
+    } else {
+      // Handle the case where the alliance color is not available
+      // For example, you could set the target pose to a default value
+    }
   }
 
   @Override
