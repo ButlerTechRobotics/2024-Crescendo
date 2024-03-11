@@ -369,7 +369,7 @@ public class RobotContainer {
     // DRIVER CONTROLLER - X
     // PATHFIND TO AMP
     // ================================================
-    driverController.x().whileTrue(new PathFinderAndFollow("Trap Amp Side"));
+    driverController.x().whileTrue(new PathFinderAndFollow("Trap Far Side"));
 
     // ================================================
     // DRIVER CONTROLLER - START
