@@ -326,7 +326,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.1),
                 candle.setColorRespawnIdle()))
         .onFalse(
             Commands.runOnce(
@@ -519,7 +519,8 @@ public class RobotContainer {
                 Commands.waitUntil(operatorController.rightTrigger()),
                 candle.runShootCommand(),
                 Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTTRAP),
+                    superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
                 Commands.waitSeconds(1.0),
                 Commands.runOnce(

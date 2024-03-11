@@ -27,6 +27,7 @@ public class Superstructure extends SubsystemBase {
     SHOOT,
     SHOOTFAR,
     SHOOTMID,
+    SHOOTTRAP,
     PREPARE_INTAKE,
     INTAKE,
     STATION_INTAKE,
@@ -94,6 +95,12 @@ public class Superstructure extends SubsystemBase {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
       }
+
+      case PREPARE_SHOOTTRAP -> {
+        // arm.setSetpoint(aimingParams.armAngle());
+        shooter.setGoal(Shooter.Goal.SHOOTINGTRAP);
+      }
+
       case SHOOT -> {
         shooter.setGoal(Shooter.Goal.SHOOTING);
         // arm.setSetpoint(aimingParams.armAngle());
@@ -104,6 +111,10 @@ public class Superstructure extends SubsystemBase {
       }
       case SHOOTFAR -> {
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
+        // arm.setSetpoint(aimingParams.armAngle());
+      }
+      case SHOOTTRAP -> {
+        shooter.setGoal(Shooter.Goal.SHOOTINGTRAP);
         // arm.setSetpoint(aimingParams.armAngle());
       }
     }
