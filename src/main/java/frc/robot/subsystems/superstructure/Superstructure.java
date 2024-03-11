@@ -8,9 +8,7 @@
 package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-// import frc.robot.subsystems.superstructure.arm.Arm;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
-import frc.robot.util.LoggedTunableNumber;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,14 +17,6 @@ import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor
 public class Superstructure extends SubsystemBase {
-  private static LoggedTunableNumber armIdleSetpointDegrees =
-      new LoggedTunableNumber("Superstructure/ArmIdleSetpointDegrees", 20.0);
-  private static LoggedTunableNumber armStationIntakeSetpointDegrees =
-      new LoggedTunableNumber("Superstructure/ArmStationIntakeSetpointDegrees", 45.0);
-  private static LoggedTunableNumber armIntakeSetpointDegrees =
-      new LoggedTunableNumber("Superstructure/ArmIntakeDegrees", 40.0);
-  private static LoggedTunableNumber followThroughTime =
-      new LoggedTunableNumber("Superstructure/FollowthroughTimeSecs", 0.5);
 
   public enum SystemState {
     PREPARE_SHOOT,
