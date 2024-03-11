@@ -363,7 +363,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - A
     // PATHFIND TO AMP
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+    driverController.b().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - A
+    // PATHFIND TO AMP
+    // ================================================
+    driverController.a().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -489,7 +495,7 @@ public class RobotContainer {
     // driveMode.disableHeadingControl()));
 
     driverController
-        .b()
+        .back()
         .onTrue(
             Commands.runOnce(
                     () ->

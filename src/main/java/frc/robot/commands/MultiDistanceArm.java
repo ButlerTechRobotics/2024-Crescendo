@@ -43,10 +43,10 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(1.0, 0.0);
     distanceMap.put(1.5, 10.88);
     distanceMap.put(2.0, 14.00);
-    distanceMap.put(2.5, 17.5);
-    distanceMap.put(3.0, 21.0);
-    distanceMap.put(3.5, 22.12);
-    distanceMap.put(4.0, 22.93);
+    distanceMap.put(2.5, 20.5);
+    distanceMap.put(3.0, 24.0);
+    distanceMap.put(3.5, 25.12);
+    distanceMap.put(4.0, 25.93);
     // distanceMap.put(4.5, 25.3);
     // distanceMap.put(5.0, 28.0);
     // distanceMap.put(5.5, 31.19);
@@ -65,7 +65,7 @@ public class MultiDistanceArm extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose);
 
     // Get the corresponding angle from the distance-angle map
-    angle = distanceMap.get(distance) + 1.5;
+    angle = distanceMap.get(distance);
 
     // Run the flywheel at the calculated angle
     armPID.setPosition(angle);
@@ -77,7 +77,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(0.0);
+    armPID.setPosition(3.5);
   }
 
   @Override
