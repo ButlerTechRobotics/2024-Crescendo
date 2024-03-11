@@ -474,6 +474,37 @@ public class RobotContainer {
                 .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
+    // OPERATOR CONTROLLER - X/RT
+    // X - PREPARE SHOOT TRAP, RT - FIRE
+    // ================================================
+    operatorController
+        .x()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTTRAP),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
+
+    // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER
     // ================================================

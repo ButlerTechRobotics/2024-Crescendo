@@ -31,6 +31,7 @@ public class Superstructure extends SubsystemBase {
   public enum SystemState {
     PREPARE_SHOOT,
     PREPARE_SHOOTFAR,
+    PREPARE_SHOOTTRAP,
 
     SHOOT,
     SHOOTFAR,
@@ -63,6 +64,7 @@ public class Superstructure extends SubsystemBase {
       case INTAKE -> currentState = SystemState.INTAKE;
       case PREPARE_SHOOT -> currentState = SystemState.PREPARE_SHOOT;
       case PREPARE_SHOOTFAR -> currentState = SystemState.PREPARE_SHOOTFAR;
+      case PREPARE_SHOOTTRAP -> currentState = SystemState.PREPARE_SHOOTTRAP;
       case SHOOT -> currentState = SystemState.SHOOT;
       case SHOOTFAR -> currentState = SystemState.SHOOTFAR;
     }
@@ -90,6 +92,10 @@ public class Superstructure extends SubsystemBase {
       case PREPARE_SHOOTFAR -> {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
+      }
+      case PREPARE_SHOOTTRAP -> {
+        // arm.setSetpoint(aimingParams.armAngle());
+        shooter.setGoal(Shooter.Goal.SHOOTINGTRAP);
       }
       case SHOOT -> {
         shooter.setGoal(Shooter.Goal.SHOOTING);
