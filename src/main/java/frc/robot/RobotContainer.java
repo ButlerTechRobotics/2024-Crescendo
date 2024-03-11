@@ -198,7 +198,7 @@ public class RobotContainer {
     // Register the Arm Reset Command
     // ================================================
 
-    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(3.5)));
+    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(4.25)));
 
     // ================================================
     // Register the Auto Command PreShoot
