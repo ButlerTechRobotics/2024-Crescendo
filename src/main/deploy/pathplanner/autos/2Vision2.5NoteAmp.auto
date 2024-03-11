@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote2"
+                  "pathName": "toNote3Amp"
                 }
               },
               {
@@ -59,24 +59,37 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "toPos2"
+                  "name": "Auto Aim"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "PreShoot"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PreShoot"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -86,7 +99,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote1"
+                  "pathName": "toNote4"
                 }
               },
               {
@@ -105,38 +118,57 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "toAutoAimAmpSide"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "toPos2"
+                  "name": "Auto Aim"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "PreShoot"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "PreShoot"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote3"
+                  "pathName": "toNote5"
                 }
               },
               {
@@ -152,31 +184,6 @@
           "type": "named",
           "data": {
             "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PreShoot"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]
