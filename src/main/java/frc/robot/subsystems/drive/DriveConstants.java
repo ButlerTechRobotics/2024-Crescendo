@@ -23,14 +23,15 @@ public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
         default ->
+            // TODO update these values, got new values from Choreo calculation
             new DrivetrainConfig(
-                Units.inchesToMeters(2.0),
-                Units.inchesToMeters(26.0),
-                Units.inchesToMeters(26.0),
-                Units.feetToMeters(12.16),
-                Units.feetToMeters(21.32),
-                7.93,
-                29.89);
+                Units.inchesToMeters(2.0), // double wheelRadius
+                Units.inchesToMeters(26.0), // double trackwidthX
+                Units.inchesToMeters(26.0), // double trackwidthY
+                Units.feetToMeters(11.637), // double maxLinearVelocity
+                Units.feetToMeters(48.426), // double maxLinearAcceleration
+                7.595, // double maxAngularVelocity
+                68.088); // double maxAngularAcceleration)
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -46,10 +47,11 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
+  // TODO tune odometry frequency
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 100.0;
+        case COMPBOT -> 250.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -77,25 +79,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(0.132812).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.372314).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.021729).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.181885).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.238770).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(-0.385498).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
@@ -136,7 +138,8 @@ public final class DriveConstants {
         case COMPBOT -> new HeadingControllerConstants(2.0, .25);
         case SIMBOT -> new HeadingControllerConstants(4.0, 0.0);
       };
-
+  // TODO tune the PP translation/rotation values, 5712 uses 10, 0.0, 0.0 and PathPlanner uses 5,
+  // 0.0, 0.0
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(10, 0.0, 0.0);

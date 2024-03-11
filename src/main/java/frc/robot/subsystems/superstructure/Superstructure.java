@@ -22,6 +22,7 @@ public class Superstructure extends SubsystemBase {
     PREPARE_SHOOT,
     PREPARE_SHOOTMID,
     PREPARE_SHOOTFAR,
+    PREPARE_SHOOTTRAP,
 
     SHOOT,
     SHOOTFAR,
@@ -56,6 +57,7 @@ public class Superstructure extends SubsystemBase {
       case PREPARE_SHOOT -> currentState = SystemState.PREPARE_SHOOT;
       case PREPARE_SHOOTMID -> currentState = SystemState.PREPARE_SHOOTMID;
       case PREPARE_SHOOTFAR -> currentState = SystemState.PREPARE_SHOOTFAR;
+      case PREPARE_SHOOTTRAP -> currentState = SystemState.PREPARE_SHOOTTRAP;
       case SHOOT -> currentState = SystemState.SHOOT;
       case SHOOTMID -> currentState = SystemState.SHOOTMID;
       case SHOOTFAR -> currentState = SystemState.SHOOTFAR;
@@ -92,7 +94,6 @@ public class Superstructure extends SubsystemBase {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
       }
-
       case SHOOT -> {
         shooter.setGoal(Shooter.Goal.SHOOTING);
         // arm.setSetpoint(aimingParams.armAngle());

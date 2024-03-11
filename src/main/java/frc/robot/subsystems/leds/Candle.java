@@ -47,7 +47,7 @@ public class Candle extends SubsystemBase {
     candle = new CANdle(32, "rio");
     candle.configBrightnessScalar(.5);
     candle.configLEDType(LEDStripType.GRB);
-    setColor(Color.BLUE);
+    setColor(Color.ORANGE);
   }
 
   public void setColor(Color color) {
