@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 4.25;
+  private double targetAngle = 3.5;
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
@@ -35,7 +35,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(true);
+    motor.setInverted(false); // NEEDS TO BE FALSE
 
     // motor.setIdleMode(IdleMode.kBrake);
 
