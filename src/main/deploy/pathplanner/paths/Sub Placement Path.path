@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.253439605310023,
-        "y": 2.6115165497092763
+        "x": 1.9229831326995024,
+        "y": 5.515804013063089
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.246307662372813,
-        "y": 2.8925766268080317
+        "x": 1.6536338921465275,
+        "y": 5.504093176517308
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0120909314571827,
-        "y": 3.4898292906428896
+        "x": 1.407706324685116,
+        "y": 5.515804013063089
       },
       "prevControl": {
-        "x": 2.8598500563620233,
-        "y": 3.1619258673610067
+        "x": 1.6887664017838722,
+        "y": 5.515804013063089
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Arm Reset"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 4.0,
@@ -39,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -34.695153531234006,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,

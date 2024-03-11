@@ -17,8 +17,6 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -28,7 +26,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -67,7 +64,6 @@ import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
-import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -188,7 +184,6 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Aim Command
     // ================================================
-
     NamedCommands.registerCommand(
         "Auto Aim",
         Commands.startEnd(
@@ -196,19 +191,14 @@ public class RobotContainer {
             .alongWith(
                 new MultiDistanceArm(
                     drive::getPose,
-                    AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                    FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                     armPID)));
 
     // ================================================
-    // Register the Auto Command Gyro
+    // Register the Arm Reset Command
     // ================================================
 
-    NamedCommands.registerCommand(
-        "Gyro Reset",
-        Commands.run(
-            () ->
-                drive.setAutoStartPose(
-                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
+    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(3.5)));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -218,17 +208,6 @@ public class RobotContainer {
         Commands.runOnce(
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
             superstructure));
-
-    // ================================================
-    // Register the Auto Command ShooterPosLeft
-    // ================================================
-    NamedCommands.registerCommand(
-        "ShooterPosLeft", Commands.runOnce(() -> armPID.setPosition(11.4878)));
-
-    // ================================================
-    // Register the Auto Command Shooter Reset
-    // ================================================
-    NamedCommands.registerCommand("Shooter Reset", Commands.runOnce(() -> armPID.setPosition(2.8)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -330,7 +309,6 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-    driverController.back().whileTrue(Commands.runOnce(() -> driveMode.toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -383,9 +361,15 @@ public class RobotContainer {
 
     // ================================================
     // DRIVER CONTROLLER - A
-    // PATHFIND TO SELECTED DRIVE MODE
+    // PATHFIND TO AMP
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow(driveMode.getDriveModeType()));
+    driverController.b().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - A
+    // PATHFIND TO AMP
+    // ================================================
+    driverController.a().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -411,10 +395,10 @@ public class RobotContainer {
     // ================================================
     driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
 
-    // AMP LOCATION
-    // operatorController.leftBumpeSCOREr().whileTrue(new PositionArmPID(armPID,
-    // 250));
-    // AMP
+    // ================================================
+    // OPERATOR CONTROLLER - LB
+    // SCORE AMP
+    // ================================================
     operatorController
         .leftBumper()
         .whileTrue(
@@ -427,8 +411,8 @@ public class RobotContainer {
                 }));
 
     // ================================================
-    // OPERATOR CONTROLLER - RIGHT BUMPER/TRIGGER
-    // BUMPER CHARGES SHOOTER, TRIGGER SHOOTS
+    // OPERATOR CONTROLLER - A/RT
+    // A - PREPARE SHOOT CLOSE, RT - FIRE
     // ================================================
     operatorController
         .a()
@@ -457,6 +441,10 @@ public class RobotContainer {
                     })
                 .alongWith(candle.setColorRespawnIdle()));
 
+    // ================================================
+    // OPERATOR CONTROLLER - B/RT
+    // B - PREPARE SHOOT FAR, RT - FIRE
+    // ================================================
     operatorController
         .b()
         .whileTrue( // Yousef and Toby Fixed This. :)
@@ -487,7 +475,7 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
-    // AIM SHOOTER AT SPEAKER
+    // AIM AT SPEAKER
     // ================================================
     operatorController
         .leftTrigger()
@@ -497,7 +485,7 @@ public class RobotContainer {
                 .alongWith(
                     new MultiDistanceArm(
                         drive::getPose,
-                        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening),
+                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                         armPID)));
     // driverController
     // .rightBumper()
@@ -507,7 +495,7 @@ public class RobotContainer {
     // driveMode.disableHeadingControl()));
 
     driverController
-        .b()
+        .back()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -516,40 +504,31 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    PathConstraints pathConstraints = new PathConstraints(4, 4, 540, 720);
-
-    SmartDashboard.putData(
-        "Pathfind to Trap Score 3",
-        AutoBuilder.pathfindThenFollowPath(
-            PathPlannerPath.fromPathFile("TrapScore3"), pathConstraints));
-
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION SUB SHOOT
+    // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8)); // "Sub shoot"
+    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION MIDFIELD SHOOT
+    // ARM POSITION STAGE SHOOT
     // ================================================
     operatorController
         .povRight()
-        .whileTrue(
-            new PositionArmPID(
-                armPID, 17.0)); // "Stage Shoot" // Was -16.25 and shot a little too high
+        .whileTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
-    // ARM POSITION AMP SHOOT
+    // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78)); // "Amp/Note Shoot"
+    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION PILLAR SHOOT
+    // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5)); // "Pillar Shoot"
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5));
   }
 
   /**

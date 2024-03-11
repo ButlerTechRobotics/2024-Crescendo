@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,12 +17,14 @@ import org.littletonrobotics.junction.AutoLogOutput;
 /** A command that angles the arm from multi-distance position from the target. */
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
-  Pose2d targetPose;
   ArmPositionPID armPID;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
   double angle;
+
+  Translation2d orignalPose;
+  Translation2d targetPose;
 
   /**
    * Creates a new MultiDistanceArm command.
@@ -30,19 +33,20 @@ public class MultiDistanceArm extends Command {
    * @param targetPose The target pose to shoot at.
    * @param armPID The arm subsystem.
    */
-  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmPositionPID armPID) {
+  public MultiDistanceArm(
+      Supplier<Pose2d> poseSupplier, Translation2d targetPose, ArmPositionPID armPID) {
     this.poseSupplier = poseSupplier;
-    this.targetPose = targetPose;
     this.armPID = armPID;
+    this.orignalPose = targetPose;
 
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
     distanceMap.put(1.5, 10.88);
     distanceMap.put(2.0, 14.00);
-    distanceMap.put(2.5, 17.5);
-    distanceMap.put(3.0, 21.0);
-    distanceMap.put(3.5, 22.12);
-    // distanceMap.put(4.0, 22.53);
+    distanceMap.put(2.5, 20.5);
+    distanceMap.put(3.0, 24.0);
+    distanceMap.put(3.5, 25.12);
+    distanceMap.put(4.0, 25.93);
     // distanceMap.put(4.5, 25.3);
     // distanceMap.put(5.0, 28.0);
     // distanceMap.put(5.5, 31.19);
@@ -51,14 +55,14 @@ public class MultiDistanceArm extends Command {
 
   @Override
   public void initialize() {
+    this.targetPose = AllianceFlipUtil.apply(orignalPose);
     // Apply any necessary transformations to the target pose
-    targetPose = AllianceFlipUtil.apply(targetPose);
   }
 
   @Override
   public void execute() {
     // Calculate the distance from the current pose to the target pose
-    distance = poseSupplier.get().getTranslation().getDistance(targetPose.getTranslation());
+    distance = poseSupplier.get().getTranslation().getDistance(targetPose);
 
     // Get the corresponding angle from the distance-angle map
     angle = distanceMap.get(distance);
@@ -73,7 +77,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(0.0);
+    armPID.setPosition(3.5);
   }
 
   @Override
@@ -98,7 +102,7 @@ public class MultiDistanceArm extends Command {
    * @return The angle in units per second.
    */
   @AutoLogOutput(key = "Arm/Angle")
-  public double getSpeed() {
+  public double getAngle() {
     return angle;
   }
 }
