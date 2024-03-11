@@ -67,7 +67,9 @@ public class Shooter extends SubsystemBase {
   public enum Goal {
     IDLE,
     SHOOTING,
+    SHOOTINGMID,
     SHOOTINGFAR,
+    SHOOTINGTRAP,
     INTAKING,
 
     CHARACTERIZATION
