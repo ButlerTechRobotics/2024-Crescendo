@@ -309,7 +309,7 @@ public class RobotContainer {
     // RUN INTAKE IN
     // ================================================
     driverController
-        .leftBumper()
+        .x()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 candle.runPrettyLightsCommand(),
@@ -334,6 +334,37 @@ public class RobotContainer {
                   rollers.setGoal(Rollers.Goal.IDLE);
                   superstructure.setGoal(Superstructure.SystemState.IDLE);
                 }));
+
+    // =========Temporary control, delete later====================
+    // DRIVER CONTROLLER - X
+    // RUN INTAKE OUT
+    // ================================================
+    // driverController
+    //     .leftBumper()
+    //     .whileTrue( // Tyler Fixed This. :)
+    //         Commands.sequence(
+    //             candle.runPrettyLightsCommand(),
+    //             Commands.runOnce(
+    //                 () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
+    //                 superstructure),
+    //             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+    //             Commands.waitUntil(() -> !rollers.getBeamBreak()),
+    //             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+    //             candle.setColorGreenCommand(),
+    //             Commands.waitUntil(() -> rollers.getBeamBreak()),
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   rollers.setGoal(Rollers.Goal.IDLE);
+    //                   superstructure.setGoal(Superstructure.SystemState.IDLE);
+    //                 }),
+    //             Commands.waitSeconds(0.5),
+    //             candle.setColorRespawnIdle()))
+    //     .onFalse(
+    //         Commands.runOnce(
+    //             () -> {
+    //               rollers.setGoal(Rollers.Goal.IDLE);
+    //               superstructure.setGoal(Superstructure.SystemState.IDLE);
+    //             }));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT TRIGGER
@@ -437,10 +468,42 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
-    // B - PREPARE SHOOT FAR, RT - FIRE
+    // B - PREPARE SHOOT Mid, RT - FIRE
     // ================================================
     operatorController
         .b()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTMID),
+                    superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorRespawnIdle()));
+
+    // ================================================
+    // OPERATOR CONTROLLER - B/RT
+    // Y - PREPARE SHOOT FAR, RT - FIRE
+    // ================================================
+    operatorController
+        .y()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
@@ -522,7 +585,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5));
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.0));
   }
 
   /**

@@ -20,10 +20,12 @@ public class Superstructure extends SubsystemBase {
 
   public enum SystemState {
     PREPARE_SHOOT,
+    PREPARE_SHOOTMID,
     PREPARE_SHOOTFAR,
 
     SHOOT,
     SHOOTFAR,
+    SHOOTMID,
     PREPARE_INTAKE,
     INTAKE,
     STATION_INTAKE,
@@ -52,8 +54,10 @@ public class Superstructure extends SubsystemBase {
       case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
       case INTAKE -> currentState = SystemState.INTAKE;
       case PREPARE_SHOOT -> currentState = SystemState.PREPARE_SHOOT;
+      case PREPARE_SHOOTMID -> currentState = SystemState.PREPARE_SHOOTMID;
       case PREPARE_SHOOTFAR -> currentState = SystemState.PREPARE_SHOOTFAR;
       case SHOOT -> currentState = SystemState.SHOOT;
+      case SHOOTMID -> currentState = SystemState.SHOOTMID;
       case SHOOTFAR -> currentState = SystemState.SHOOTFAR;
     }
 
@@ -73,16 +77,28 @@ public class Superstructure extends SubsystemBase {
       case REVERSE_INTAKE -> {
         // arm.setSetpoint(Rotation2d.fromDegrees(armIntakeSetpointDegrees.get()));
       }
+
       case PREPARE_SHOOT -> {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTING);
       }
+
+      case PREPARE_SHOOTMID -> {
+        // arm.setSetpoint(aimingParams.armAngle());
+        shooter.setGoal(Shooter.Goal.SHOOTINGMID);
+      }
+
       case PREPARE_SHOOTFAR -> {
         // arm.setSetpoint(aimingParams.armAngle());
         shooter.setGoal(Shooter.Goal.SHOOTINGFAR);
       }
+
       case SHOOT -> {
         shooter.setGoal(Shooter.Goal.SHOOTING);
+        // arm.setSetpoint(aimingParams.armAngle());
+      }
+      case SHOOTMID -> {
+        shooter.setGoal(Shooter.Goal.SHOOTINGMID);
         // arm.setSetpoint(aimingParams.armAngle());
       }
       case SHOOTFAR -> {
