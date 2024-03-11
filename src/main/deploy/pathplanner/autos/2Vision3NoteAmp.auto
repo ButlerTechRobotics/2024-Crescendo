@@ -59,6 +59,12 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "toAutoAimAmpSide"
+                }
+              },
+              {
                 "type": "named",
                 "data": {
                   "name": "Auto Aim"
@@ -77,7 +83,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -120,7 +126,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "toShootNote4"
+            "pathName": "toAutoAimAmpSide"
           }
         },
         {
@@ -159,6 +165,31 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
           }
         },
         {

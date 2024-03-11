@@ -372,6 +372,12 @@ public class RobotContainer {
     driverController.b().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
 
     // ================================================
+    // DRIVER CONTROLLER - X
+    // PATHFIND TO AMP
+    // ================================================
+    driverController.x().whileTrue(new PathFinderAndFollow("Trap Amp Side"));
+
+    // ================================================
     // DRIVER CONTROLLER - START
     // SET AUTO START POSE (i think it sets the heading)
     // ================================================
