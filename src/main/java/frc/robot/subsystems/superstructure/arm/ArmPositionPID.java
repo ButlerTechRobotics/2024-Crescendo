@@ -22,9 +22,9 @@ public class ArmPositionPID extends SubsystemBase {
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  TunableNumber kP = new TunableNumber("Arm P Gain", 0.057); // .00566
-  TunableNumber kI = new TunableNumber("Arm I Gain", 0.00023); // 0.000228
-  TunableNumber kD = new TunableNumber("Arm D Gain", 0.0013); // 0.00134
+  TunableNumber kP = new TunableNumber("Arm P Gain", 0.056); // .00566
+  TunableNumber kI = new TunableNumber("Arm I Gain", 0.000232); // 0.000228
+  TunableNumber kD = new TunableNumber("Arm D Gain", 0.00136); // 0.00134
   TunableNumber kFF = new TunableNumber("Arm FF Gain", 0.000); // .0
 
   /** Creates a new SparkMaxClosedLoop. */

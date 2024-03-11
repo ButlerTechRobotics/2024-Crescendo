@@ -332,7 +332,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.1),
                 candle.setColorOperationIdle()))
         .onFalse(
             Commands.runOnce(
