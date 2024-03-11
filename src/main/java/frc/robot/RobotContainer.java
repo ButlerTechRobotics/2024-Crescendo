@@ -327,7 +327,7 @@ public class RobotContainer {
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
                 Commands.waitSeconds(0.5),
-                candle.setColorRespawnIdle()))
+                candle.setColorOperationIdle()))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -357,13 +357,19 @@ public class RobotContainer {
     // DRIVER CONTROLLER - A
     // PATHFIND TO AMP
     // ================================================
-    driverController.b().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
 
     // ================================================
-    // DRIVER CONTROLLER - A
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
+    // ================================================
+    driverController.b().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - X
     // PATHFIND TO AMP
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+    driverController.x().whileTrue(new PathFinderAndFollow("Trap Far Side"));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -433,7 +439,70 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
+
+    // ================================================
+    // OPERATOR CONTROLLER - B/RT
+    // B - PREPARE SHOOT FAR, RT - FIRE
+    // ================================================
+    operatorController
+        .b()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
+                    superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
+
+    // ================================================
+    // OPERATOR CONTROLLER - X/RT
+    // X - PREPARE SHOOT TRAP, RT - FIRE
+    // ================================================
+    operatorController
+        .x()
+        .whileTrue( // Yousef and Toby Fixed This. :)
+            Commands.sequence(
+                candle.runPrepareShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTTRAP),
+                    superstructure),
+                Commands.waitUntil(operatorController.rightTrigger()),
+                candle.runShootCommand(),
+                Commands.runOnce(
+                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(1.0),
+                Commands.runOnce(
+                    () -> {
+                      shooter.setGoal(Shooter.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })))
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      superstructure.setGoal(Superstructure.SystemState.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
