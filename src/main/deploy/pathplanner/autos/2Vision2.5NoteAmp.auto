@@ -59,12 +59,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "toAutoAimAmpSide"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Auto Aim"
@@ -190,12 +184,6 @@
           "type": "named",
           "data": {
             "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Heading Reset"
           }
         }
       ]

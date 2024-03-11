@@ -28,10 +28,10 @@ public final class DriveConstants {
                 Units.inchesToMeters(2.0), // double wheelRadius
                 Units.inchesToMeters(26.0), // double trackwidthX
                 Units.inchesToMeters(26.0), // double trackwidthY
-                Units.feetToMeters(11.637), // double maxLinearVelocity
-                Units.feetToMeters(48.426), // double maxLinearAcceleration
-                7.595, // double maxAngularVelocity
-                68.088); // double maxAngularAcceleration)
+                Units.feetToMeters(12.16), // double maxLinearVelocity
+                Units.feetToMeters(21.32), // double maxLinearAcceleration
+                7.93, // double maxAngularVelocity
+                29.89); // double maxAngularAcceleration)
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -47,11 +47,10 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
-  // TODO tune odometry frequency
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 250.0;
+        case COMPBOT -> 100.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -142,13 +141,13 @@ public final class DriveConstants {
   // 0.0, 0.0
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(10, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 

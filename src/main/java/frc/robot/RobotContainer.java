@@ -203,6 +203,12 @@ public class RobotContainer {
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
             superstructure));
 
+    NamedCommands.registerCommand(
+        "PreShootFar",
+        Commands.runOnce(
+            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
+            superstructure));
+
     // ================================================
     // Register the Auto Command Shoot
     // ================================================
