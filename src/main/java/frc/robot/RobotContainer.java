@@ -363,13 +363,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - A
     // PATHFIND TO AMP
     // ================================================
-    driverController.b().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
 
     // ================================================
-    // DRIVER CONTROLLER - A
-    // PATHFIND TO AMP
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
     // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+    driverController.b().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
 
     // ================================================
     // DRIVER CONTROLLER - START
