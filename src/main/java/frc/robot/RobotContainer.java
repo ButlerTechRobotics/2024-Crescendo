@@ -309,7 +309,7 @@ public class RobotContainer {
     // RUN INTAKE IN
     // ================================================
     driverController
-        .x()
+        .leftBumper()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 candle.runPrettyLightsCommand(),
@@ -327,7 +327,7 @@ public class RobotContainer {
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
                 Commands.waitSeconds(0.5),
-                candle.setColorOperationIdle()))
+                candle.setColorRespawnIdle()))
         .onFalse(
             Commands.runOnce(
                 () -> {
@@ -470,7 +470,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorOperationIdle()));
+                .alongWith(candle.setColorRespawnIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
@@ -502,7 +502,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorOperationIdle()));
+                .alongWith(candle.setColorRespawnIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - X/RT
@@ -533,7 +533,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorOperationIdle()));
+                .alongWith(candle.setColorRespawnIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT

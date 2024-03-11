@@ -35,7 +35,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(false); // NEEDS TO BE FALSE
+    motor.setInverted(true); // NEEDS TO BE TRUE
 
     // motor.setIdleMode(IdleMode.kBrake);
 

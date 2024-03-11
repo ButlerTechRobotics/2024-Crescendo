@@ -28,10 +28,10 @@ public final class DriveConstants {
                 Units.inchesToMeters(2.0), // double wheelRadius
                 Units.inchesToMeters(26.0), // double trackwidthX
                 Units.inchesToMeters(26.0), // double trackwidthY
-                Units.feetToMeters(11.637), // double maxLinearVelocity
-                Units.feetToMeters(48.426), // double maxLinearAcceleration
-                7.595, // double maxAngularVelocity
-                68.088); // double maxAngularAcceleration)
+                Units.feetToMeters(12.16), // double maxLinearVelocity
+                Units.feetToMeters(21.32), // double maxLinearAcceleration
+                7.93, // double maxAngularVelocity
+                29.89); // double maxAngularAcceleration)
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -51,7 +51,7 @@ public final class DriveConstants {
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 250.0;
+        case COMPBOT -> 100.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -79,25 +79,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.372314).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.132812).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.181885).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.021729).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.238770).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(-0.385498).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
