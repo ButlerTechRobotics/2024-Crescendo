@@ -35,7 +35,7 @@ public class ArmPositionPID extends SubsystemBase {
     pidController.setD(kD.get());
     // pidController.setFF(kFF.get());
 
-    motor.setInverted(false); // NEEDS TO BE FALSE
+    motor.setInverted(true); // NEEDS TO BE TRUE
 
     // motor.setIdleMode(IdleMode.kBrake);
 
@@ -75,7 +75,7 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.12; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.125; // Adjust this value to control the down speed
     double upSpeedFactor = 0.2; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
