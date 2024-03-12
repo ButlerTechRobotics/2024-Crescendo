@@ -185,7 +185,7 @@ public class RobotContainer {
                 drive::getPose,
                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                 armPID)
-            .withTimeout(2) // Add a 2-second timeout to the command
+            .withTimeout(3) // Add a 2-second timeout to the command
             .andThen(
                 new InstantCommand(
                     () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
@@ -197,6 +197,15 @@ public class RobotContainer {
         "PreShoot",
         Commands.runOnce(
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+            superstructure));
+
+    // ================================================
+    // Register the Auto Command PreShootMID
+    // ================================================
+    NamedCommands.registerCommand(
+        "PreShootMID",
+        Commands.runOnce(
+            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
             superstructure));
 
     // ================================================
