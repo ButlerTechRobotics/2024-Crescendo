@@ -43,17 +43,17 @@ public class MultiDistanceArm extends Command {
     this.orignalPose = targetPose;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.0, 3.5);
-    distanceMap.put(1.5, 3.5);
-    distanceMap.put(2.0, 14.00);
-    distanceMap.put(2.5, 18.0);
-    distanceMap.put(3.0, 21.5);
-    distanceMap.put(3.5, 22.8);
-    distanceMap.put(4.0, 22.93);
-    distanceMap.put(4.5, 28.75);
-    distanceMap.put(5.0, 29.50);
-    distanceMap.put(5.5, 30.20);
-    distanceMap.put(6.0, 34.475);
+    distanceMap.put(1.0, 0.0); // 3.5
+    distanceMap.put(1.5, 4.0 + 0.7); // 3.5
+    distanceMap.put(2.0, 12.02 + 0.7);
+    distanceMap.put(2.5, 18.4 + 0.7);
+    distanceMap.put(3.0, 21.9 + 0.7);
+    distanceMap.put(3.5, 23.95 + 0.7);
+    distanceMap.put(4.0, 25.58 + 0.7);
+    distanceMap.put(4.5, 26.91 + 0.7);
+    distanceMap.put(5.0, 27.60 + 0.7);
+    // distanceMap.put(5.5, 30.20+0.7);
+    // distanceMap.put(6.0, 34.475);
   }
 
   @Override
@@ -80,7 +80,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(3.5);
+    armPID.setPosition(2.15);
   }
 
   @Override

@@ -192,7 +192,7 @@ public class RobotContainer {
     // Register the Arm Reset Command
     // ================================================
 
-    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(3.5)));
+    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(2.15)));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -332,7 +332,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     }),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(0.1),
                 candle.setColorOperationIdle()))
         .onFalse(
             Commands.runOnce(
@@ -565,7 +565,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5));
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.15));
   }
 
   /**
