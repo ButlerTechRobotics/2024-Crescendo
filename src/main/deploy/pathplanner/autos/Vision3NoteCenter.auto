@@ -130,21 +130,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toIntakePosCenter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "toParkPosCenter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Heading Reset"
           }
         }
       ]

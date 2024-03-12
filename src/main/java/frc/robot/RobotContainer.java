@@ -209,6 +209,15 @@ public class RobotContainer {
             superstructure));
 
     // ================================================
+    // Register the Auto Command PreShootFar
+    // ================================================
+    NamedCommands.registerCommand(
+        "PreShootFar",
+        Commands.runOnce(
+            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
+            superstructure));
+
+    // ================================================
     // Register the Auto Command Shoot
     // ================================================
     NamedCommands.registerCommand(
@@ -669,9 +678,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController
-        .povRight()
-        .onTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
+    operatorController.povRight().onTrue(new PositionArmPID(armPID, 59.98953467578964314576));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
