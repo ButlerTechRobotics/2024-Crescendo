@@ -51,9 +51,12 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(3.5, 24.98 + 0.7);
     distanceMap.put(4.0, 29.75 + 0.7); // 29.85
     distanceMap.put(4.5, 32.04 + 0.7);
-    distanceMap.put(5.0, 33.2 + 0.7);
-    distanceMap.put(5.5, 34.50 + 0.7);
-    // distanceMap.put(6.0, 34.475);
+    distanceMap.put(5.0, 32.2 + 0.7);
+    distanceMap.put(5.5, 32.50 + 0.7);
+    distanceMap.put(6.0, 32.675);
+    distanceMap.put(6.5, 32.875);
+    distanceMap.put(7.0, 33.375);
+    distanceMap.put(8.0, 34.175);
   }
 
   @Override
