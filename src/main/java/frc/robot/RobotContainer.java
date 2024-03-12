@@ -188,7 +188,7 @@ public class RobotContainer {
             .withTimeout(3) // Add a 2-second timeout to the command
             .andThen(
                 new InstantCommand(
-                    () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
+                    () -> armPID.setPosition(2.15), armPID))); // Reset the arm position
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -486,7 +486,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
@@ -518,7 +518,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - X/RT
@@ -550,7 +550,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
@@ -582,7 +582,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
@@ -614,7 +614,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                       superstructure.setGoal(Superstructure.SystemState.IDLE);
                     })
-                .alongWith(candle.setColorRespawnIdle()));
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
@@ -651,7 +651,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+    operatorController.povUp().onTrue(new PositionArmPID(armPID, 90));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
