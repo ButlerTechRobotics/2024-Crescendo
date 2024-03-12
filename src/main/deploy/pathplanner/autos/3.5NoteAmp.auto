@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": "Auto Aim2sec"
                 }
               },
               {
@@ -124,16 +124,9 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": "Auto Aim4sec"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "sequential",
                 "data": {
@@ -147,7 +140,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 2.75
                       }
                     },
                     {
