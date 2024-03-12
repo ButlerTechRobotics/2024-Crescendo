@@ -22,13 +22,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
 import frc.robot.commands.PathFinderAndFollow;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
-import frc.robot.commands.climber.PositionClimbPID;
 // import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
@@ -178,21 +178,38 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Aim Command
     // ================================================
+    // Register the Auto Aim Command
     NamedCommands.registerCommand(
         "Auto Aim",
-        Commands.startEnd(
-                () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-            .alongWith(
-                new MultiDistanceArm(
-                    drive::getPose,
-                    FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                    armPID)));
-
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(2) // Add a 2-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
+    // after the command
+    // finishes
     // ================================================
     // Register the Arm Reset Command
     // ================================================
 
-    NamedCommands.registerCommand("Arm Reset", Commands.runOnce(() -> armPID.setPosition(3.5)));
+    // NamedCommands.registerCommand(
+    //         "Arm Reset",
+    //         Commands.runOnce(
+    //                 () -> {
+    //                     // Cancel the Auto Aim command
+    //                     NamedCommands.getCommand("Auto Aim").cancel();
+
+    //                     // Reset the arm position
+    //                     armPID.setPosition(3.5);
+    //                 }));
+
+    // NamedCommands.registerCommand(
+    // "Stop Auto Aim",
+    // new InstantCommand(() -> NamedCommands.getCommand("Auto Aim").cancel(),
+    // armPID));
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -274,8 +291,7 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Command ShooterPosLeft
     // ================================================
-    NamedCommands.registerCommand(
-        "ArmPositionAmp", Commands.runOnce(() -> armPID.setPosition(78.0)));
+    NamedCommands.registerCommand("ArmPositionAmp", Commands.run(() -> armPID.setPosition(78.0)));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -394,7 +410,19 @@ public class RobotContainer {
     // DRIVER CONTROLLER - B
     // PATHFIND TO SPEAKER
     // ================================================
-    driverController.b().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+    driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
+    // ================================================
+    driverController.povDown().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
+    // ================================================
+    driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
 
     // ================================================
     // DRIVER CONTROLLER - X
@@ -418,13 +446,13 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    // driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
+    // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
@@ -635,7 +663,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().whileTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
@@ -643,21 +671,19 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povRight()
-        .whileTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
+        .onTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController
-        .povLeft()
-        .whileTrue(new PositionArmPID(armPID, 78))
-        .whileFalse(new PositionArmPID(armPID, 0));
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 78));
+    // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 3.5));
+    operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.5));
   }
 
   /**
