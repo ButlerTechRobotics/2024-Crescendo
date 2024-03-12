@@ -185,7 +185,29 @@ public class RobotContainer {
                 drive::getPose,
                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                 armPID)
-            .withTimeout(3) // Add a 2-second timeout to the command
+            .withTimeout(3) // Add a 3-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
+
+    NamedCommands.registerCommand(
+        "Auto Aim 2sec",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(2) // Add a 2-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
+
+    NamedCommands.registerCommand(
+        "Auto Aim 4sec",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(4) // Add a 4-second timeout to the command
             .andThen(
                 new InstantCommand(
                     () -> armPID.setPosition(2.1), armPID))); // Reset the arm position

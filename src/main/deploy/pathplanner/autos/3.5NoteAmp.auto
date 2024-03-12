@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": "Auto Aim 2sec"
                 }
               },
               {
@@ -112,15 +112,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "toAutoAimAmpSide"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toAutoAimAmpSide"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -140,7 +140,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 2.5
                       }
                     },
                     {
