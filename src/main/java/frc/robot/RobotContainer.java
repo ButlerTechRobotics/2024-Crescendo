@@ -189,27 +189,6 @@ public class RobotContainer {
             .andThen(
                 new InstantCommand(
                     () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
-    // after the command
-    // finishes
-    // ================================================
-    // Register the Arm Reset Command
-    // ================================================
-
-    // NamedCommands.registerCommand(
-    //         "Arm Reset",
-    //         Commands.runOnce(
-    //                 () -> {
-    //                     // Cancel the Auto Aim command
-    //                     NamedCommands.getCommand("Auto Aim").cancel();
-
-    //                     // Reset the arm position
-    //                     armPID.setPosition(3.5);
-    //                 }));
-
-    // NamedCommands.registerCommand(
-    // "Stop Auto Aim",
-    // new InstantCommand(() -> NamedCommands.getCommand("Auto Aim").cancel(),
-    // armPID));
 
     // ================================================
     // Register the Auto Command PreShoot
