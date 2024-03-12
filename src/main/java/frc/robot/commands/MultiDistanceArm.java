@@ -80,7 +80,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(3.5);
+    armPID.setPosition(2.15);
   }
 
   @Override
