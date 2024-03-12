@@ -47,7 +47,6 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
-  // TODO tune odometry frequency
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
@@ -79,25 +78,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(0.132812).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.372314).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.021729).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.181885).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.238770).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(-0.385498).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))

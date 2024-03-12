@@ -33,12 +33,12 @@ public class Shooter extends SubsystemBase {
   private static LoggedTunableNumber shootingMidTopRPM =
       new LoggedTunableNumber("Superstructure/ShootingMidTopRPM", 3700.0);
   private static LoggedTunableNumber shootingMidBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingMidBottomRPM", 3500.0);
+      new LoggedTunableNumber("Superstructure/ShootingMidBottomRPM", 3450.0);
 
   private static LoggedTunableNumber shootingFarTopRPM =
-      new LoggedTunableNumber("Superstructure/ShootingFarTopRPM", 4000.0);
+      new LoggedTunableNumber("Superstructure/ShootingFarTopRPM", 3950.0);
   private static LoggedTunableNumber shootingFarBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingFarBottomRPM", 3900.0);
+      new LoggedTunableNumber("Superstructure/ShootingFarBottomRPM", 3650.0);
 
   private static LoggedTunableNumber shootingTrapTopRPM =
       new LoggedTunableNumber("Superstructure/ShootingTrapTopRPM", 2750.0);

@@ -188,7 +188,7 @@ public class RobotContainer {
             .withTimeout(3) // Add a 2-second timeout to the command
             .andThen(
                 new InstantCommand(
-                    () -> armPID.setPosition(2.15), armPID))); // Reset the arm position
+                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -395,28 +395,40 @@ public class RobotContainer {
     driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
 
     // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povDown().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
-
-    // ================================================
     // DRIVER CONTROLLER - X
-    // PATHFIND TO AMP
+    // PATHFIND TO SOURCE-SIDE SPEAKER
     // ================================================
-    driverController.x().whileTrue(new PathFinderAndFollow("Trap Far Side"));
+    driverController.x().whileTrue(new PathFinderAndFollow("toPos1"));
+
+    // ================================================
+    // DRIVER CONTROLLER - Y
+    // PATHFIND TO MIDDLE SPEAKER
+    // ================================================
+    driverController.y().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO AMP-SIDE SPEAKER
+    // ================================================
+    driverController.b().whileTrue(new PathFinderAndFollow("toPos3"));
+
+    // ================================================
+    // DRIVER CONTROLLER - UP D-PAD
+    // PATHFIND TO FAR-SIDE TRAP
+    // ================================================
+    driverController.povUp().whileTrue(new PathFinderAndFollow("Trap Far Side"));
+
+    // ================================================
+    // DRIVER CONTROLLER - LEFT D-PAD
+    // PATHFIND TO SOURCE-SIDE TRAP
+    // ================================================
+    driverController.povLeft().whileTrue(new PathFinderAndFollow("Trap Source Side"));
+
+    // ================================================
+    // DRIVER CONTROLLER - RIGHT D-PAD
+    // PATHFIND TO AMP-SIDE TRAP
+    // ================================================
+    driverController.povRight().whileTrue(new PathFinderAndFollow("Trap Amp Side"));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -671,7 +683,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.15));
+    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.1));
   }
 
   /**
