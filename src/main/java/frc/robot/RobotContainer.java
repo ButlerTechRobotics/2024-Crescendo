@@ -185,7 +185,7 @@ public class RobotContainer {
                 drive::getPose,
                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                 armPID)
-            .withTimeout(3) // Add a 2-second timeout to the command
+            .withTimeout(2) // Add a 2-second timeout to the command
             .andThen(
                 new InstantCommand(
                     () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
@@ -659,13 +659,14 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povRight()
-        .onTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
+        .onTrue(new PositionArmPID(armPID, 55)); // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 78));
+
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
