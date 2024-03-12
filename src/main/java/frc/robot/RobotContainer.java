@@ -340,31 +340,31 @@ public class RobotContainer {
     // RUN INTAKE OUT
     // ================================================
     // driverController
-    //     .leftBumper()
-    //     .whileTrue( // Tyler Fixed This. :)
-    //         Commands.sequence(
-    //             candle.runPrettyLightsCommand(),
-    //             Commands.runOnce(
-    //                 () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
-    //                 superstructure),
-    //             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
-    //             Commands.waitUntil(() -> !rollers.getBeamBreak()),
-    //             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-    //             candle.setColorGreenCommand(),
-    //             Commands.waitUntil(() -> rollers.getBeamBreak()),
-    //             Commands.runOnce(
-    //                 () -> {
-    //                   rollers.setGoal(Rollers.Goal.IDLE);
-    //                   superstructure.setGoal(Superstructure.SystemState.IDLE);
-    //                 }),
-    //             Commands.waitSeconds(0.5),
-    //             candle.setColorRespawnIdle()))
-    //     .onFalse(
-    //         Commands.runOnce(
-    //             () -> {
-    //               rollers.setGoal(Rollers.Goal.IDLE);
-    //               superstructure.setGoal(Superstructure.SystemState.IDLE);
-    //             }));
+    // .leftBumper()
+    // .whileTrue( // Tyler Fixed This. :)
+    // Commands.sequence(
+    // candle.runPrettyLightsCommand(),
+    // Commands.runOnce(
+    // () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
+    // superstructure),
+    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+    // Commands.waitUntil(() -> !rollers.getBeamBreak()),
+    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+    // candle.setColorGreenCommand(),
+    // Commands.waitUntil(() -> rollers.getBeamBreak()),
+    // Commands.runOnce(
+    // () -> {
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // superstructure.setGoal(Superstructure.SystemState.IDLE);
+    // }),
+    // Commands.waitSeconds(0.5),
+    // candle.setColorRespawnIdle()))
+    // .onFalse(
+    // Commands.runOnce(
+    // () -> {
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // superstructure.setGoal(Superstructure.SystemState.IDLE);
+    // }));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT TRIGGER
@@ -649,8 +649,10 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().whileTrue(new PositionArmPID(armPID, 78));
-
+    operatorController
+        .povLeft()
+        .whileTrue(new PositionArmPID(armPID, 78))
+        .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
