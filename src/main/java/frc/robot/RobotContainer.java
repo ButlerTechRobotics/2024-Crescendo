@@ -180,36 +180,48 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Aim Command
     NamedCommands.registerCommand(
-        "Auto Aim",
+        "Auto Aim1sec",
         new MultiDistanceArm(
                 drive::getPose,
                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
                 armPID)
-            .withTimeout(2) // Add a 2-second timeout to the command
+            .withTimeout(1) // Add a 3-second timeout to the command
             .andThen(
                 new InstantCommand(
                     () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
-    // after the command
-    // finishes
-    // ================================================
-    // Register the Arm Reset Command
-    // ================================================
 
-    // NamedCommands.registerCommand(
-    //         "Arm Reset",
-    //         Commands.runOnce(
-    //                 () -> {
-    //                     // Cancel the Auto Aim command
-    //                     NamedCommands.getCommand("Auto Aim").cancel();
+    NamedCommands.registerCommand(
+        "Auto Aim2sec",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(2) // Add a 3-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
 
-    //                     // Reset the arm position
-    //                     armPID.setPosition(3.5);
-    //                 }));
+    NamedCommands.registerCommand(
+        "Auto Aim3sec",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(3) // Add a 3-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
 
-    // NamedCommands.registerCommand(
-    // "Stop Auto Aim",
-    // new InstantCommand(() -> NamedCommands.getCommand("Auto Aim").cancel(),
-    // armPID));
+    NamedCommands.registerCommand(
+        "Auto Aim4sec",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(4) // Add a 3-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(3.5), armPID))); // Reset the arm position
 
     // ================================================
     // Register the Auto Command PreShoot
@@ -218,6 +230,15 @@ public class RobotContainer {
         "PreShoot",
         Commands.runOnce(
             () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
+            superstructure));
+
+    // ================================================
+    // Register the Auto Command PreShootMID
+    // ================================================
+    NamedCommands.registerCommand(
+        "PreShootMID",
+        Commands.runOnce(
+            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
             superstructure));
 
     // ================================================
@@ -671,13 +692,14 @@ public class RobotContainer {
     // ================================================
     operatorController
         .povRight()
-        .onTrue(new PositionArmPID(armPID, 17.0)); // Was -16.25 and shot a little too high
+        .onTrue(new PositionArmPID(armPID, 55)); // Was -16.25 and shot a little too high
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 78));
+
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN

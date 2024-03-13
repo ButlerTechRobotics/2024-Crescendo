@@ -44,16 +44,18 @@ public class MultiDistanceArm extends Command {
 
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
-    distanceMap.put(1.5, 7.88); // 7.88
-    distanceMap.put(2.0, 12.00); // 12.02
-    distanceMap.put(2.5, 18.0); // 17.95
-    distanceMap.put(3.0, 21.2); // 21.05
-    distanceMap.put(3.5, 22.80); // 22.8
-    distanceMap.put(4.0, 24.453); // 24.5 (95%)
-    distanceMap.put(4.5, 25.3);
-    // distanceMap.put(5.0, 26.8);
-    // distanceMap.put(5.5, 31.19);
-    // distanceMap.put(6.0, 34.475);
+    distanceMap.put(1.5, 7.88); // 7.88 (V3s)
+    distanceMap.put(2.0, 12.02); // 12.02(V3s)
+    distanceMap.put(2.5, 18.15); // 18.15(V3s)
+    distanceMap.put(3.0, 21.90); // 21.98(V3s)
+    distanceMap.put(3.5, 23.10); // 23.3(V3s)
+    distanceMap.put(3.75, 24.28); // 23.6 (old) 23.8(V3s)
+    distanceMap.put(4.0, 24.96); // 24.5 (old 95%) 24.52 (V3s)
+    distanceMap.put(4.2, 26.02);
+    distanceMap.put(4.5, 27.40);
+    distanceMap.put(5.0, 27.5);
+    distanceMap.put(5.5, 28.6);
+    distanceMap.put(6.0, 30.2);
   }
 
   @Override

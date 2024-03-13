@@ -6,15 +6,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "PreShoot"
+            "waitTime": 1.5
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "PreShoot"
           }
         },
         {
@@ -27,12 +27,6 @@
           "type": "named",
           "data": {
             "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Heading Reset"
           }
         }
       ]
