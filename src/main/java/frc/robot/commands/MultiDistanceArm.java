@@ -16,6 +16,7 @@ import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 /** A command that angles the arm from multi-distance position from the target. */
 public class MultiDistanceArm extends Command {
@@ -97,8 +98,9 @@ public class MultiDistanceArm extends Command {
    *
    * @return The distance in units.
    */
-  @AutoLogOutput(key = "Arm/DistanceToTarget")
+  @AutoLogOutput(key = "Arm/Distance")
   public double getDistance() {
+    Logger.recordOutput("Arm/Distance", distance);
     return distance;
   }
 

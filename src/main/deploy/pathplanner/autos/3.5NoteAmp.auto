@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim 2sec"
+                  "name": "Auto Aim2sec"
                 }
               },
               {
@@ -124,7 +124,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": "Auto Aim4sec"
                 }
               },
               {
@@ -134,13 +134,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "PreShoot"
+                        "name": "PreShootFar"
                       }
                     },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.5
+                        "waitTime": 2.75
                       }
                     },
                     {
