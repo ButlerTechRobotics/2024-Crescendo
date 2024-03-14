@@ -83,6 +83,6 @@ public class ArmPositionPID extends SubsystemBase {
     measuredVisualizer.update(getPosition());
     setpointVisualizer.update(targetAngle);
     Logger.recordOutput("Arm/SetAngle", targetAngle);
-    Logger.recordOutput("ArmCurrentAngle", getPosition());
+    Logger.recordOutput("Arm/CurrentAngle", getPosition());
   }
 }
