@@ -18,7 +18,9 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-/** A command that angles the arm from multi-distance position from the target. */
+/**
+ * A command that angles the arm from multi-distance position from the target.
+ */
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
   ArmPositionPID armPID;
@@ -34,8 +36,8 @@ public class MultiDistanceArm extends Command {
    * Creates a new MultiDistanceArm command.
    *
    * @param poseSupplier The supplier for the robot's current pose.
-   * @param targetPose The target pose to shoot at.
-   * @param armPID The arm subsystem.
+   * @param targetPose   The target pose to shoot at.
+   * @param armPID       The arm subsystem.
    */
   public MultiDistanceArm(
       Supplier<Pose2d> poseSupplier, Translation2d targetPose, ArmPositionPID armPID) {
@@ -52,8 +54,8 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(3.5, 23.0); // 23.10 match 23.3(V3s)
     distanceMap.put(3.75, 23.7); // 23.6 (old) 23.8(V3s)
     distanceMap.put(4.0, 24.56); // 24.5 (old 95%) 24.52 (V3s)
-    distanceMap.put(4.2, 25.77);//26.02
-    distanceMap.put(4.5, 26.96);//27.40
+    distanceMap.put(4.2, 25.77);// 26.02
+    distanceMap.put(4.5, 26.96);// 27.40
     distanceMap.put(5.0, 27.5);
     distanceMap.put(5.5, 28.3);
     distanceMap.put(6.0, 29.2);
