@@ -321,7 +321,7 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Command ShooterPosLeft
     // ================================================
-    NamedCommands.registerCommand("ArmPositionAmp", Commands.run(() -> armPID.setPosition(78.0)));
+    NamedCommands.registerCommand("ArmPositionAmp", Commands.run(() -> armPID.setPosition(81.0)));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -707,7 +707,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 78));
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 81));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
