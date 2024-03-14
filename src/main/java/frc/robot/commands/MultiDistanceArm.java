@@ -48,15 +48,15 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(1.5, 7.88); // 7.88 (V3s)
     distanceMap.put(2.0, 12.02); // 12.02(V3s)
     distanceMap.put(2.5, 18.15); // 18.15(V3s)
-    distanceMap.put(3.0, 21.75); // 21.9 match 21.98(V3s)
-    distanceMap.put(3.5, 22.92); // 23.10 match 23.3(V3s)
-    distanceMap.put(3.75, 24.0); // 23.6 (old) 23.8(V3s)
-    distanceMap.put(4.0, 24.82); // 24.5 (old 95%) 24.52 (V3s)
-    distanceMap.put(4.2, 26.02);
-    distanceMap.put(4.5, 27.40);
+    distanceMap.put(3.0, 21.84); // 21.9 match 21.98(V3s)
+    distanceMap.put(3.5, 23.06); // 23.10 match 23.3(V3s)
+    distanceMap.put(3.75, 23.8); // 23.6 (old) 23.8(V3s)
+    distanceMap.put(4.0, 24.6); // 24.5 (old 95%) 24.52 (V3s)
+    distanceMap.put(4.2, 25.77);//26.02
+    distanceMap.put(4.5, 26.96);//27.40
     distanceMap.put(5.0, 27.5);
-    distanceMap.put(5.5, 28.6);
-    distanceMap.put(6.0, 30.2);
+    distanceMap.put(5.5, 28.3);
+    distanceMap.put(6.0, 29.2);
   }
 
   @Override
