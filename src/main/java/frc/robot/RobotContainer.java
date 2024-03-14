@@ -700,7 +700,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().onTrue(new PositionArmPID(armPID, 30));
+    operatorController.povRight().onTrue(new PositionArmPID(armPID, 58.2546556566));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
