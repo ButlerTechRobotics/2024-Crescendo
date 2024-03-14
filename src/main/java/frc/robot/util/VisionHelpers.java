@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 325 & 144
+// Copyright (c) 2024 FRC 9597
 // https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
@@ -38,7 +38,7 @@ public class VisionHelpers {
       /** The average distance to the detected tags. */
       double averageTagDistance,
       /** The IDs of the detected tags. */
-      int[] tagIDs) {
+      double tagCount) {
 
     /**
      * Checks if this pose estimate is equal to another object.
@@ -55,7 +55,7 @@ public class VisionHelpers {
         return false;
       }
       PoseEstimate other = (PoseEstimate) obj;
-      return Arrays.equals(tagIDs, other.tagIDs)
+      return Double.compare(tagCount, other.tagCount) == 0
           && Objects.equals(pose, other.pose)
           && Double.compare(timestampSeconds, other.timestampSeconds) == 0
           && Double.compare(averageTagDistance, other.averageTagDistance) == 0;
@@ -69,10 +69,7 @@ public class VisionHelpers {
     @Override
     public int hashCode() {
       return Objects.hash(
-          Arrays.hashCode(getPose3dToArray(pose)),
-          timestampSeconds,
-          averageTagDistance,
-          Arrays.hashCode(tagIDs));
+          Arrays.hashCode(getPose3dToArray(pose)), timestampSeconds, averageTagDistance, tagCount);
     }
 
     /**
@@ -90,7 +87,7 @@ public class VisionHelpers {
           + ", averageTagDistance="
           + Double.toString(averageTagDistance)
           + ", tagIDs="
-          + Arrays.toString(tagIDs)
+          + Double.toString(tagCount)
           + '}';
     }
   }

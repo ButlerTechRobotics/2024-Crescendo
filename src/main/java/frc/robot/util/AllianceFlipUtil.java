@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -10,18 +10,13 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import java.util.Optional;
 
 /** Utility functions for flipping from the blue to red alliance. */
 public class AllianceFlipUtil {
-  /**
-   * Flips an x coordinate to the correct side of the field based on the current alliance color.
-   *
-   * @param xCoordinate The x coordinate to be flipped.
-   * @return The flipped x coordinate.
-   */
+  /** Flips an x coordinate to the correct side of the field based on the current alliance color. */
   public static double apply(double xCoordinate) {
     if (shouldFlip()) {
       return FieldConstants.fieldLength - xCoordinate;
@@ -30,12 +25,7 @@ public class AllianceFlipUtil {
     }
   }
 
-  /**
-   * Flips a translation to the correct side of the field based on the current alliance color.
-   *
-   * @param translation The translation to be flipped.
-   * @return The flipped translation.
-   */
+  /** Flips a translation to the correct side of the field based on the current alliance color. */
   public static Translation2d apply(Translation2d translation) {
     if (shouldFlip()) {
       return new Translation2d(apply(translation.getX()), translation.getY());
@@ -44,12 +34,7 @@ public class AllianceFlipUtil {
     }
   }
 
-  /**
-   * Flips a rotation based on the current alliance color.
-   *
-   * @param rotation The rotation to be flipped.
-   * @return The flipped rotation.
-   */
+  /** Flips a rotation based on the current alliance color. */
   public static Rotation2d apply(Rotation2d rotation) {
     if (shouldFlip()) {
       return new Rotation2d(-rotation.getCos(), rotation.getSin());
@@ -58,12 +43,7 @@ public class AllianceFlipUtil {
     }
   }
 
-  /**
-   * Flips a pose to the correct side of the field based on the current alliance color.
-   *
-   * @param pose The pose to be flipped.
-   * @return The flipped pose.
-   */
+  /** Flips a pose to the correct side of the field based on the current alliance color. */
   public static Pose2d apply(Pose2d pose) {
     if (shouldFlip()) {
       return new Pose2d(apply(pose.getTranslation()), apply(pose.getRotation()));
@@ -72,13 +52,17 @@ public class AllianceFlipUtil {
     }
   }
 
-  /**
-   * Checks if the alliance color should be flipped.
-   *
-   * @return True if the alliance color should be flipped, false otherwise.
-   */
+  public static Translation3d apply(Translation3d translation3d) {
+    if (shouldFlip()) {
+      return new Translation3d(
+          apply(translation3d.getX()), translation3d.getY(), translation3d.getZ());
+    } else {
+      return translation3d;
+    }
+  }
+
   public static boolean shouldFlip() {
-    Optional<Alliance> optional = DriverStation.getAlliance();
-    return optional.isPresent() && optional.get() == Alliance.Red;
+    return DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red;
   }
 }

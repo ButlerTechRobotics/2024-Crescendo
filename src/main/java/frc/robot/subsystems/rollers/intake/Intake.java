@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,28 +7,33 @@
 
 package frc.robot.subsystems.rollers.intake;
 
-import frc.robot.subsystems.rollers.GenericRollerSubsystem;
-import frc.robot.subsystems.rollers.GenericRollerSubsystem.VoltageGoal;
-import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import frc.robot.subsystems.rollers.GenericRollerSystem;
+import frc.robot.subsystems.rollers.GenericRollerSystem.VoltageGoal;
+import frc.robot.util.LoggedTunableNumber;
 
-public class Intake extends GenericRollerSubsystem<Intake.Goal> {
+@Setter
+@Getter
+public class Intake extends GenericRollerSystem<Intake.Goal> {
   @RequiredArgsConstructor
   @Getter
   public enum Goal implements VoltageGoal {
-    IDLE(() -> 0.0),
+    IDLING(() -> 0.0),
     FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 10.0)),
-    SHOOTING(new LoggedTunableNumber("Intake/Shooting", 0.0)),
-    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -10.0)),
-    AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", 0.0));
+    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -8.0)),
+    SHOOTING(new LoggedTunableNumber("Intake/ShootingVoltage", 12.0)),
+    AMP_SCORING(new LoggedTunableNumber("Intake/AmpVoltage", 5.0)),
+    TRAP_SCORING(new LoggedTunableNumber("Intake/TrapVoltage", 5.0)),
+    SHUFFLING( new LoggedTunableNumber("Intake/ShufflingVoltage", -1.0));
+
 
     private final DoubleSupplier voltageSupplier;
   }
 
-  @Getter @Setter private Goal goal = Goal.IDLE;
+  private Goal goal = Goal.IDLING;
 
   public Intake(IntakeIO io) {
     super("Intake", io);

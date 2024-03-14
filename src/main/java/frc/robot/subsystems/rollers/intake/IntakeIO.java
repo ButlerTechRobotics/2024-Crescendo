@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at

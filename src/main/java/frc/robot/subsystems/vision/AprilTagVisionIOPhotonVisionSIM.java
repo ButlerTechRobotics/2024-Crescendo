@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 325 & 144
+// Copyright (c) 2024 FRC 9597
 // https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
@@ -38,6 +38,14 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
   private double lastEstTimestamp = 0;
   private final Supplier<Pose2d> poseSupplier;
 
+  /**
+   * Constructs a new AprilTagVisionIOPhotonVisionSIM instance.
+   *
+   * @param identifier The identifier of the PhotonCamera.
+   * @param robotToCamera The transform from the robot's coordinate system to the camera's
+   *     coordinate system.
+   * @param poseSupplier The supplier of the robot's pose.
+   */
   public AprilTagVisionIOPhotonVisionSIM(
       String identifier, Transform3d robotToCamera, Supplier<Pose2d> poseSupplier) {
     camera = new PhotonCamera(identifier);
@@ -72,6 +80,11 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
     this.poseSupplier = poseSupplier;
   }
 
+  /**
+   * Updates the inputs for AprilTag vision.
+   *
+   * @param inputs The AprilTagVisionIOInputs object containing the inputs.
+   */
   @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
     visionSim.update(poseSupplier.get());
@@ -104,11 +117,13 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
                 .getDistance(poseEstimation.getTranslation().toTranslation2d());
       }
       averageTagDistance /= tagIDs.length;
-      poseEstimates.add(new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagIDs));
-      inputs.poseEstimates = poseEstimates;
+      poseEstimates.add(
+          new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagIDs.length));
     }
+    inputs.poseEstimates = poseEstimates;
   }
 
+  /** Updates the PhotonPoseEstimator and returns the estimated global pose. */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
     var visionEst = photonEstimator.update();
     double latestTimestamp = camera.getLatestResult().getTimestampSeconds();

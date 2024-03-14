@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,12 +7,12 @@
 
 package frc.robot.util;
 
-import frc.robot.Constants;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
@@ -85,7 +85,6 @@ public class LoggedTunableNumber implements DoubleSupplier {
    *     otherwise.
    */
   public boolean hasChanged(int id) {
-    if (!Constants.tuningMode) return false;
     double currentValue = get();
     Double lastValue = lastHasChangedValues.get(id);
     if (lastValue == null || currentValue != lastValue) {

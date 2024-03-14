@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,98 +7,124 @@
 
 package frc.robot.subsystems.rollers;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.rollers.feeder.Feeder;
-import frc.robot.subsystems.rollers.intake.Intake;
-// import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
+
+import java.util.function.BooleanSupplier;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import frc.robot.subsystems.rollers.intake.Intake;
+import frc.robot.util.NoteVisualizer;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-@RequiredArgsConstructor()
 public class Rollers extends SubsystemBase {
-  // private final ArmPositionPID armPID;
-  private final Feeder feeder1;
-  private final Feeder feeder2;
   private final Intake intake;
 
-  // Beambreak on DIO 2
-  DigitalInput beambreak = new DigitalInput(8);
-
-  public boolean getBeamBreak() {
-    return beambreak.get();
-  }
+  private final RollersSensorsIO sensorsIO;
+  private final RollersSensorsIOInputsAutoLogged sensorInputs = new RollersSensorsIOInputsAutoLogged();
 
   public enum Goal {
     IDLE,
     FLOOR_INTAKE,
     EJECT_TO_FLOOR,
-    FEED_SHOOTER,
-    AMP_SHOOTER,
-    EJECTALIGN,
-    SHOOT
+    FEED_TO_SHOOTER,
+    AMP_SCORE,
+    TRAP_SCORE,
+    SHUFFLE_SHOOTER
   }
 
-  @Getter @Setter private Goal goal = Goal.IDLE;
+  public enum GamepieceState {
+    NONE,
+    SHOOTER_STAGED
+  }
+
+  @Getter
+  private Goal goal = Goal.IDLE;
+  @AutoLogOutput
+  @Getter
+  @Setter
+  private GamepieceState gamepieceState = GamepieceState.NONE;
+  private GamepieceState lastGamepieceState = GamepieceState.NONE;
+  private Timer gamepieceStateTimer = new Timer();
+
+  @Setter
+  private BooleanSupplier backpackActuatedSupplier = () -> false;
+
+  public Rollers(
+      Intake intake,
+      RollersSensorsIO sensorsIO) {
+    this.intake = intake;
+    this.sensorsIO = sensorsIO;
+
+    setDefaultCommand(setGoalCommand(Goal.IDLE));
+    gamepieceStateTimer.start();
+  }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("BeamBreak", beambreak.get());
+    sensorsIO.updateInputs(sensorInputs);
+    Logger.processInputs("RollersSensors", sensorInputs);
 
+    if (DriverStation.isDisabled()) {
+      goal = Goal.IDLE;
+    }
+
+    if (sensorInputs.shooterStaged) {
+      gamepieceState = GamepieceState.SHOOTER_STAGED;
+    } else {
+      gamepieceState = GamepieceState.NONE;
+    }
+    if (gamepieceState != lastGamepieceState) {
+      gamepieceStateTimer.reset();
+    }
+    lastGamepieceState = gamepieceState;
+
+    NoteVisualizer.setHasNote(gamepieceState != GamepieceState.NONE);
+
+    // Reset idle and wait for other input
+    intake.setGoal(Intake.Goal.IDLING);
     switch (goal) {
       case IDLE -> {
-        feeder1.setGoal(Feeder.Goal.IDLE);
-        feeder2.setGoal(Feeder.Goal.IDLE);
-        intake.setGoal(Intake.Goal.IDLE);
       }
       case FLOOR_INTAKE -> {
-        // if (armPID.isAtHomePosition()) {
-        feeder1.setGoal(Feeder.Goal.FLOOR_INTAKING);
-        feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
-        intake.setGoal(Intake.Goal.FLOOR_INTAKING);
-        // } else {
-        //   // The arm is not at its home position, so set the goals to IDLE
-        //   feeder1.setGoal(Feeder.Goal.IDLE);
-        //   feeder2.setGoal(Feeder.Goal.IDLE);
-        //   intake.setGoal(Intake.Goal.IDLE);
-        // }
-      }
-
-      case SHOOT -> {
-        feeder1.setGoal(Feeder.Goal.SHOOT);
-        feeder2.setGoal(Feeder.Goal.SHOOT);
-      }
-
-      case EJECTALIGN -> {
-        feeder1.setGoal(Feeder.Goal.EJECTALIGN);
-        feeder2.setGoal(Feeder.Goal.EJECTALIGN);
-        intake.setGoal(Intake.Goal.IDLE);
-      }
-
-      case AMP_SHOOTER -> {
-        feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
-        feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
-      }
-
-      case FEED_SHOOTER -> {
-        intake.setGoal(Intake.Goal.SHOOTING);
-        feeder1.setGoal(Feeder.Goal.SHOOTING);
-        feeder2.setGoal(Feeder.Goal.SHOOTING);
+        if (gamepieceState == GamepieceState.SHOOTER_STAGED) {
+          intake.setGoal(Intake.Goal.EJECTING);
+        } else {
+          intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+        }
       }
       case EJECT_TO_FLOOR -> {
-        feeder1.setGoal(Feeder.Goal.EJECTING);
-        feeder2.setGoal(Feeder.Goal.EJECTING);
         intake.setGoal(Intake.Goal.EJECTING);
+      }
+      case FEED_TO_SHOOTER -> {
+        intake.setGoal(Intake.Goal.SHOOTING);
+      }
+      case AMP_SCORE -> {
+        intake.setGoal(Intake.Goal.AMP_SCORING);
+      }
+      case TRAP_SCORE -> {
+        intake.setGoal(Intake.Goal.TRAP_SCORING);
+      }
+      case SHUFFLE_SHOOTER -> {
+        // Shuffle into shooter
+        intake.setGoal(Intake.Goal.SHUFFLING);
+        if (gamepieceState != GamepieceState.SHOOTER_STAGED) {
+          intake.setGoal(Intake.Goal.IDLING);}
       }
     }
 
-    Logger.recordOutput("Rollers/Goal", goal);
-
-    feeder1.periodic();
-    feeder2.periodic();
     intake.periodic();
+
+    // Leds.getInstance().hasNote = gamepieceState != GamepieceState.NONE;
+    // Leds.getInstance().intaking = goal == Goal.FLOOR_INTAKE || goal ==
+    // Goal.STATION_INTAKE;
+  }
+
+  public Command setGoalCommand(Goal goal) {
+    return startEnd(() -> this.goal = goal, () -> this.goal = Goal.IDLE)
+        .withName("Rollers " + goal);
   }
 }

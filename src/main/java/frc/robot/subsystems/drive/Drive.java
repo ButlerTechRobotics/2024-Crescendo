@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 325 & 144
+// Copyright (c) 2024 FRC 9597
 // https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
@@ -46,7 +46,7 @@ public class Drive extends SubsystemBase {
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-  private final SwerveModule[] modules = new SwerveModule[4]; // FL, FR, BL, BR
+  private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
 
   private static ProfiledPIDController thetaController =
@@ -81,15 +81,19 @@ public class Drive extends SubsystemBase {
 
   public Drive(
       GyroIO gyroIO,
-      SwerveModuleIO flModuleIO,
-      SwerveModuleIO frModuleIO,
-      SwerveModuleIO blModuleIO,
-      SwerveModuleIO brModuleIO) {
+      ModuleIO flModuleIO,
+      ModuleIO frModuleIO,
+      ModuleIO blModuleIO,
+      ModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
-    modules[0] = new SwerveModule(flModuleIO, 0);
-    modules[1] = new SwerveModule(frModuleIO, 1);
-    modules[2] = new SwerveModule(blModuleIO, 2);
-    modules[3] = new SwerveModule(brModuleIO, 3);
+    modules[0] = new Module(flModuleIO, 0);
+    modules[1] = new Module(frModuleIO, 1);
+    modules[2] = new Module(blModuleIO, 2);
+    modules[3] = new Module(brModuleIO, 3);
+
+    // Start threads (no-op for each if no signals have been created)
+    PhoenixOdometryThread.getInstance().start();
+    SparkMaxOdometryThread.getInstance().start();
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
@@ -138,7 +142,12 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
+    for (var module : modules) {
+      module.updateInputs();
+    }
+    odometryLock.unlock();
     Logger.processInputs("Drive/Gyro", gyroInputs);
     for (var module : modules) {
       module.periodic();
@@ -156,31 +165,38 @@ public class Drive extends SubsystemBase {
       Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
 
-    // Read wheel positions and deltas from each module
-    SwerveModulePosition[] modulePositions = getModulePositions();
-    SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
-    for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-      moduleDeltas[moduleIndex] =
-          new SwerveModulePosition(
-              modulePositions[moduleIndex].distanceMeters
-                  - lastModulePositions[moduleIndex].distanceMeters,
-              modulePositions[moduleIndex].angle);
-      lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
-    }
+    // Update odometry
+    double[] sampleTimestamps =
+        modules[0].getOdometryTimestamps(); // All signals are sampled together
+    int sampleCount = sampleTimestamps.length;
+    for (int i = 0; i < sampleCount; i++) {
+      // Read wheel positions and deltas from each module
+      SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+      SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
+      for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
+        modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
+        moduleDeltas[moduleIndex] =
+            new SwerveModulePosition(
+                modulePositions[moduleIndex].distanceMeters
+                    - lastModulePositions[moduleIndex].distanceMeters,
+                modulePositions[moduleIndex].angle);
+        lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
+      }
 
-    // Update gyro angle
-    if (gyroInputs.connected) {
-      // Use the real gyro angle
-      rawGyroRotation = gyroInputs.yawPosition;
-    } else {
-      // Use the angle delta from the kinematics and module deltas
-      Twist2d twist = kinematics.toTwist2d(moduleDeltas);
-      rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
-    }
+      // Update gyro angle
+      if (gyroInputs.connected) {
+        // Use the real gyro angle
+        rawGyroRotation = gyroInputs.odometryYawPositions[i];
+      } else {
+        // Use the angle delta from the kinematics and module deltas
+        Twist2d twist = kinematics.toTwist2d(moduleDeltas);
+        rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
+      }
 
-    // Apply update
-    poseEstimator.update(rawGyroRotation, modulePositions);
-    odometryDrive.update(rawGyroRotation, modulePositions);
+      // Apply update
+      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      odometryDrive.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+    }
   }
 
   /**
@@ -225,12 +241,20 @@ public class Drive extends SubsystemBase {
     stop();
   }
 
-  /** Returns a command to run a quasistatic test in the specified direction. */
+  /**
+   * Returns a command to run a quasistatic test in the specified direction.
+   *
+   * @param direction The direction to run the quasistatic test.
+   */
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return sysId.quasistatic(direction);
   }
 
-  /** Returns a command to run a dynamic test in the specified direction. */
+  /**
+   * Returns a command to run a dynamic test in the specified direction.
+   *
+   * @param direction The direction to run the dynamic test.
+   */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysId.dynamic(direction);
   }

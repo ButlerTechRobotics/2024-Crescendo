@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 325 & 144
+// Copyright (c) 2024 FRC 9597
 // https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style

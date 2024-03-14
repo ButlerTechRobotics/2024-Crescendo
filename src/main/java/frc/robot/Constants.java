@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 325 & 144
+// Copyright (c) 2024 FRC 9597
 // https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
@@ -20,7 +20,7 @@ import frc.robot.util.Alert;
  */
 public final class Constants {
   public static final int loopPeriodMs = 20;
-  private static RobotType robotType = RobotType.COMPBOT;
+  private static RobotType robotType = RobotType.SIMBOT;
   public static final boolean tuningMode = true;
   public static final boolean characterizationMode = false;
 

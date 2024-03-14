@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.util;
 
 import static edu.wpi.first.apriltag.AprilTagFields.k2024Crescendo;
@@ -65,24 +58,16 @@ public class FieldConstants {
   }
 
   /** Each corner of the speaker * */
-
-  // TODO - update these to the correct values
   public static final class Speaker {
 
     /** Center of the speaker opening (blue alliance) */
     public static Pose2d centerSpeakerOpening =
         new Pose2d(0.0, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
 
-    /** Center of the speaker opening (blue alliance) */
-    public static Pose2d redSpeakerOpening =
-        new Pose2d(fieldLength, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
-
-    /** Center of the speaker opening (blue alliance) */
-    public static Pose2d blueSpeakerOpening =
-        new Pose2d(0.0, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
+        /** Center of the speaker opening (blue alliance) */
+    public static final Translation3d centerSpeakerOpening3d =
+    bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
   }
-
-  // Alliance.apply(FieldConstants.Speaker.centerSpeakerOpening1);
 
   // corners (blue alliance origin)
   public static Translation3d topRightSpeaker =
