@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2024 FRC 9597
+// https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,13 +7,13 @@
 
 package frc.robot.subsystems.rollers.intake;
 
+import frc.robot.subsystems.rollers.GenericRollerSystem;
+import frc.robot.subsystems.rollers.GenericRollerSystem.VoltageGoal;
+import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import frc.robot.subsystems.rollers.GenericRollerSystem;
-import frc.robot.subsystems.rollers.GenericRollerSystem.VoltageGoal;
-import frc.robot.util.LoggedTunableNumber;
 
 @Setter
 @Getter
@@ -27,8 +27,7 @@ public class Intake extends GenericRollerSystem<Intake.Goal> {
     SHOOTING(new LoggedTunableNumber("Intake/ShootingVoltage", 12.0)),
     AMP_SCORING(new LoggedTunableNumber("Intake/AmpVoltage", 5.0)),
     TRAP_SCORING(new LoggedTunableNumber("Intake/TrapVoltage", 5.0)),
-    SHUFFLING( new LoggedTunableNumber("Intake/ShufflingVoltage", -1.0));
-
+    SHUFFLING(new LoggedTunableNumber("Intake/ShufflingVoltage", -1.0));
 
     private final DoubleSupplier voltageSupplier;
   }

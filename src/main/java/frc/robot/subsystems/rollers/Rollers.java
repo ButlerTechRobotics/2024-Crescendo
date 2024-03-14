@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2024 FRC 9597
+// https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -11,12 +11,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.subsystems.rollers.intake.Intake;
+import frc.robot.util.NoteVisualizer;
 import java.util.function.BooleanSupplier;
 import lombok.Getter;
 import lombok.Setter;
-import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.util.NoteVisualizer;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,7 +23,8 @@ public class Rollers extends SubsystemBase {
   private final Intake intake;
 
   private final RollersSensorsIO sensorsIO;
-  private final RollersSensorsIOInputsAutoLogged sensorInputs = new RollersSensorsIOInputsAutoLogged();
+  private final RollersSensorsIOInputsAutoLogged sensorInputs =
+      new RollersSensorsIOInputsAutoLogged();
 
   public enum Goal {
     IDLE,
@@ -41,21 +41,14 @@ public class Rollers extends SubsystemBase {
     SHOOTER_STAGED
   }
 
-  @Getter
-  private Goal goal = Goal.IDLE;
-  @AutoLogOutput
-  @Getter
-  @Setter
-  private GamepieceState gamepieceState = GamepieceState.NONE;
+  @Getter private Goal goal = Goal.IDLE;
+  @AutoLogOutput @Getter @Setter private GamepieceState gamepieceState = GamepieceState.NONE;
   private GamepieceState lastGamepieceState = GamepieceState.NONE;
   private Timer gamepieceStateTimer = new Timer();
 
-  @Setter
-  private BooleanSupplier backpackActuatedSupplier = () -> false;
+  @Setter private BooleanSupplier backpackActuatedSupplier = () -> false;
 
-  public Rollers(
-      Intake intake,
-      RollersSensorsIO sensorsIO) {
+  public Rollers(Intake intake, RollersSensorsIO sensorsIO) {
     this.intake = intake;
     this.sensorsIO = sensorsIO;
 
@@ -87,8 +80,7 @@ public class Rollers extends SubsystemBase {
     // Reset idle and wait for other input
     intake.setGoal(Intake.Goal.IDLING);
     switch (goal) {
-      case IDLE -> {
-      }
+      case IDLE -> {}
       case FLOOR_INTAKE -> {
         if (gamepieceState == GamepieceState.SHOOTER_STAGED) {
           intake.setGoal(Intake.Goal.EJECTING);
@@ -112,7 +104,8 @@ public class Rollers extends SubsystemBase {
         // Shuffle into shooter
         intake.setGoal(Intake.Goal.SHUFFLING);
         if (gamepieceState != GamepieceState.SHOOTER_STAGED) {
-          intake.setGoal(Intake.Goal.IDLING);}
+          intake.setGoal(Intake.Goal.IDLING);
+        }
       }
     }
 

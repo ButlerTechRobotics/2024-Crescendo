@@ -5,8 +5,6 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.subsystems.rollers.intake;
+package frc.robot;
 
-import frc.robot.subsystems.rollers.GenericRollerSystemIO;
-
-public interface IntakeIO extends GenericRollerSystemIO {}
+public class Climber {}

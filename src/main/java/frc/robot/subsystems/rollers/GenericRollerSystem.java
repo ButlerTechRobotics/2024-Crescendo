@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2024 FRC 9597
+// https://github.com/ButlerTechRobotics
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,9 +7,9 @@
 
 package frc.robot.subsystems.rollers;
 
+import frc.robot.util.Alert;
 import java.util.function.DoubleSupplier;
 import lombok.RequiredArgsConstructor;
-import frc.robot.util.Alert;
 import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor

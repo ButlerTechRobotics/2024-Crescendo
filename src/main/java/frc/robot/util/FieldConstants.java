@@ -1,3 +1,10 @@
+// Copyright (c) 2024 FRC 9597
+// https://github.com/ButlerTechRobotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
+
 package frc.robot.util;
 
 import static edu.wpi.first.apriltag.AprilTagFields.k2024Crescendo;
@@ -64,9 +71,9 @@ public class FieldConstants {
     public static Pose2d centerSpeakerOpening =
         new Pose2d(0.0, fieldWidth - Units.inchesToMeters(104.0), new Rotation2d());
 
-        /** Center of the speaker opening (blue alliance) */
+    /** Center of the speaker opening (blue alliance) */
     public static final Translation3d centerSpeakerOpening3d =
-    bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
+        bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
   }
 
   // corners (blue alliance origin)

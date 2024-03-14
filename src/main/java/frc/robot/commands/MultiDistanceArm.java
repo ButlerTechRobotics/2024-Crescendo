@@ -1,6 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2024 FRC 9597
+// https://github.com/ButlerTechRobotics
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.commands;
 
@@ -9,17 +12,15 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 /** A command that angles the arm from multi-distance position from the target. */
-
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
   Pose2d targetPose;
-  ArmIO arm;
+  Arm arm;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
@@ -32,7 +33,7 @@ public class MultiDistanceArm extends Command {
    * @param targetPose The target pose to shoot at.
    * @param armPID The arm subsystem.
    */
-  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, ArmIO arm) {
+  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Pose2d targetPose, Arm arm) {
     this.poseSupplier = poseSupplier;
     this.targetPose = targetPose;
     this.arm = arm;
@@ -66,7 +67,7 @@ public class MultiDistanceArm extends Command {
     angle = distanceMap.get(distance);
 
     // Run the flywheel at the calculated angle
-    arm.setPosition(angle);
+    arm.setDesiredDegrees(angle);
 
     // Put the distance on the SmartDashboard
     SmartDashboard.putNumber("Distance", getDistance());
@@ -75,7 +76,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    arm.setPosition(0.0);
+    arm.setDesiredDegrees(0.0);
   }
 
   @Override
