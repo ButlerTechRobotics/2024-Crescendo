@@ -85,7 +85,7 @@ public class RobotContainer {
   private boolean hasRun = false;
   private boolean hasEjected = false; // New flag for the EJECTALIGN command
 
-  // Controller
+  // Controllerf
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
@@ -700,7 +700,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().onTrue(new PositionArmPID(armPID, 59.98953467578964314576));
+    operatorController.povRight().onTrue(new PositionArmPID(armPID, 30));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
