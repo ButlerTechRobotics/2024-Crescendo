@@ -89,7 +89,7 @@ public class Candle extends SubsystemBase {
   }
 
   public ColorFlowAnimation prepareShoot() {
-    return new ColorFlowAnimation(254, 55, 0, 0, 0.75, NUM_LEDS, Direction.Backward);
+    return new ColorFlowAnimation(0, 0, 254, 0, 0.75, NUM_LEDS, Direction.Backward);
   }
 
   public RainbowAnimation rainbow() {
