@@ -44,7 +44,6 @@ public class MultiDistanceArm extends Command {
     this.orignalPose = targetPose;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.0, 0.0); // 3.5
     distanceMap.put(1.5, 4.0 + 0.7); // 3.5
     distanceMap.put(2.0, 12.02 + 0.7);
     distanceMap.put(2.5, 18.4 + 0.7);

@@ -255,6 +255,21 @@ public class RobotContainer {
                 })));
 
     // ================================================
+    // Register the Auto Command Shoot Far
+    // ================================================
+    NamedCommands.registerCommand(
+        "ShootFar",
+        Commands.sequence(
+            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+            Commands.waitSeconds(0.5),
+            Commands.runOnce(
+                () -> {
+                  shooter.setGoal(Shooter.Goal.IDLE);
+                  superstructure.setGoal(Superstructure.SystemState.IDLE);
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })));
+
+    // ================================================
     // Register the Auto Command Intake Reset
     // ================================================
     NamedCommands.registerCommand(
