@@ -129,7 +129,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote6Source"
+                        "pathName": "toNote7Source"
                       }
                     },
                     {
@@ -163,7 +163,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideUnderstageShoot"
+                  "pathName": "toSourcesideShootNote7"
                 }
               },
               {
