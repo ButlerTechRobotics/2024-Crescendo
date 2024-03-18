@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
-import frc.robot.util.swerve.ModuleLimits;
 
 /** All Constants Measured in Meters and Radians (m/s, m/s^2, rad/s, rad/s^2) */
 public final class DriveConstants {
@@ -65,39 +64,29 @@ public final class DriveConstants {
         default -> 0.01;
       };
 
-  public static final int gyroID = 13;
+  public static final int gyroID = 30;
 
   // Turn to "" for no canbus name
-  public static final String canbus = "chassis";
+  public static final String canbus = "rio";
 
   public static ModuleConfig[] moduleConfigs =
       switch (Constants.getRobot()) {
         case COMPBOT ->
             new ModuleConfig[] {
-              new ModuleConfig(
-                  1,
-                  2,
-                  9,
-                  Rotation2d.fromRotations(-0.383).plus(Rotation2d.fromDegrees(180)),
-                  true),
+              new ModuleConfig(1, 2, 9, Rotation2d.fromRotations(0.191650), false),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(-0.251).plus(Rotation2d.fromDegrees(180)),
-                  true),
-              new ModuleConfig(
-                  5,
-                  6,
-                  11,
-                  Rotation2d.fromRotations(-0.057).plus(Rotation2d.fromDegrees(180)),
-                  true),
+                  Rotation2d.fromRotations(0.197021).plus(Rotation2d.fromDegrees(180)),
+                  false),
+              new ModuleConfig(5, 6, 11, Rotation2d.fromRotations(-0.403076), false),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(-0.470).plus(Rotation2d.fromDegrees(180)),
-                  true)
+                  Rotation2d.fromRotations(-0.485596).plus(Rotation2d.fromDegrees(180)),
+                  false)
             };
         case SIMBOT -> {
           ModuleConfig[] configs = new ModuleConfig[4];
@@ -130,18 +119,6 @@ public final class DriveConstants {
                 Mk4iReductions.L2.reduction,
                 Mk4iReductions.TURN.reduction);
       };
-
-  public static final ModuleLimits moduleLimitsFree =
-      new ModuleLimits(
-          drivetrainConfig.maxLinearVelocity(),
-          drivetrainConfig.maxLinearAcceleration(),
-          Units.degreesToRadians(1080.0));
-
-  public static final ModuleLimits moduleLimitsFlywheelSpinup =
-      new ModuleLimits(
-          drivetrainConfig.maxLinearVelocity(),
-          drivetrainConfig.maxLinearAcceleration() / 2.0,
-          Units.degreesToRadians(1080.0));
 
   public static HeadingControllerConstants headingControllerConstants =
       switch (Constants.getRobot()) {
@@ -196,7 +173,7 @@ public final class DriveConstants {
   private enum Mk4iReductions {
     L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
     L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)),
-    TURN((150.0 / 7.0));
+    TURN((12.8 / 1.0));
 
     final double reduction;
 

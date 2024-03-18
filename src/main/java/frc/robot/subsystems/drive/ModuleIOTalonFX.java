@@ -65,7 +65,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     absoluteEncoderOffset = config.absoluteEncoderOffset();
 
     var driveConfig = new TalonFXConfiguration();
-    driveConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+    driveConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     driveTalon.getConfigurator().apply(driveConfig);
     setDriveBrakeMode(true);
@@ -74,7 +74,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnConfig.CurrentLimits.StatorCurrentLimit = 30.0;
     turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     turnTalon.getConfigurator().apply(turnConfig);
-    setTurnBrakeMode(true);
+    setTurnBrakeMode(false);
 
     cancoder.getConfigurator().apply(new CANcoderConfiguration());
 

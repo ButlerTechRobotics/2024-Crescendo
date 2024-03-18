@@ -7,117 +7,79 @@
 
 package frc.robot.subsystems.rollers;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.util.NoteVisualizer;
-import java.util.function.BooleanSupplier;
+// import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+@RequiredArgsConstructor()
 public class Rollers extends SubsystemBase {
+  // private final ArmPositionPID armPID;
   private final Intake intake;
 
-  private final RollersSensorsIO sensorsIO;
-  private final RollersSensorsIOInputsAutoLogged sensorInputs =
-      new RollersSensorsIOInputsAutoLogged();
+  // Beambreak on DIO 2
+  DigitalInput beambreak = new DigitalInput(0);
+
+  public boolean getBeamBreak() {
+    return beambreak.get();
+  }
 
   public enum Goal {
     IDLE,
     FLOOR_INTAKE,
     EJECT_TO_FLOOR,
-    FEED_TO_SHOOTER,
-    AMP_SCORE,
-    TRAP_SCORE,
-    SHUFFLE_SHOOTER
+    FEED_SHOOTER,
+    AMP_SHOOTER,
+    EJECTALIGN,
+    SHOOT
   }
 
-  public enum GamepieceState {
-    NONE,
-    SHOOTER_STAGED
-  }
-
-  @Getter private Goal goal = Goal.IDLE;
-  @AutoLogOutput @Getter @Setter private GamepieceState gamepieceState = GamepieceState.NONE;
-  private GamepieceState lastGamepieceState = GamepieceState.NONE;
-  private Timer gamepieceStateTimer = new Timer();
-
-  @Setter private BooleanSupplier backpackActuatedSupplier = () -> false;
-
-  public Rollers(Intake intake, RollersSensorsIO sensorsIO) {
-    this.intake = intake;
-    this.sensorsIO = sensorsIO;
-
-    setDefaultCommand(setGoalCommand(Goal.IDLE));
-    gamepieceStateTimer.start();
-  }
+  @Getter @Setter private Goal goal = Goal.IDLE;
 
   @Override
   public void periodic() {
-    sensorsIO.updateInputs(sensorInputs);
-    Logger.processInputs("RollersSensors", sensorInputs);
+    SmartDashboard.putBoolean("BeamBreak", beambreak.get());
 
-    if (DriverStation.isDisabled()) {
-      goal = Goal.IDLE;
-    }
-
-    if (sensorInputs.shooterStaged) {
-      gamepieceState = GamepieceState.SHOOTER_STAGED;
-    } else {
-      gamepieceState = GamepieceState.NONE;
-    }
-    if (gamepieceState != lastGamepieceState) {
-      gamepieceStateTimer.reset();
-    }
-    lastGamepieceState = gamepieceState;
-
-    NoteVisualizer.setHasNote(gamepieceState != GamepieceState.NONE);
-
-    // Reset idle and wait for other input
-    intake.setGoal(Intake.Goal.IDLING);
     switch (goal) {
-      case IDLE -> {}
-      case FLOOR_INTAKE -> {
-        if (gamepieceState == GamepieceState.SHOOTER_STAGED) {
-          intake.setGoal(Intake.Goal.EJECTING);
-        } else {
-          intake.setGoal(Intake.Goal.FLOOR_INTAKING);
-        }
+      case IDLE -> {
+        intake.setGoal(Intake.Goal.IDLE);
       }
+      case FLOOR_INTAKE -> {
+        // if (armPID.isAtHomePosition()) {
+        intake.setGoal(Intake.Goal.FLOOR_INTAKING);
+        // } else {
+        //   // The arm is not at its home position, so set the goals to IDLE
+        //   feeder1.setGoal(Feeder.Goal.IDLE);
+        //   feeder2.setGoal(Feeder.Goal.IDLE);
+        //   intake.setGoal(Intake.Goal.IDLE);
+        // }
+      }
+
+      case SHOOT -> {
+        intake.setGoal(Intake.Goal.SHOOTING);
+      }
+
+      case EJECTALIGN -> {
+        intake.setGoal(Intake.Goal.EJECTALIGN);
+      }
+
+        // case AMP_SHOOTER -> {
+        //   feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
+        //   feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
+        // }
+
       case EJECT_TO_FLOOR -> {
         intake.setGoal(Intake.Goal.EJECTING);
       }
-      case FEED_TO_SHOOTER -> {
-        intake.setGoal(Intake.Goal.SHOOTING);
-      }
-      case AMP_SCORE -> {
-        intake.setGoal(Intake.Goal.AMP_SCORING);
-      }
-      case TRAP_SCORE -> {
-        intake.setGoal(Intake.Goal.TRAP_SCORING);
-      }
-      case SHUFFLE_SHOOTER -> {
-        // Shuffle into shooter
-        intake.setGoal(Intake.Goal.SHUFFLING);
-        if (gamepieceState != GamepieceState.SHOOTER_STAGED) {
-          intake.setGoal(Intake.Goal.IDLING);
-        }
-      }
     }
 
+    Logger.recordOutput("Rollers/Goal", goal);
+
     intake.periodic();
-
-    // Leds.getInstance().hasNote = gamepieceState != GamepieceState.NONE;
-    // Leds.getInstance().intaking = goal == Goal.FLOOR_INTAKE || goal ==
-    // Goal.STATION_INTAKE;
-  }
-
-  public Command setGoalCommand(Goal goal) {
-    return startEnd(() -> this.goal = goal, () -> this.goal = Goal.IDLE)
-        .withName("Rollers " + goal);
   }
 }

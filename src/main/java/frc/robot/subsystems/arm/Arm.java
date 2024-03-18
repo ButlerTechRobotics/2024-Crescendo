@@ -7,229 +7,154 @@
 
 package frc.robot.subsystems.arm;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
+  private static final String canBusName = "canivore";
+  private final TalonFX m_leftTalonFX = new TalonFX(25, canBusName);
+  private final TalonFX m_rightTalonFX = new TalonFX(26, canBusName);
+  private final DynamicMotionMagicTorqueCurrentFOC m_mmtorquePosition =
+      new DynamicMotionMagicTorqueCurrentFOC(0, 35, 250, 4000, 0, 0, false, false, false);
 
-  ArmIOInputsAutoLogged inputs;
-  ArmIO io;
+  private double m_targetArmPosition = 0.0;
+  private double m_realArmPosition = 0.0;
 
-  private ArmFeedforward armFeedforward;
+  private final double ADD_POSITION = 8;
+  private final double PI = 3.1415926;
+  private final double MAX_FEEDFORWARD = 8.0;
+  private final double MAXIMUM_POSITION = 0.0;
+  private final double MINIMUM_POSITION = -32.0;
 
-  /** PID on the arm's position. The proportional term has to do with the angle error. */
-  private ArmPDController armPD;
+  /* What to publish over networktables for telemetry */
+  private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
 
-  private TrapezoidProfile profile;
-  private Timer timer;
+  /* intake data for checking */
+  private final NetworkTable driveStats = inst.getTable("Arm");
+  private final DoublePublisher velocityTarget =
+      driveStats.getDoubleTopic("Velocity Target").publish();
+  private final DoublePublisher velocityMeasurement =
+      driveStats.getDoubleTopic("Velocity Measurement").publish();
+  private final DoublePublisher positionTarget =
+      driveStats.getDoubleTopic("Position Target").publish();
+  private final DoublePublisher positionMeasurement =
+      driveStats.getDoubleTopic("Position Measurement").publish();
+  private final DoublePublisher torqueTarget = driveStats.getDoubleTopic("Torque Target").publish();
+  private final DoublePublisher torqueMeasurement =
+      driveStats.getDoubleTopic("Torque Measurement").publish();
+  private final DoublePublisher torqueFeedForward =
+      driveStats.getDoubleTopic("Torque FeedForward").publish();
+  private final DoublePublisher torqueMeasurementRight =
+      driveStats.getDoubleTopic("Right Torque Measurement").publish();
+  private final DoublePublisher realArmPosition =
+      driveStats.getDoubleTopic("Real Arm Position").publish();
 
-  private TrapezoidProfile.State initState;
-  private double targetAngleDegrees;
-  public boolean isMovingToTarget;
+  public Arm() {
+    initializeTalonFX(m_leftTalonFX.getConfigurator());
+    m_rightTalonFX.setControl(new Follower(m_leftTalonFX.getDeviceID(), true));
 
-  private Mechanism2d armMech2d;
-  private MechanismRoot2d armMechRoot;
-  private MechanismLigament2d mechLigament;
-
-  private SysIdRoutine.Mechanism sysIdMech;
-  private SysIdRoutine sysIdRoutine;
-
-  public Arm(ArmIO armIO) {
-    io = armIO;
-    inputs = new ArmIOInputsAutoLogged();
-
-    armFeedforward =
-        new ArmFeedforward(
-            ArmConstants.kSArmVolts,
-            ArmConstants.kGArmVolts,
-            ArmConstants.kVArmVoltsSecondsPerRadian,
-            ArmConstants.kAArmVoltsSecondsSquaredPerRadian);
-
-    armPD =
-        new ArmPDController(
-            ArmConstants.kPArmVoltsPerDegree, ArmConstants.kDArmVoltsSecondsPerDegree);
-
-    profile = new TrapezoidProfile(ArmConstants.profileConstraints);
-    timer = new Timer();
-
-    isMovingToTarget = false;
-
-    armMech2d = new Mechanism2d(1, 1);
-    armMechRoot = armMech2d.getRoot("root", 0.3, 0.1);
-    mechLigament =
-        armMechRoot.append(new MechanismLigament2d("arm", 0.508, inputs.armAngleDegrees));
-
-    sysIdMech =
-        new SysIdRoutine.Mechanism(
-            (Measure<Voltage> volts) -> {
-              io.setArmMotorVolts(volts.in(Volts));
-            },
-            this::motorSysIdLog,
-            this);
-
-    sysIdRoutine = new SysIdRoutine(new Config(), sysIdMech);
+    m_realArmPosition = -0.003; // -1 degree / 360
   }
 
-  // This method is in here because future commands which want to move the arm will be more easily
-  // written.
-  // Rather than having to motion profile within each command, it can be just one function call.
-  /**
-   * Sets the desired position for the arm's motion profile to follow.
-   *
-   * @param targetDegrees - Target angle in degrees for the arm.
-   */
-  public void setDesiredDegrees(double targetAngleDegrees) {
-    targetAngleDegrees =
-        MathUtil.clamp(
-            targetAngleDegrees, ArmConstants.armMinAngleDegrees, ArmConstants.armMaxAngleDegrees);
-
-    // For continuous control
-    if (Math.abs(this.targetAngleDegrees - targetAngleDegrees) < 0.5) {
-      // No need to generate a new profile if the requested
-      // target is close to the current target. PID should get us
-      // there on its own.
-      return;
-    }
-
-    initState =
-        new TrapezoidProfile.State(inputs.armAngleDegrees, inputs.armVelocityDegreesPerSecond);
-    this.targetAngleDegrees = targetAngleDegrees;
-    isMovingToTarget = true;
-
-    timer.restart();
-  }
-
-  public Command setDesiredDegreesCommand(double targetAngleDegrees) {
-    return this.run(
+  public Command armUp() {
+    return runOnce(
         () -> {
-          this.setDesiredDegrees(targetAngleDegrees);
+          m_mmtorquePosition.Velocity = 35;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = getArmPosition() - ADD_POSITION;
+          setArmPosition(position);
         });
   }
 
-  public Command holdCurrentPositionCommand() {
-    return this.run(
+  public Command armDown() {
+    return runOnce(
         () -> {
-          this.setDesiredDegrees(inputs.armAngleDegrees);
+          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = getArmPosition() + ADD_POSITION;
+          setArmPosition(position);
         });
   }
 
-  public double getDegrees() {
-    return inputs.armAngleDegrees;
-  }
-
-  public double getErrorDegrees() {
-    return this.targetAngleDegrees - inputs.armAngleDegrees;
-  }
-
-  public boolean isCloseToTarget() {
-    // TODO: pick a non-arbitrary value based on sensor resolution?
-    boolean errorIsSmall = Math.abs(getErrorDegrees()) < 1.0;
-    boolean isSteady = inputs.armVelocityDegreesPerSecond < 1.0;
-    return errorIsSmall
-        && isSteady; // This worked without the isSteady before because I forgot to deploy!
-  }
-
-  private void followTrapezoidProfile() {
-
-    // Hold the current position if there's no trapezoidal profile active.
-    // I think? that generating new trapezoidal profiles for an inactive arm causes some
-    // oscillations.
-    if (!isMovingToTarget) {
-
-      double feedforwardOutputVolts =
-          armFeedforward.calculate(Math.toRadians(targetAngleDegrees), 0);
-      double pidOutputVolts =
-          armPD.calculate(
-              inputs.armAngleDegrees, inputs.armVelocityDegreesPerSecond, targetAngleDegrees, 0);
-
-      io.setArmMotorVolts(feedforwardOutputVolts + pidOutputVolts);
-
-      Logger.recordOutput("arm/totalOutputVolts", feedforwardOutputVolts + pidOutputVolts);
-
-      return;
+  public void setArmPosition(double position) {
+    if (position > MAXIMUM_POSITION) {
+      position = MAXIMUM_POSITION;
+    } else if (position < MINIMUM_POSITION) {
+      position = MINIMUM_POSITION;
     }
-
-    TrapezoidProfile.State desiredState =
-        profile.calculate(
-            timer.get(), initState, new TrapezoidProfile.State(targetAngleDegrees, 0));
-
-    double feedforwardOutputVolts =
-        armFeedforward.calculate(
-            Math.toRadians(inputs.armAngleDegrees), Math.toRadians(desiredState.velocity));
-    double pidOutputVolts =
-        armPD.calculate(
-            inputs.armAngleDegrees,
-            inputs.armVelocityDegreesPerSecond,
-            desiredState.position,
-            desiredState.velocity);
-
-    double totalOutputVolts = feedforwardOutputVolts + pidOutputVolts;
-
-    totalOutputVolts = MathUtil.clamp(totalOutputVolts, -12, 12);
-
-    if ((inputs.atLowerLimit && totalOutputVolts < 0)
-        || (inputs.atUpperLimit && totalOutputVolts > 0)) totalOutputVolts = 0;
-
-    Logger.recordOutput("arm/trapezoidProfilePosition", desiredState.position);
-    Logger.recordOutput("arm/totalOutputVolts", totalOutputVolts);
-
-    io.setArmMotorVolts(totalOutputVolts);
-
-    // profile.calculate() must be called before this line in order for isFinished() to function
-    // properly
-    if (profile.isFinished(timer.get())) {
-      isMovingToTarget = false;
-    }
+    m_targetArmPosition = position;
   }
 
-  private void motorSysIdLog(SysIdRoutineLog log) {
-    log.motor("leftMotor")
-        .voltage(Volts.of(inputs.leftMotorAppliedVoltage))
-        .angularPosition(Degrees.of(inputs.armAngleDegrees))
-        .angularVelocity(DegreesPerSecond.of(inputs.armVelocityDegreesPerSecond));
+  private void initializeTalonFX(TalonFXConfigurator cfg) {
+    var toApply = new TalonFXConfiguration();
 
-    log.motor("rightMotor")
-        .voltage(Volts.of(inputs.rightMotorAppliedVoltage))
-        .angularPosition(Degrees.of(inputs.armAngleDegrees))
-        .angularVelocity(DegreesPerSecond.of(inputs.armVelocityDegreesPerSecond));
-  }
+    toApply.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
-  public Command generateSysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.quasistatic(direction);
-  }
+    /*
+     * Torque-based velocity does not require a feed forward, as torque will
+     * accelerate the rotor up to the desired velocity by itself
+     */
+    toApply.Slot0.kP = 3.5; // An error of 1 rotation per second results in 5 amps output
+    toApply.Slot0.kI =
+        0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
+    toApply.Slot0.kD = 1.5; // A change of 1000 rotation per second squared results in 1 amp output
 
-  public Command generateSysIdDynamic(SysIdRoutine.Direction direction) {
-    return sysIdRoutine.dynamic(direction);
+    // Peak output of 40 amps
+    toApply.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+    toApply.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
+    cfg.apply(toApply);
   }
 
   @Override
   public void periodic() {
+    telemetry();
+    m_realArmPosition = -(getArmPosition() / 80.0) * 360 - 5.0;
+    var armPositionRad = m_realArmPosition * PI / 180;
+    var feedforward = -MAX_FEEDFORWARD * Math.cos(2 * (armPositionRad - 4 / PI));
 
-    io.updateInputs(inputs);
+    m_leftTalonFX.setControl(
+        m_mmtorquePosition.withPosition(m_targetArmPosition).withFeedForward(feedforward));
+  }
 
-    followTrapezoidProfile();
-    mechLigament.setAngle(inputs.armAngleDegrees);
+  private void telemetry() {
+    velocityTarget.set(m_leftTalonFX.getClosedLoopReferenceSlope().getValueAsDouble());
+    velocityMeasurement.set(m_leftTalonFX.getVelocity().getValueAsDouble());
 
-    Logger.processInputs("armInputs", inputs);
-    Logger.recordOutput("arm/mech2d", armMech2d);
-    Logger.recordOutput("arm/isMovingToTarget", isMovingToTarget);
-    Logger.recordOutput("arm/targetAngleDegrees", targetAngleDegrees);
+    positionTarget.set(m_leftTalonFX.getClosedLoopReference().getValueAsDouble());
+    positionMeasurement.set(m_leftTalonFX.getPosition().getValueAsDouble());
+
+    torqueTarget.set(m_leftTalonFX.getClosedLoopOutput().getValueAsDouble());
+    torqueMeasurement.set(m_leftTalonFX.getTorqueCurrent().getValueAsDouble());
+    torqueFeedForward.set(m_leftTalonFX.getClosedLoopFeedForward().getValueAsDouble());
+
+    torqueMeasurementRight.set(m_rightTalonFX.getTorqueCurrent().getValueAsDouble());
+
+    realArmPosition.set(m_realArmPosition);
+  }
+
+  public TalonFX getLeftTalonFX() {
+    return m_leftTalonFX;
+  }
+
+  public TalonFX getRightTalonFX() {
+    return m_rightTalonFX;
+  }
+
+  public double getArmPosition() {
+    return m_leftTalonFX.getPosition().getValueAsDouble();
   }
 }

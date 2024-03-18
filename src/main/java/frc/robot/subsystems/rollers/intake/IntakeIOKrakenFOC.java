@@ -16,15 +16,15 @@ public class IntakeIOKrakenFOC extends GenericRollerSystemIOKrakenFOC implements
   private static final int currentLimitAmps = 40;
   private static final boolean invert;
   private static final boolean brake = false;
-  private static final double reduction = 18.0 / 12.0;
+  private static final double reduction = 5.0 / 3.0;
 
   static {
     if (Constants.getRobot() == Constants.RobotType.COMPBOT) {
-      id = 9;
-      invert = false;
+      id = 20;
+      invert = true;
     } else {
-      id = 2;
-      invert = false;
+      id = 20;
+      invert = true;
     }
   }
 

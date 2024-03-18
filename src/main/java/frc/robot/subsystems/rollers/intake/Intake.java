@@ -21,18 +21,17 @@ public class Intake extends GenericRollerSystem<Intake.Goal> {
   @RequiredArgsConstructor
   @Getter
   public enum Goal implements VoltageGoal {
-    IDLING(() -> 0.0),
-    FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 10.0)),
-    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -8.0)),
-    SHOOTING(new LoggedTunableNumber("Intake/ShootingVoltage", 12.0)),
-    AMP_SCORING(new LoggedTunableNumber("Intake/AmpVoltage", 5.0)),
-    TRAP_SCORING(new LoggedTunableNumber("Intake/TrapVoltage", 5.0)),
-    SHUFFLING(new LoggedTunableNumber("Intake/ShufflingVoltage", -1.0));
+    IDLE(() -> 0.0),
+    FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 4.0)),
+    SHOOTING(new LoggedTunableNumber("Intake/Shooting", 12.0)),
+    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -4.0)),
+    EJECTALIGN(new LoggedTunableNumber("Intake/EjectingVoltage", -0.05)),
+    AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", 0.0));
 
     private final DoubleSupplier voltageSupplier;
   }
 
-  private Goal goal = Goal.IDLING;
+  private Goal goal = Goal.IDLE;
 
   public Intake(IntakeIO io) {
     super("Intake", io);
