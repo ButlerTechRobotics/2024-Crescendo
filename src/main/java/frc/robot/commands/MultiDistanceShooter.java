@@ -12,38 +12,38 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
+import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 /** A command that angles the arm from multi-distance position from the target. */
-public class MultiDistanceArm extends Command {
+public class MultiDistanceShooter extends Command {
   Supplier<Pose2d> poseSupplier;
-  ArmPositionPID armPID;
+  Shooter shooter;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
-  double angle;
+  double speed;
 
   Translation2d orignalPose;
   Translation2d targetPose;
 
   /**
-   * Creates a new MultiDistanceArm command.
+   * Creates a new MultiDistanceShooter command.
    *
    * @param poseSupplier The supplier for the robot's current pose.
    * @param targetPose The target pose to shoot at.
-   * @param armPID The arm subsystem.
+   * @param shooter The shooter subsystem.
    */
-  public MultiDistanceArm(
-      Supplier<Pose2d> poseSupplier, Translation2d targetPose, ArmPositionPID armPID) {
+  public MultiDistanceShooter(
+      Supplier<Pose2d> poseSupplier, Translation2d targetPose, Shooter shooter) {
     this.poseSupplier = poseSupplier;
-    this.armPID = armPID;
+    this.shooter = shooter;
     this.orignalPose = targetPose;
 
-    // Populate the distance map with distance-angle pairs
+    // Populate the distance map with distance-rpm pairs
     distanceMap.put(1.0, 0.0);
     distanceMap.put(1.5, 7.88); // 7.88 (V3s)
     distanceMap.put(2.0, 12.02); // 12.02(V3s)
@@ -71,10 +71,10 @@ public class MultiDistanceArm extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose);
 
     // Get the corresponding angle from the distance-angle map
-    angle = distanceMap.get(distance);
+    speed = distanceMap.get(distance);
 
     // Run the flywheel at the calculated angle
-    armPID.setPosition(angle);
+    shooter.setSetpoint(speed, speed);
 
     // Put the distance on the SmartDashboard
     SmartDashboard.putNumber("Distance", getDistance());
@@ -83,7 +83,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(2.5); // 3
+    shooter.setSetpoint(0, 0); // 3
   }
 
   @Override
@@ -97,9 +97,9 @@ public class MultiDistanceArm extends Command {
    *
    * @return The distance in units.
    */
-  @AutoLogOutput(key = "Arm/Distance")
+  @AutoLogOutput(key = "Shooter/Distance")
   public double getDistance() {
-    Logger.recordOutput("Arm/Distance", distance);
+    Logger.recordOutput("Shooter/Distance", distance);
     return distance;
   }
 
@@ -108,8 +108,8 @@ public class MultiDistanceArm extends Command {
    *
    * @return The angle in units per second.
    */
-  @AutoLogOutput(key = "Arm/Angle")
-  public double getAngle() {
-    return angle;
+  @AutoLogOutput(key = "Shooter/SetDistanceRPM")
+  public double getSpeed() {
+    return speed;
   }
 }

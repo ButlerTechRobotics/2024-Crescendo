@@ -25,8 +25,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
+import frc.robot.commands.arm.MultiDistanceArm;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 // import frc.robot.subsystems.SwagLights;
@@ -694,6 +695,15 @@ public class RobotContainer {
     // () -> driveMode.enableHeadingControl(), () ->
     // driveMode.disableHeadingControl()));
 
+    operatorController
+        .rightBumper()
+        .whileTrue(
+            Commands.run(
+                () ->
+                    new MultiDistanceShooter(
+                        drive::getPose,
+                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                        shooter)));
     driverController
         .back()
         .onTrue(

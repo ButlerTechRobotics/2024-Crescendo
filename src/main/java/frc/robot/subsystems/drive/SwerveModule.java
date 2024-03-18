@@ -57,9 +57,16 @@ public class SwerveModule {
     turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
     setBrakeMode(true);
   }
-
-  public void periodic() {
+  
+  /**
+   * Update inputs without running the rest of the periodic logic. This is useful since these
+   * updates need to be properly thread-locked.
+   */
+  public void updateInputs() {
     io.updateInputs(inputs);
+  }
+  
+  public void periodic() {
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
     // On first cycle, reset relative turn encoder
