@@ -714,11 +714,14 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().onTrue(new PositionArmPID(armPID, 19.7));
-
-    // .alongWith(Commands.startEnd(
-    // () -> driveMode.enableHeadingControl(), () ->
-    // driveMode.disableHeadingControl()))); //
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(armPID, 20.09)
+                .alongWith(
+                    Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl()))); //
     // Was -16.25 and shot a little too high
 
     // ================================================
