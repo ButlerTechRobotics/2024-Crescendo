@@ -735,7 +735,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.5));
+    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2.5)); // 3
   }
 
   /**
