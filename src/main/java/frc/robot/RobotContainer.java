@@ -715,7 +715,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().onTrue(new PositionArmPID(armPID, 58.2546556566));
+    operatorController.povRight().onTrue(new PositionArmPID(armPID, 30)); // 58.2546556566
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
@@ -727,7 +727,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().whileTrue(new PositionArmPID(armPID, 2.1));
+    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2.1));
   }
 
   /**
