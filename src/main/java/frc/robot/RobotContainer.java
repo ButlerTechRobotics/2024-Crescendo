@@ -180,6 +180,21 @@ public class RobotContainer {
     // ================================================
     // Register the Auto Aim Command
     NamedCommands.registerCommand(
+        "Auto Aim",
+        new MultiDistanceArm(
+                drive::getPose,
+                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                armPID)
+            .withTimeout(3) // Add a 3-second timeout to the command
+            .andThen(
+                new InstantCommand(
+                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
+
+    // ================================================
+    // Register the Auto Aim Command
+    // ================================================
+    // Register the Auto Aim Command
+    NamedCommands.registerCommand(
         "Auto Aim1sec",
         new MultiDistanceArm(
                 drive::getPose,
@@ -702,7 +717,8 @@ public class RobotContainer {
     operatorController.povRight().onTrue(new PositionArmPID(armPID, 19.7));
 
     // .alongWith(Commands.startEnd(
-    //     () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl()))); //
+    // () -> driveMode.enableHeadingControl(), () ->
+    // driveMode.disableHeadingControl()))); //
     // Was -16.25 and shot a little too high
 
     // ================================================
