@@ -53,7 +53,7 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(3.75, 23.32); // 23.46 (old) 23.8(V3s)
     distanceMap.put(4.0, 24.42); // 24.5 (old 95%) 24.52 (V3s)
     distanceMap.put(4.2, 25.77); // 26.02
-    distanceMap.put(4.5, 26.96);  // 27.40
+    distanceMap.put(4.5, 26.96); // 27.40
     distanceMap.put(5.0, 27.4);
     distanceMap.put(5.5, 27.8);
     distanceMap.put(6.0, 28.2);
@@ -83,7 +83,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(3);
+    armPID.setPosition(2.5); // 3
   }
 
   @Override
