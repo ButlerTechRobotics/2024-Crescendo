@@ -107,6 +107,12 @@ public class RobotContainer {
               Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
 
+  private static final Transform3d robotToCameraBack =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(-12.625), Units.inchesToMeters(0.0), Units.inchesToMeters(8.75)),
+          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-180.)));
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.getMode()) {
@@ -131,7 +137,9 @@ public class RobotContainer {
         aprilTagVision =
             new AprilTagVision(
                 new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
-                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR));
+                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
+
         break;
 
       case SIM:
