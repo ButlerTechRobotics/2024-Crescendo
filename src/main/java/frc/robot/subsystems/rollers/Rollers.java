@@ -35,8 +35,7 @@ public class Rollers extends SubsystemBase {
     EJECT_TO_FLOOR,
     FEED_SHOOTER,
     AMP_SHOOTER,
-    EJECTALIGN,
-    SHOOT
+    EJECTALIGN
   }
 
   @Getter @Setter private Goal goal = Goal.IDLE;
@@ -53,15 +52,11 @@ public class Rollers extends SubsystemBase {
         // if (armPID.isAtHomePosition()) {
         intake.setGoal(Intake.Goal.FLOOR_INTAKING);
         // } else {
-        //   // The arm is not at its home position, so set the goals to IDLE
-        //   feeder1.setGoal(Feeder.Goal.IDLE);
-        //   feeder2.setGoal(Feeder.Goal.IDLE);
-        //   intake.setGoal(Intake.Goal.IDLE);
+        // // The arm is not at its home position, so set the goals to IDLE
+        // feeder1.setGoal(Feeder.Goal.IDLE);
+        // feeder2.setGoal(Feeder.Goal.IDLE);
+        // intake.setGoal(Intake.Goal.IDLE);
         // }
-      }
-
-      case SHOOT -> {
-        intake.setGoal(Intake.Goal.SHOOTING);
       }
 
       case EJECTALIGN -> {
@@ -69,12 +64,16 @@ public class Rollers extends SubsystemBase {
       }
 
         // case AMP_SHOOTER -> {
-        //   feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
-        //   feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
+        // feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
+        // feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
         // }
 
       case EJECT_TO_FLOOR -> {
         intake.setGoal(Intake.Goal.EJECTING);
+      }
+
+      case FEED_SHOOTER -> {
+        intake.setGoal(Intake.Goal.SHOOTING);
       }
     }
 

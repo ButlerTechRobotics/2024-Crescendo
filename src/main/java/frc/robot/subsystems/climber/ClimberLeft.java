@@ -9,15 +9,13 @@ package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climber extends SubsystemBase {
-  private TalonFX leader = new TalonFX(23);
-  private TalonFX follower = new TalonFX(24);
+public class ClimberLeft extends SubsystemBase {
+  private TalonFX motor = new TalonFX(23);
 
   /* Be able to switch which control request to use based on a button press */
   /* Start at velocity 0, enable FOC, no feed forward, use slot 0 */
@@ -27,10 +25,9 @@ public class Climber extends SubsystemBase {
           targetPosition, targetPosition, false, targetPosition, 0, false, false, false);
 
   /** Creates a new flyWheelEncoder. */
-  public Climber() {
+  public ClimberLeft() {
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    leader.setNeutralMode(NeutralModeValue.Brake);
-    follower.setControl(new Follower(leader.getDeviceID(), true));
+    motor.setNeutralMode(NeutralModeValue.Brake);
 
     /*
      * Voltage-based velocity requires a feed forward to account for the back-emf of
@@ -51,7 +48,7 @@ public class Climber extends SubsystemBase {
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;
     for (int i = 0; i < 5; ++i) {
-      status = leader.getConfigurator().apply(configs);
+      status = motor.getConfigurator().apply(configs);
 
       if (status.isOK()) break;
     }
@@ -69,12 +66,12 @@ public class Climber extends SubsystemBase {
   }
 
   public double getPosition() {
-    return leader.getPosition().getValueAsDouble();
+    return motor.getPosition().getValueAsDouble();
   }
 
   @Override
   public void periodic() {
-    leader.setControl(m_positionVoltage.withPosition(targetPosition));
+    motor.setControl(m_positionVoltage.withPosition(targetPosition));
 
     // This method will be called once per scheduler run
   }

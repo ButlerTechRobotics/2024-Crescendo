@@ -8,16 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberRight;
 
-public class PositionClimbPID extends Command {
+public class PositionClimbRightPID extends Command {
   /** Creates a new ClimbEncoderPosition. */
-  Climber m_climb;
+  ClimberRight m_climb;
 
   double m_position;
 
   /** Creates a new Climb. */
-  public PositionClimbPID(Climber Climb, double position) {
+  public PositionClimbRightPID(ClimberRight Climb, double position) {
     m_climb = Climb;
     m_position = position;
     addRequirements(m_climb);

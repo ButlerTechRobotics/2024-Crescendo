@@ -10,6 +10,7 @@ package frc.robot;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -24,10 +25,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.PositionClimbPID;
+import frc.robot.commands.PositionClimbLeftPID;
+import frc.robot.commands.PositionClimbRightPID;
 import frc.robot.commands.VelocityShootCommand;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberLeft;
+import frc.robot.subsystems.climber.ClimberRight;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -60,8 +63,13 @@ public class RobotContainer {
   private AprilTagVision aprilTagVision;
   private final Shooter shooter = new Shooter();
   private final Rollers rollers;
-  private final Climber climber;
+  private final ClimberLeft climberleft;
+  private final ClimberRight climberright;
+
   private final Arm m_arm = new Arm();
+
+  private boolean hasRun = false;
+  private boolean hasEjected = false; // New flag for the EJECTALIGN command
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -87,11 +95,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(moduleConfigs[1]),
                 new ModuleIOTalonFX(moduleConfigs[2]),
                 new ModuleIOTalonFX(moduleConfigs[3]));
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIOLimelight("limelight"));
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIOLimelight("limelight-back"));
         intake = new Intake(new IntakeIOKrakenFOC());
         rollers = new Rollers(intake);
         // arm = new Arm(new ArmIOKrakenFOC());
-        climber = new Climber();
+        climberleft = new ClimberLeft();
+        climberright = new ClimberRight();
 
         break;
 
@@ -114,7 +123,8 @@ public class RobotContainer {
         rollers = new Rollers(intake);
 
         // arm = new Arm(new ArmIOSim());
-        climber = new Climber();
+        climberleft = new ClimberLeft();
+        climberright = new ClimberRight();
 
         break;
 
@@ -136,7 +146,8 @@ public class RobotContainer {
 
         rollers = new Rollers(intake);
 
-        climber = new Climber();
+        climberleft = new ClimberLeft();
+        climberright = new ClimberRight();
     }
 
     // Set up auto routines
@@ -146,6 +157,67 @@ public class RobotContainer {
     // () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop,
     // flywheel)
     // .withTimeout(5.0));
+
+    // ================================================
+    // Register the Auto Command Intake
+    // ================================================
+    NamedCommands.registerCommand(
+        "Intake",
+        Commands.sequence(
+            Commands.runOnce(
+                () -> {
+                  if (!hasRun) {
+                    rollers.setGoal(Rollers.Goal.FLOOR_INTAKE);
+                    hasRun = true;
+                  }
+                },
+                rollers),
+            Commands.waitUntil(() -> rollers.getBeamBreak()),
+            Commands.runOnce(
+                () -> {
+                  if (!hasEjected) {
+                    rollers.setGoal(Rollers.Goal.EJECTALIGN);
+                    hasEjected = true;
+                  }
+                },
+                rollers),
+            Commands.waitUntil(() -> !rollers.getBeamBreak()),
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })));
+
+    // ================================================
+    // Register the Auto Command Intake Reset
+    // ================================================
+    NamedCommands.registerCommand(
+        "Intake Reset",
+        Commands.runOnce(
+            () -> {
+              hasRun = false;
+              hasEjected = false;
+            }));
+
+    // ================================================
+    // Register the Auto Command PreShoot
+    // ================================================
+    NamedCommands.registerCommand(
+        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(30.0, 15.0)));
+
+    // ================================================
+    // Register the Auto Command Shoot
+    // ================================================
+    NamedCommands.registerCommand(
+        "Shoot",
+        Commands.sequence(
+            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FEED_SHOOTER)),
+            Commands.waitSeconds(0.5),
+            Commands.runOnce(
+                () -> {
+                  shooter.setVelocity(0);
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
@@ -249,14 +321,26 @@ public class RobotContainer {
     // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
     // flywheel));
 
-    driverController.rightTrigger().whileTrue(new PositionClimbPID(climber, 300));
-    driverController.leftTrigger().whileTrue(new PositionClimbPID(climber, -300));
+    driverController.leftBumper().whileTrue(new PositionClimbLeftPID(climberleft, 300));
+    driverController.leftTrigger().whileTrue(new PositionClimbLeftPID(climberleft, -300));
+    driverController.rightBumper().whileTrue(new PositionClimbRightPID(climberright, 300));
+    driverController.rightTrigger().whileTrue(new PositionClimbRightPID(climberright, -300));
 
-    driverController.povUp().onTrue(m_arm.armUp());
-    driverController.povDown().onTrue(m_arm.armDown());
-    driverController.povRight().onTrue(m_arm.armUpMicro());
-    driverController.povLeft().onTrue(m_arm.armDownMicro());
+    driverController
+        .povUp()
+        .whileTrue(
+            new PositionClimbLeftPID(climberleft, 300)
+                .alongWith(new PositionClimbRightPID(climberright, 300)));
+    driverController
+        .povDown()
+        .whileTrue(
+            new PositionClimbLeftPID(climberleft, -300)
+                .alongWith(new PositionClimbRightPID(climberright, -300)));
 
+    operatorController.povUp().onTrue(m_arm.armUp());
+    operatorController.povDown().onTrue(m_arm.armDown());
+    operatorController.povRight().onTrue(m_arm.armUpMicro());
+    operatorController.povLeft().onTrue(m_arm.armDownMicro());
 
     operatorController.rightBumper().whileTrue(shooter.differentialShootDownCommand()); // subwoofer
     operatorController.leftBumper().whileTrue(shooter.differentialShootUpCommand()); // midrange

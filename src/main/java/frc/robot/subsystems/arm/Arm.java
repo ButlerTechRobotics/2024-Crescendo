@@ -18,6 +18,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
   private static final String canBusName = "canivore";
@@ -101,7 +102,8 @@ public class Arm extends SubsystemBase {
           setArmPosition(position);
         });
   }
-    public Command armDownMicro() {
+
+  public Command armDownMicro() {
     return runOnce(
         () -> {
           m_mmtorquePosition.Velocity = 20;
@@ -200,6 +202,9 @@ public class Arm extends SubsystemBase {
 
     m_leftTalonFX.setControl(
         m_mmtorquePosition.withPosition(m_targetArmPosition).withFeedForward(feedforward));
+
+    Logger.recordOutput("Arm/TargetAngle", m_targetArmPosition);
+    Logger.recordOutput("Arm/CurrentAngle", m_leftTalonFX.getPosition().getValueAsDouble());
   }
 
   private void telemetry() {
