@@ -15,7 +15,7 @@ public class VelocityShootCommand extends Command {
 
   private final Shooter m_shooter;
   private final Timer m_timer;
-  private final double m_shooterVelocitySet = 40.0;
+  private final double m_shooterVelocitySet = 45.0;
 
   public VelocityShootCommand(Shooter shooter) {
     m_shooter = shooter;

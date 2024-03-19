@@ -195,7 +195,7 @@ public class RobotContainer {
             () -> driverController.getRightX()));
 
     driverController
-        .leftBumper()
+        .x()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
@@ -214,7 +214,7 @@ public class RobotContainer {
                 }));
 
     driverController
-        .leftTrigger()
+        .a()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers)))
@@ -225,7 +225,7 @@ public class RobotContainer {
                 }));
 
     driverController
-        .y()
+        .start()
         .whileTrue(
             Commands.runOnce(
                 () ->
@@ -249,11 +249,24 @@ public class RobotContainer {
     // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
     // flywheel));
 
-    driverController.b().whileTrue(new PositionClimbPID(climber, 300));
-    driverController.a().whileTrue(new PositionClimbPID(climber, -300));
+    driverController.rightTrigger().whileTrue(new PositionClimbPID(climber, 300));
+    driverController.leftTrigger().whileTrue(new PositionClimbPID(climber, -300));
 
     driverController.povUp().onTrue(m_arm.armUp());
     driverController.povDown().onTrue(m_arm.armDown());
+    driverController.povRight().onTrue(m_arm.armUpMicro());
+    driverController.povLeft().onTrue(m_arm.armDownMicro());
+
+
+    operatorController.rightBumper().whileTrue(shooter.differentialShootDownCommand()); // subwoofer
+    operatorController.leftBumper().whileTrue(shooter.differentialShootUpCommand()); // midrange
+    operatorController.leftTrigger().whileTrue(shooter.commonShootCommand()); // normal
+    operatorController.rightTrigger().whileTrue(shooter.farShootCommand()); // far
+
+    operatorController.x().onTrue(m_arm.armBackZero());
+    operatorController.y().onTrue(m_arm.armAMP());
+    operatorController.a().onTrue(m_arm.armMid());
+    operatorController.b().onTrue(m_arm.armPod());
 
     // driverController.povUp().whileTrue(Commands.runOnce(() ->
     // arm.setDesiredDegrees(90)));

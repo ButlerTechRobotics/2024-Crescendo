@@ -29,7 +29,7 @@ public final class DriveConstants {
                 Units.inchesToMeters(26.0),
                 Units.feetToMeters(12.16),
                 Units.feetToMeters(21.32),
-                7.93,
+                10.93,
                 29.89);
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);

@@ -52,7 +52,7 @@ public class Drive extends SubsystemBase {
   private static ProfiledPIDController thetaController =
       new ProfiledPIDController(
           headingControllerConstants.Kp(),
-          0,
+          0.000,
           headingControllerConstants.Kd(),
           new TrapezoidProfile.Constraints(
               drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));

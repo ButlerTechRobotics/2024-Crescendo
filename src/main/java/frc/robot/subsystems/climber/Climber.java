@@ -36,7 +36,7 @@ public class Climber extends SubsystemBase {
      * Voltage-based velocity requires a feed forward to account for the back-emf of
      * the motor
      */
-    configs.Slot0.kP = 0.11; // An error of 1 rotation per second results in 2V output
+    configs.Slot0.kP = 0.15; // An error of 1 rotation per second results in 2V output
     configs.Slot0.kI =
         0.0; // An error of 1 rotation per second increases output by 0.5V every second
     configs.Slot0.kD =
@@ -46,7 +46,7 @@ public class Climber extends SubsystemBase {
     // volts / Rotation per second
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 8;
-    configs.Voltage.PeakReverseVoltage = -8;
+    configs.Voltage.PeakReverseVoltage = -10;
 
     /* Retry config apply up to 5 times, report if failure */
     StatusCode status = StatusCode.StatusCodeNotInitialized;

@@ -30,6 +30,7 @@ public class Arm extends SubsystemBase {
   private double m_realArmPosition = 0.0;
 
   private final double ADD_POSITION = 8;
+  private final double MICRO_POSITION = 8;
   private final double PI = 3.1415926;
   private final double MAX_FEEDFORWARD = 8.0;
   private final double MAXIMUM_POSITION = 0.0;
@@ -85,6 +86,77 @@ public class Arm extends SubsystemBase {
           m_mmtorquePosition.Jerk = 1000;
 
           var position = getArmPosition() + ADD_POSITION;
+          setArmPosition(position);
+        });
+  }
+
+  public Command armUpMicro() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 25;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = getArmPosition() - MICRO_POSITION;
+          setArmPosition(position);
+        });
+  }
+    public Command armDownMicro() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 20;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = getArmPosition() + MICRO_POSITION;
+          setArmPosition(position);
+        });
+  }
+
+  public Command armBackZero() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = 0.0;
+          setArmPosition(position);
+        });
+  }
+
+  public Command armAMP() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = -31.0;
+          setArmPosition(position);
+        });
+  }
+
+  public Command armMid() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = -15.0;
+          setArmPosition(position);
+        });
+  }
+
+  public Command armPod() {
+    return runOnce(
+        () -> {
+          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Acceleration = 100;
+          m_mmtorquePosition.Jerk = 1000;
+
+          var position = -22.5;
           setArmPosition(position);
         });
   }
