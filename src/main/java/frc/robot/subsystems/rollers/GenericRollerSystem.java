@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor
-public abstract class GenericRollerSubsystem<G extends GenericRollerSubsystem.VoltageGoal> {
+public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageGoal> {
   public interface VoltageGoal {
     DoubleSupplier getVoltageSupplier();
   }

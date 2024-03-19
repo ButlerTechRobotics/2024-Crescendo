@@ -7,17 +7,17 @@
 
 package frc.robot.subsystems.rollers.feeder;
 
-import frc.robot.subsystems.rollers.GenericRollerSubsystem;
+import frc.robot.subsystems.rollers.GenericRollerSystem;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-public class Feeder extends GenericRollerSubsystem<Feeder.Goal> {
+public class Feeder extends GenericRollerSystem<Feeder.Goal> {
   @RequiredArgsConstructor
   @Getter
-  public enum Goal implements GenericRollerSubsystem.VoltageGoal {
+  public enum Goal implements GenericRollerSystem.VoltageGoal {
     IDLE(() -> 0.0),
     FLOOR_INTAKING(new LoggedTunableNumber("Feeder/FloorIntakingVoltage", 6.0)),
     BACKSTOPPING(new LoggedTunableNumber("Feeder/BackstoppingVoltage", -3.0)),

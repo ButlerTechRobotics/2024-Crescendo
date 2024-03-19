@@ -57,7 +57,7 @@ public class SwerveModule {
     turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
     setBrakeMode(true);
   }
-  
+
   /**
    * Update inputs without running the rest of the periodic logic. This is useful since these
    * updates need to be properly thread-locked.
@@ -65,7 +65,7 @@ public class SwerveModule {
   public void updateInputs() {
     io.updateInputs(inputs);
   }
-  
+
   public void periodic() {
     Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 

@@ -16,7 +16,7 @@ public class SuperstructureConstants {
 
   public static class ShooterConstants {
     // encoder / flywheelReduction = flywheel
-    public static double reduction = (-1.0 / 1.0);
+    public static double reduction = (1.0 / 1.0);
     public static double shooterToleranceRPM = 100.0;
     public static int topID = 22;
     public static int bottomID = 23;
