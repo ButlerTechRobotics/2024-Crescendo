@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
@@ -47,28 +48,32 @@ public class DriveCommands {
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble() * 0.8, DEADBAND);
 
+          if (driveMode.isHeadingControlled()) {
+            final var targetAngle = driveMode.getHeadingAngle();
+            SmartDashboard.putBoolean("Heading Control", true);
+            omega =
+                Drive.getThetaController()
+                    .calculate(
+                        Drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
+            SmartDashboard.putNumber("omega", omega);
+            // if (Drive.getThetaController().atGoal()) {
+            //   omega = 0;
+            // }
+            // omega = Math.copySign(Math.min(1, Math.abs(omega)), omega);
+          } else {
+            SmartDashboard.putBoolean("Heading Control", false);
+          }
+
+          // Square values
+          linearMagnitude = linearMagnitude * linearMagnitude;
+          omega = Math.copySign(omega * omega, omega);
+
           // // If the joystick is not moving, stop the drive and turn the modules to an X
           // // arrangement
           if (Math.abs(linearMagnitude) < DEADBAND && Math.abs(omega) < DEADBAND) {
             drive.stopWithX();
             return;
           }
-
-          if (driveMode.isHeadingControlled()) {
-            final var targetAngle = driveMode.getHeadingAngle();
-            omega =
-                Drive.getThetaController()
-                    .calculate(
-                        drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
-            if (Drive.getThetaController().atGoal()) {
-              omega = 0;
-            }
-            omega = Math.copySign(Math.min(1, Math.abs(omega)), omega);
-          }
-
-          // Square values
-          linearMagnitude = linearMagnitude * linearMagnitude;
-          omega = Math.copySign(omega * omega, omega);
 
           // Calcaulate new linear velocity
           Translation2d linearVelocity =

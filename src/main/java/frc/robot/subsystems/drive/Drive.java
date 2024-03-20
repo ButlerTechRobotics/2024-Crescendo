@@ -53,13 +53,11 @@ public class Drive extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
 
-
   private static ShuffleboardTab tempTuningTab = Shuffleboard.getTab("Drive Snap Tuning");
-  
 
   private GenericEntry maxVelocityEntry = tempTuningTab.add("Max Velocity", 9999999).getEntry();
-  private GenericEntry maxAccelerationEntry = tempTuningTab.add("Max Acceleration", 9999999).getEntry();
-
+  private GenericEntry maxAccelerationEntry =
+      tempTuningTab.add("Max Acceleration", 9999999).getEntry();
 
   private static ProfiledPIDController thetaController =
       new ProfiledPIDController(
@@ -68,14 +66,15 @@ public class Drive extends SubsystemBase {
           headingControllerConstants.Kd(),
           new TrapezoidProfile.Constraints(
               drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));
-  
+
   static {
     tempTuningTab.add(thetaController);
+    tempTuningTab.addNumber("theta setpoint", () -> thetaController.getSetpoint().position);
   }
 
-  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
-  private Rotation2d rawGyroRotation = new Rotation2d();
-  private SwerveModulePosition[] lastModulePositions = // For delta tracking
+  private static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
+  private static Rotation2d rawGyroRotation = new Rotation2d();
+  private static SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),
         new SwerveModulePosition(),
@@ -113,7 +112,7 @@ public class Drive extends SubsystemBase {
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
-        this::getPose,
+        Drive::getPose,
         this::setAutoStartPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
@@ -158,8 +157,8 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    thetaController.setConstraints(new Constraints(maxVelocityEntry.getDouble(9999999), maxAccelerationEntry.getDouble(0)));
-    
+    thetaController.setConstraints(
+        new Constraints(maxVelocityEntry.getDouble(9999999), maxAccelerationEntry.getDouble(0)));
 
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);

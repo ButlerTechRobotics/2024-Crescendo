@@ -22,13 +22,12 @@ public class ClimberLeft extends SubsystemBase {
   private double targetPosition = 0;
   private final PositionVoltage m_positionVoltage =
       new PositionVoltage(
-          targetPosition, targetPosition, false, targetPosition, 0, false, false, false);
+          targetPosition, targetPosition, false, targetPosition, 0, true, false, false);
 
   /** Creates a new flyWheelEncoder. */
   public ClimberLeft() {
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    motor.setNeutralMode(NeutralModeValue.Brake);
-
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     /*
      * Voltage-based velocity requires a feed forward to account for the back-emf of
      * the motor

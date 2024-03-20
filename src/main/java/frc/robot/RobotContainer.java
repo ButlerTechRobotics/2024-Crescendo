@@ -13,15 +13,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -47,10 +44,7 @@ import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOKrakenFOC;
 import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.vision.AprilTagVision;
-import frc.robot.subsystems.vision.AprilTagVisionIO;
-import frc.robot.subsystems.vision.AprilTagVisionIOLimelight;
-import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
+import frc.robot.subsystems.vision.VisionPoseEstimator;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -63,7 +57,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private static DriveController driveMode = new DriveController();
-  private AprilTagVision aprilTagVision;
+  private VisionPoseEstimator visionPoseEstimator;
   private final Shooter shooter = new Shooter();
   private final LedStrips ledStrips = new LedStrips();
   private final Rollers rollers;
@@ -82,7 +76,8 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private GenericEntry headingDegreesEntry = Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
+  private GenericEntry headingDegreesEntry =
+      Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
 
   // private final LoggedTunableNumber flywheelSpeedInput =
   // new LoggedTunableNumber("Flywheel Speed", 1500.0);
@@ -101,12 +96,13 @@ public class RobotContainer {
                 new ModuleIOTalonFX(moduleConfigs[1]),
                 new ModuleIOTalonFX(moduleConfigs[2]),
                 new ModuleIOTalonFX(moduleConfigs[3]));
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIOLimelight("limelight-back"));
         intake = new Intake(new IntakeIOKrakenFOC());
         rollers = new Rollers(intake);
         // arm = new Arm(new ArmIOKrakenFOC());
         climberleft = new ClimberLeft();
         climberright = new ClimberRight();
+
+        visionPoseEstimator = new VisionPoseEstimator();
 
         break;
 
@@ -119,12 +115,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVisionSIM(
-                    "photonCamera1",
-                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-                    drive::getDrive));
+
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(intake);
 
@@ -143,8 +134,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
 
         intake = new Intake(new IntakeIO() {});
 
@@ -251,10 +240,9 @@ public class RobotContainer {
     // flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
-    aprilTagVision.setDataInterfaces(drive::addVisionData);
-    driveMode.setPoseSupplier(drive::getPose);
-    driveMode.setHeadingSupplier(() -> Rotation2d.fromDegrees(headingDegreesEntry.getDouble(0)));
-    // driveMode.disableHeadingControl();
+    driveMode.setPoseSupplier(Drive::getPose);
+    // driveMode.setHeadingSupplier(() -> Rotation2d.fromDegrees(headingDegreesEntry.getDouble(0)));
+    driveMode.disableHeadingControl();
 
     configureButtonBindings();
   }
@@ -302,7 +290,8 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                })).whileTrue(shooter.commonShootCommand(20,true));
+                }))
+        .whileTrue(shooter.commonShootCommand(20, true));
 
     driverController
         .b()
@@ -313,7 +302,8 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                })).whileTrue(shooter.commonShootCommand(20,true));
+                }))
+        .whileTrue(shooter.commonShootCommand(20, true));
 
     driverController
         .start()

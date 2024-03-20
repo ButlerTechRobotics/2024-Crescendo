@@ -27,7 +27,7 @@ public class ClimberRight extends SubsystemBase {
   /** Creates a new flyWheelEncoder. */
   public ClimberRight() {
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    motor.setNeutralMode(NeutralModeValue.Brake);
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     /*
      * Voltage-based velocity requires a feed forward to account for the back-emf of
