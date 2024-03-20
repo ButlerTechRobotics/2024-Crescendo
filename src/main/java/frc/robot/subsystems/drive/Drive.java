@@ -29,9 +29,13 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -49,6 +53,14 @@ public class Drive extends SubsystemBase {
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
 
+
+  private static ShuffleboardTab tempTuningTab = Shuffleboard.getTab("Drive Snap Tuning");
+  
+
+  private GenericEntry maxVelocityEntry = tempTuningTab.add("Max Velocity", 9999999).getEntry();
+  private GenericEntry maxAccelerationEntry = tempTuningTab.add("Max Acceleration", 9999999).getEntry();
+
+
   private static ProfiledPIDController thetaController =
       new ProfiledPIDController(
           headingControllerConstants.Kp(),
@@ -56,6 +68,10 @@ public class Drive extends SubsystemBase {
           headingControllerConstants.Kd(),
           new TrapezoidProfile.Constraints(
               drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));
+  
+  static {
+    tempTuningTab.add(thetaController);
+  }
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -66,7 +82,7 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator =
+  private static SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(
           kinematics,
           rawGyroRotation,
@@ -142,6 +158,9 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    thetaController.setConstraints(new Constraints(maxVelocityEntry.getDouble(9999999), maxAccelerationEntry.getDouble(0)));
+    
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     for (var module : modules) {
@@ -280,7 +299,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the current pose estimation. */
   @AutoLogOutput(key = "Odometry/PoseEstimation")
-  public Pose2d getPose() {
+  public static Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
   }
 
@@ -320,7 +339,7 @@ public class Drive extends SubsystemBase {
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp The timestamp of the vision measurement in seconds.
    */
-  public void addVisionMeasurement(
+  public static void addVisionMeasurement(
       Pose2d visionPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(visionPose, timestamp, visionMeasurementStdDevs);
   }

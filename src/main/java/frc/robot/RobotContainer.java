@@ -17,8 +17,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -38,6 +40,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.leds.LedStrips;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
@@ -62,6 +65,7 @@ public class RobotContainer {
   private static DriveController driveMode = new DriveController();
   private AprilTagVision aprilTagVision;
   private final Shooter shooter = new Shooter();
+  private final LedStrips ledStrips = new LedStrips();
   private final Rollers rollers;
   private final ClimberLeft climberleft;
   private final ClimberRight climberright;
@@ -77,6 +81,8 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private GenericEntry headingDegreesEntry = Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
 
   // private final LoggedTunableNumber flywheelSpeedInput =
   // new LoggedTunableNumber("Flywheel Speed", 1500.0);
@@ -202,7 +208,7 @@ public class RobotContainer {
     // Register the Auto Command PreShoot
     // ================================================
     NamedCommands.registerCommand(
-        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(30.0, 15.0)));
+        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(40.0, 25.0)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -247,7 +253,9 @@ public class RobotContainer {
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
     driveMode.setPoseSupplier(drive::getPose);
-    driveMode.disableHeadingControl();
+    driveMode.setHeadingSupplier(() -> Rotation2d.fromDegrees(headingDegreesEntry.getDouble(0)));
+    // driveMode.disableHeadingControl();
+
     configureButtonBindings();
   }
 
@@ -274,7 +282,7 @@ public class RobotContainer {
                 Commands.waitUntil(() -> rollers.getBeamBreak()),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
                 Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                Commands.waitSeconds(0.035),
+                Commands.waitSeconds(0.02),
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);
@@ -294,7 +302,18 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+                })).whileTrue(shooter.commonShootCommand(20,true));
+
+    driverController
+        .b()
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers)))
+        .whileFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })).whileTrue(shooter.commonShootCommand(20,true));
 
     driverController
         .start()
@@ -336,6 +355,9 @@ public class RobotContainer {
         .whileTrue(
             new PositionClimbLeftPID(climberleft, -300)
                 .alongWith(new PositionClimbRightPID(climberright, -300)));
+
+    driverController.back().onTrue(ledStrips.setRGB_CMD(255, 0, 0));
+    operatorController.back().onTrue(ledStrips.setRGB_CMD(0, 255, 0));
 
     operatorController.povUp().onTrue(m_arm.armUp());
     operatorController.povDown().onTrue(m_arm.armDown());
