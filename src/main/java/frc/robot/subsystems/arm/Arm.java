@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.DynamicMotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -31,9 +32,9 @@ public class Arm extends SubsystemBase {
   private double m_realArmPosition = 0.0;
 
   private final double ADD_POSITION = 8;
-  private final double MICRO_POSITION = 8;
+  private final double MICRO_POSITION = 2;
   private final double PI = 3.1415926;
-  private final double MAX_FEEDFORWARD = 8.0;
+  private final double MAX_FEEDFORWARD = 5.0;
   private final double MAXIMUM_POSITION = 0.0;
   private final double MINIMUM_POSITION = -32.0;
 
@@ -62,6 +63,8 @@ public class Arm extends SubsystemBase {
 
   public Arm() {
     initializeTalonFX(m_leftTalonFX.getConfigurator());
+    m_leftTalonFX.setNeutralMode(NeutralModeValue.Brake);
+    m_rightTalonFX.setNeutralMode(NeutralModeValue.Brake);
     m_rightTalonFX.setControl(new Follower(m_leftTalonFX.getDeviceID(), true));
 
     m_realArmPosition = -0.003; // -1 degree / 360
@@ -118,7 +121,7 @@ public class Arm extends SubsystemBase {
   public Command armBackZero() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Velocity = 43; // 35
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
@@ -130,11 +133,11 @@ public class Arm extends SubsystemBase {
   public Command armAMP() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Velocity = 40; // 30
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -28.0;
+          var position = -33; // -33
           setArmPosition(position);
         });
   }
@@ -142,11 +145,11 @@ public class Arm extends SubsystemBase {
   public Command armMid() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Velocity = 35;
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -7.0;
+          var position = -6; // -6.5
           setArmPosition(position);
         });
   }
@@ -154,11 +157,11 @@ public class Arm extends SubsystemBase {
   public Command armPod() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 30;
+          m_mmtorquePosition.Velocity = 35;
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -12.5;
+          var position = -11.5; // -12.0
           setArmPosition(position);
         });
   }
@@ -187,8 +190,8 @@ public class Arm extends SubsystemBase {
     toApply.Slot0.kD = 1.5; // A change of 1000 rotation per second squared results in 1 amp output
 
     // Peak output of 40 amps
-    toApply.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-    toApply.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+    toApply.TorqueCurrent.PeakForwardTorqueCurrent = 50;
+    toApply.TorqueCurrent.PeakReverseTorqueCurrent = -50;
 
     cfg.apply(toApply);
   }

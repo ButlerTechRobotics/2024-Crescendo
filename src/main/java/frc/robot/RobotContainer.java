@@ -9,6 +9,8 @@ package frc.robot;
 
 import static frc.robot.subsystems.drive.DriveConstants.*;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,16 +19,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.PositionClimbLeftPID;
 import frc.robot.commands.PositionClimbRightPID;
-import frc.robot.commands.VelocityShootCommand;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.climber.ClimberLeft;
 import frc.robot.subsystems.climber.ClimberRight;
@@ -37,6 +41,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.drive97.CommandSwerveDrivetrain;
 import frc.robot.subsystems.leds.LedStrips;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
@@ -48,54 +53,74 @@ import frc.robot.subsystems.vision.VisionPoseEstimator;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+
+  public final Drive drive;
   private static DriveController driveMode = new DriveController();
-  private VisionPoseEstimator visionPoseEstimator;
+  public VisionPoseEstimator visionPoseEstimator;
   private final Shooter shooter = new Shooter();
-  private final LedStrips ledStrips = new LedStrips();
   private final Rollers rollers;
   private final ClimberLeft climberleft;
   private final ClimberRight climberright;
+
+  private LedStrips m_LedStrips = LedStrips.getIns();
 
   private final Arm m_arm = new Arm();
 
   private boolean hasRun = false;
   private boolean hasEjected = false; // New flag for the EJECTALIGN command
 
+  ////////////////////// NEW
+
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  public final LoggedDashboardChooser<Command> autoChooser;
 
-  private GenericEntry headingDegreesEntry =
-      Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
+  private GenericEntry headingDegreesEntry = Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
+
+  private double MaxSpeed = 6; // 6 meters per second desired top speed
+  private double MaxAngularRate = 1.2 * Math.PI; // 3/4 of a rotation per second max angular velocity
+
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+
+  private final SwerveRequest.FieldCentric drive97 = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.1)
+      .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+
+  // driving in open loop
 
   // private final LoggedTunableNumber flywheelSpeedInput =
   // new LoggedTunableNumber("Flywheel Speed", 1500.0);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Declare component subsystems (not visible outside constructor)
     Intake intake = null;
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(true),
-                new ModuleIOTalonFX(moduleConfigs[0]),
-                new ModuleIOTalonFX(moduleConfigs[1]),
-                new ModuleIOTalonFX(moduleConfigs[2]),
-                new ModuleIOTalonFX(moduleConfigs[3]));
+        drive = new Drive(
+            new GyroIOPigeon2(true),
+            new ModuleIOTalonFX(moduleConfigs[0]),
+            new ModuleIOTalonFX(moduleConfigs[1]),
+            new ModuleIOTalonFX(moduleConfigs[2]),
+            new ModuleIOTalonFX(moduleConfigs[3]));
         intake = new Intake(new IntakeIOKrakenFOC());
         rollers = new Rollers(intake);
         // arm = new Arm(new ArmIOKrakenFOC());
@@ -108,13 +133,13 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim());
 
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(intake);
@@ -127,15 +152,20 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            });
 
-        intake = new Intake(new IntakeIO() {});
+        intake = new Intake(new IntakeIO() {
+        });
 
         // arm = new Arm(new ArmIO() {});
 
@@ -197,7 +227,7 @@ public class RobotContainer {
     // Register the Auto Command PreShoot
     // ================================================
     NamedCommands.registerCommand(
-        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(40.0, 25.0)));
+        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(60.0, 22.0)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -206,14 +236,38 @@ public class RobotContainer {
         "Shoot",
         Commands.sequence(
             Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FEED_SHOOTER)),
-            Commands.waitSeconds(0.5),
+            Commands.waitSeconds(1),
             Commands.runOnce(
                 () -> {
                   shooter.setVelocity(0);
                   rollers.setGoal(Rollers.Goal.IDLE);
                 })));
 
+    // ================================================
+    // Register the Auto Command ResetPose
+    // ================================================
+    NamedCommands.registerCommand(
+        "ResetPose1",
+        Commands.runOnce(
+            () -> drive.setAutoStartPose(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(60)))));
+
+    NamedCommands.registerCommand(
+        "ResetPose2",
+        Commands.runOnce(
+            () -> drive.setAutoStartPose(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-60)))));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    // angleChooser = new LoggedDashboardChooser<>("Start Angle Choices")
+    // angleChooser= new LoggedDashboardChooser<>("startAngle",c
+    // Commands.runOnce(
+    // () ->
+    // drive.setAutoStartPose(
+    // new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(startAngle))_;
+
+    // public static SendableChooser<Command> buildAutoChooser() {
+    // return buildAutoChooser("");
+    // }
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -241,19 +295,38 @@ public class RobotContainer {
 
     // Configure the button bindings
     driveMode.setPoseSupplier(Drive::getPose);
-    // driveMode.setHeadingSupplier(() -> Rotation2d.fromDegrees(headingDegreesEntry.getDouble(0)));
+    // driveMode.setHeadingSupplier(() ->
+    // Rotation2d.fromDegrees(headingDegreesEntry.getDouble(0)));
     driveMode.disableHeadingControl();
 
+    Trigger enabling = new Trigger(RobotState::isEnabled);
+    enabling.onTrue(m_arm.armBackZero());
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    // drivetrain.setDefaultCommand( // Drivetrain will execute this command
+    // periodically
+    // drivetrain.applyRequest(
+    // () ->
+    // drive97
+    // .withVelocityX(curveControl(-driverController.getLeftY()) * MaxSpeed)
+    // // Drive forward with negative Y (forward)
+    // .withVelocityY(
+    // curveControl(-driverController.getLeftX())
+    // * MaxSpeed) // Drive left with negative X (left)
+    // // Drive counterclockwise with negative X (left)
+    // .withRotationalRate(
+    // curveControl(-driverController.getRightX()) * MaxAngularRate)));
+
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
@@ -264,22 +337,28 @@ public class RobotContainer {
 
     driverController
         .x()
+        .whileTrue(shooter.commonShootCommand(5, true))
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                 Commands.waitUntil(() -> rollers.getBeamBreak()),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-                Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                Commands.waitSeconds(0.02),
+                Commands.runOnce(() -> m_LedStrips.setRGB(0, 255, 0)),
+                // Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                Commands.waitSeconds(0.26), // 0.18
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);
                     })))
         .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+            Commands.sequence(
+                Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                      // shooter.commonShootCommand(0, true);
+                    }),
+                Commands.waitSeconds(1.69), // 0.18
+                Commands.runOnce(() -> m_LedStrips.setRGB(255, 0, 0))));
 
     driverController
         .a()
@@ -292,29 +371,60 @@ public class RobotContainer {
                   rollers.setGoal(Rollers.Goal.IDLE);
                 }))
         .whileTrue(shooter.commonShootCommand(20, true));
-
     driverController
-        .b()
+        .back()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers)))
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers)))
         .whileFalse(
             Commands.runOnce(
                 () -> {
                   rollers.setGoal(Rollers.Goal.IDLE);
                 }))
-        .whileTrue(shooter.commonShootCommand(20, true));
+        .whileTrue(shooter.commonShootCommand(3, true));
+
+    // driverController
+    // .b()
+    // .whileTrue( // Tyler Fixed This. :)
+    // Commands.sequence(
+    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR),
+    // rollers)))
+    // .whileFalse(
+    // Commands.runOnce(
+    // () -> {
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // }))
+    // .whileTrue(shooter.commonShootCommand(20, true));
+
+    driverController
+        .b()
+        .whileTrue(shooter.commonShootCommand(45, false))
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+        .whileFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
 
     driverController
         .start()
         .whileTrue(
             Commands.runOnce(
-                () ->
-                    drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
+                () -> drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
 
-    driverController.y().whileTrue(new VelocityShootCommand(shooter));
-
+    driverController
+        .y()
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FEED_SHOOTER), rollers)))
+        .whileFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
     // driverController
     // .povDown()
     // .whileTrue(
@@ -330,39 +440,54 @@ public class RobotContainer {
     // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
     // flywheel));
 
-    driverController.leftBumper().whileTrue(new PositionClimbLeftPID(climberleft, 300));
-    driverController.leftTrigger().whileTrue(new PositionClimbLeftPID(climberleft, -300));
-    driverController.rightBumper().whileTrue(new PositionClimbRightPID(climberright, 300));
-    driverController.rightTrigger().whileTrue(new PositionClimbRightPID(climberright, -300));
+    // driverController.rightBumper().whileTrue(new
+    // PositionClimbLeftPID(climberleft, 300));
+    // driverController.rightTrigger().whileTrue(new
+    // PositionClimbLeftPID(climberleft, -300));
+    // driverController.leftBumper().whileTrue(new
+    // PositionClimbRightPID(climberright, 300));
+    // driverController.leftTrigger().whileTrue(new
+    // PositionClimbRightPID(climberright, -300));
 
+    driverController.povLeft().whileTrue(new PositionClimbLeftPID(climberleft, -300));
+    driverController.povRight().whileTrue(new PositionClimbRightPID(climberright, -300));
     driverController
         .povUp()
         .whileTrue(
-            new PositionClimbLeftPID(climberleft, 300)
-                .alongWith(new PositionClimbRightPID(climberright, 300)));
+            new PositionClimbLeftPID(climberleft, 400)
+                .alongWith(new PositionClimbRightPID(climberright, 400)));
     driverController
         .povDown()
         .whileTrue(
             new PositionClimbLeftPID(climberleft, -300)
                 .alongWith(new PositionClimbRightPID(climberright, -300)));
 
-    driverController.back().onTrue(ledStrips.setRGB_CMD(255, 0, 0));
-    operatorController.back().onTrue(ledStrips.setRGB_CMD(0, 255, 0));
-
     operatorController.povUp().onTrue(m_arm.armUp());
     operatorController.povDown().onTrue(m_arm.armDown());
     operatorController.povRight().onTrue(m_arm.armUpMicro());
     operatorController.povLeft().onTrue(m_arm.armDownMicro());
 
-    operatorController.rightBumper().whileTrue(shooter.differentialShootDownCommand()); // subwoofer
-    operatorController.leftBumper().whileTrue(shooter.differentialShootUpCommand()); // midrange
-    operatorController.leftTrigger().whileTrue(shooter.commonShootCommand()); // normal
-    operatorController.rightTrigger().whileTrue(shooter.farShootCommand()); // far
+    operatorController.leftBumper().whileTrue(shooter.differentialShootUpCommand());
+    operatorController.rightBumper().whileTrue(shooter.commonShootCommand());
+    operatorController.leftTrigger().whileTrue(shooter.differentialShootDownCommand());
+    operatorController.rightTrigger().whileTrue(shooter.farShootCommand());
 
     operatorController.x().onTrue(m_arm.armBackZero());
     operatorController.y().onTrue(m_arm.armAMP());
-    operatorController.a().onTrue(m_arm.armMid());
+    operatorController.a().whileTrue(shooter.differentialShootUpCommand());
     operatorController.b().onTrue(m_arm.armPod());
+
+    operatorController
+        .back()
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers)))
+        .whileFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }))
+        .whileTrue(shooter.commonShootCommand(3, true));
 
     // driverController.povUp().whileTrue(Commands.runOnce(() ->
     // arm.setDesiredDegrees(90)));
@@ -405,5 +530,12 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autoChooser.get();
+  }
+
+  private double curveControl(double input) {
+    if (input < 0) {
+      return -Math.pow(input, 2);
+    }
+    return Math.pow(input, 2);
   }
 }

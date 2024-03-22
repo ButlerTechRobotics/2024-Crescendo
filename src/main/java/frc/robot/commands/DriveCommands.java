@@ -25,7 +25,7 @@ import frc.robot.subsystems.drive.DriveController;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
-  private static final double DEADBAND = 0.1;
+  private static final double DEADBAND = 0.10;
 
   private DriveCommands() {}
 
@@ -46,7 +46,7 @@ public class DriveCommands {
                   Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
           Rotation2d linearDirection =
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble() * 0.8, DEADBAND);
+          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
           if (driveMode.isHeadingControlled()) {
             final var targetAngle = driveMode.getHeadingAngle();
@@ -57,7 +57,7 @@ public class DriveCommands {
                         Drive.getPose().getRotation().getRadians(), targetAngle.get().getRadians());
             SmartDashboard.putNumber("omega", omega);
             // if (Drive.getThetaController().atGoal()) {
-            //   omega = 0;
+            // omega = 0;
             // }
             // omega = Math.copySign(Math.min(1, Math.abs(omega)), omega);
           } else {
@@ -70,7 +70,7 @@ public class DriveCommands {
 
           // // If the joystick is not moving, stop the drive and turn the modules to an X
           // // arrangement
-          if (Math.abs(linearMagnitude) < DEADBAND && Math.abs(omega) < DEADBAND) {
+          if (Math.abs(linearMagnitude) == 0 && Math.abs(omega) == 0) {
             drive.stopWithX();
             return;
           }
@@ -95,5 +95,14 @@ public class DriveCommands {
                       : drive.getRotation()));
         },
         drive);
+  }
+
+  private static double curveControl(double input) {
+    if (input < 0) {
+      return -Math.pow(input, 2);
+    }
+    return Math.pow(input, 2);
+
+    // return Math.pow(input, 5);
   }
 }

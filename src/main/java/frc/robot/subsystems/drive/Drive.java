@@ -158,7 +158,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     thetaController.setConstraints(
-        new Constraints(maxVelocityEntry.getDouble(9999999), maxAccelerationEntry.getDouble(0)));
+        new Constraints(maxVelocityEntry.getDouble(12), maxAccelerationEntry.getDouble(10)));
 
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
@@ -215,6 +215,9 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
       odometryDrive.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
+
+    Logger.recordOutput("Drive/Esitmatedpose", poseEstimator.getEstimatedPosition());
+    Logger.recordOutput("Drive/odo", odometryDrive.getEstimatedPosition());
   }
 
   /**
@@ -285,6 +288,10 @@ public class Drive extends SubsystemBase {
       states[i] = modules[i].getState();
     }
     return states;
+  }
+
+  public void setRotation(Rotation2d rotation) {
+    setPose(new Pose2d(getPose().getTranslation(), rotation));
   }
 
   /** Returns the module positions (turn angles and drive positions) for all of the modules. */

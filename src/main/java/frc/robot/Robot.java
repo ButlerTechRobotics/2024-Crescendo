@@ -8,8 +8,10 @@
 package frc.robot;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.leds.LedStrips;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -28,6 +30,11 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
 
+  // private AddressableLED m_led = new AddressableLED(0);
+  // private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(120);
+
+  private LedStrips m_LedStrips = LedStrips.getIns();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,6 +48,15 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
     Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+
+    // m_led.setLength(m_ledBuffer.getLength());
+    // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    // m_ledBuffer.setRGB(i, 0, 255, 0);
+    // }
+    // m_led.setData(m_ledBuffer);
+    // m_led.start();
+    m_LedStrips.setRGB(255, 0, 0);
+
     switch (BuildConstants.DIRTY) {
       case 0:
         Logger.recordMetadata("GitDirty", "All changes committed");
@@ -104,6 +120,10 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
+    robotContainer.drive.setRotation(
+        (robotContainer.autoChooser.get().getName().equals("Lame but better")
+            ? new Rotation2d(60)
+            : new Rotation2d(-60)));
     // TalonFX(23).setNeutralMode(NeutralModeValue.Brake);
   }
 
@@ -125,6 +145,10 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    robotContainer.drive.setRotation(
+        (robotContainer.autoChooser.get().getName().equals("Lame but better")
+            ? new Rotation2d(60)
+            : new Rotation2d(-60)));
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

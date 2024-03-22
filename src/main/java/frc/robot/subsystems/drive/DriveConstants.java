@@ -22,15 +22,7 @@ import frc.robot.Constants;
 public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
-        default ->
-            new DrivetrainConfig(
-                Units.inchesToMeters(2.0),
-                Units.inchesToMeters(26.0),
-                Units.inchesToMeters(26.0),
-                Units.feetToMeters(12.16),
-                Units.feetToMeters(21.32),
-                10.93,
-                29.89);
+        default -> new DrivetrainConfig(Units.inchesToMeters(2.0), 19.5, 19.5, 6, 8, 2.5, 1.5);
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -134,7 +126,7 @@ public final class DriveConstants {
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(2, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(0.0, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 

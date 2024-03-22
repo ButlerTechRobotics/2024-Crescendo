@@ -5,7 +5,7 @@
       "x": 1.385354324682553,
       "y": 5.550936522700434
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -78,12 +78,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "PreShoot"
@@ -140,12 +134,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -204,12 +192,6 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "toPos2"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "PreShoot"
@@ -222,6 +204,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toPos2"
           }
         }
       ]

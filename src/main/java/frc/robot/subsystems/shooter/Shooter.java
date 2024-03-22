@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command commonShootCommand() {
-    return startEnd(() -> setVelocity(40.0), () -> setVelocity(0.0));
+    return startEnd(() -> setVelocity(60.0), () -> setVelocity(0.0));
   }
 
   public Command commonShootCommand(double velocity, boolean oppositeDirection) {
@@ -59,15 +59,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command differentialShootUpCommand() {
-    return startEnd(() -> setVelocity(60.0, 35.0), () -> setVelocity(0.0));
+    return startEnd(() -> setVelocity(60, 18.0), () -> setVelocity(0.0)); // 50,20
   }
 
   public Command farShootCommand() {
-    return startEnd(() -> setVelocity(60.0, 45.0), () -> setVelocity(0.0));
+    return startEnd(() -> setVelocity(60.0, 50.0), () -> setVelocity(0.0));
   }
 
   public Command differentialShootDownCommand() {
-    return startEnd(() -> setVelocity(35.0, 50.0), () -> setVelocity(0.0));
+    return startEnd(() -> setVelocity(75.0, 25.0), () -> setVelocity(0.0));
   }
 
   public void setVelocity(double velocity) {
@@ -115,8 +115,8 @@ public class Shooter extends SubsystemBase {
         0.001; // A change of 1000 rotation per second squared results in 1 amp output
 
     // Peak output of 40 amps
-    toApply.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-    toApply.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+    toApply.TorqueCurrent.PeakForwardTorqueCurrent = 50;
+    toApply.TorqueCurrent.PeakReverseTorqueCurrent = -50;
 
     cfg.apply(toApply);
   }
