@@ -79,7 +79,7 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(0.132812).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.498535).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
@@ -119,7 +119,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L1.reduction,
+                Mk4iReductions.L2.reduction,
                 Mk4iReductions.TURN.reduction);
         case SIMBOT ->
             new ModuleConstants(
@@ -129,7 +129,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L1.reduction,
+                Mk4iReductions.L2.reduction,
                 Mk4iReductions.TURN.reduction);
       };
 
