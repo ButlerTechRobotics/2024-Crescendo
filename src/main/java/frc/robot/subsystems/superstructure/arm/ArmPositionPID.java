@@ -18,7 +18,7 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 2.5; // 3
+  private double targetAngle = 3.25; // 3
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
