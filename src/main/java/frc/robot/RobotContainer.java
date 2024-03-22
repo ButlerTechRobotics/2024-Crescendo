@@ -53,12 +53,9 @@ import frc.robot.subsystems.vision.VisionPoseEstimator;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -88,39 +85,41 @@ public class RobotContainer {
   // Dashboard inputs
   public final LoggedDashboardChooser<Command> autoChooser;
 
-  private GenericEntry headingDegreesEntry = Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
+  private GenericEntry headingDegreesEntry =
+      Shuffleboard.getTab("Drive Snap Tuning").add("Target Angle", 0).getEntry();
 
   private double MaxSpeed = 6; // 6 meters per second desired top speed
-  private double MaxAngularRate = 1.2 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  private double MaxAngularRate =
+      1.2 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final SwerveRequest.FieldCentric drive97 = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1)
-      .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+  private final SwerveRequest.FieldCentric drive97 =
+      new SwerveRequest.FieldCentric()
+          .withDeadband(MaxSpeed * 0.1)
+          .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+          .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
 
   // driving in open loop
 
   // private final LoggedTunableNumber flywheelSpeedInput =
   // new LoggedTunableNumber("Flywheel Speed", 1500.0);
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Declare component subsystems (not visible outside constructor)
     Intake intake = null;
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive = new Drive(
-            new GyroIOPigeon2(true),
-            new ModuleIOTalonFX(moduleConfigs[0]),
-            new ModuleIOTalonFX(moduleConfigs[1]),
-            new ModuleIOTalonFX(moduleConfigs[2]),
-            new ModuleIOTalonFX(moduleConfigs[3]));
+        drive =
+            new Drive(
+                new GyroIOPigeon2(true),
+                new ModuleIOTalonFX(moduleConfigs[0]),
+                new ModuleIOTalonFX(moduleConfigs[1]),
+                new ModuleIOTalonFX(moduleConfigs[2]),
+                new ModuleIOTalonFX(moduleConfigs[3]));
         intake = new Intake(new IntakeIOKrakenFOC());
         rollers = new Rollers(intake);
         // arm = new Arm(new ArmIOKrakenFOC());
@@ -133,13 +132,13 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive = new Drive(
-            new GyroIO() {
-            },
-            new ModuleIOSim(),
-            new ModuleIOSim(),
-            new ModuleIOSim(),
-            new ModuleIOSim());
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim());
 
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(intake);
@@ -152,20 +151,15 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        drive = new Drive(
-            new GyroIO() {
-            },
-            new ModuleIO() {
-            },
-            new ModuleIO() {
-            },
-            new ModuleIO() {
-            },
-            new ModuleIO() {
-            });
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
 
-        intake = new Intake(new IntakeIO() {
-        });
+        intake = new Intake(new IntakeIO() {});
 
         // arm = new Arm(new ArmIO() {});
 
@@ -305,11 +299,9 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
+   * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -345,7 +337,7 @@ public class RobotContainer {
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
                 Commands.runOnce(() -> m_LedStrips.setRGB(0, 255, 0)),
                 // Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                Commands.waitSeconds(0.26), // 0.18
+                Commands.waitSeconds(0.28), // 0.18
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);
@@ -412,8 +404,9 @@ public class RobotContainer {
         .start()
         .whileTrue(
             Commands.runOnce(
-                () -> drive.setAutoStartPose(
-                    new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
+                () ->
+                    drive.setAutoStartPose(
+                        new Pose2d(new Translation2d(4, 5), Rotation2d.fromDegrees(0)))));
 
     driverController
         .y()
@@ -474,20 +467,8 @@ public class RobotContainer {
 
     operatorController.x().onTrue(m_arm.armBackZero());
     operatorController.y().onTrue(m_arm.armAMP());
-    operatorController.a().whileTrue(shooter.differentialShootUpCommand());
+    operatorController.a().onTrue(m_arm.armMid());
     operatorController.b().onTrue(m_arm.armPod());
-
-    operatorController
-        .back()
-        .whileTrue( // Tyler Fixed This. :)
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers)))
-        .whileFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }))
-        .whileTrue(shooter.commonShootCommand(3, true));
 
     // driverController.povUp().whileTrue(Commands.runOnce(() ->
     // arm.setDesiredDegrees(90)));
