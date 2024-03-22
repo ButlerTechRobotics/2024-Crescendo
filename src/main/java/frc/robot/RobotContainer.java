@@ -32,6 +32,8 @@ import frc.robot.commands.arm.MultiDistanceArm;
 // import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
 // import frc.robot.subsystems.SwagLights;
+import frc.robot.commands.climber.PositionClimbLeftPID;
+import frc.robot.commands.climber.PositionClimbRightPID;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -53,7 +55,8 @@ import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-import frc.robot.subsystems.superstructure.climber.Climber;
+import frc.robot.subsystems.superstructure.climber.ClimberLeft;
+import frc.robot.subsystems.superstructure.climber.ClimberRight;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
@@ -94,7 +97,8 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private ArmPositionPID armPID = new ArmPositionPID();
-  private final Climber climberPID = new Climber();
+  private final ClimberLeft climberLeftPID = new ClimberLeft();
+  private final ClimberRight climberRightPID = new ClimberRight();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -487,7 +491,7 @@ public class RobotContainer {
     // DRIVER CONTROLLER - B
     // PATHFIND TO SPEAKER
     // ================================================
-    driverController.povDown().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
+    // driverController.povDown().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
 
     // ================================================
     // DRIVER CONTROLLER - B
@@ -522,13 +526,21 @@ public class RobotContainer {
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    // driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    driverController
+        .povUp()
+        .whileTrue(
+            new PositionClimbLeftPID(climberLeftPID, -100)
+                .alongWith(new PositionClimbRightPID(climberRightPID, -100)));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
+    driverController
+        .povDown()
+        .whileTrue(
+            new PositionClimbLeftPID(climberLeftPID, 0)
+                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
@@ -578,10 +590,10 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - B/RT
-    // Y - PREPARE SHOOT FAR, RT - FIRE
+    // B - PREPARE SHOOT FAR, RT - FIRE
     // ================================================
     operatorController
-        .y()
+        .b()
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
