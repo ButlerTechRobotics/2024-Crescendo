@@ -121,7 +121,7 @@ public class Arm extends SubsystemBase {
   public Command armBackZero() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 43; // 35
+          m_mmtorquePosition.Velocity = 50; // 35
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
@@ -133,7 +133,7 @@ public class Arm extends SubsystemBase {
   public Command armAMP() {
     return runOnce(
         () -> {
-          m_mmtorquePosition.Velocity = 40; // 30
+          m_mmtorquePosition.Velocity = 45; // 30
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
@@ -149,7 +149,7 @@ public class Arm extends SubsystemBase {
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -6; // -6.5
+          var position = -6.8; // -6.5
           setArmPosition(position);
         });
   }
@@ -161,7 +161,7 @@ public class Arm extends SubsystemBase {
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -11.5; // -12.0
+          var position = -13.0; // -12.0
           setArmPosition(position);
         });
   }

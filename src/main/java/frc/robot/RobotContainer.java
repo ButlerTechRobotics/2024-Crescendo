@@ -323,8 +323,8 @@ public class RobotContainer {
         DriveCommands.joystickDrive(
             drive,
             driveMode,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
+            () -> driverController.getLeftY(),
+            () -> driverController.getLeftX(),
             () -> driverController.getRightX()));
 
     driverController
@@ -334,8 +334,8 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
                 Commands.waitUntil(() -> rollers.getBeamBreak()),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
                 Commands.runOnce(() -> m_LedStrips.setRGB(0, 255, 0)),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
                 // Commands.waitUntil(() -> !rollers.getBeamBreak()),
                 Commands.waitSeconds(0.28), // 0.18
                 Commands.runOnce(
@@ -350,6 +350,19 @@ public class RobotContainer {
                       // shooter.commonShootCommand(0, true);
                     }),
                 Commands.waitSeconds(1.69), // 0.18
+                Commands.runOnce(() -> m_LedStrips.setRGB(255, 0, 0))))
+        .whileFalse(
+            Commands.sequence(
+                Commands.waitUntil(() -> rollers.getBeamBreak()),
+                Commands.runOnce(() -> m_LedStrips.setRGB(0, 255, 0)),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                // Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                Commands.waitSeconds(0.28), // 0.18
+                Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                    }),
+                Commands.waitSeconds(1),
                 Commands.runOnce(() -> m_LedStrips.setRGB(255, 0, 0))));
 
     driverController
@@ -364,7 +377,18 @@ public class RobotContainer {
                 }))
         .whileTrue(shooter.commonShootCommand(20, true));
     driverController
-        .back()
+        .rightBumper()
+        .whileTrue( // Tyler Fixed This. :)
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers)))
+        .whileFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }))
+        .whileTrue(shooter.commonShootCommand(3, true));
+    driverController
+        .leftBumper()
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers)))
@@ -395,10 +419,12 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
         .whileFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+            Commands.sequence(
+                Commands.runOnce(() -> m_arm.armMid()),
+                Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                    })));
 
     driverController
         .start()
@@ -467,8 +493,10 @@ public class RobotContainer {
 
     operatorController.x().onTrue(m_arm.armBackZero());
     operatorController.y().onTrue(m_arm.armAMP());
-    operatorController.a().onTrue(m_arm.armMid());
-    operatorController.b().onTrue(m_arm.armPod());
+    // operatorController.a().onTrue(m_arm.armMid());
+    // operatorController.b().onTrue(m_arm.armPod());
+    operatorController.a().whileTrue(m_arm.armMid()).whileTrue(shooter.farShootCommand());
+    operatorController.b().whileTrue(m_arm.armPod()).whileTrue(shooter.farShootCommand());
 
     // driverController.povUp().whileTrue(Commands.runOnce(() ->
     // arm.setDesiredDegrees(90)));

@@ -30,12 +30,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -65,12 +59,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
           }
         },
         {
@@ -125,12 +113,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -141,12 +123,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -179,12 +155,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
           }
         },
         {

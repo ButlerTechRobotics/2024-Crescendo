@@ -26,7 +26,8 @@ public class Intake extends GenericRollerSystem<Intake.Goal> {
     SHOOTING(new LoggedTunableNumber("Intake/Shooting", 6.5)),
     EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -3.4)), // 4
     EJECTALIGN(new LoggedTunableNumber("Intake/slowEjectingVoltage", -1.0)), // 1.8
-    AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", 5));
+    AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", 5)),
+    SLOWSHINTAKE(new LoggedTunableNumber("SLOWSHINTAKE", 2));
     private final DoubleSupplier voltageSupplier;
   }
 

@@ -35,7 +35,8 @@ public class Rollers extends SubsystemBase {
     EJECT_TO_FLOOR,
     FEED_SHOOTER,
     AMP_SHOOTER,
-    EJECTALIGN
+    EJECTALIGN,
+    SLOWSHINTAKE,
   }
 
   @Getter @Setter private Goal goal = Goal.IDLE;
@@ -61,6 +62,10 @@ public class Rollers extends SubsystemBase {
 
       case EJECTALIGN -> {
         intake.setGoal(Intake.Goal.EJECTALIGN);
+      }
+
+      case SLOWSHINTAKE -> {
+        intake.setGoal(Intake.Goal.SLOWSHINTAKE);
       }
 
       case AMP_SHOOTER -> {
