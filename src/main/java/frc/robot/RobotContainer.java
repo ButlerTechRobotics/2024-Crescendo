@@ -106,27 +106,27 @@ public class RobotContainer {
   private static final Transform3d robotToCameraBL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-10.5), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
   private static final Transform3d robotToCameraBR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
+              Units.inchesToMeters(-10.625),
+              Units.inchesToMeters(-11.5),
+              Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-25.), Math.toRadians(-150.)));
 
   private static final Transform3d robotToCameraBack =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-2), Units.inchesToMeters(0.0), Units.inchesToMeters(14.1875)),
+              Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
           new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
 
   private static final Transform3d robotToCameraFront =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(13.75),
-              Units.inchesToMeters(10.875),
-              Units.inchesToMeters(8.875)),
+              Units.inchesToMeters(12.5), Units.inchesToMeters(11.0), Units.inchesToMeters(8.875)),
           new Rotation3d(0, Math.toRadians(-18.), Math.toRadians(0.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -504,11 +504,22 @@ public class RobotContainer {
     // PATHFIND TO AMP
     // ================================================
     // driverController.x().whileTrue(new PathFinderAndFollow("Trap Far Side"));
+    // driverController
+    //     .x()
+    //     .whileTrue(
+    //         new DriveToPoint(
+    //                 drive, new Pose2d(new Translation2d(6.17, 4.06), Rotation2d.fromDegrees(0)))
+    //             .andThen(
+    //                 new PositionClimbLeftPID(climberLeftPID, -100)
+    //                     .alongWith(new PositionClimbRightPID(climberRightPID, -100))));
     driverController
         .x()
         .whileTrue(
             new DriveToPoint(
-                drive, new Pose2d(new Translation2d(6.17, 4.06), Rotation2d.fromDegrees(0))));
+                    drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
+                .andThen(
+                    new PositionClimbLeftPID(climberLeftPID, -100)
+                        .alongWith(new PositionClimbRightPID(climberRightPID, -100))));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -734,11 +745,14 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 40)
-    .alongWith(
-        Commands.startEnd(
-            () -> driveMode.enableHeadingControl(),
-            () -> driveMode.disableHeadingControl())));
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(armPID, 40)
+                .alongWith(
+                    Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl())));
     // Was -16.25 and shot a little too high
 
     // ================================================
