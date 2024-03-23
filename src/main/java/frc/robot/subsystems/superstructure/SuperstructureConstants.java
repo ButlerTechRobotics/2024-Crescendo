@@ -24,7 +24,7 @@ public class SuperstructureConstants {
     public static Gains gains =
         switch (Constants.getRobot()) {
           case SIMBOT -> new Gains(0.0, 0.0, 0.0, 0.09078, 0.00103, 0.0);
-          case COMPBOT -> new Gains(0.00009, 0.0000002, 0.05, 8.75, 0.0027, 0.0);
+          case COMPBOT -> new Gains(0.0001, 0.00000005, 0.0000000006, 5.50, 0.00027, 0.00);
             // case COMPBOT -> null;
         };
 
