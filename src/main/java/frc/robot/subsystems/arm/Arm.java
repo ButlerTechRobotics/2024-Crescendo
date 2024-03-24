@@ -149,7 +149,7 @@ public class Arm extends SubsystemBase {
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -6.8; // -6.5
+          var position = -7; // -6.5
           setArmPosition(position);
         });
   }
@@ -161,7 +161,7 @@ public class Arm extends SubsystemBase {
           m_mmtorquePosition.Acceleration = 100;
           m_mmtorquePosition.Jerk = 1000;
 
-          var position = -13.0; // -12.0
+          var position = -12.0; // -12.0
           setArmPosition(position);
         });
   }

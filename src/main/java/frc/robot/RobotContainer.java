@@ -185,26 +185,23 @@ public class RobotContainer {
         Commands.sequence(
             Commands.runOnce(
                 () -> {
-                  if (!hasRun) {
-                    rollers.setGoal(Rollers.Goal.FLOOR_INTAKE);
-                    hasRun = true;
-                  }
+                  rollers.setGoal(Rollers.Goal.FLOOR_INTAKE);
                 },
-                rollers),
-            Commands.waitUntil(() -> rollers.getBeamBreak()),
-            Commands.runOnce(
-                () -> {
-                  if (!hasEjected) {
-                    rollers.setGoal(Rollers.Goal.EJECTALIGN);
-                    hasEjected = true;
-                  }
-                },
-                rollers),
-            Commands.waitUntil(() -> !rollers.getBeamBreak()),
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                })));
+                rollers)
+            //     ,
+            // Commands.waitUntil(() -> rollers.getBeamBreak()),
+            // Commands.runOnce(
+            //     () -> {
+            //         rollers.setGoal(Rollers.Goal.EJECTALIGN);
+            //     },
+            //     rollers),
+            // Commands.waitSeconds(0.2),
+            // Commands.runOnce(
+            //     () -> {
+            //       rollers.setGoal(Rollers.Goal.IDLE);
+            //     })
+
+            ));
 
     // ================================================
     // Register the Auto Command Intake Reset
@@ -213,15 +210,16 @@ public class RobotContainer {
         "Intake Reset",
         Commands.runOnce(
             () -> {
-              hasRun = false;
-              hasEjected = false;
+              Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN), rollers);
+              Commands.waitSeconds(0.2);
+              rollers.setGoal(Rollers.Goal.IDLE);
             }));
 
     // ================================================
     // Register the Auto Command PreShoot
     // ================================================
     NamedCommands.registerCommand(
-        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(60.0, 22.0)));
+        "PreShoot", Commands.runOnce(() -> shooter.setVelocity(60.0, 23.0)));
 
     // ================================================
     // Register the Auto Command Shoot
@@ -239,16 +237,16 @@ public class RobotContainer {
 
     // ================================================
     // Register the Auto Command ResetPose
-    // ================================================
+    // // ================================================
     NamedCommands.registerCommand(
         "ResetPose1",
         Commands.runOnce(
-            () -> drive.setAutoStartPose(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(60)))));
+            () -> drive.setAutoStartPose(new Pose2d(0.7, 4.35, Rotation2d.fromDegrees(0)))));
 
     NamedCommands.registerCommand(
         "ResetPose2",
         Commands.runOnce(
-            () -> drive.setAutoStartPose(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(-60)))));
+            () -> drive.setAutoStartPose(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)))));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -418,9 +416,9 @@ public class RobotContainer {
         .whileTrue( // Tyler Fixed This. :)
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
-        .whileFalse(
+        .whileFalse( //
             Commands.sequence(
-                Commands.runOnce(() -> m_arm.armMid()),
+                // Commands.runOnce(() -> m_arm.armBackZero()),
                 Commands.runOnce(
                     () -> {
                       rollers.setGoal(Rollers.Goal.IDLE);

@@ -14,7 +14,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 0.2
           }
         },
         {
@@ -26,7 +26,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.6
           }
         },
         {
@@ -38,13 +50,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Intake"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "ToMidBotNote1"
+            "waitTime": 3.0
           }
         }
       ]

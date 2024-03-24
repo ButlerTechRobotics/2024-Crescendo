@@ -22,7 +22,7 @@ import frc.robot.Constants;
 public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
-        default -> new DrivetrainConfig(Units.inchesToMeters(2.0), 19.5, 19.5, 4.6, 6, 1.8, 1.4);
+        default -> new DrivetrainConfig(Units.inchesToMeters(2.0), 19.5, 19.5, 4.6, 7, 1.0, 1.2);
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =

@@ -62,6 +62,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -72,6 +78,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -113,6 +125,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -123,6 +141,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -155,6 +185,30 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Reset"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
