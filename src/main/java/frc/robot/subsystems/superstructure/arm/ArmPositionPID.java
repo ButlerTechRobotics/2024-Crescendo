@@ -22,6 +22,8 @@ public class ArmPositionPID extends SubsystemBase {
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
+  public double armHomePosition = 2.5;
+
   TunableNumber kP = new TunableNumber("Arm P Gain", 0.055); // 0.057
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0001); // 0.00023
   TunableNumber kD = new TunableNumber("Arm D Gain", 0.0); // 0.0013
@@ -69,6 +71,11 @@ public class ArmPositionPID extends SubsystemBase {
     // if (kFF.hasChanged()) {
     // pidController.setFF(kFF.get());
     // }
+  }
+
+  public boolean isAtTargetPosition() {
+    double tolerance = 1.0; // This is the tolerance in degrees
+    return Math.abs(getPosition() - targetAngle) < tolerance;
   }
 
   @Override
