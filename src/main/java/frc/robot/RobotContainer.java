@@ -68,7 +68,6 @@ public class RobotContainer {
   private final Rollers rollers;
   private final ClimberLeft climberleft;
   private final ClimberRight climberright;
-
   private LedStrips m_LedStrips = LedStrips.getIns();
 
   private final Arm m_arm = new Arm();
