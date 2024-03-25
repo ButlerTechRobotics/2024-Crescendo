@@ -18,14 +18,14 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-/** A command that angles the arm from multi-distance position from the target. */
+/** A command that spins the shooter from multi-distance position from the target. */
 public class MultiDistanceShooter extends Command {
   Supplier<Pose2d> poseSupplier;
   Shooter shooter;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
-  double speed;
+  double rpm;
 
   Translation2d orignalPose;
   Translation2d targetPose;
@@ -43,20 +43,23 @@ public class MultiDistanceShooter extends Command {
     this.shooter = shooter;
     this.orignalPose = targetPose;
 
-    // Populate the distance map with distance-rpm pairs
-    distanceMap.put(1.0, 0.0);
-    distanceMap.put(1.5, 7.88); // 7.88 (V3s)
-    distanceMap.put(2.0, 12.02); // 12.02(V3s)
-    distanceMap.put(2.5, 18.03); // 18.08 match 18.15(V3s)
-    distanceMap.put(3.0, 21.36); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.5, 22.7); // 22.98 match 23.3(V3s)
-    distanceMap.put(3.75, 23.32); // 23.46 (old) 23.8(V3s)
-    distanceMap.put(4.0, 24.42); // 24.5 (old 95%) 24.52 (V3s)
-    distanceMap.put(4.2, 25.77); // 26.02
-    distanceMap.put(4.5, 26.96); // 27.40
-    distanceMap.put(5.0, 27.4);
-    distanceMap.put(5.5, 27.8);
-    distanceMap.put(6.0, 28.2);
+    // Populate the distance map with distance-angle pairs
+    distanceMap.put(1.0, 3500.0);
+    distanceMap.put(1.5, 3500.0); // 7.88 (V3s)
+    distanceMap.put(2.0, 3500.0); // 12.02(V3s)
+    distanceMap.put(2.5, 3600.0); // 18.08 match 18.15(V3s)
+    distanceMap.put(3.0, 3800.0); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.5, 4000.0); // 22.98 match 23.3(V3s)
+    distanceMap.put(3.75, 4000.0); // 23.46 (old) 23.8(V3s)
+    distanceMap.put(4.0, 4200.0); // 24.5 (old 95%) 24.52 (V3s)
+    distanceMap.put(4.2, 4250.0); // 26.02
+    distanceMap.put(4.5, 4300.0); // 27.40
+    distanceMap.put(5.0, 4400.0);
+    distanceMap.put(5.5, 4500.0);
+    distanceMap.put(6.0, 4750.0);
+    distanceMap.put(6.5, 5000.0);
+    distanceMap.put(7.0, 5500.0);
+    distanceMap.put(8.0, 6500.0);
   }
 
   @Override
@@ -71,10 +74,10 @@ public class MultiDistanceShooter extends Command {
     distance = poseSupplier.get().getTranslation().getDistance(targetPose);
 
     // Get the corresponding angle from the distance-angle map
-    speed = distanceMap.get(distance);
+    rpm = distanceMap.get(distance);
 
     // Run the flywheel at the calculated angle
-    shooter.setSetpoint(speed, speed);
+    shooter.setSetpoint(rpm, rpm);
 
     // Put the distance on the SmartDashboard
     SmartDashboard.putNumber("Distance", getDistance());
@@ -82,8 +85,8 @@ public class MultiDistanceShooter extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    // Sets the arm to home when the command ends
-    shooter.setSetpoint(0, 0); // 3
+    // Sets the shooter to 0 rpm when the command ends
+    shooter.stop();
   }
 
   @Override
@@ -104,12 +107,12 @@ public class MultiDistanceShooter extends Command {
   }
 
   /**
-   * Gets the angle of the arm.
+   * Gets the speed of the shooter.
    *
-   * @return The angle in units per second.
+   * @return The speed in rotations per minute.
    */
-  @AutoLogOutput(key = "Shooter/SetDistanceRPM")
+  @AutoLogOutput(key = "Shooter/RPM")
   public double getSpeed() {
-    return speed;
+    return rpm;
   }
 }

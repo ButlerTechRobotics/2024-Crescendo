@@ -8,7 +8,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
@@ -24,7 +24,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -33,7 +33,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -43,13 +43,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": null
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": null
                 }
               }
             ]
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
@@ -74,7 +74,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Arm Reset"
+                  "name": null
                 }
               },
               {
@@ -86,7 +86,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -99,13 +99,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": null
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": null
                 }
               }
             ]
@@ -120,7 +120,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
@@ -142,7 +142,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -151,7 +151,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -167,13 +167,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim"
+                  "name": null
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": null
                 }
               }
             ]
@@ -186,7 +186,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Arm Reset"
+                  "name": null
                 }
               },
               {

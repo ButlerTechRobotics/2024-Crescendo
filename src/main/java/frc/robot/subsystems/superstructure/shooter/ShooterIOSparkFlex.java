@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems.superstructure.shooter;
 
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.ShooterConstants.*;
+import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
@@ -66,7 +66,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
     bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
     topMotor.setInverted(true);
-    bottomMotor.setInverted(true);
+    bottomMotor.follow(topMotor, false);
 
     topMotor.burnFlash();
     bottomMotor.burnFlash();

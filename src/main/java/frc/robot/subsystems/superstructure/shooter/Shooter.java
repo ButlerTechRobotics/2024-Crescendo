@@ -7,13 +7,10 @@
 
 package frc.robot.subsystems.superstructure.shooter;
 
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.ShooterConstants.*;
+import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
-import lombok.Getter;
-import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,36 +22,6 @@ public class Shooter extends SubsystemBase {
   private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
   private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-  private static LoggedTunableNumber shootingTopRPM =
-      new LoggedTunableNumber("Superstructure/ShootingTopRPM", 3250.0); // 3350
-  private static LoggedTunableNumber shootingBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingBottomRPM", 3250.0);
-
-  private static LoggedTunableNumber shootingMidTopRPM =
-      new LoggedTunableNumber("Superstructure/ShootingMidTopRPM", 4000.0); // 3900
-  private static LoggedTunableNumber shootingMidBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingMidBottomRPM", 4000.0);
-
-  private static LoggedTunableNumber shootingFarTopRPM =
-      new LoggedTunableNumber("Superstructure/ShootingFarTopRPM", 4700.0); // 4200
-  private static LoggedTunableNumber shootingFarBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingFarBottomRPM", 4700.0);
-
-  private static LoggedTunableNumber shootingTrapTopRPM =
-      new LoggedTunableNumber("Superstructure/ShootingTrapTopRPM", 2750.0);
-  private static LoggedTunableNumber shootingTrapBottomRPM =
-      new LoggedTunableNumber("Superstructure/ShootingTrapBottomRPM", 3500.0);
-
-  private static LoggedTunableNumber intakingTopRPM =
-      new LoggedTunableNumber("Superstructure/IntakingTopRPM", -2000.0);
-  private static LoggedTunableNumber intakingBottomRPM =
-      new LoggedTunableNumber("Superstructure/IntakingBottomRPM", -2000.0);
-
-  // private static LoggedTunableNumber idleTopRPM =
-  //     new LoggedTunableNumber("Superstructure/IdleTopRPM", 200.0);
-  // private static LoggedTunableNumber idleBottomRPM =
-  //     new LoggedTunableNumber("Superstructure/IdleBottomRPM", 200.0);
-
   private static final LoggedTunableNumber shooterTolerance =
       new LoggedTunableNumber("Flywheels/ToleranceRPM", shooterToleranceRPM);
 
@@ -64,21 +31,8 @@ public class Shooter extends SubsystemBase {
   private Double topSetpointRpm = null;
   private Double bottomSetpointRPM = null;
 
-  public enum Goal {
-    IDLE,
-    SHOOTING,
-    SHOOTINGMID,
-    SHOOTINGFAR,
-    SHOOTINGTRAP,
-    INTAKING,
-
-    CHARACTERIZATION
-  }
-
-  @Getter @Setter private Goal goal = Goal.IDLE;
-
   public void setSetpoint(double top, double bottom) {
-    topSetpointRpm = top;
+    topSetpointRpm = top + 100;
     bottomSetpointRPM = bottom;
     io.runVelocity(top, bottom);
   }
@@ -104,21 +58,6 @@ public class Shooter extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Flywheels", inputs);
 
-    if (DriverStation.isDisabled()) {
-      stop();
-      setGoal(Goal.IDLE);
-    } else {
-      switch (goal) {
-        case IDLE -> io.stop();
-        case INTAKING -> setSetpoint(intakingTopRPM.get(), intakingBottomRPM.get());
-        case SHOOTING -> setSetpoint(shootingTopRPM.get(), shootingBottomRPM.get());
-        case SHOOTINGMID -> setSetpoint(shootingMidTopRPM.get(), shootingMidBottomRPM.get());
-        case SHOOTINGFAR -> setSetpoint(shootingFarTopRPM.get(), shootingFarBottomRPM.get());
-        case SHOOTINGTRAP -> setSetpoint(shootingTrapTopRPM.get(), shootingTrapBottomRPM.get());
-      }
-    }
-
-    Logger.recordOutput("Flywheels/Goal", goal);
     Logger.recordOutput("Flywheels/TopSetpointRPM", topSetpointRpm != null ? topSetpointRpm : 0.0);
     Logger.recordOutput(
         "Flywheels/BottomSetpointRPM", bottomSetpointRPM != null ? bottomSetpointRPM : 0.0);

@@ -13,12 +13,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmPositionPID extends SubsystemBase {
   private CANSparkFlex motor = new CANSparkFlex(20, MotorType.kBrushless);
   private PIDController pidController;
-  private double targetAngle = 3.25; // 3
+  private double targetAngle = 3.0; // 3
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
@@ -73,6 +74,7 @@ public class ArmPositionPID extends SubsystemBase {
     // }
   }
 
+  @AutoLogOutput(key = "Arm/IsAtTargetPosition")
   public boolean isAtTargetPosition() {
     double tolerance = 1.0; // This is the tolerance in degrees
     return Math.abs(getPosition() - targetAngle) < tolerance;
