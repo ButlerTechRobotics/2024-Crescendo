@@ -27,9 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.MultiDistanceArm;
 import frc.robot.commands.PathFinderAndFollow;
-// import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
-// import frc.robot.subsystems.SwagLights;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -513,7 +511,7 @@ public class RobotContainer {
     // SCORE AMP
     // ================================================
     operatorController
-        .leftBumper()
+        .axisLessThan(2,0.5)
         .whileTrue(
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
@@ -528,49 +526,17 @@ public class RobotContainer {
     // A - PREPARE SHOOT CLOSE, RT - FIRE
     // ================================================
     operatorController
-        .a()
+        .button(8)
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
                     superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
+                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
                 candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    // ================================================
-    // OPERATOR CONTROLLER - B/RT
-    // B - PREPARE SHOOT FAR, RT - FIRE
-    // ================================================
-    operatorController
-        .b()
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
-                    superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
-                    superstructure),
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
                 Commands.waitSeconds(1.0),
                 Commands.runOnce(
@@ -591,7 +557,7 @@ public class RobotContainer {
     // X - PREPARE SHOOT TRAP, RT - FIRE
     // ================================================
     operatorController
-        .x()
+        .button(4)
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
@@ -623,14 +589,14 @@ public class RobotContainer {
     // B - PREPARE SHOOT Mid, RT - FIRE
     // ================================================
     operatorController
-        .b()
+        .button(2)
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
                     superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
+                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
                 candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOTMID),
@@ -655,14 +621,14 @@ public class RobotContainer {
     // Y - PREPARE SHOOT FAR, RT - FIRE
     // ================================================
     operatorController
-        .y()
+        .button(1)
         .whileTrue( // Yousef and Toby Fixed This. :)
             Commands.sequence(
                 candle.runPrepareShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
                     superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
+                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
                 candle.runShootCommand(),
                 Commands.runOnce(
                     () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
@@ -687,7 +653,7 @@ public class RobotContainer {
     // AIM AT SPEAKER
     // ================================================
     operatorController
-        .leftTrigger()
+        .button(3)
         .whileTrue(
             Commands.startEnd(
                     () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
@@ -729,13 +695,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 78));
+    operatorController.button(9).onTrue(new PositionArmPID(armPID, 78));
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2.1));
+    operatorController.button(10).onTrue(new PositionArmPID(armPID, 2.1));
   }
 
   /**
