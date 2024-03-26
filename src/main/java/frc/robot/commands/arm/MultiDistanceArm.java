@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -44,19 +44,22 @@ public class MultiDistanceArm extends Command {
     this.orignalPose = targetPose;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.5, 4.0 + 0.7); // 3.5
-    distanceMap.put(2.0, 12.02 + 0.7);
-    distanceMap.put(2.5, 18.4 + 0.7);
-    distanceMap.put(3.0, 21.7 + 0.7);
-    distanceMap.put(3.5, 24.98 + 0.7);
-    distanceMap.put(4.0, 30.00 + 0.7); // 29.85
-    distanceMap.put(4.5, 31.10 + 0.7);
-    distanceMap.put(5.0, 34.00 + 0.7);
-    distanceMap.put(5.5, 34.50 + 0.7);
-    distanceMap.put(6.0, 35.00);
-    distanceMap.put(6.5, 35.75);
-    // distanceMap.put(7.0, 31.375);
-    // distanceMap.put(8.0, 31.175);
+    distanceMap.put(1.0, 0.0);
+    distanceMap.put(1.5, 7.88); // 7.88 (V3s)
+    distanceMap.put(2.0, 12.02); // 12.02(V3s)
+    distanceMap.put(2.5, 21.6); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.0, 24.36); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.5, 27.36); // 21.6 match 21.98(V3s)
+    distanceMap.put(4.0, 28.36); // 21.6 match 21.98(V3s)
+    distanceMap.put(4.5, 30.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(5.0, 31.5); // 21.6 match 21.98(V3s)
+    distanceMap.put(5.5, 32.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(6.0, 33.5); // 21.6 match 21.98(V3s)
+    distanceMap.put(6.5, 35.0); // 21.6 match 21.98(V3s)
+    distanceMap.put(7.0, 35.5); // 21.6 match 21.98(V3s)
+    distanceMap.put(8.0, 36.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(9.0, 38.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(9.5, 39.75); // 21.6 match 21.98(V3s)
   }
 
   @Override
@@ -83,7 +86,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(2.5);
+    armPID.setPosition(3.0); // 3
   }
 
   @Override

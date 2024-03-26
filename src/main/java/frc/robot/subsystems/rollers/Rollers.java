@@ -26,7 +26,7 @@ public class Rollers extends SubsystemBase {
   private final Intake intake;
 
   // Beambreak on DIO 2
-  DigitalInput beambreak = new DigitalInput(8);
+  DigitalInput beambreak = new DigitalInput(9);
 
   public boolean getBeamBreak() {
     return beambreak.get();

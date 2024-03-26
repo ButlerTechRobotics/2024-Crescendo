@@ -21,13 +21,20 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.MultiDistanceArm;
+import frc.robot.commands.DriveToPoint;
+import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
+import frc.robot.commands.arm.MultiDistanceArm;
+// import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
+// import frc.robot.subsystems.SwagLights;
+import frc.robot.commands.climber.PositionClimbLeftPID;
+import frc.robot.commands.climber.PositionClimbRightPID;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
@@ -39,15 +46,17 @@ import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.feeder.FeederIO;
+import frc.robot.subsystems.rollers.feeder.FeederIOSim;
 import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexBack;
 import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexFront;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
+import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
 // import frc.robot.subsystems.rollers.intake.IntakeIOSim;
-import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-import frc.robot.subsystems.superstructure.climber.Climber;
+import frc.robot.subsystems.superstructure.climber.ClimberLeft;
+import frc.robot.subsystems.superstructure.climber.ClimberRight;
 import frc.robot.subsystems.superstructure.shooter.Shooter;
 import frc.robot.subsystems.superstructure.shooter.ShooterIO;
 import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
@@ -78,17 +87,16 @@ public class RobotContainer {
 
   private Candle candle = new Candle();
 
-  private Superstructure superstructure;
-
   private boolean hasRun = false;
-  private boolean hasEjected = false; // New flag for the EJECTALIGN command
+  private boolean hasEjected = false;
 
-  // Controllerf
+  // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private ArmPositionPID armPID = new ArmPositionPID();
-  private final Climber climberPID = new Climber();
+  private final ClimberLeft climberLeftPID = new ClimberLeft();
+  private final ClimberRight climberRightPID = new ClimberRight();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -96,20 +104,28 @@ public class RobotContainer {
   private static final Transform3d robotToCameraBL =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-10.5), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
+              Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
           new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
   private static final Transform3d robotToCameraBR =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-10.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-150.)));
+              Units.inchesToMeters(-10.625),
+              Units.inchesToMeters(-11.5),
+              Units.inchesToMeters(9.5)),
+          new Rotation3d(0, Math.toRadians(-25.), Math.toRadians(-150.)));
 
   private static final Transform3d robotToCameraBack =
       new Transform3d(
           new Translation3d(
-              Units.inchesToMeters(-12.625), Units.inchesToMeters(0.0), Units.inchesToMeters(8.75)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(-180.)));
+              Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
+          new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
+
+  private static final Transform3d robotToCameraFront =
+      new Transform3d(
+          new Translation3d(
+              Units.inchesToMeters(12.5), Units.inchesToMeters(11.0), Units.inchesToMeters(8.875)),
+          new Rotation3d(0, Math.toRadians(-18.), Math.toRadians(0.)));
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -125,7 +141,6 @@ public class RobotContainer {
                 new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
-        superstructure = new Superstructure(shooter);
 
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
@@ -136,8 +151,8 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
                 new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
-
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
+                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
         break;
 
       case SIM:
@@ -151,6 +166,11 @@ public class RobotContainer {
                 new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
+
+        feeder1 = new Feeder(new FeederIOSim());
+        feeder2 = new Feeder(new FeederIOSim());
+        intake = new Intake(new IntakeIOSim());
+        rollers = new Rollers(feeder1, feeder2, intake);
 
         aprilTagVision =
             new AprilTagVision(
@@ -180,158 +200,40 @@ public class RobotContainer {
 
         intake = new Intake(new IntakeIO() {});
     }
+    // ================================================
+    // Register the Named Commands
+    // ================================================
+    NamedCommands.registerCommand("Intake", intakeNote());
+    NamedCommands.registerCommand("Eject", ejectNote());
+
+    // // ================================================
+    // // Register the Auto Aim Command
+    // // ================================================
+    // NamedCommands.registerCommand(
+    //         "Auto Aim",
+    //         new MultiDistanceArm(
+    //                 drive::getPose,
+    //                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+    //                 armPID)
+    //                 .andThen(
+    //                         new InstantCommand(
+    //                                 () -> armPID.setPosition(3.0), armPID))); // Reset the arm
+    // position
 
     // ================================================
-    // Register the Auto Aim Command
+    // Register the Auto Command AimAndPreShoot
     // ================================================
-    // Register the Auto Aim Command
-    NamedCommands.registerCommand(
-        "Auto Aim",
-        new MultiDistanceArm(
-                drive::getPose,
-                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                armPID)
-            .withTimeout(3) // Add a 3-second timeout to the command
-            .andThen(
-                new InstantCommand(
-                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
-
-    NamedCommands.registerCommand(
-        "Auto Aim 2sec",
-        new MultiDistanceArm(
-                drive::getPose,
-                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                armPID)
-            .withTimeout(2) // Add a 2-second timeout to the command
-            .andThen(
-                new InstantCommand(
-                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
-
-    NamedCommands.registerCommand(
-        "Auto Aim 4sec",
-        new MultiDistanceArm(
-                drive::getPose,
-                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                armPID)
-            .withTimeout(4) // Add a 4-second timeout to the command
-            .andThen(
-                new InstantCommand(
-                    () -> armPID.setPosition(2.1), armPID))); // Reset the arm position
+    NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
 
     // ================================================
-    // Register the Auto Command PreShoot
+    // Register the Auto Command StopAimAndPreShoot
     // ================================================
-    NamedCommands.registerCommand(
-        "PreShoot",
-        Commands.runOnce(
-            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
-            superstructure));
-
-    // ================================================
-    // Register the Auto Command PreShootMID
-    // ================================================
-    NamedCommands.registerCommand(
-        "PreShootMID",
-        Commands.runOnce(
-            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
-            superstructure));
-
-    // ================================================
-    // Register the Auto Command PreShootFar
-    // ================================================
-    NamedCommands.registerCommand(
-        "PreShootFar",
-        Commands.runOnce(
-            () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
-            superstructure));
+    NamedCommands.registerCommand("StopAimAndPreShoot", stopAimAndPreShoot());
 
     // ================================================
     // Register the Auto Command Shoot
     // ================================================
-    NamedCommands.registerCommand(
-        "Shoot",
-        Commands.sequence(
-            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(
-                () -> {
-                  shooter.setGoal(Shooter.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                })));
-
-    // ================================================
-    // Register the Auto Command Shoot Far
-    // ================================================
-    NamedCommands.registerCommand(
-        "ShootFar",
-        Commands.sequence(
-            Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-            Commands.waitSeconds(0.5),
-            Commands.runOnce(
-                () -> {
-                  shooter.setGoal(Shooter.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                })));
-
-    // ================================================
-    // Register the Auto Command Intake Reset
-    // ================================================
-    NamedCommands.registerCommand(
-        "Intake Reset",
-        Commands.runOnce(
-            () -> {
-              hasRun = false;
-              hasEjected = false;
-            }));
-
-    // ================================================
-    // Register the Auto Command Heading Reset
-    // ================================================
-    NamedCommands.registerCommand(
-        "Heading Reset",
-        Commands.runOnce(
-            () ->
-                drive.setAutoStartPose(
-                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(0)))));
-
-    // ================================================
-    // Register the Auto Command Intake
-    // ================================================
-    NamedCommands.registerCommand(
-        "Intake",
-        Commands.sequence(
-            Commands.runOnce(
-                () -> {
-                  if (!hasRun) {
-                    superstructure.setGoal(Superstructure.SystemState.INTAKE);
-                    rollers.setGoal(Rollers.Goal.FLOOR_INTAKE);
-                    hasRun = true;
-                  }
-                },
-                superstructure,
-                rollers),
-            Commands.waitUntil(() -> !rollers.getBeamBreak()),
-            Commands.runOnce(
-                () -> {
-                  if (!hasEjected) {
-                    rollers.setGoal(Rollers.Goal.EJECTALIGN);
-                    hasEjected = true;
-                  }
-                },
-                rollers),
-            Commands.waitUntil(() -> rollers.getBeamBreak()),
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                })));
-
-    // ================================================
-    // Register the Auto Command ShooterPosLeft
-    // ================================================
-    NamedCommands.registerCommand("ArmPositionAmp", Commands.run(() -> armPID.setPosition(78.0)));
+    NamedCommands.registerCommand("Shoot", shoot());
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -342,6 +244,68 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  public Command intakeNote() {
+    return Commands.sequence(
+        candle.runPrettyLightsCommand(),
+        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+        Commands.waitUntil(() -> !rollers.getBeamBreak()),
+        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+        candle.setColorGreenCommand(),
+        Commands.waitUntil(() -> rollers.getBeamBreak()),
+        Commands.runOnce(
+            () -> {
+              rollers.setGoal(Rollers.Goal.IDLE);
+            }),
+        Commands.waitSeconds(0.1),
+        candle.setColorOperationIdle());
+  }
+
+  public Command ejectNote() {
+    return Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers);
+  }
+
+  public Command aimAndPreShoot() {
+    return Commands.sequence(
+        Commands.startEnd(
+                () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+            .alongWith(
+                new MultiDistanceArm(
+                        drive::getPose,
+                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                        armPID)
+                    .alongWith(
+                        new MultiDistanceShooter(
+                            drive::getPose,
+                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                            shooter))));
+  }
+
+  public Command stopAimAndPreShoot() {
+    return new InstantCommand(
+        () -> {
+          CommandScheduler.getInstance().cancel(aimAndPreShoot());
+        });
+  }
+
+  public Command shoot() {
+    return Commands.sequence(
+        candle.runShootCommand(),
+        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+        Commands.waitSeconds(0.4),
+        Commands.runOnce(
+            () -> {
+              rollers.setGoal(Rollers.Goal.IDLE);
+              shooter.stop();
+            }));
+  }
+
+  public Command resetHeading() {
+    return Commands.runOnce(
+            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+            drive)
+        .ignoringDisable(true);
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -349,6 +313,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // ==================
     // DEFAULT COMMANDS
     // ==================
@@ -359,128 +324,6 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
-
-    // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // RUN INTAKE IN
-    // ================================================
-    driverController
-        .leftBumper()
-        .whileTrue( // Tyler Fixed This. :)
-            Commands.sequence(
-                candle.runPrettyLightsCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
-                    superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
-                Commands.waitUntil(() -> !rollers.getBeamBreak()),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-                candle.setColorGreenCommand(),
-                Commands.waitUntil(() -> rollers.getBeamBreak()),
-                Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    }),
-                Commands.waitSeconds(0.1),
-                candle.setColorOperationIdle()))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                  superstructure.setGoal(Superstructure.SystemState.IDLE);
-                }));
-
-    // =========Temporary control, delete later====================
-    // DRIVER CONTROLLER - X
-    // RUN INTAKE OUT
-    // ================================================
-    // driverController
-    // .leftBumper()
-    // .whileTrue( // Tyler Fixed This. :)
-    // Commands.sequence(
-    // candle.runPrettyLightsCommand(),
-    // Commands.runOnce(
-    // () -> superstructure.setGoal(Superstructure.SystemState.INTAKE),
-    // superstructure),
-    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
-    // Commands.waitUntil(() -> !rollers.getBeamBreak()),
-    // Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-    // candle.setColorGreenCommand(),
-    // Commands.waitUntil(() -> rollers.getBeamBreak()),
-    // Commands.runOnce(
-    // () -> {
-    // rollers.setGoal(Rollers.Goal.IDLE);
-    // superstructure.setGoal(Superstructure.SystemState.IDLE);
-    // }),
-    // Commands.waitSeconds(0.5),
-    // candle.setColorRespawnIdle()))
-    // .onFalse(
-    // Commands.runOnce(
-    // () -> {
-    // rollers.setGoal(Rollers.Goal.IDLE);
-    // superstructure.setGoal(Superstructure.SystemState.IDLE);
-    // }));
-
-    // ================================================
-    // DRIVER CONTROLLER - LEFT TRIGGER
-    // RUN INTAKE OUT
-    // ================================================
-    driverController
-        .leftTrigger()
-        .whileTrue(
-            Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.INTAKE), superstructure)
-                .andThen(
-                    Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers),
-                    Commands.idle())
-                .finallyDo(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    }));
-
-    // ================================================
-    // DRIVER CONTROLLER - A
-    // PATHFIND TO AMP
-    // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
-
-    // ================================================
-    // DRIVER CONTROLLER - X
-    // PATHFIND TO SOURCE-SIDE SPEAKER
-    // ================================================
-    driverController.x().whileTrue(new PathFinderAndFollow("toPos1"));
-
-    // ================================================
-    // DRIVER CONTROLLER - Y
-    // PATHFIND TO MIDDLE SPEAKER
-    // ================================================
-    driverController.y().whileTrue(new PathFinderAndFollow("Sub Placement Path"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO AMP-SIDE SPEAKER
-    // ================================================
-    driverController.b().whileTrue(new PathFinderAndFollow("toPos3"));
-
-    // ================================================
-    // DRIVER CONTROLLER - UP D-PAD
-    // PATHFIND TO FAR-SIDE TRAP
-    // ================================================
-    driverController.povUp().whileTrue(new PathFinderAndFollow("Trap Far Side"));
-
-    // ================================================
-    // DRIVER CONTROLLER - LEFT D-PAD
-    // PATHFIND TO SOURCE-SIDE TRAP
-    // ================================================
-    driverController.povLeft().whileTrue(new PathFinderAndFollow("Trap Source Side"));
-
-    // ================================================
-    // DRIVER CONTROLLER - RIGHT D-PAD
-    // PATHFIND TO AMP-SIDE TRAP
-    // ================================================
-    driverController.povRight().whileTrue(new PathFinderAndFollow("Trap Amp Side"));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -495,23 +338,84 @@ public class RobotContainer {
                         new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
+    // DRIVER CONTROLLER - LEFT BUMPER
+    // RUN INTAKE IN
+    // ================================================
+    driverController
+        .leftBumper()
+        .whileTrue(intakeNote())
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
+
+    // ================================================
+    // DRIVER CONTROLLER - LEFT TRIGGER
+    // RUN INTAKE OUT
+    // ================================================
+    driverController
+        .leftTrigger()
+        .whileTrue(ejectNote())
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
+
+    // ================================================
+    // DRIVER CONTROLLER - A
+    // PATHFIND TO AMP
+    // ================================================
+    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
+    // ================================================
+    driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO SPEAKER
+    // ================================================
+    driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
+
+    driverController
+        .x()
+        .whileTrue(
+            new DriveToPoint(
+                    drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
+                .andThen(
+                    new PositionClimbLeftPID(climberLeftPID, -100)
+                        .alongWith(new PositionClimbRightPID(climberRightPID, -100))));
+
+    // ================================================
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
     // ================================================
-    // driverController.povUp().whileTrue(new PositionClimbPID(climberPID, 300));
+    driverController
+        .povUp()
+        .whileTrue(
+            new PositionClimbLeftPID(climberLeftPID, -100)
+                .alongWith(new PositionClimbRightPID(climberRightPID, -100)));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
-    // driverController.povDown().whileTrue(new PositionClimbPID(climberPID, -300));
+    driverController
+        .povDown()
+        .whileTrue(
+            new PositionClimbLeftPID(climberLeftPID, 12)
+                .alongWith(new PositionClimbRightPID(climberRightPID, 12)));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
     // SCORE AMP
     // ================================================
     operatorController
-        .axisLessThan(2,0.5)
+        .leftBumper()
         .whileTrue(
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
@@ -522,186 +426,52 @@ public class RobotContainer {
                 }));
 
     // ================================================
-    // OPERATOR CONTROLLER - A/RT
-    // A - PREPARE SHOOT CLOSE, RT - FIRE
-    // ================================================
-    operatorController
-        .button(8)
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOT),
-                    superstructure),
-                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOT), superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    // ================================================
-    // OPERATOR CONTROLLER - X/RT
-    // X - PREPARE SHOOT TRAP, RT - FIRE
-    // ================================================
-    operatorController
-        .button(4)
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTTRAP),
-                    superstructure),
-                Commands.waitUntil(operatorController.rightTrigger()),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTTRAP),
-                    superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    // ================================================
-    // OPERATOR CONTROLLER - B/RT
-    // B - PREPARE SHOOT Mid, RT - FIRE
-    // ================================================
-    operatorController
-        .button(2)
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTMID),
-                    superstructure),
-                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTMID),
-                    superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    // ================================================
-    // OPERATOR CONTROLLER - B/RT
-    // Y - PREPARE SHOOT FAR, RT - FIRE
-    // ================================================
-    operatorController
-        .button(1)
-        .whileTrue( // Yousef and Toby Fixed This. :)
-            Commands.sequence(
-                candle.runPrepareShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.PREPARE_SHOOTFAR),
-                    superstructure),
-                Commands.waitUntil(operatorController.axisGreaterThan(2,.3)),
-                candle.runShootCommand(),
-                Commands.runOnce(
-                    () -> superstructure.setGoal(Superstructure.SystemState.SHOOTFAR),
-                    superstructure),
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-                Commands.waitSeconds(1.0),
-                Commands.runOnce(
-                    () -> {
-                      shooter.setGoal(Shooter.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })))
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                      superstructure.setGoal(Superstructure.SystemState.IDLE);
-                    })
-                .alongWith(candle.setColorOperationIdle()));
-
-    // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
-    // AIM AT SPEAKER
+    // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController
-        .button(3)
-        .whileTrue(
-            Commands.startEnd(
-                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-                .alongWith(
-                    new MultiDistanceArm(
-                        drive::getPose,
-                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                        armPID)));
-    // driverController
-    // .rightBumper()
-    // .whileTrue(
-    // Commands.startEnd(
-    // () -> driveMode.enableHeadingControl(), () ->
-    // driveMode.disableHeadingControl()));
+    operatorController.leftTrigger().whileTrue(aimAndPreShoot()).whileFalse(stopAimAndPreShoot());
 
-    driverController
-        .back()
-        .onTrue(
+    operatorController
+        .rightTrigger()
+        .whileTrue(shoot())
+        .onFalse(
             Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                    drive)
-                .ignoringDisable(true));
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(armPID, 90));
+    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController.povRight().onTrue(new PositionArmPID(armPID, 30)); // 58.2546556566
+    operatorController
+        .povRight()
+        .whileTrue(
+            new PositionArmPID(armPID, 40)
+                .alongWith(
+                    Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl())));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.button(9).onTrue(new PositionArmPID(armPID, 78));
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
+
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.button(10).onTrue(new PositionArmPID(armPID, 2.1));
+    operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.0)); // 3
   }
 
   /**

@@ -47,6 +47,7 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
+  // TODO tune odometry frequency
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
@@ -78,25 +79,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.394043).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.034668).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.182861).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(-0.162354).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.240967).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.249268).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(0.185303).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.175781).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
@@ -118,7 +119,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L1.reduction,
+                Mk4iReductions.L2.reduction,
                 Mk4iReductions.TURN.reduction);
         case SIMBOT ->
             new ModuleConstants(
@@ -128,7 +129,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L1.reduction,
+                Mk4iReductions.L2.reduction,
                 Mk4iReductions.TURN.reduction);
       };
 
@@ -142,13 +143,13 @@ public final class DriveConstants {
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
-        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(3, 0.0, 0.0);
       };
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
-        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(3, 0.0, 0.0);
       };
 
   public record DrivetrainConfig(

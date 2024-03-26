@@ -8,25 +8,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PreShoot"
+            "name": null
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         },
         {
@@ -40,7 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote8"
+                        "pathName": "toNote2"
                       }
                     },
                     {
@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -74,48 +74,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShoot"
+                  "pathName": "toPos2"
                 }
               },
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Auto Aim"
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "PreShootFar"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Shoot"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "name": null
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         },
         {
@@ -129,7 +103,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote7Source"
+                        "pathName": "toNote1"
                       }
                     },
                     {
@@ -144,7 +118,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -153,7 +127,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -163,48 +137,85 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShootNote7"
+                  "pathName": "toPos2"
                 }
               },
               {
-                "type": "parallel",
+                "type": "named",
+                "data": {
+                  "name": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "path",
                       "data": {
-                        "name": "Auto Aim"
+                        "pathName": "toNote3"
                       }
                     },
                     {
-                      "type": "sequential",
+                      "type": "wait",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "PreShootFar"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 2.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Shoot"
-                            }
-                          }
-                        ]
+                        "waitTime": 1.25
                       }
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": null
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

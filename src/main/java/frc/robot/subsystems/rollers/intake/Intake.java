@@ -7,15 +7,15 @@
 
 package frc.robot.subsystems.rollers.intake;
 
-import frc.robot.subsystems.rollers.GenericRollerSubsystem;
-import frc.robot.subsystems.rollers.GenericRollerSubsystem.VoltageGoal;
+import frc.robot.subsystems.rollers.GenericRollerSystem;
+import frc.robot.subsystems.rollers.GenericRollerSystem.VoltageGoal;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-public class Intake extends GenericRollerSubsystem<Intake.Goal> {
+public class Intake extends GenericRollerSystem<Intake.Goal> {
   @RequiredArgsConstructor
   @Getter
   public enum Goal implements VoltageGoal {

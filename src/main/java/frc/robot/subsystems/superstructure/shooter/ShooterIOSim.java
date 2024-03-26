@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems.superstructure.shooter;
 
-import static frc.robot.subsystems.superstructure.SuperstructureConstants.ShooterConstants.*;
+import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;

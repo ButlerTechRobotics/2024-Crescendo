@@ -46,6 +46,14 @@ public class DriveCommands {
           Rotation2d linearDirection =
               new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+
+          // // If the joystick is not moving, stop the drive and turn the modules to an X
+          // // arrangement
+          // if (Math.abs(linearMagnitude) < DEADBAND && Math.abs(omega) < DEADBAND) {
+          //   drive.stopWithX();
+          //   return;
+          // }
+
           if (driveMode.isHeadingControlled()) {
             final var targetAngle = driveMode.getHeadingAngle();
             omega =

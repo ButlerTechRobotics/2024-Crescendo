@@ -8,7 +8,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreShoot"
+            "name": null
           }
         },
         {
@@ -20,13 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -67,7 +67,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": null
                 }
               }
             ]
@@ -76,7 +76,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
@@ -92,7 +92,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": null
                 }
               }
             ]
@@ -101,7 +101,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -117,7 +117,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": null
                 }
               }
             ]
@@ -126,13 +126,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": null
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Reset"
+            "name": null
           }
         },
         {
@@ -144,7 +144,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Heading Reset"
+            "name": null
           }
         }
       ]

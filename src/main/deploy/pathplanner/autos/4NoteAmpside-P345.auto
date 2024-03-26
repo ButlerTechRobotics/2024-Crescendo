@@ -6,27 +6,41 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "PreShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimAndPreShoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StopAimAndPreShoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -38,33 +52,40 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote3Amp"
+                        "waitTime": 0.5
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.25
+                        "name": "Intake"
                       }
                     }
                   ]
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "toNote3"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
           }
         },
         {
@@ -74,7 +95,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim2sec"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -82,11 +103,37 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "PreShootMID"
+                        "waitTime": 0.5
                       }
                     },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
                     {
                       "type": "wait",
                       "data": {
@@ -96,51 +143,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Intake"
                       }
                     }
                   ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "toNote4"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.25
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
           }
         },
         {
@@ -156,7 +165,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim4sec"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -164,15 +173,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "PreShootMID"
-                      }
-                    },
-                    {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.75
+                        "waitTime": 2.0
                       }
                     },
                     {
@@ -188,41 +191,35 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toNote5"
+                }
+              },
               {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote5"
+                        "waitTime": 0.5
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.25
+                        "name": "Intake"
                       }
                     }
                   ]
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Reset"
           }
         },
         {
@@ -238,7 +235,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Auto Aim4sec"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -246,15 +243,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "PreShootMID"
-                      }
-                    },
-                    {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.75
+                        "waitTime": 2.0
                       }
                     },
                     {
