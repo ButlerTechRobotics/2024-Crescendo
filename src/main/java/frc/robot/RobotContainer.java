@@ -121,12 +121,6 @@ public class RobotContainer {
               Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
           new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
 
-  private static final Transform3d robotToCameraFront =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(12.5), Units.inchesToMeters(11.0), Units.inchesToMeters(8.875)),
-          new Rotation3d(0, Math.toRadians(-18.), Math.toRadians(0.)));
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.getMode()) {
@@ -151,8 +145,7 @@ public class RobotContainer {
             new AprilTagVision(
                 new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
                 new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack),
-                new AprilTagVisionIOPhotonVision("FrontCamera", robotToCameraFront));
+                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
         break;
 
       case SIM:
@@ -210,14 +203,14 @@ public class RobotContainer {
     // // Register the Auto Aim Command
     // // ================================================
     // NamedCommands.registerCommand(
-    //         "Auto Aim",
-    //         new MultiDistanceArm(
-    //                 drive::getPose,
-    //                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-    //                 armPID)
-    //                 .andThen(
-    //                         new InstantCommand(
-    //                                 () -> armPID.setPosition(3.0), armPID))); // Reset the arm
+    // "Auto Aim",
+    // new MultiDistanceArm(
+    // drive::getPose,
+    // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+    // armPID)
+    // .andThen(
+    // new InstantCommand(
+    // () -> armPID.setPosition(3.0), armPID))); // Reset the arm
     // position
 
     // ================================================
