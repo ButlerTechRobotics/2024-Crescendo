@@ -93,6 +93,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandXboxController guitarController = new CommandXboxController(2);
 
   private ArmPositionPID armPID = new ArmPositionPID();
   private final ClimberLeft climberLeftPID = new ClimberLeft();
@@ -419,10 +420,31 @@ public class RobotContainer {
                 }));
 
     // ================================================
+    // OPERATOR GUITAR - YELLOW
+    // SCORE AMP
+    // ================================================
+    guitarController
+        .button(1)
+        .whileTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
+
+    // ================================================
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
     operatorController.leftTrigger().whileTrue(aimAndPreShoot()).whileFalse(stopAimAndPreShoot());
+
+    // ================================================
+    // OPERATOR GUITAR - GREEN
+    // AIM AT SPEAKER AND PRE-SHOOT
+    // ================================================
+    guitarController.button(8).whileTrue(aimAndPreShoot()).whileFalse(stopAimAndPreShoot());
 
     operatorController
         .rightTrigger()
@@ -433,12 +455,28 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                     })
                 .alongWith(candle.setColorOperationIdle()));
+    guitarController
+        .axisGreaterThan(1,0.3)
+        .whileTrue(shoot())
+        .onFalse(
+            Commands.runOnce(
+                    () -> {
+                      rollers.setGoal(Rollers.Goal.IDLE);
+                    })
+                .alongWith(candle.setColorOperationIdle()));
+
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
     operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+
+    // ================================================
+    // OPERATOR GUITAR - SELECT
+    // ARM POSITION MAX POSITION
+    // ================================================
+    guitarController.button(9).onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
@@ -459,12 +497,25 @@ public class RobotContainer {
     // ================================================
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
 
+    // ================================================
+    // OPERATOR GUITAR - BLUE
+    // ARM POSITION AMP
+    // ================================================
+    guitarController.button(3).onTrue(new PositionArmPID(armPID, 80));
+
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
     operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.0)); // 3
+
+    // .whileFalse(new PositionArmPID(armPID, 0));
+    // ================================================
+    // OPERATOR GUITAR - RED
+    // ARM POSITION LOWEST POSITION
+    // ================================================
+    guitarController.button(2).onTrue(new PositionArmPID(armPID, 3.0)); // 3
   }
 
   /**
