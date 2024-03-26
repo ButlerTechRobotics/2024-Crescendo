@@ -505,10 +505,10 @@ public class RobotContainer {
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
 
     // ================================================
-    // OPERATOR GUITAR - ORANGE
+    // OPERATOR GUITAR - BLUE
     // ARM POSITION AMP
     // ================================================
-    guitarController.button(4).onTrue(new PositionArmPID(armPID, 80));
+    guitarController.button(3).onTrue(new PositionArmPID(armPID, 80));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
@@ -519,10 +519,10 @@ public class RobotContainer {
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
-    // OPERATOR GUITAR - BLUE
+    // OPERATOR GUITAR - RED
     // ARM POSITION LOWEST POSITION
     // ================================================
-    guitarController.button(3).onTrue(new PositionArmPID(armPID, 3.0)); // 3
+    guitarController.button(2).onTrue(new PositionArmPID(armPID, 3.0)); // 3
   }
 
   /**
