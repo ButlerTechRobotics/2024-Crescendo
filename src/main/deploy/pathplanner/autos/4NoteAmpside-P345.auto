@@ -12,7 +12,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -30,6 +30,12 @@
                       "data": {
                         "name": "Shoot"
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StopAimAndPreShoot"
+                      }
                     }
                   ]
                 }
@@ -38,15 +44,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "toNote3"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
@@ -65,6 +65,25 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "toNote3"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -76,7 +95,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -146,7 +165,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -216,7 +235,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PreShoot"
+                  "name": "AimAndPreShoot"
                 }
               },
               {

@@ -213,34 +213,32 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake", intakeNote());
         NamedCommands.registerCommand("Eject", ejectNote());
 
-        // ================================================
-        // Register the Auto Aim Command
-        // ================================================
-        NamedCommands.registerCommand(
-                "Auto Aim",
-                new MultiDistanceArm(
-                        drive::getPose,
-                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                        armPID)
-                        .andThen(
-                                new InstantCommand(
-                                        () -> armPID.setPosition(3.0), armPID))); // Reset the arm position
+        // // ================================================
+        // // Register the Auto Aim Command
+        // // ================================================
+        // NamedCommands.registerCommand(
+        //         "Auto Aim",
+        //         new MultiDistanceArm(
+        //                 drive::getPose,
+        //                 FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+        //                 armPID)
+        //                 .andThen(
+        //                         new InstantCommand(
+        //                                 () -> armPID.setPosition(3.0), armPID))); // Reset the arm position
 
         // ================================================
-        // Register the Auto Command PreShoot
+        // Register the Auto Command AimAndPreShoot
         // ================================================
-        NamedCommands.registerCommand("PreShoot", aimAndPreShoot());
+        NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
+
+        // ================================================
+        // Register the Auto Command StopAimAndPreShoot
+        // ================================================
+        NamedCommands.registerCommand("StopAimAndPreShoot", stopAimAndPreShoot());
 
         // ================================================
         // Register the Auto Command Shoot
         // ================================================
-        // NamedCommands.registerCommand("Shoot", shoot());
-
-        // ================================================
-        // Register the Auto Command ShooterPosLeft
-        // ================================================
-        NamedCommands.registerCommand("ArmPositionAmp", Commands.run(() -> armPID.setPosition(80.0)));
-
         NamedCommands.registerCommand("Shoot", shoot());
 
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -274,19 +272,19 @@ public class RobotContainer {
 
     public Command aimAndPreShoot() {
         return Commands.sequence(
-            Commands.startEnd(
-                () -> driveMode.enableHeadingControl(), 
-                () -> driveMode.disableHeadingControl())
-                .alongWith(
-                    new MultiDistanceArm(
-                        drive::getPose,
-                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                        armPID)
-                    .alongWith(
-                        new MultiDistanceShooter(
-                            drive::getPose,
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            shooter))));
+                Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(),
+                        () -> driveMode.disableHeadingControl())
+                        .alongWith(
+                                new MultiDistanceArm(
+                                        drive::getPose,
+                                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                                        armPID)
+                                        .alongWith(
+                                                new MultiDistanceShooter(
+                                                        drive::getPose,
+                                                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                                                        shooter))));
     }
 
     public Command stopAimAndPreShoot() {
