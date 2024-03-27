@@ -21,9 +21,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToPoint;
@@ -89,6 +87,7 @@ public class RobotContainer {
 
   private boolean hasRun = false;
   private boolean hasEjected = false;
+  private boolean hasShot = false;
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -220,11 +219,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
 
     // ================================================
-    // Register the Auto Command StopAimAndPreShoot
-    // ================================================
-    NamedCommands.registerCommand("StopAimAndPreShoot", stopAimAndPreShoot());
-
-    // ================================================
     // Register the Auto Command Shoot
     // ================================================
     NamedCommands.registerCommand("Shoot", shoot());
@@ -260,25 +254,23 @@ public class RobotContainer {
 
   public Command aimAndPreShoot() {
     return Commands.sequence(
-        Commands.startEnd(
-                () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-            .alongWith(
-                new MultiDistanceArm(
-                        drive::getPose,
-                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                        armPID)
-                    .alongWith(
-                        new MultiDistanceShooter(
+            Commands.startEnd(
+                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                .alongWith(
+                    new MultiDistanceArm(
                             drive::getPose,
                             FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            shooter))));
+                            armPID)
+                        .alongWith(
+                            new MultiDistanceShooter(
+                                drive::getPose,
+                                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                                shooter))))
+        .until(() -> hasShot);
   }
 
-  public Command stopAimAndPreShoot() {
-    return new InstantCommand(
-        () -> {
-          CommandScheduler.getInstance().cancel(aimAndPreShoot());
-        });
+  public void resetHasShot() {
+    hasShot = false;
   }
 
   public Command shoot() {
@@ -290,7 +282,9 @@ public class RobotContainer {
             () -> {
               rollers.setGoal(Rollers.Goal.IDLE);
               shooter.stop();
-            }));
+              hasShot = true; // set hasShot to true
+            }),
+        Commands.runOnce(() -> resetHasShot())); // reset hasShot
   }
 
   public Command resetHeading() {
@@ -438,13 +432,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController.leftTrigger().whileTrue(aimAndPreShoot()).whileFalse(stopAimAndPreShoot());
+    operatorController.leftTrigger().whileTrue(aimAndPreShoot());
 
     // ================================================
     // OPERATOR GUITAR - GREEN
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    guitarController.button(8).whileTrue(aimAndPreShoot()).whileFalse(stopAimAndPreShoot());
+    guitarController.button(8).whileTrue(aimAndPreShoot());
 
     operatorController
         .rightTrigger()
@@ -456,7 +450,7 @@ public class RobotContainer {
                     })
                 .alongWith(candle.setColorOperationIdle()));
     guitarController
-        .axisGreaterThan(1,0.3)
+        .axisGreaterThan(1, 0.3)
         .whileTrue(shoot())
         .onFalse(
             Commands.runOnce(
@@ -464,7 +458,6 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                     })
                 .alongWith(candle.setColorOperationIdle()));
-
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD UP
