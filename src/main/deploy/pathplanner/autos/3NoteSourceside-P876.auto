@@ -95,7 +95,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toAutoAimSourceside"
+                  "pathName": "toSourcesideShoot"
                 }
               },
               {
@@ -111,7 +111,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 2.5
                       }
                     },
                     {
@@ -178,13 +178,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toAutoAimSourceside"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimAndPreShoot"
+                  "pathName": "toSourcesideShoot"
                 }
               },
               {
@@ -194,7 +188,26 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.5
                       }
                     },
                     {
