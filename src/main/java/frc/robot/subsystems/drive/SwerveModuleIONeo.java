@@ -57,7 +57,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
 
     turnSparkMax.setInverted(config.turnMotorInverted());
     driveSparkMax.setSmartCurrentLimit(60);
-    turnSparkMax.setSmartCurrentLimit(20);
+    turnSparkMax.setSmartCurrentLimit(30);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
 

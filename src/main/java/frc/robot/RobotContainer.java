@@ -283,6 +283,7 @@ public class RobotContainer {
               rollers.setGoal(Rollers.Goal.IDLE);
               shooter.stop();
               hasShot = true; // set hasShot to true
+              candle.setColorOperationIdle();
             }),
         Commands.runOnce(() -> resetHasShot())); // reset hasShot
   }
@@ -383,7 +384,7 @@ public class RobotContainer {
     // MOVE CLIMBER UP
     // ================================================
     driverController
-        .povUp()
+        .rightBumper()
         .whileTrue(
             new PositionClimbLeftPID(climberLeftPID, -100)
                 .alongWith(new PositionClimbRightPID(climberRightPID, -100)));
@@ -393,7 +394,7 @@ public class RobotContainer {
     // MOVE CLIMBER DOWN
     // ================================================
     driverController
-        .povDown()
+        .rightTrigger()
         .whileTrue(
             new PositionClimbLeftPID(climberLeftPID, 12)
                 .alongWith(new PositionClimbRightPID(climberRightPID, 12)));
