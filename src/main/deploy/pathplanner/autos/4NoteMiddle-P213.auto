@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3591983318328855,
-      "y": 5.564249038696289
-    },
-    "rotation": -1.0715459136338198e-20
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -16,16 +10,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimAndPreShoot"
-                      }
-                    }
-                  ]
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -80,7 +67,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "4NoteMiddle-P123.1"
+                        "pathName": "toNote2"
                       }
                     },
                     {
@@ -136,6 +123,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "Intake"
@@ -151,7 +144,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "4NoteMiddle-P123.2"
+                        "pathName": "toNote1fromNote2"
                       }
                     },
                     {
@@ -207,6 +200,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "Intake"
@@ -222,7 +221,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "4NoteMiddle-P123.3"
+                        "pathName": "toNote3fromNote1"
                       }
                     },
                     {
@@ -273,5 +272,5 @@
     }
   },
   "folder": null,
-  "choreoAuto": true
+  "choreoAuto": false
 }

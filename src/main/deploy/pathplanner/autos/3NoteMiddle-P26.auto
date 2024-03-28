@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.384968876838684,
-      "y": 5.551628589630127
-    },
-    "rotation": -4.592056872604022e-27
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -36,6 +30,12 @@
                       "data": {
                         "name": "Shoot"
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StopAimAndPreShoot"
+                      }
                     }
                   ]
                 }
@@ -52,6 +52,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "Intake"
@@ -67,7 +73,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "3NoteMiddle-P26.1"
+                        "pathName": "toNote2"
                       }
                     },
                     {
@@ -99,7 +105,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
@@ -144,7 +150,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "3NoteMiddle-P26.2"
+                        "pathName": "toNote6"
                       }
                     },
                     {
@@ -166,7 +172,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3NoteMiddle-P26.3"
+                  "pathName": "toAmpsideUnderstageShoot"
                 }
               },
               {
@@ -209,16 +215,10 @@
               }
             ]
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3NoteMiddle-P26.4"
-          }
         }
       ]
     }
   },
   "folder": null,
-  "choreoAuto": true
+  "choreoAuto": false
 }
