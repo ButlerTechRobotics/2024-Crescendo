@@ -36,12 +36,6 @@
                       "data": {
                         "name": "Shoot"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
-                      }
                     }
                   ]
                 }
@@ -118,12 +112,6 @@
                       "type": "named",
                       "data": {
                         "name": "Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
                       }
                     }
                   ]
@@ -202,12 +190,6 @@
                       "data": {
                         "name": "Shoot"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
-                      }
                     }
                   ]
                 }
@@ -284,12 +266,6 @@
                       "type": "named",
                       "data": {
                         "name": "Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
                       }
                     }
                   ]
@@ -386,12 +362,6 @@
                       "type": "named",
                       "data": {
                         "name": "Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
                       }
                     }
                   ]
