@@ -51,6 +51,7 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(3.0, 24.36); // 21.6 match 21.98(V3s)
     distanceMap.put(3.5, 27.36); // 21.6 match 21.98(V3s)
     distanceMap.put(4.0, 28.36); // 21.6 match 21.98(V3s)
+    distanceMap.put(4.25, 29.75); // 21.6 match 21.98(V3s)
     distanceMap.put(4.5, 30.75); // 21.6 match 21.98(V3s)
     distanceMap.put(5.0, 32.75); // 21.6 match 21.98(V3s)
     distanceMap.put(5.5, 34.00); // 21.6 match 21.98(V3s)
