@@ -93,9 +93,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -105,7 +118,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.5
+                        "waitTime": 2.65
                       }
                     },
                     {
@@ -182,7 +195,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 2.0
                       }
                     },
                     {
@@ -201,7 +214,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.5
+                        "waitTime": 2.65
                       }
                     },
                     {
