@@ -269,6 +269,13 @@ public class RobotContainer {
         .until(() -> hasShot);
   }
 
+  public Command blurpShoot() {
+    return Commands.sequence(
+            Commands.startEnd(
+                () -> shooter.setSetpoint(3000, 300), () -> shooter.setSetpoint(0, 0)))
+        .until(() -> hasShot);
+  }
+
   public void resetHasShot() {
     hasShot = false;
   }
@@ -441,6 +448,18 @@ public class RobotContainer {
     // ================================================
     guitarController.button(8).whileTrue(aimAndPreShoot());
 
+    // ================================================
+    // OPERATOR CONTROLLER - A
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    operatorController.a().whileTrue(blurpShoot());
+
+    // ================================================
+    // OPERATOR CONTROLLER - BLUE
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    guitarController.button(3).whileTrue(blurpShoot());
+
     operatorController
         .rightTrigger()
         .whileTrue(shoot())
@@ -474,16 +493,15 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION STAGE SHOOT
+    // ARM POSITION BLURP SHOOT
     // ================================================
-    operatorController
-        .povRight()
-        .whileTrue(
-            new PositionArmPID(armPID, 40)
-                .alongWith(
-                    Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(),
-                        () -> driveMode.disableHeadingControl())));
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
+
+    // ================================================
+    // OPERATOR CONTROLLER - START
+    // ARM POSITION BLURP SHOOT
+    // ================================================
+    guitarController.button(10).whileTrue(new PositionArmPID(armPID, 55));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
