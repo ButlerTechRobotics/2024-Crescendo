@@ -415,11 +415,11 @@ public class RobotContainer {
                 }));
 
     // ================================================
-    // OPERATOR GUITAR - YELLOW
+    // OPERATOR GUITAR - STRUM UP
     // SCORE AMP
     // ================================================
     guitarController
-        .button(1)
+        .axisLessThan(1, -0.7)
         .whileTrue(
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
@@ -492,10 +492,10 @@ public class RobotContainer {
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
 
     // ================================================
-    // OPERATOR GUITAR - BLUE
+    // OPERATOR GUITAR - YELLOW
     // ARM POSITION AMP
     // ================================================
-    guitarController.button(3).onTrue(new PositionArmPID(armPID, 80));
+    guitarController.button(1).onTrue(new PositionArmPID(armPID, 80));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
