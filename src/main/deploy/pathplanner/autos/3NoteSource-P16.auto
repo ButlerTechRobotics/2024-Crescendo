@@ -67,7 +67,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote2"
+                        "pathName": "toNote1Aimed"
                       }
                     },
                     {
@@ -144,7 +144,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote6"
+                        "pathName": "toNote6Source"
                       }
                     },
                     {
