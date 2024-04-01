@@ -67,9 +67,12 @@ import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -101,38 +104,36 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraBL =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
+  private static final Transform3d robotToCameraBL = new Transform3d(
+      new Translation3d(
+          Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
+      new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
 
-  private static final Transform3d robotToCameraBR =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-10.625),
-              Units.inchesToMeters(-11.5),
-              Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-25.), Math.toRadians(-150.)));
+  private static final Transform3d robotToCameraBR = new Transform3d(
+      new Translation3d(
+          Units.inchesToMeters(-10.625),
+          Units.inchesToMeters(-11.5),
+          Units.inchesToMeters(9.5)),
+      new Rotation3d(0, Math.toRadians(-25.), Math.toRadians(-150.)));
 
-  private static final Transform3d robotToCameraBack =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
-          new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
+  private static final Transform3d robotToCameraBack = new Transform3d(
+      new Translation3d(
+          Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
+      new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware I` implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new SwerveModuleIONeo(moduleConfigs[0]),
-                new SwerveModuleIONeo(moduleConfigs[1]),
-                new SwerveModuleIONeo(moduleConfigs[2]),
-                new SwerveModuleIONeo(moduleConfigs[3]));
+        drive = new Drive(
+            new GyroIOPigeon2(),
+            new SwerveModuleIONeo(moduleConfigs[0]),
+            new SwerveModuleIONeo(moduleConfigs[1]),
+            new SwerveModuleIONeo(moduleConfigs[2]),
+            new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
 
@@ -141,22 +142,21 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         rollers = new Rollers(feeder1, feeder2, intake);
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
-                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
+        aprilTagVision = new AprilTagVision(
+            new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
+            new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
+            new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim());
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new SwerveModuleIOSim(),
+            new SwerveModuleIOSim(),
+            new SwerveModuleIOSim(),
+            new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
 
@@ -165,33 +165,41 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(feeder1, feeder2, intake);
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVisionSIM(
-                    "photonCamera1",
-                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-                    drive::getDrive));
+        aprilTagVision = new AprilTagVision(
+            new AprilTagVisionIOPhotonVisionSIM(
+                "photonCamera1",
+                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+                drive::getDrive));
 
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {});
-        shooter = new Shooter(new ShooterIO() {});
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            },
+            new SwerveModuleIO() {
+            });
+        shooter = new Shooter(new ShooterIO() {
+        });
 
-        feeder1 = new Feeder(new FeederIO() {});
+        feeder1 = new Feeder(new FeederIO() {
+        });
 
-        feeder2 = new Feeder(new FeederIO() {});
+        feeder2 = new Feeder(new FeederIO() {
+        });
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {
+        });
 
-        intake = new Intake(new IntakeIO() {});
+        intake = new Intake(new IntakeIO() {
+        });
     }
     // ================================================
     // Register the Named Commands
@@ -254,18 +262,18 @@ public class RobotContainer {
 
   public Command aimAndPreShoot() {
     return Commands.sequence(
-            Commands.startEnd(
-                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-                .alongWith(
-                    new MultiDistanceArm(
+        Commands.startEnd(
+            () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+            .alongWith(
+                new MultiDistanceArm(
+                    drive::getPose,
+                    FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                    armPID)
+                    .alongWith(
+                        new MultiDistanceShooter(
                             drive::getPose,
                             FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            armPID)
-                        .alongWith(
-                            new MultiDistanceShooter(
-                                drive::getPose,
-                                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                                shooter))))
+                            shooter))))
         .until(() -> hasShot);
   }
 
@@ -289,15 +297,17 @@ public class RobotContainer {
 
   public Command resetHeading() {
     return Commands.runOnce(
-            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-            drive)
+        () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+        drive)
         .ignoringDisable(true);
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -321,9 +331,8 @@ public class RobotContainer {
         .start()
         .whileTrue(
             Commands.run(
-                () ->
-                    drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+                () -> drive.setAutoStartPose(
+                    new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -373,7 +382,7 @@ public class RobotContainer {
         .x()
         .whileTrue(
             new DriveToPoint(
-                    drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
+                drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
                 .andThen(
                     new PositionClimbLeftPID(climberLeftPID, -100)
                         .alongWith(new PositionClimbRightPID(climberRightPID, -100))));
@@ -445,18 +454,18 @@ public class RobotContainer {
         .whileTrue(shoot())
         .onFalse(
             Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                    })
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })
                 .alongWith(candle.setColorRespawnIdle()));
     guitarController
         .axisGreaterThan(1, 0.3)
         .whileTrue(shoot())
         .onFalse(
             Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                    })
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                })
                 .alongWith(candle.setColorRespawnIdle()));
 
     // ================================================
@@ -483,6 +492,12 @@ public class RobotContainer {
                     Commands.startEnd(
                         () -> driveMode.enableHeadingControl(),
                         () -> driveMode.disableHeadingControl())));
+
+    // ================================================
+    // OPERATOR CONTROLLER - DPAD RIGHT
+    // ARM POSITION BLURP SHOOT
+    // ================================================
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
