@@ -277,6 +277,13 @@ public class RobotContainer {
         .until(() -> hasShot);
   }
 
+  public Command blurpShoot() {
+    return Commands.sequence(
+        Commands.startEnd(
+            () -> shooter.setSetpoint(3000, 300), () -> shooter.setSetpoint(0, 0)))
+        .until(() -> hasShot);
+  }
+
   public void resetHasShot() {
     hasShot = false;
   }
