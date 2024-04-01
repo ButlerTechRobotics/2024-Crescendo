@@ -456,6 +456,18 @@ public class RobotContainer {
     // ================================================
     guitarController.button(8).whileTrue(aimAndPreShoot());
 
+    // ================================================
+    // OPERATOR CONTROLLER - A
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    operatorController.a().whileTrue(blurpShoot());
+
+    // ================================================
+    // OPERATOR CONTROLLER - BLUE
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    guitarController.button(3).whileTrue(blurpShoot());
+
     operatorController
         .rightTrigger()
         .whileTrue(shoot())
