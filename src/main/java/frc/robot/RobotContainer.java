@@ -402,8 +402,8 @@ public class RobotContainer {
     driverController
         .rightTrigger()
         .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, 12)
-                .alongWith(new PositionClimbRightPID(climberRightPID, 12)));
+            new PositionClimbLeftPID(climberLeftPID, 0)
+                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
