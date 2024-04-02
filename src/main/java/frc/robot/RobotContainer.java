@@ -501,7 +501,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - START
     // ARM POSITION BLURP SHOOT
     // ================================================
-    guitarController.button(10).whileTrue(new PositionArmPID(armPID, 55));
+    guitarController.button(4).whileTrue(new PositionArmPID(armPID, 55));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT

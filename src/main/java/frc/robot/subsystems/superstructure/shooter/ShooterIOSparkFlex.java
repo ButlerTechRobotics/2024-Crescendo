@@ -42,8 +42,8 @@ public class ShooterIOSparkFlex implements ShooterIO {
     bottomMotor.restoreFactoryDefaults();
 
     // Limits
-    topMotor.setSmartCurrentLimit(60);
-    bottomMotor.setSmartCurrentLimit(60);
+    topMotor.setSmartCurrentLimit(40);
+    bottomMotor.setSmartCurrentLimit(40);
     topMotor.enableVoltageCompensation(12.0);
     bottomMotor.enableVoltageCompensation(12.0);
 
