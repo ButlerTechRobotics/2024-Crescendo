@@ -272,7 +272,7 @@ public class RobotContainer {
   public Command blurpShoot() {
     return Commands.sequence(
             Commands.startEnd(
-                () -> shooter.setSetpoint(3000, 300), () -> shooter.setSetpoint(0, 0)))
+                () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
         .until(() -> hasShot);
   }
 
@@ -287,9 +287,10 @@ public class RobotContainer {
         Commands.waitSeconds(0.4),
         Commands.runOnce(
             () -> {
+              hasShot = true; // set hasShot to true
               rollers.setGoal(Rollers.Goal.IDLE);
               shooter.stop();
-              hasShot = true; // set hasShot to true
+              candle.setColorOperationIdle();
             }),
         Commands.runOnce(() -> resetHasShot())); // reset hasShot
   }
@@ -439,13 +440,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController.leftTrigger().whileTrue(aimAndPreShoot());
+    operatorController
+        .leftTrigger()
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
 
     // ================================================
     // OPERATOR GUITAR - GREEN
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    guitarController.button(8).whileTrue(aimAndPreShoot());
+    guitarController
+        .button(8)
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
 
     // ================================================
     // OPERATOR CONTROLLER - A
