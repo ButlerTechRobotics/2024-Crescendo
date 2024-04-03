@@ -382,8 +382,8 @@ public class RobotContainer {
             new DriveToPoint(
                     drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
                 .andThen(
-                    new PositionClimbLeftPID(climberLeftPID, -160)
-                        .alongWith(new PositionClimbRightPID(climberRightPID, -160))));
+                    new PositionClimbLeftPID(climberLeftPID, -140)
+                        .alongWith(new PositionClimbRightPID(climberRightPID, -140))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -392,8 +392,8 @@ public class RobotContainer {
     driverController
         .rightBumper()
         .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, -160)
-                .alongWith(new PositionClimbRightPID(climberRightPID, -160)));
+            new PositionClimbLeftPID(climberLeftPID, -140)
+                .alongWith(new PositionClimbRightPID(climberRightPID, -140)));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN

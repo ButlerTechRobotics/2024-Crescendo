@@ -136,7 +136,7 @@ public final class DriveConstants {
   public static HeadingControllerConstants headingControllerConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new HeadingControllerConstants(2.0, .25);
-        case SIMBOT -> new HeadingControllerConstants(4.0, 0.0);
+        case SIMBOT -> new HeadingControllerConstants(3.0, 0.0);
       };
   // TODO tune the PP translation/rotation values, 5712 uses 10, 0.0, 0.0 and PathPlanner uses 5,
   // 0.0, 0.0
