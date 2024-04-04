@@ -440,13 +440,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController.leftTrigger().whileTrue(aimAndPreShoot());
+    operatorController
+        .leftTrigger()
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
 
     // ================================================
     // OPERATOR GUITAR - GREEN
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    guitarController.button(8).whileTrue(aimAndPreShoot());
+    guitarController
+        .button(8)
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
 
     // ================================================
     // OPERATOR CONTROLLER - A
