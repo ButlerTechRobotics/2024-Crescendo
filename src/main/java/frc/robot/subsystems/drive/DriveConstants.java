@@ -25,7 +25,7 @@ public final class DriveConstants {
         default ->
             // TODO update these values, got new values from Choreo calculation
             new DrivetrainConfig(
-                Units.inchesToMeters(2.0), // double wheelRadius
+                Units.inchesToMeters(1.95), // double wheelRadius
                 Units.inchesToMeters(26.0), // double trackwidthX
                 Units.inchesToMeters(26.0), // double trackwidthY
                 Units.feetToMeters(12.16), // double maxLinearVelocity
