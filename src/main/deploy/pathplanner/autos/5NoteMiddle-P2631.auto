@@ -246,18 +246,11 @@
                       "data": {
                         "name": "Shoot"
                       }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
+                    },
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.15
+                        "waitTime": 0.5
                       }
                     },
                     {
