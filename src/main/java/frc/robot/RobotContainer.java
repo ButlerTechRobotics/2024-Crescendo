@@ -269,6 +269,13 @@ public class RobotContainer {
         .until(() -> hasShot);
   }
 
+  public Command blurpShoot() {
+    return Commands.sequence(
+            Commands.startEnd(
+                () -> shooter.setSetpoint(3000, 300), () -> shooter.setSetpoint(0, 0)))
+        .until(() -> hasShot);
+  }
+
   public void resetHasShot() {
     hasShot = false;
   }
@@ -376,8 +383,8 @@ public class RobotContainer {
             new DriveToPoint(
                     drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
                 .andThen(
-                    new PositionClimbLeftPID(climberLeftPID, -100)
-                        .alongWith(new PositionClimbRightPID(climberRightPID, -100))));
+                    new PositionClimbLeftPID(climberLeftPID, -160)
+                        .alongWith(new PositionClimbRightPID(climberRightPID, -160))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
@@ -386,8 +393,8 @@ public class RobotContainer {
     driverController
         .rightBumper()
         .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, -100)
-                .alongWith(new PositionClimbRightPID(climberRightPID, -100)));
+            new PositionClimbLeftPID(climberLeftPID, -160)
+                .alongWith(new PositionClimbRightPID(climberRightPID, -160)));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
@@ -396,8 +403,8 @@ public class RobotContainer {
     driverController
         .rightTrigger()
         .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, 12)
-                .alongWith(new PositionClimbRightPID(climberRightPID, 12)));
+            new PositionClimbLeftPID(climberLeftPID, 0)
+                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
@@ -415,11 +422,11 @@ public class RobotContainer {
                 }));
 
     // ================================================
-    // OPERATOR GUITAR - YELLOW
+    // OPERATOR GUITAR - STRUM UP
     // SCORE AMP
     // ================================================
     guitarController
-        .button(1)
+        .axisLessThan(1, -0.7)
         .whileTrue(
             Commands.sequence(
                 Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
@@ -433,13 +440,31 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController.leftTrigger().whileTrue(aimAndPreShoot());
+    operatorController
+        .leftTrigger()
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
 
     // ================================================
     // OPERATOR GUITAR - GREEN
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    guitarController.button(8).whileTrue(aimAndPreShoot());
+    guitarController
+        .button(8)
+        .whileTrue(aimAndPreShoot())
+        .onFalse(Commands.runOnce(() -> hasShot = false));
+
+    // ================================================
+    // OPERATOR CONTROLLER - A
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    operatorController.a().whileTrue(blurpShoot());
+
+    // ================================================
+    // OPERATOR CONTROLLER - BLUE
+    // SETS SHOOTER TO BLURP SHOOT SPEED
+    // ================================================
+    guitarController.button(3).whileTrue(blurpShoot());
 
     operatorController
         .rightTrigger()
@@ -474,16 +499,15 @@ public class RobotContainer {
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION STAGE SHOOT
+    // ARM POSITION BLURP SHOOT
     // ================================================
-    operatorController
-        .povRight()
-        .whileTrue(
-            new PositionArmPID(armPID, 40)
-                .alongWith(
-                    Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(),
-                        () -> driveMode.disableHeadingControl())));
+    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
+
+    // ================================================
+    // OPERATOR CONTROLLER - START
+    // ARM POSITION BLURP SHOOT
+    // ================================================
+    guitarController.button(4).whileTrue(new PositionArmPID(armPID, 55));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
@@ -492,10 +516,10 @@ public class RobotContainer {
     operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
 
     // ================================================
-    // OPERATOR GUITAR - BLUE
+    // OPERATOR GUITAR - YELLOW
     // ARM POSITION AMP
     // ================================================
-    guitarController.button(3).onTrue(new PositionArmPID(armPID, 80));
+    guitarController.button(1).onTrue(new PositionArmPID(armPID, 80));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================

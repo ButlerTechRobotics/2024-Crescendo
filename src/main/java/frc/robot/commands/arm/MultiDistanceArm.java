@@ -47,20 +47,20 @@ public class MultiDistanceArm extends Command {
     distanceMap.put(1.0, 0.0);
     distanceMap.put(1.5, 7.88); // 7.88 (V3s)
     distanceMap.put(2.0, 12.02); // 12.02(V3s)
-    distanceMap.put(2.5, 21.6); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.0, 24.36); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.5, 27.36); // 21.6 match 21.98(V3s)
-    distanceMap.put(4.0, 28.36); // 21.6 match 21.98(V3s)
+    distanceMap.put(2.5, 20.6); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.0, 23.4); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.5, 25.0); // 21.6 match 21.98(V3s)
+    distanceMap.put(4.0, 28.0); // 21.6 match 21.98(V3s)
     distanceMap.put(4.25, 29.75); // 21.6 match 21.98(V3s)
     distanceMap.put(4.5, 30.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(5.0, 32.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(5.0, 32.0); // 21.6 match 21.98(V3s)
     distanceMap.put(5.5, 34.00); // 21.6 match 21.98(V3s)
     distanceMap.put(6.0, 34.5); // 21.6 match 21.98(V3s)
     distanceMap.put(6.5, 35.0); // 21.6 match 21.98(V3s)
     distanceMap.put(7.0, 35.5); // 21.6 match 21.98(V3s)
-    distanceMap.put(8.0, 37.00); // 21.6 match 21.98(V3s)
-    distanceMap.put(9.0, 38.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(9.5, 39.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(8.0, 38.0); // 21.6 match 21.98(V3s)
+    distanceMap.put(9.0, 39.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(9.5, 40.75); // 21.6 match 21.98(V3s)
   }
 
   @Override

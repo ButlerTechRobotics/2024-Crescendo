@@ -36,7 +36,7 @@ public class ClimberLeft extends SubsystemBase {
 
     motor.restoreFactoryDefaults();
 
-    motor.setSmartCurrentLimit(80);
+    motor.setSmartCurrentLimit(40);
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kBrake);
 

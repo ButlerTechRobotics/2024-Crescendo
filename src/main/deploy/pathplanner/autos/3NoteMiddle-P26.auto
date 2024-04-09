@@ -30,12 +30,6 @@
                       "data": {
                         "name": "Shoot"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StopAimAndPreShoot"
-                      }
                     }
                   ]
                 }
@@ -54,7 +48,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.25
                       }
                     },
                     {
@@ -73,7 +67,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote2"
+                        "pathName": "toNote2slow"
                       }
                     },
                     {
@@ -182,7 +176,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.0
                       }
                     },
                     {
