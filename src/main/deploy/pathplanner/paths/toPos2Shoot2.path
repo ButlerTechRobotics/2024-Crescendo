@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.080330106451938,
-        "y": 1.6512279529551925
+        "x": 2.70383902591167,
+        "y": 5.192204572443334
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.958642847385552,
-        "y": 1.8034688280503517
+        "x": 2.329626083753592,
+        "y": 5.355922734637492
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.281967377058862,
-        "y": 2.4475648380683346
+        "x": 1.3940937283583965,
+        "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 7.610334441822742,
-        "y": 2.1682840164292103
+        "x": 2.107437149347233,
+        "y": 5.566417514601411
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intaking",
-      "waypointRelativePos": 0.3,
+      "name": "Shoot",
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,24 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Blurp Charge",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "blurpShoot"
               }
             }
           ]
@@ -56,14 +73,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 23.84301980167712,
+    "velocity": 0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

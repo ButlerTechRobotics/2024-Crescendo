@@ -38,7 +38,7 @@ public class DriveToPoint extends Command {
     pathRun =
         AutoBuilder.pathfindToPose(
             AllianceFlipUtil.apply(targetPose),
-            new PathConstraints(4.0, 4.0, Units.degreesToRadians(360), Units.degreesToRadians(540)),
+            new PathConstraints(5.4, 4.0, Units.degreesToRadians(360), Units.degreesToRadians(540)),
             0,
             0.0);
     scoreCommand = Commands.sequence(pathRun);

@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8761397865163765,
-        "y": 5.539225686154654
+        "x": 4.51643296448986,
+        "y": 4.665967622533537
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7473205845127802,
-        "y": 5.527514849608872
+        "x": 3.2534642847063466,
+        "y": 5.344228580195052
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3959954881393342,
-        "y": 5.539225686154654
+        "x": 2.8675571881058293,
+        "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 1.6653447286923087,
-        "y": 5.539225686154654
+        "x": 3.183299358051708,
+        "y": 5.437781815734571
+      },
+      "nextControl": {
+        "x": 2.614975271575406,
+        "y": 5.648272218133201
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.3940937283583965,
+        "y": 5.55472336015897
+      },
+      "prevControl": {
+        "x": 2.107437149347233,
+        "y": 5.566417514601411
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 1.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -42,6 +58,23 @@
               "type": "named",
               "data": {
                 "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Blurp Charge",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "blurpShoot"
               }
             }
           ]
