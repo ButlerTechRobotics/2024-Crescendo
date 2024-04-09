@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.8444684695637196,
-      "y": 4.350225452587657
-    },
-    "rotation": -50.82634202955577
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -18,7 +12,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "name": "BlurpShoot"
                 }
               },
               {
