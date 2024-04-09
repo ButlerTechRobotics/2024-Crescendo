@@ -44,7 +44,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote3Intaking"
+                  "pathName": "toNote1IntakingAlt"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
                 }
               }
             ]
@@ -55,9 +61,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "pathName": "EventtoSourcesideShoot"
                 }
               },
               {
@@ -65,15 +71,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "AimAndPreShoot"
                       }
                     }
                   ]
@@ -89,13 +89,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toNote4Intaking"
+                  "pathName": "toNote8Intaking"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.5
+                  "waitTime": 3.0
                 }
               }
             ]
@@ -108,7 +108,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EventtoAutoAimAmpSide"
+                  "pathName": "EventtoSourcesideShoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -121,13 +140,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EventtoNote5"
+                  "pathName": "toNote7Intaking"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.5
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -140,7 +159,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "EventtoAutoAimAmpSide"
+                  "pathName": "EventtoSourcesideShoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
