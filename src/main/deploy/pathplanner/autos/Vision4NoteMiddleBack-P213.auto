@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.8444684695637196,
-      "y": 4.350225452587657
-    },
-    "rotation": -50.82634202955577
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -18,7 +12,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "name": "BlurpShoot"
                 }
               },
               {
@@ -47,6 +41,76 @@
           "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "toNote2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "toPos2"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.75
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
+                }
+              },
               {
                 "type": "sequential",
                 "data": {
@@ -60,6 +124,32 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "Shoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "Intake"
                       }
                     }
@@ -73,7 +163,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote8"
+                        "pathName": "toNote1"
                       }
                     },
                     {
@@ -95,7 +185,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShoot"
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -105,7 +195,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 1.25
                       }
                     },
                     {
@@ -124,7 +214,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.65
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -169,7 +259,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote7"
+                        "pathName": "toNote3"
                       }
                     },
                     {
@@ -191,7 +281,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShoot"
+                  "pathName": "toPos2"
                 }
               },
               {
@@ -201,7 +291,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -220,7 +310,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.65
+                        "waitTime": 2.0
                       }
                     },
                     {

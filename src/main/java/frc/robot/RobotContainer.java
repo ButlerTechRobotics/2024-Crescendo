@@ -219,6 +219,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
 
     // ================================================
+    // Register the Auto Command BlurpShoot
+    // ================================================
+    NamedCommands.registerCommand("BlurpShoot", blurpShoot());
+
+    // ================================================
     // Register the Auto Command Shoot
     // ================================================
     NamedCommands.registerCommand("Shoot", shoot());
@@ -272,7 +277,7 @@ public class RobotContainer {
   public Command blurpShoot() {
     return Commands.sequence(
             Commands.startEnd(
-                () -> shooter.setSetpoint(3000, 300), () -> shooter.setSetpoint(0, 0)))
+                () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
         .until(() -> hasShot);
   }
 
