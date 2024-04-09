@@ -45,23 +45,23 @@ public class MultiDistanceArm extends Command {
 
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
-    distanceMap.put(1.5, 7.88); // 7.88 (V3s)
-    distanceMap.put(2.0, 12.02); // 12.02(V3s)
-    distanceMap.put(2.25, 15.0); // 12.02(V3s)
-    distanceMap.put(2.5, 20.0); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.0, 23.50); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.5, 27.0); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.75, 27.5); // 21.6 match 21.98(V3s)
-    distanceMap.put(4.0, 28.0); // 21.6 match 21.98(V3s)
-    distanceMap.put(4.5, 30.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(5.0, 31.5); // 21.6 match 21.98(V3s)
-    distanceMap.put(5.5, 32.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(6.0, 33.5); // 21.6 match 21.98(V3s)
-    distanceMap.put(6.5, 35.0); // 21.6 match 21.98(V3s)
-    distanceMap.put(7.0, 35.5); // 21.6 match 21.98(V3s)
-    distanceMap.put(8.0, 36.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(9.0, 38.75); // 21.6 match 21.98(V3s)
-    distanceMap.put(9.5, 39.75); // 21.6 match 21.98(V3s)
+    distanceMap.put(1.5, 7.88);
+    distanceMap.put(2.0, 12.02);
+    distanceMap.put(2.25, 15.0);
+    distanceMap.put(2.5, 20.0);
+    distanceMap.put(3.0, 23.50);
+    distanceMap.put(3.5, 28.0); // 27.0 (27.25 bad)
+    distanceMap.put(3.75, 28.5); // 27.5 (27.75 bad)
+    distanceMap.put(4.0, 29.0); // 28.0 (28.25 bad)5
+    distanceMap.put(4.5, 30.75);
+    distanceMap.put(5.0, 31.5);
+    distanceMap.put(5.5, 32.75);
+    distanceMap.put(6.0, 33.5);
+    distanceMap.put(6.5, 35.0);
+    distanceMap.put(7.0, 35.5);
+    distanceMap.put(8.0, 36.75);
+    distanceMap.put(9.0, 38.75);
+    distanceMap.put(9.5, 39.75);
   }
 
   @Override

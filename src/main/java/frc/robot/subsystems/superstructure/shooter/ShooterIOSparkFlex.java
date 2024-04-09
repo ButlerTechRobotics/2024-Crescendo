@@ -10,16 +10,16 @@ package frc.robot.subsystems.superstructure.shooter;
 import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
 
 import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import frc.robot.VendorWrappers.Neo;
 
 public class ShooterIOSparkFlex implements ShooterIO {
   // Hardware
-  private CANSparkFlex topMotor;
-  private CANSparkFlex bottomMotor;
+  private Neo topMotor;
+  private Neo bottomMotor;
   private RelativeEncoder topEncoder;
   private RelativeEncoder bottomEncoder;
 
@@ -31,8 +31,8 @@ public class ShooterIOSparkFlex implements ShooterIO {
 
   public ShooterIOSparkFlex() {
     // Init Hardware
-    topMotor = new CANSparkFlex(topID, CANSparkFlex.MotorType.kBrushless);
-    bottomMotor = new CANSparkFlex(bottomID, CANSparkFlex.MotorType.kBrushless);
+    topMotor = new Neo(topID);
+    bottomMotor = new Neo(bottomID);
     topEncoder = topMotor.getEncoder();
     bottomEncoder = bottomMotor.getEncoder();
 

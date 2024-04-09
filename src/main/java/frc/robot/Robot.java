@@ -37,7 +37,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    RobotController.setBrownoutVoltage(6);
+    RobotController.setBrownoutVoltage(5.5);
     Pathfinding.setPathfinder(new LocalADStarAK());
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);

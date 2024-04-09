@@ -219,6 +219,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
 
     // ================================================
+    // Register the Auto Command BlurpShoot
+    // ================================================
+    NamedCommands.registerCommand("BlurpShoot", blurpShoot());
+
+    // ================================================
     // Register the Auto Command Shoot
     // ================================================
     NamedCommands.registerCommand("Shoot", shoot());
@@ -385,6 +390,16 @@ public class RobotContainer {
                 .andThen(
                     new PositionClimbLeftPID(climberLeftPID, -140)
                         .alongWith(new PositionClimbRightPID(climberRightPID, -140))));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
+    // PATHFIND TO STAGE SHOOT
+    // ================================================
+    driverController
+        .b()
+        .whileTrue(
+            new DriveToPoint(
+                drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
