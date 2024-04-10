@@ -1295,7 +1295,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "5NoteMiddle-P4532": {
             "waypoints": [
@@ -3718,7 +3718,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "4NoteMiddle-P213": {
             "waypoints": [
@@ -4608,7 +4608,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "4NoteSource-P876": {
             "waypoints": [
@@ -7224,36 +7224,31 @@
                     "scope": [
                         "first"
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 },
                 {
                     "scope": [
                         "last"
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 },
                 {
                     "scope": [
                         4
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 },
                 {
                     "scope": [
                         9
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 },
                 {
                     "scope": [
                         10
                     ],
-                    "type": "StopPoint",
-                    "direction": 0
+                    "type": "StopPoint"
                 }
             ],
             "usesControlIntervalGuessing": true,
@@ -7264,7 +7259,7 @@
                 {
                     "name": "Intake",
                     "target": 3,
-                    "targetTimestamp": 2.3329615356988347,
+                    "targetTimestamp": null,
                     "offset": -0.5,
                     "command": {
                         "type": "named",
@@ -7276,7 +7271,7 @@
                 {
                     "name": "Shoot",
                     "target": 4,
-                    "targetTimestamp": 3.8639625452795214,
+                    "targetTimestamp": null,
                     "offset": 0,
                     "command": {
                         "type": "named",
@@ -7288,7 +7283,7 @@
                 {
                     "name": "AimAndPreShoot",
                     "target": 4,
-                    "targetTimestamp": 3.8639625452795214,
+                    "targetTimestamp": null,
                     "offset": -1,
                     "command": {
                         "type": "named",
@@ -7300,7 +7295,7 @@
                 {
                     "name": "Intake",
                     "target": 6,
-                    "targetTimestamp": 5.2637964877252665,
+                    "targetTimestamp": null,
                     "offset": -0.5,
                     "command": {
                         "type": "named",
@@ -7312,7 +7307,7 @@
                 {
                     "name": "Shoot",
                     "target": 9,
-                    "targetTimestamp": 7.357024401060694,
+                    "targetTimestamp": null,
                     "offset": 0,
                     "command": {
                         "type": "named",
@@ -7324,7 +7319,7 @@
                 {
                     "name": "AimAndPreShoot",
                     "target": 9,
-                    "targetTimestamp": 7.357024401060694,
+                    "targetTimestamp": null,
                     "offset": -1,
                     "command": {
                         "type": "named",
@@ -8394,7 +8389,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         }
     },
     "splitTrajectoriesAtStopPoints": true,
