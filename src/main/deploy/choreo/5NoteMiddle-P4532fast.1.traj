@@ -469,5 +469,33 @@
       "timestamp": 3.8639625452795214
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 1.8329615356988347,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake"
+        }
+      }
+    },
+    {
+      "timestamp": 3.8639625452795214,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shoot"
+        }
+      }
+    },
+    {
+      "timestamp": 2.8639625452795214,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AimAndPreShoot"
+        }
+      }
+    }
+  ]
 }
