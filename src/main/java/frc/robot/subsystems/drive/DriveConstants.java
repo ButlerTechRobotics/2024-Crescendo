@@ -51,7 +51,7 @@ public final class DriveConstants {
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 250.0;
+        case COMPBOT -> 100.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -79,25 +79,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.404785).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.398193).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.021729).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.024658).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.273682).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.284180).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(0.057861).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.067383).plus(Rotation2d.fromDegrees(0)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))

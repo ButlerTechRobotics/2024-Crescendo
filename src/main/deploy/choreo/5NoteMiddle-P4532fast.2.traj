@@ -505,5 +505,42 @@
       "timestamp": 3.364764467253013
     }
   ],
-  "eventMarkers": []
+  "eventMarkers": [
+    {
+      "timestamp": 0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shoot"
+        }
+      }
+    },
+    {
+      "timestamp": 0.8218440213609504,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake"
+        }
+      }
+    },
+    {
+      "timestamp": 3.364764467253013,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shoot"
+        }
+      }
+    },
+    {
+      "timestamp": 2.364764467253013,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AimAndPreShoot"
+        }
+      }
+    }
+  ]
 }
