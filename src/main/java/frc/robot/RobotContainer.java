@@ -113,7 +113,7 @@ public class RobotContainer {
               Units.inchesToMeters(-10.625),
               Units.inchesToMeters(-11.5),
               Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-25.), Math.toRadians(-150.)));
+          new Rotation3d(0, Math.toRadians(-27.), Math.toRadians(-150.)));
 
   private static final Transform3d robotToCameraBack =
       new Transform3d(
@@ -198,6 +198,7 @@ public class RobotContainer {
     // ================================================
     NamedCommands.registerCommand("Intake", intakeNote());
     NamedCommands.registerCommand("Eject", ejectNote());
+    NamedCommands.registerCommand("blurpShoot", blurpShoot());
 
     // // ================================================
     // // Register the Auto Aim Command

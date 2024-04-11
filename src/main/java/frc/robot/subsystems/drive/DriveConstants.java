@@ -25,7 +25,7 @@ public final class DriveConstants {
         default ->
             // TODO update these values, got new values from Choreo calculation
             new DrivetrainConfig(
-                Units.inchesToMeters(1.95), // double wheelRadius
+                Units.inchesToMeters(2.0), // double wheelRadius
                 Units.inchesToMeters(26.0), // double trackwidthX
                 Units.inchesToMeters(26.0), // double trackwidthY
                 Units.feetToMeters(12.16), // double maxLinearVelocity
@@ -51,7 +51,7 @@ public final class DriveConstants {
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 100.0;
+        case COMPBOT -> 250.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -79,7 +79,7 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.498535).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.404785).plus(Rotation2d.fromDegrees(180)),
                   true),
               new ModuleConfig(
                   3,
