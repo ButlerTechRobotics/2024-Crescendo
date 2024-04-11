@@ -282,6 +282,14 @@ public class RobotContainer {
         .until(() -> hasShot);
   }
 
+  public Command autoBlurp() {
+    return Commands.sequence(
+        // Start by spinning up the shooter and setting the arm to 40
+        Commands.parallel(
+            Commands.runOnce(() -> shooter.setSetpoint(4000, 4000)),
+            Commands.runOnce(() -> new PositionArmPID(armPID, 40))));
+  }
+
   public void resetHasShot() {
     hasShot = false;
   }
@@ -517,14 +525,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION STAGE SHOOT
     // ================================================
-    operatorController
-        .povRight()
-        .whileTrue(
-            new PositionArmPID(armPID, 40)
-                .alongWith(
-                    Commands.startEnd(
-                        () -> driveMode.enableHeadingControl(),
-                        () -> driveMode.disableHeadingControl())));
+    operatorController.povRight().onTrue(autoBlurp());
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
