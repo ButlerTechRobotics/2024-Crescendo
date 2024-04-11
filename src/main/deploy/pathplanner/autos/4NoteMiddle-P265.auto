@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.4434937238693235,
+      "y": 5.56
+    },
+    "rotation": -6.222930744196216e-39
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,7 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "name": "blurpShoot"
                 }
               },
               {
@@ -22,7 +28,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.25
                       }
                     },
                     {
@@ -46,28 +52,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote3"
+                        "pathName": "4NoteMiddle-P265.1"
                       }
                     },
                     {
@@ -77,6 +64,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
                 }
               }
             ]
@@ -123,15 +116,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 1.0
+                        "pathName": "4NoteMiddle-P265.2"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake"
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -142,15 +135,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote4"
+                        "waitTime": 1.5
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "Intake"
                       }
                     }
                   ]
@@ -166,13 +159,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toAutoAimAmpSide"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimAndPreShoot"
+                  "pathName": "4NoteMiddle-P265.3"
                 }
               },
               {
@@ -182,7 +169,26 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.25
                       }
                     },
                     {
@@ -206,15 +212,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 0.5
+                        "pathName": "4NoteMiddle-P265.4"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake"
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -225,15 +231,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote5"
+                        "waitTime": 1.5
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "Intake"
                       }
                     }
                   ]
@@ -249,13 +255,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toAutoAimAmpSide"
+                  "pathName": "4NoteMiddle-P265.5"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "AimAndPreShoot"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AimAndPreShoot"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -284,5 +303,5 @@
     }
   },
   "folder": null,
-  "choreoAuto": false
+  "choreoAuto": true
 }
