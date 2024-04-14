@@ -13,6 +13,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -51,6 +52,23 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
 
     driveSparkMax.setCANTimeout(250);
     turnSparkMax.setCANTimeout(250);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 11);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 12);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 100);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 101);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 102);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 103);
+    driveSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 104);
+
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 15);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 16);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 17);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 205);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 206);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 207);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 208);
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 209);
 
     driveEncoder = driveSparkMax.getEncoder();
     turnRelativeEncoder = turnSparkMax.getEncoder();
@@ -69,8 +87,8 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
 
-    driveSparkMax.setCANTimeout(0);
-    turnSparkMax.setCANTimeout(0);
+    // driveSparkMax.setCANTimeout(0);
+    // turnSparkMax.setCANTimeout(0);
 
     // //Wait 1 second before flashing NEO eprom memory
     // try {

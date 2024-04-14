@@ -10,6 +10,7 @@ package frc.robot.subsystems.superstructure.shooter;
 import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -46,6 +47,24 @@ public class ShooterIOSparkFlex implements ShooterIO {
     bottomMotor.setSmartCurrentLimit(60);
     topMotor.enableVoltageCompensation(12.0);
     bottomMotor.enableVoltageCompensation(12.0);
+
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 150);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 151);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 152);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 153);
+    topMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 154);
+
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 20);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 155);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 156);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 157);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 158);
+    bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 159);
 
     // Reset encoders
     topEncoder.setPosition(0.0);
