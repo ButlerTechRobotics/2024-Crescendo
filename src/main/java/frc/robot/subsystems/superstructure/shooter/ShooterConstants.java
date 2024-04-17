@@ -21,7 +21,7 @@ public class ShooterConstants {
       switch (Constants.getRobot()) {
         case SIMBOT -> new Gains(0.0, 0.0, 0.0, 0.09078, 0.00103, 0.0);
           // case COMPBOT -> new Gains(0.00009, 0.0000002, 0.05, 8.75, 0.0027, 0.0);
-        case COMPBOT -> new Gains(0.000175, 0.0, 0.0, 0.122, 0.00175, 0.0);
+        case COMPBOT -> new Gains(0.0002, 0.0, 0.0, 0.122, 0.00175, 0.0);
 
           // case COMPBOT -> null;
       };
