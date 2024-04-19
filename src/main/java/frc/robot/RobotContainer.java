@@ -518,13 +518,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 82));
 
     // ================================================
     // OPERATOR GUITAR - YELLOW
     // ARM POSITION AMP
     // ================================================
-    guitarController.button(1).onTrue(new PositionArmPID(armPID, 80));
+    guitarController.button(1).onTrue(new PositionArmPID(armPID, 82));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================

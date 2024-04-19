@@ -89,7 +89,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShoot"
+                  "pathName": "toSourcesideShootFar"
                 }
               },
               {
@@ -185,7 +185,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShoot"
+                  "pathName": "toSourcesideShootFar"
                 }
               },
               {
