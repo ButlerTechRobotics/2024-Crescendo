@@ -44,10 +44,10 @@ public class MultiDistanceShooter extends Command {
     this.orignalPose = targetPose;
 
     // Populate the distance map with distance-angle pairs
-    distanceMap.put(1.0, 3500.0);
-    distanceMap.put(1.5, 3500.0);
-    distanceMap.put(2.0, 3500.0);
-    distanceMap.put(2.5, 3600.0);
+    distanceMap.put(1.0, 3000.0);
+    distanceMap.put(1.5, 3000.0);
+    distanceMap.put(2.0, 3200.0);
+    distanceMap.put(2.5, 3500.0);
     distanceMap.put(3.0, 3800.0);
     distanceMap.put(3.5, 4250.0); // 4000 4/4/2024 3:56PM
     distanceMap.put(3.75, 4250.0); // 4000 4/4/2024 3:56PM

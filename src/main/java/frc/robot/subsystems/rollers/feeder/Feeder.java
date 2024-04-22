@@ -26,7 +26,9 @@ public class Feeder extends GenericRollerSystem<Feeder.Goal> {
     EJECTALIGN(new LoggedTunableNumber("Feeder/EjectingAlignVoltage", -1.0)),
     SHOOT(new LoggedTunableNumber("Feeder/ShootVoltage", 12.0)),
     AMPSHOOTER(new LoggedTunableNumber("AmpVoltage", -3)),
-    AMPSHOOTER2(new LoggedTunableNumber("Amp2Voltage", -12));
+    AMPSHOOTER2(new LoggedTunableNumber("Amp2Voltage", -12)),
+    AMPSHOOTERRED(new LoggedTunableNumber("AmpVoltageRed", -3)),
+    AMPSHOOTER2RED(new LoggedTunableNumber("AmpVoltage2Red", -12));
 
     private final DoubleSupplier voltageSupplier;
   }

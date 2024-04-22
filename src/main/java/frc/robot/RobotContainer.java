@@ -446,6 +446,21 @@ public class RobotContainer {
                 }));
 
     // ================================================
+    // OPERATOR CONTROLLER - RB
+    // SCORE AMP RED
+    // ================================================
+    operatorController
+        .rightBumper()
+        .whileTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTERRED), rollers)))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  rollers.setGoal(Rollers.Goal.IDLE);
+                }));
+
+    // ================================================
     // OPERATOR GUITAR - YELLOW
     // SCORE AMP
     // ================================================

@@ -38,6 +38,7 @@ public class Rollers extends SubsystemBase {
     EJECT_TO_FLOOR,
     FEED_SHOOTER,
     AMP_SHOOTER,
+    AMP_SHOOTERRED,
     EJECTALIGN,
     SHOOT
   }
@@ -81,6 +82,11 @@ public class Rollers extends SubsystemBase {
       case AMP_SHOOTER -> {
         feeder1.setGoal(Feeder.Goal.AMPSHOOTER2);
         feeder2.setGoal(Feeder.Goal.AMPSHOOTER);
+      }
+
+      case AMP_SHOOTERRED -> {
+        feeder1.setGoal(Feeder.Goal.AMPSHOOTER2RED);
+        feeder2.setGoal(Feeder.Goal.AMPSHOOTERRED);
       }
 
       case FEED_SHOOTER -> {
