@@ -18,11 +18,11 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private Neo motor = new Neo(20);
   private PIDController pidController;
-  private double targetAngle = 2.1; // 3
+  private double targetAngle = 2; // 3
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  public double armHomePosition = 2.1;
+  public double armHomePosition = 2;
 
   TunableNumber kP = new TunableNumber("Arm P Gain", 0.055); // 0.057
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0001); // 0.00023
@@ -83,7 +83,7 @@ public class ArmPositionPID extends SubsystemBase {
   public void periodic() {
     setPID();
     double output = pidController.calculate(getPosition(), targetAngle);
-    double downSpeedFactor = 0.150; // Adjust this value to control the down speed
+    double downSpeedFactor = 0.169; // Adjust this value to control the down speed
     double upSpeedFactor = 0.175; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
     motor.set(output * speedFactor);
