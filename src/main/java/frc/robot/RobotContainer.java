@@ -8,6 +8,7 @@
 package frc.robot;
 
 import static frc.robot.subsystems.drive.DriveConstants.*;
+import static frc.robot.subsystems.vision.CameraConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -28,9 +29,7 @@ import frc.robot.commands.DriveToPoint;
 import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
 import frc.robot.commands.arm.MultiDistanceArm;
-// import frc.robot.commands.ShootDistance;
 import frc.robot.commands.arm.PositionArmPID;
-// import frc.robot.subsystems.SwagLights;
 import frc.robot.commands.climber.PositionClimbLeftPID;
 import frc.robot.commands.climber.PositionClimbRightPID;
 import frc.robot.subsystems.drive.Drive;
@@ -51,7 +50,6 @@ import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
-// import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
 import frc.robot.subsystems.superstructure.climber.ClimberLeft;
 import frc.robot.subsystems.superstructure.climber.ClimberRight;
@@ -67,519 +65,450 @@ import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // Subsystems
-  private Drive drive;
-  private Shooter shooter;
-  private AprilTagVision aprilTagVision;
-  private static DriveController driveMode = new DriveController();
-  private Intake intake;
-  private Feeder feeder1;
-  private Feeder feeder2;
-  private Rollers rollers;
 
-  private Candle candle = new Candle();
+    // Subsystems
+    private Drive drive;
+    private Shooter shooter;
+    private AprilTagVision aprilTagVision;
+    private static DriveController driveMode = new DriveController();
+    private Intake intake;
+    private Feeder feeder1;
+    private Feeder feeder2;
+    private Rollers rollers;
+    private Candle candle = new Candle();
 
-  private boolean hasRun = false;
-  private boolean hasEjected = false;
-  private boolean hasShot = false;
+    private boolean hasShot = false;
 
-  // Controller
-  private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
-  private final CommandXboxController guitarController = new CommandXboxController(2);
+    // Controller
+    private final CommandXboxController driverController = new CommandXboxController(0);
+    private final CommandXboxController operatorController = new CommandXboxController(1);
 
-  private ArmPositionPID armPID = new ArmPositionPID();
-  private final ClimberLeft climberLeftPID = new ClimberLeft();
-  private final ClimberRight climberRightPID = new ClimberRight();
+    private ArmPositionPID armPID = new ArmPositionPID();
+    private final ClimberLeft climberLeftPID = new ClimberLeft();
+    private final ClimberRight climberRightPID = new ClimberRight();
 
-  // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+    // Dashboard inputs
+    private final LoggedDashboardChooser<Command> autoChooser;
 
-  private static final Transform3d robotToCameraBL =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        switch (Constants.getMode()) {
+            case REAL:
+                // Real robot, instantiate hardware I` implementations
+                drive = new Drive(
+                        new GyroIOPigeon2(),
+                        new SwerveModuleIONeo(moduleConfigs[0]),
+                        new SwerveModuleIONeo(moduleConfigs[1]),
+                        new SwerveModuleIONeo(moduleConfigs[2]),
+                        new SwerveModuleIONeo(moduleConfigs[3]));
 
-  private static final Transform3d robotToCameraBR =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-10.625),
-              Units.inchesToMeters(-11.5),
-              Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-27.), Math.toRadians(-150.)));
+                shooter = new Shooter(new ShooterIOSparkFlex());
 
-  private static final Transform3d robotToCameraBack =
-      new Transform3d(
-          new Translation3d(
-              Units.inchesToMeters(-3.0), Units.inchesToMeters(0.0), Units.inchesToMeters(14.75)),
-          new Rotation3d(0, Math.toRadians(-20.), Math.toRadians(180.)));
+                feeder1 = new Feeder(new FeederIOSparkFlexFront());
+                feeder2 = new Feeder(new FeederIOSparkFlexBack());
+                intake = new Intake(new IntakeIOSparkFlex());
+                rollers = new Rollers(feeder1, feeder2, intake);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    switch (Constants.getMode()) {
-      case REAL:
-        // Real robot, instantiate hardware I` implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new SwerveModuleIONeo(moduleConfigs[0]),
-                new SwerveModuleIONeo(moduleConfigs[1]),
-                new SwerveModuleIONeo(moduleConfigs[2]),
-                new SwerveModuleIONeo(moduleConfigs[3]));
+                aprilTagVision = new AprilTagVision(
+                        new AprilTagVisionIOPhotonVision("BLCamera", ROBOT_TO_CAMERA_BL),
+                        new AprilTagVisionIOPhotonVision("BRCamera", ROBOT_TO_CAMERA_BR),
+                        new AprilTagVisionIOPhotonVision("BackCamera", ROBOT_TO_CAMERA_BACK));
+                break;
 
-        shooter = new Shooter(new ShooterIOSparkFlex());
+            case SIM:
+                // Sim robot, instantiate physics sim IO implementations
+                drive = new Drive(
+                        new GyroIO() {
+                        },
+                        new SwerveModuleIOSim(),
+                        new SwerveModuleIOSim(),
+                        new SwerveModuleIOSim(),
+                        new SwerveModuleIOSim());
 
-        feeder1 = new Feeder(new FeederIOSparkFlexFront());
-        feeder2 = new Feeder(new FeederIOSparkFlexBack());
-        intake = new Intake(new IntakeIOSparkFlex());
-        rollers = new Rollers(feeder1, feeder2, intake);
+                shooter = new Shooter(new ShooterIOSim());
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("BLCamera", robotToCameraBL),
-                new AprilTagVisionIOPhotonVision("BRCamera", robotToCameraBR),
-                new AprilTagVisionIOPhotonVision("BackCamera", robotToCameraBack));
-        break;
+                feeder1 = new Feeder(new FeederIOSim());
+                feeder2 = new Feeder(new FeederIOSim());
+                intake = new Intake(new IntakeIOSim());
+                rollers = new Rollers(feeder1, feeder2, intake);
 
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim());
+                aprilTagVision = new AprilTagVision(
+                        new AprilTagVisionIOPhotonVisionSIM(
+                                "photonCamera1",
+                                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+                                drive::getDrive));
 
-        shooter = new Shooter(new ShooterIOSim());
+                break;
 
-        feeder1 = new Feeder(new FeederIOSim());
-        feeder2 = new Feeder(new FeederIOSim());
-        intake = new Intake(new IntakeIOSim());
-        rollers = new Rollers(feeder1, feeder2, intake);
+            default:
+                // Replayed robot, disable IO implementations
+                drive = new Drive(
+                        new GyroIO() {
+                        },
+                        new SwerveModuleIO() {
+                        },
+                        new SwerveModuleIO() {
+                        },
+                        new SwerveModuleIO() {
+                        },
+                        new SwerveModuleIO() {
+                        });
+                shooter = new Shooter(new ShooterIO() {
+                });
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVisionSIM(
-                    "photonCamera1",
-                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
-                    drive::getDrive));
+                feeder1 = new Feeder(new FeederIO() {
+                });
 
-        break;
+                feeder2 = new Feeder(new FeederIO() {
+                });
 
-      default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {});
-        shooter = new Shooter(new ShooterIO() {});
+                aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {
+                });
 
-        feeder1 = new Feeder(new FeederIO() {});
+                intake = new Intake(new IntakeIO() {
+                });
+        }
+        // ================================================
+        // Register the Named Commands
+        // ================================================
+        NamedCommands.registerCommand("Intake", intakeNote());
+        NamedCommands.registerCommand("Eject", ejectNote());
+        NamedCommands.registerCommand("blurpShoot", blurpShoot());
 
-        feeder2 = new Feeder(new FeederIO() {});
+        // // ================================================
+        // // Register the Auto Aim Command
+        // // ================================================
+        // NamedCommands.registerCommand(
+        // "Auto Aim",
+        // new MultiDistanceArm(
+        // drive::getPose,
+        // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+        // armPID)
+        // .andThen(
+        // new InstantCommand(
+        // () -> armPID.setPosition(3.0), armPID))); // Reset the arm
+        // position
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        // ================================================
+        // Register the Auto Command AimAndPreShoot
+        // ================================================
+        NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
 
-        intake = new Intake(new IntakeIO() {});
+        // ================================================
+        // Register the Auto Command BlurpShoot
+        // ================================================
+        NamedCommands.registerCommand("BlurpShoot", blurpShoot());
+
+        // ================================================
+        // Register the Auto Command Shoot
+        // ================================================
+        NamedCommands.registerCommand("Shoot", shoot());
+
+        autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+        // Configure the button bindings
+        aprilTagVision.setDataInterfaces(drive::addVisionData);
+        driveMode.setPoseSupplier(drive::getPose);
+        driveMode.disableHeadingControl();
+        configureButtonBindings();
     }
-    // ================================================
-    // Register the Named Commands
-    // ================================================
-    NamedCommands.registerCommand("Intake", intakeNote());
-    NamedCommands.registerCommand("Eject", ejectNote());
-    NamedCommands.registerCommand("blurpShoot", blurpShoot());
 
-    // // ================================================
-    // // Register the Auto Aim Command
-    // // ================================================
-    // NamedCommands.registerCommand(
-    // "Auto Aim",
-    // new MultiDistanceArm(
-    // drive::getPose,
-    // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-    // armPID)
-    // .andThen(
-    // new InstantCommand(
-    // () -> armPID.setPosition(3.0), armPID))); // Reset the arm
-    // position
+    public Command intakeNote() {
+        return Commands.sequence(
+                candle.runPrettyLightsCommand(),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
+                Commands.waitUntil(() -> !rollers.getBeamBreak()),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
+                candle.setColorGreenCommand(),
+                Commands.waitUntil(() -> rollers.getBeamBreak()),
+                Commands.runOnce(
+                        () -> {
+                            rollers.setGoal(Rollers.Goal.IDLE);
+                        }),
+                Commands.waitSeconds(0.1),
+                candle.setColorRespawnIdle());
+    }
 
-    // ================================================
-    // Register the Auto Command AimAndPreShoot
-    // ================================================
-    NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
+    public Command ejectNote() {
+        return Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers);
+    }
 
-    // ================================================
-    // Register the Auto Command BlurpShoot
-    // ================================================
-    NamedCommands.registerCommand("BlurpShoot", blurpShoot());
-
-    // ================================================
-    // Register the Auto Command Shoot
-    // ================================================
-    NamedCommands.registerCommand("Shoot", shoot());
-
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
-    // Configure the button bindings
-    aprilTagVision.setDataInterfaces(drive::addVisionData);
-    driveMode.setPoseSupplier(drive::getPose);
-    driveMode.disableHeadingControl();
-    configureButtonBindings();
-  }
-
-  public Command intakeNote() {
-    return Commands.sequence(
-        candle.runPrettyLightsCommand(),
-        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
-        Commands.waitUntil(() -> !rollers.getBeamBreak()),
-        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-        candle.setColorGreenCommand(),
-        Commands.waitUntil(() -> rollers.getBeamBreak()),
-        Commands.runOnce(
-            () -> {
-              rollers.setGoal(Rollers.Goal.IDLE);
-            }),
-        Commands.waitSeconds(0.1),
-        candle.setColorRespawnIdle());
-  }
-
-  public Command ejectNote() {
-    return Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers);
-  }
-
-  public Command aimAndPreShoot() {
-    return Commands.sequence(
-            Commands.startEnd(
-                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
-                .alongWith(
-                    new MultiDistanceArm(
-                            drive::getPose,
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            armPID)
+    public Command aimAndPreShoot() {
+        return Commands.sequence(
+                Commands.startEnd(
+                        () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
                         .alongWith(
-                            new MultiDistanceShooter(
-                                drive::getPose,
-                                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                                shooter))))
-        .until(() -> hasShot);
-  }
+                                new MultiDistanceArm(
+                                        drive::getPose,
+                                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                                        armPID)
+                                        .alongWith(
+                                                new MultiDistanceShooter(
+                                                        drive::getPose,
+                                                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
+                                                        shooter))))
+                .until(() -> hasShot);
+    }
 
-  public Command blurpShoot() {
-    return Commands.sequence(
-            Commands.startEnd(
-                () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
-        .until(() -> hasShot);
-  }
+    public Command blurpShoot() {
+        return Commands.sequence(
+                Commands.startEnd(
+                        () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
+                .until(() -> hasShot);
+    }
 
-  public Command autoBlurp() {
-    return Commands.sequence(
-        // Start by spinning up the shooter and setting the arm to 40
-        Commands.parallel(
-            Commands.runOnce(() -> shooter.setSetpoint(4000, 4000)),
-            Commands.runOnce(() -> new PositionArmPID(armPID, 40))));
-  }
+    public Command autoBlurp() {
+        return Commands.sequence(
+                // Start by spinning up the shooter and setting the arm to 40
+                Commands.parallel(
+                        Commands.runOnce(() -> shooter.setSetpoint(4000, 4000)),
+                        Commands.runOnce(() -> new PositionArmPID(armPID, 40))));
+    }
 
-  public void resetHasShot() {
-    hasShot = false;
-  }
+    public void resetHasShot() {
+        hasShot = false;
+    }
 
-  public Command shoot() {
-    return Commands.sequence(
-        candle.runShootCommand(),
-        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
-        Commands.waitSeconds(0.4),
-        Commands.runOnce(
-            () -> {
-              hasShot = true; // set hasShot to true
-              rollers.setGoal(Rollers.Goal.IDLE);
-              shooter.stop();
-              candle.setColorOperationIdle();
-            }),
-        Commands.runOnce(() -> resetHasShot())); // reset hasShot
-  }
+    public Command shoot() {
+        return Commands.sequence(
+                candle.runShootCommand(),
+                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.SHOOT), rollers),
+                Commands.waitSeconds(0.4),
+                Commands.runOnce(
+                        () -> {
+                            hasShot = true; // set hasShot to true
+                            rollers.setGoal(Rollers.Goal.IDLE);
+                            shooter.stop();
+                            candle.setColorOperationIdle();
+                        }),
+                Commands.runOnce(() -> resetHasShot())); // reset hasShot
+    }
 
-  public Command resetHeading() {
-    return Commands.runOnce(
-            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-            drive)
-        .ignoringDisable(true);
-  }
+    public Command resetHeading() {
+        return Commands.runOnce(
+                () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                drive)
+                .ignoringDisable(true);
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
 
-    // ==================
-    // DEFAULT COMMANDS
-    // ==================
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            driveMode,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
+        // ==================
+        // DEFAULT COMMANDS
+        // ==================
+        drive.setDefaultCommand(
+                DriveCommands.joystickDrive(
+                        drive,
+                        driveMode,
+                        () -> -driverController.getLeftY(),
+                        () -> -driverController.getLeftX(),
+                        () -> -driverController.getRightX()));
 
-    // ================================================
-    // DRIVER CONTROLLER - START
-    // SET AUTO START POSE (i think it sets the heading)
-    // ================================================
-    driverController
-        .start()
-        .whileTrue(
-            Commands.run(
-                () ->
-                    drive.setAutoStartPose(
-                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+        // ================================================
+        // DRIVER CONTROLLER - START
+        // SET AUTO START POSE (i think it sets the heading)
+        // ================================================
+        driverController
+                .start()
+                .whileTrue(
+                        Commands.run(
+                                () -> drive.setAutoStartPose(
+                                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
-    // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // RUN INTAKE IN
-    // ================================================
-    driverController
-        .leftBumper()
-        .whileTrue(intakeNote())
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        // ================================================
+        // DRIVER CONTROLLER - LEFT BUMPER
+        // RUN INTAKE IN
+        // ================================================
+        driverController
+                .leftBumper()
+                .whileTrue(intakeNote())
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    rollers.setGoal(Rollers.Goal.IDLE);
+                                }));
 
-    // ================================================
-    // DRIVER CONTROLLER - LEFT TRIGGER
-    // RUN INTAKE OUT
-    // ================================================
-    driverController
-        .leftTrigger()
-        .whileTrue(ejectNote())
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        // ================================================
+        // DRIVER CONTROLLER - LEFT TRIGGER
+        // RUN INTAKE OUT
+        // ================================================
+        driverController
+                .leftTrigger()
+                .whileTrue(ejectNote())
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    rollers.setGoal(Rollers.Goal.IDLE);
+                                }));
 
-    // ================================================
-    // DRIVER CONTROLLER - A
-    // PATHFIND TO AMP
-    // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
+        // ================================================
+        // DRIVER CONTROLLER - A
+        // PATHFIND TO AMP
+        // ================================================
+        driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
 
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
+        // ================================================
+        // DRIVER CONTROLLER - B
+        // PATHFIND TO SPEAKER
+        // ================================================
+        driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
 
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
+        // ================================================
+        // DRIVER CONTROLLER - B
+        // PATHFIND TO SPEAKER
+        // ================================================
+        driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
 
-    driverController
-        .x()
-        .whileTrue(
-            new DriveToPoint(
-                    drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
-                .andThen(
-                    new PositionClimbLeftPID(climberLeftPID, -140)
-                        .alongWith(new PositionClimbRightPID(climberRightPID, -140))));
+        driverController
+                .x()
+                .whileTrue(
+                        new DriveToPoint(
+                                drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
+                                .andThen(
+                                        new PositionClimbLeftPID(climberLeftPID, -140)
+                                                .alongWith(new PositionClimbRightPID(climberRightPID, -140))));
 
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO STAGE SHOOT
-    // ================================================
-    driverController
-        .b()
-        .whileTrue(
-            new DriveToPoint(
-                drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
+        // ================================================
+        // DRIVER CONTROLLER - B
+        // PATHFIND TO STAGE SHOOT
+        // ================================================
+        driverController
+                .b()
+                .whileTrue(
+                        new DriveToPoint(
+                                drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
 
-    // ================================================
-    // DRIVER CONTROLLER - DPAD UP
-    // MOVE CLIMBER UP
-    // ================================================
-    driverController
-        .rightBumper()
-        .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, -140)
-                .alongWith(new PositionClimbRightPID(climberRightPID, -140)));
+        // ================================================
+        // DRIVER CONTROLLER - DPAD UP
+        // MOVE CLIMBER UP
+        // ================================================
+        driverController
+                .rightBumper()
+                .whileTrue(
+                        new PositionClimbLeftPID(climberLeftPID, -140)
+                                .alongWith(new PositionClimbRightPID(climberRightPID, -140)));
 
-    // ================================================
-    // DRIVER CONTROLLER - DPAD DOWN
-    // MOVE CLIMBER DOWN
-    // ================================================
-    driverController
-        .rightTrigger()
-        .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, 0)
-                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
+        // ================================================
+        // DRIVER CONTROLLER - DPAD DOWN
+        // MOVE CLIMBER DOWN
+        // ================================================
+        driverController
+                .rightTrigger()
+                .whileTrue(
+                        new PositionClimbLeftPID(climberLeftPID, 0)
+                                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
 
-    // ================================================
-    // OPERATOR CONTROLLER - LB
-    // SCORE AMP
-    // ================================================
-    operatorController
-        .leftBumper()
-        .whileTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        // ================================================
+        // OPERATOR CONTROLLER - LB
+        // SCORE AMP
+        // ================================================
+        operatorController
+                .leftBumper()
+                .whileTrue(
+                        Commands.sequence(
+                                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    rollers.setGoal(Rollers.Goal.IDLE);
+                                }));
 
-    // ================================================
-    // OPERATOR CONTROLLER - RB
-    // SCORE AMP RED
-    // ================================================
-    operatorController
-        .rightBumper()
-        .whileTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTERRED), rollers)))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        // ================================================
+        // OPERATOR CONTROLLER - RB
+        // SCORE AMP RED
+        // ================================================
+        operatorController
+                .rightBumper()
+                .whileTrue(
+                        Commands.sequence(
+                                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTERRED), rollers)))
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    rollers.setGoal(Rollers.Goal.IDLE);
+                                }));
 
-    // ================================================
-    // OPERATOR GUITAR - YELLOW
-    // SCORE AMP
-    // ================================================
-    guitarController
-        .button(1)
-        .whileTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        // ================================================
+        // OPERATOR CONTROLLER - LEFT TRIGGER
+        // AIM AT SPEAKER AND PRE-SHOOT
+        // ================================================
+        operatorController
+                .leftTrigger()
+                .whileTrue(aimAndPreShoot())
+                .onFalse(Commands.runOnce(() -> hasShot = false));
 
-    // ================================================
-    // OPERATOR CONTROLLER - LEFT TRIGGER
-    // AIM AT SPEAKER AND PRE-SHOOT
-    // ================================================
-    operatorController
-        .leftTrigger()
-        .whileTrue(aimAndPreShoot())
-        .onFalse(Commands.runOnce(() -> hasShot = false));
+        // ================================================
+        // OPERATOR CONTROLLER - A
+        // SETS SHOOTER TO BLURP SHOOT SPEED
+        // ================================================
+        operatorController.a().whileTrue(blurpShoot());
 
-    // ================================================
-    // OPERATOR GUITAR - GREEN
-    // AIM AT SPEAKER AND PRE-SHOOT
-    // ================================================
-    guitarController
-        .button(8)
-        .whileTrue(aimAndPreShoot())
-        .onFalse(Commands.runOnce(() -> hasShot = false));
+        operatorController
+                .rightTrigger()
+                .whileTrue(shoot())
+                .onFalse(
+                        Commands.runOnce(
+                                () -> {
+                                    rollers.setGoal(Rollers.Goal.IDLE);
+                                })
+                                .alongWith(candle.setColorRespawnIdle()));
 
-    // ================================================
-    // OPERATOR CONTROLLER - A
-    // SETS SHOOTER TO BLURP SHOOT SPEED
-    // ================================================
-    operatorController.a().whileTrue(blurpShoot());
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD UP
+        // ARM POSITION MAX POSITION
+        // ================================================
+        operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
 
-    // ================================================
-    // OPERATOR CONTROLLER - BLUE
-    // SETS SHOOTER TO BLURP SHOOT SPEED
-    // ================================================
-    guitarController.button(3).whileTrue(blurpShoot());
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD RIGHT
+        // ARM POSITION STAGE SHOOT
+        // ================================================
+        operatorController.povRight().onTrue(autoBlurp());
 
-    operatorController
-        .rightTrigger()
-        .whileTrue(shoot())
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                    })
-                .alongWith(candle.setColorRespawnIdle()));
-    guitarController
-        .axisGreaterThan(1, 0.3)
-        .whileTrue(shoot())
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                    })
-                .alongWith(candle.setColorRespawnIdle()));
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD RIGHT
+        // ARM POSITION BLURP SHOOT
+        // ================================================
+        operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD LEFT
+        // ARM POSITION AMP
+        // ================================================
+        operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
 
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION MAX POSITION
-    // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+        // .whileFalse(new PositionArmPID(armPID, 0));
+        // ================================================
+        // OPERATOR CONTROLLER - DPAD DOWN
+        // ARM POSITION LOWEST POSITION
+        // ================================================
+        operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.0)); // 3
+    }
 
-    // ================================================
-    // OPERATOR GUITAR - SELECT
-    // ARM POSITION MAX POSITION
-    // ================================================
-    guitarController.button(9).onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
-
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION STAGE SHOOT
-    // ================================================
-    operatorController.povRight().onTrue(autoBlurp());
-
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION BLURP SHOOT
-    // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD LEFT
-    // ARM POSITION AMP
-    // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
-
-    // ================================================
-    // OPERATOR GUITAR - BLUE
-    // ARM POSITION AMP
-    // ================================================
-    guitarController.button(3).onTrue(new PositionArmPID(armPID, 80));
-
-    // .whileFalse(new PositionArmPID(armPID, 0));
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION LOWEST POSITION
-    // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(armPID, 3.0)); // 3
-
-    // .whileFalse(new PositionArmPID(armPID, 0));
-    // ================================================
-    // OPERATOR GUITAR - RED
-    // ARM POSITION LOWEST POSITION
-    // ================================================
-    guitarController.button(2).onTrue(new PositionArmPID(armPID, 3.0)); // 3
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.get();
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return autoChooser.get();
+    }
 }
