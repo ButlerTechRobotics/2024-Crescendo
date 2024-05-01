@@ -20,9 +20,9 @@ public class Intake extends GenericRollerSystem<Intake.Goal> {
   @Getter
   public enum Goal implements VoltageGoal {
     IDLE(() -> 0.0),
-    FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 10.0)),
+    FLOOR_INTAKING(new LoggedTunableNumber("Intake/FloorIntakingVoltage", 12.0)),
     SHOOTING(new LoggedTunableNumber("Intake/Shooting", 0.0)),
-    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -10.0)),
+    EJECTING(new LoggedTunableNumber("Intake/EjectingVoltage", -12.0)),
     AMP_SHOOTER(new LoggedTunableNumber("AmpVoltage", 0.0));
 
     private final DoubleSupplier voltageSupplier;

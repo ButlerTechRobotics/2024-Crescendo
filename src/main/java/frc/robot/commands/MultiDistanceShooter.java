@@ -60,6 +60,7 @@ public class MultiDistanceShooter extends Command {
     distanceMap.put(6.5, 5000.0);
     distanceMap.put(7.0, 5500.0);
     distanceMap.put(8.0, 6500.0);
+    distanceMap.put(9.0, 7500.0);
   }
 
   @Override

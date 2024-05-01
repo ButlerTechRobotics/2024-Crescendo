@@ -75,7 +75,7 @@ public class ArmPositionPID extends SubsystemBase {
 
   @AutoLogOutput(key = "Arm/IsAtTargetPosition")
   public boolean isAtTargetPosition() {
-    double tolerance = 0.01; // This is the tolerance in degrees
+    double tolerance = 0.001; // This is the tolerance in degrees
     return Math.abs(getPosition() - targetAngle) < tolerance;
   }
 
