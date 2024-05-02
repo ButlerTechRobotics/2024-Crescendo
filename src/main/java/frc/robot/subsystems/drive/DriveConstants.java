@@ -47,11 +47,11 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
-  // TODO tune odometry frequency
+
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 100.0;
+        case COMPBOT -> 250.0;
       };
   public static final Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -138,18 +138,17 @@ public final class DriveConstants {
         case COMPBOT -> new HeadingControllerConstants(2.0, .25);
         case SIMBOT -> new HeadingControllerConstants(3.0, 0.0);
       };
-  // TODO tune the PP translation/rotation values, 5712 uses 10, 0.0, 0.0 and PathPlanner uses 5,
-  // 0.0, 0.0
+
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
-        case SIMBOT -> new PIDConstants(3, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(5, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 
   public static final PIDConstants PProtationConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
-        case SIMBOT -> new PIDConstants(3, 0.0, 0.0);
+        case COMPBOT -> new PIDConstants(7.5, 0.0, 0.0);
+        case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
       };
 
   public record DrivetrainConfig(

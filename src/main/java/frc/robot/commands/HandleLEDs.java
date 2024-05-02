@@ -5,23 +5,22 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.commands.climber;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.climber.ClimberRight;
+import frc.robot.subsystems.leds.LedController;
+import frc.robot.subsystems.linebreak.LineBreak;
 
-public class PositionClimbRightPID extends Command {
-  /** Creates a new ClimbEncoderPosition. */
-  ClimberRight m_climb;
+public class HandleLEDs extends Command {
+  LedController ledController;
+  LineBreak lineBreak;
 
-  double m_position;
-
-  /** Creates a new Climb. */
-  public PositionClimbRightPID(ClimberRight Climb, double position) {
-    m_climb = Climb;
-    m_position = position;
-    addRequirements(m_climb);
+  /** Creates a new HandleLEDs. */
+  public HandleLEDs(LedController ledController, LineBreak lineBreak) {
+    this.ledController = ledController;
+    this.lineBreak = lineBreak;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(ledController);
   }
 
   // Called when the command is initially scheduled.
@@ -31,14 +30,16 @@ public class PositionClimbRightPID extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climb.setPosition(m_position);
+    if (lineBreak.hasGamePiece()) {
+      ledController.setHasGamePiece(true);
+    } else {
+      ledController.setHasGamePiece(false);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_climb.setPosition(m_climb.getPosition());
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
