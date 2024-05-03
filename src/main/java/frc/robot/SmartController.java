@@ -11,26 +11,21 @@ import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The SmartController class represents a controller for the robot's system. It
- * provides methods to
+ * The SmartController class represents a controller for the robot's system. It provides methods to
  * control the robot.
  *
- * <p>
- * Most of the methods in this class handle state machine logic, which is a way
- * to represent the
+ * <p>Most of the methods in this class handle state machine logic, which is a way to represent the
  * state of the robot and the transitions between states.
  *
- * <p>
- * The SmartController class is a singleton, which means that there is only one
- * instance of the
+ * <p>The SmartController class is a singleton, which means that there is only one instance of the
  * class that is shared across the entire robot code.
  */
 public class SmartController {
   private static SmartController instance;
 
   private DriveModeType driveModeType = DriveModeType.SAFE;
-  private AimingParameters targetAimingParameters = new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5,
-      ArmConstants.shoot.arm(), 2, 0);
+  private AimingParameters targetAimingParameters =
+      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, ArmConstants.shoot.arm(), 2, 0);
 
   // Whether or not the robot is in smart control mode. Smart control mode is a
   // mode where the robot
@@ -139,10 +134,8 @@ public class SmartController {
   }
 
   /**
-   * Sets the emergency intake mode. This is used if the normal intake is not
-   * working properly.
-   * Emergency intake mode allows us to pick up directly from the source using the
-   * shooter.
+   * Sets the emergency intake mode. This is used if the normal intake is not working properly.
+   * Emergency intake mode allows us to pick up directly from the source using the shooter.
    *
    * @param emergencyMode The emergency mode to set.
    */
@@ -193,21 +186,16 @@ public class SmartController {
   }
 
   /**
-   * Calculates the shooter parameters for a given field relative pose, velocity,
-   * and acceleration.
+   * Calculates the shooter parameters for a given field relative pose, velocity, and acceleration.
    *
-   * <p>
-   * This handles calculating target robot angle, radial velocity, shooter speed,
-   * shooter angle,
+   * <p>This handles calculating target robot angle, radial velocity, shooter speed, shooter angle,
    * and wrist error.
    *
-   * <p>
-   * It also is done in a way that if the robot is moving, it will adjust the
-   * location of the
+   * <p>It also is done in a way that if the robot is moving, it will adjust the location of the
    * target to account for the robot's movement so the shot will still hit.
    *
-   * @param fieldRelativePose         The pose of the robot on the field
-   * @param fieldRelativeVelocity     The velocity of the robot on the field
+   * @param fieldRelativePose The pose of the robot on the field
+   * @param fieldRelativeVelocity The velocity of the robot on the field
    * @param fieldRelativeAcceleration The acceleration of the robot on the field
    */
   public void calculateSpeaker(
@@ -220,7 +208,8 @@ public class SmartController {
 
     setPrerollDistance(8.002);
 
-    Translation2d speakerPose = AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
+    Translation2d speakerPose =
+        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
 
     // Calculate the distance to the speaker and the time it will take to get there
     double distanceToSpeaker = fieldRelativePose.getTranslation().getDistance(speakerPose);
@@ -246,8 +235,9 @@ public class SmartController {
     }
 
     // Set the target angle of the robot to point at the target
-    Rotation2d setpointAngle = (movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle())
-        .plus(Rotation2d.fromDegrees(180));
+    Rotation2d setpointAngle =
+        (movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle())
+            .plus(Rotation2d.fromDegrees(180));
     double angleDifference = setpointAngle.minus(fieldRelativePose.getRotation()).getRadians();
 
     // Assuming a constant linear velocity (you can adjust this)
@@ -284,8 +274,7 @@ public class SmartController {
   /**
    * Calculates the shooter parameters for the amp shot.
    *
-   * <p>
-   * This will always be static and will not adjust for the robot's movement.
+   * <p>This will always be static and will not adjust for the robot's movement.
    */
   public void calculateAmp() {
     setTargetAimingParameters(
@@ -295,9 +284,7 @@ public class SmartController {
   /**
    * Calculates the shooter parameters for the feeding shot.
    *
-   * <p>
-   * This is identical to the speaker shot, but the target is the feed location
-   * next to the amp.
+   * <p>This is identical to the speaker shot, but the target is the feed location next to the amp.
    */
   public void calculateFeed(Pose2d fieldRelativePose, Translation2d fieldRelativeVelocity) {
     setPrerollDistance(FieldConstants.fieldLength);
@@ -307,7 +294,8 @@ public class SmartController {
     Translation2d movingGoalLocation = feedLocation.minus(fieldRelativeVelocity.times(shotTime));
     Translation2d toTestGoal = movingGoalLocation.minus(fieldRelativePose.getTranslation());
     double effectiveDistanceToFeedLocation = toTestGoal.getNorm();
-    Rotation2d setpointAngle = movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
+    Rotation2d setpointAngle =
+        movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
     double angleDifference = setpointAngle.minus(fieldRelativePose.getRotation()).getRadians();
     double radialVelocity = 0.0;
     Logger.recordOutput(
@@ -339,9 +327,7 @@ public class SmartController {
   /**
    * Gets the target aiming parameters.
    *
-   * <p>
-   * The target aiming parameters are the information that the robot should use to
-   * hit the
+   * <p>The target aiming parameters are the information that the robot should use to hit the
    * target.
    *
    * @return The target aiming parameters.
@@ -351,8 +337,7 @@ public class SmartController {
   }
 
   /**
-   * Gets the distance to the target when we should start running the flywheel if
-   * we have a game
+   * Gets the distance to the target when we should start running the flywheel if we have a game
    * piece.
    *
    * @return The preroll distance.
@@ -362,8 +347,7 @@ public class SmartController {
   }
 
   /**
-   * Sets the distance to the target when we should start running the flywheel if
-   * we have a game
+   * Sets the distance to the target when we should start running the flywheel if we have a game
    * piece.
    *
    * @param prerollDistance The preroll distance to set.
@@ -378,8 +362,7 @@ public class SmartController {
       double shooterSpeed,
       Rotation2d shooterAngle,
       double armError,
-      double effectiveDistanceToTarget) {
-  }
+      double effectiveDistanceToTarget) {}
 
   /** Possible Drive Modes. */
   public enum DriveModeType {

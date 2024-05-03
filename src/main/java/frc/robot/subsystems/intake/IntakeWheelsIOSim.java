@@ -7,12 +7,12 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
-public class IntakeWheelsIOSIM implements IntakeWheelsIO {
+public class IntakeWheelsIOSim implements IntakeWheelsIO {
   TalonFX leader = new TalonFX(45);
   TalonFXSimState leaderSim = leader.getSimState();
   FlywheelSim flywheelSim;
 
-  public IntakeWheelsIOSIM() {
+  public IntakeWheelsIOSim() {
     leaderSim = leader.getSimState();
     flywheelSim = new FlywheelSim(DCMotor.getNeo550(1), 3.0, 0.01);
     TalonFXConfiguration config = new TalonFXConfiguration();

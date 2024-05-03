@@ -7,12 +7,12 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
-public class MagazineIOSIM implements MagazineIO {
+public class MagazineIOSim implements MagazineIO {
   TalonFX leader = new TalonFX(18);
   TalonFXSimState leaderSim = leader.getSimState();
   FlywheelSim magazineSIM;
 
-  public MagazineIOSIM() {
+  public MagazineIOSim() {
     leaderSim = leader.getSimState();
     magazineSIM = new FlywheelSim(DCMotor.getNeo550(1), 3.0, 0.01);
     TalonFXConfiguration config = new TalonFXConfiguration();
