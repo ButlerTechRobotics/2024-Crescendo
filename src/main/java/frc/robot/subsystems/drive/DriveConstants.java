@@ -23,15 +23,15 @@ public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
         default ->
-            // TODO update these values, got new values from Choreo calculation
+            // These values are from Choreo
             new DrivetrainConfig(
                 Units.inchesToMeters(2.0), // double wheelRadius
-                Units.inchesToMeters(26.0), // double trackwidthX
-                Units.inchesToMeters(26.0), // double trackwidthY
-                Units.feetToMeters(12.16), // double maxLinearVelocity
-                Units.feetToMeters(21.32), // double maxLinearAcceleration
-                7.93, // double maxAngularVelocity
-                29.89); // double maxAngularAcceleration)
+                Units.inchesToMeters(22.0), // double trackwidthX
+                Units.inchesToMeters(22.0), // double trackwidthY
+                Units.feetToMeters(16.055), // double maxLinearVelocity
+                Units.feetToMeters(28.718), // double maxLinearAcceleration
+                12.384, // double maxAngularVelocity
+                31.319); // double maxAngularAcceleration)
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -47,7 +47,7 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
-  // TODO tune odometry frequency
+
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
@@ -119,7 +119,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L2.reduction,
+                Mk4iReductions.L2PLUS.reduction,
                 Mk4iReductions.TURN.reduction);
         case SIMBOT ->
             new ModuleConstants(
@@ -129,7 +129,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L2.reduction,
+                Mk4iReductions.L2PLUS.reduction,
                 Mk4iReductions.TURN.reduction);
       };
 
@@ -138,8 +138,7 @@ public final class DriveConstants {
         case COMPBOT -> new HeadingControllerConstants(2.0, .25);
         case SIMBOT -> new HeadingControllerConstants(3.0, 0.0);
       };
-  // TODO tune the PP translation/rotation values, 5712 uses 10, 0.0, 0.0 and PathPlanner uses 5,
-  // 0.0, 0.0
+
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
@@ -187,6 +186,7 @@ public final class DriveConstants {
   private enum Mk4iReductions {
     L1((50.0 / 14.0) * (19.0 / 25.0) * (45.0 / 15.0)),
     L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
+    L2PLUS((50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0)),
     L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)),
     TURN((150.0 / 7.0)); // MK4i
     // TURN((12.8 / 1.0)); //MK4
