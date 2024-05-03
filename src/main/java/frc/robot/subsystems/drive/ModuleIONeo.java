@@ -17,8 +17,8 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.robot.VendorWrappers.Neo;
 import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
+import frc.robot.util.vendorwrappers.Neo;
 
 /**
  * Module IO implementation for SparkFlex drive motor controller, SparkFlex turn motor controller,

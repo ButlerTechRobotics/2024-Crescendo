@@ -1,15 +1,12 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.linebreak;
+package frc.robot.subsystems.lineBreak;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.linebreak.LineBreakIO.LineBreakIOInputs;
+import frc.robot.subsystems.lineBreak.LineBreakIO.LineBreakIOInputs;
 import frc.robot.util.visualizer.RobotGamePieceVisualizer;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -66,6 +63,11 @@ public class LineBreak extends SubsystemBase {
   @AutoLogOutput(key = "/LineBreak/isShooterLoaded")
   public boolean isShooterLoaded() {
     return inputs.lineBreakValues.isShooterLoaded();
+  }
+
+  public void bumpGamePiece() {
+    lineBreakIO.bumpGamePiece();
+    RobotGamePieceVisualizer.drawGamePieces();
   }
 
   public void shootGamePiece() {

@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.util.PIDConstants;
@@ -23,15 +16,16 @@ public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
         default ->
-            // TODO update these values, got new values from Choreo calculation
             new DrivetrainConfig(
-                Units.inchesToMeters(2.0), // double wheelRadius
-                Units.inchesToMeters(26.0), // double trackwidthX
-                Units.inchesToMeters(26.0), // double trackwidthY
-                Units.feetToMeters(12.16), // double maxLinearVelocity
-                Units.feetToMeters(21.32), // double maxLinearAcceleration
-                7.93, // double maxAngularVelocity
-                29.89); // double maxAngularAcceleration)
+                Units.inchesToMeters(2.0),
+                Units.inchesToMeters(22.75),
+                Units.inchesToMeters(22.75),
+                4.608,
+                4.418,
+                // 5.522,
+                11.277,
+                22.290);
+          // 27.863);
       };
   public static final double wheelRadius = Units.inchesToMeters(2.0);
   public static final Translation2d[] moduleTranslations =
@@ -47,7 +41,6 @@ public final class DriveConstants {
       };
   public static final SwerveDriveKinematics kinematics =
       new SwerveDriveKinematics(moduleTranslations);
-
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
@@ -66,41 +59,24 @@ public final class DriveConstants {
         default -> 0.01;
       };
 
-  public static final int gyroID = 30;
+  public static final int gyroID = 13;
 
   // Turn to "" for no canbus name
-  public static final String canbus = "rio";
+  public static final String canbus = "chassis";
 
   public static ModuleConfig[] moduleConfigs =
       switch (Constants.getRobot()) {
         case COMPBOT ->
             new ModuleConfig[] {
-              new ModuleConfig(
-                  1,
-                  2,
-                  9,
-                  Rotation2d.fromRotations(-0.398193).plus(Rotation2d.fromDegrees(180)),
-                  true),
-              new ModuleConfig(
-                  3,
-                  4,
-                  10,
-                  Rotation2d.fromRotations(0.024658).plus(Rotation2d.fromDegrees(0)),
-                  true),
-              new ModuleConfig(
-                  5,
-                  6,
-                  11,
-                  Rotation2d.fromRotations(0.284180).plus(Rotation2d.fromDegrees(180)),
-                  true),
-              new ModuleConfig(
-                  7,
-                  8,
-                  12,
-                  Rotation2d.fromRotations(0.067383).plus(Rotation2d.fromDegrees(0)),
-                  true)
+              // 0.454346
+              new ModuleConfig(1, 2, 9, Rotation2d.fromRotations(0.360840), true),
+              // -0.305420
+              new ModuleConfig(3, 4, 10, Rotation2d.fromRotations(-0.307861 + 0.5), true),
+              // -0.486084
+              new ModuleConfig(5, 6, 11, Rotation2d.fromRotations(-0.488770), true),
+              // -0.052002
+              new ModuleConfig(7, 8, 12, Rotation2d.fromRotations(-0.163086 + 0.5), true)
             };
-          // .plus(Rotation2d.fromDegrees(180))
         case SIMBOT -> {
           ModuleConfig[] configs = new ModuleConfig[4];
           for (int i = 0; i < configs.length; i++)
@@ -119,7 +95,7 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L2.reduction,
+                Mk4iReductions.L4.reduction,
                 Mk4iReductions.TURN.reduction);
         case SIMBOT ->
             new ModuleConstants(
@@ -129,14 +105,14 @@ public final class DriveConstants {
                 0.0,
                 10.0,
                 0.0,
-                Mk4iReductions.L2.reduction,
+                Mk4iReductions.L4.reduction,
                 Mk4iReductions.TURN.reduction);
       };
 
   public static HeadingControllerConstants headingControllerConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new HeadingControllerConstants(2.0, .25);
-        case SIMBOT -> new HeadingControllerConstants(3.0, 0.0);
+        case COMPBOT -> new HeadingControllerConstants(7.0, 0.0);
+        case SIMBOT -> new HeadingControllerConstants(7, 0.125);
       };
 
   public static final PIDConstants PPtranslationConstants =
@@ -184,11 +160,10 @@ public final class DriveConstants {
   public record HeadingControllerConstants(double Kp, double Kd) {}
 
   private enum Mk4iReductions {
-    L1((50.0 / 14.0) * (19.0 / 25.0) * (45.0 / 15.0)),
     L2((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)),
     L3((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)),
-    TURN((150.0 / 7.0)); // MK4i
-    // TURN((12.8 / 1.0)); //MK4
+    L4((50.0 / 16.0) * (16.0 / 28.0) * (45.0 / 15.0)),
+    TURN((150.0 / 7.0));
 
     final double reduction;
 

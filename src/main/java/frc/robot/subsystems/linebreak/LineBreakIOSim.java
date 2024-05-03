@@ -1,41 +1,41 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
-package frc.robot.subsystems.linebreak;
+package frc.robot.subsystems.lineBreak;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.subsystems.linebreak.LineBreakHelper.LineBreakValues;
+import frc.robot.subsystems.lineBreak.LineBreakHelper.LineBreakValues;
 
 public class LineBreakIOSim implements LineBreakIO {
   NetworkTable table;
-  NetworkTableEntry IntakeSensor;
+  NetworkTableEntry intakeSensor;
 
   public LineBreakIOSim() {
     table = NetworkTableInstance.getDefault().getTable("LineBreak");
-    IntakeSensor = table.getEntry("IntakeSensor");
+    intakeSensor = table.getEntry("intakeSensor");
+    intakeSensor.setBoolean(false);
+  }
 
-    IntakeSensor.setBoolean(false);
+  @Override
+  /** Bumps the game piece to the next sensor. */
+  public void bumpGamePiece() {
+    if (intakeSensor.getBoolean(false)) {
+      intakeSensor.setBoolean(false);
+    }
   }
 
   @Override
   /** Shoots the game piece (empty magazines) */
   public void shootGamePiece() {
-    IntakeSensor.setBoolean(false);
+    intakeSensor.setBoolean(false);
   }
 
   @Override
   /** Sets the game piece sensors */
   public void setGamePiece(boolean intake) {
-    IntakeSensor.setBoolean(intake);
+    intakeSensor.setBoolean(intake);
   }
 
   public void updateInputs(LineBreakIOInputs inputs) {
-    inputs.lineBreakValues = new LineBreakValues(IntakeSensor.getBoolean(false));
+    inputs.lineBreakValues = new LineBreakValues(intakeSensor.getBoolean(false));
   }
 }

@@ -1,34 +1,35 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.linebreak.LineBreak;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.lineBreak.LineBreak;
 
 public class AutoPreRoll extends Command {
   Arm arm;
-  Shooter shooter;
+  Flywheel flywheel;
   LineBreak lineBreak;
-  Rotation2d armPosition;
+  Rotation2d wristPosition;
   double flyWheelSpeed;
 
   /** Creates a new Shoot. */
   public AutoPreRoll(
-      Arm arm, Shooter shooter, LineBreak lineBreak, Rotation2d armPosition, double flyWheelSpeed) {
+      Arm arm,
+      Flywheel flywheel,
+      LineBreak lineBreak,
+      Rotation2d wristPosition,
+      double flyWheelSpeed) {
     this.arm = arm;
-    this.shooter = shooter;
+    this.flywheel = flywheel;
     this.lineBreak = lineBreak;
-    this.armPosition = armPosition;
+    this.wristPosition = wristPosition;
     this.flyWheelSpeed = flyWheelSpeed;
-    addRequirements(arm, shooter);
+    addRequirements(arm, flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -40,11 +41,11 @@ public class AutoPreRoll extends Command {
   @Override
   public void execute() {
     if (lineBreak.hasGamePiece()) {
-      arm.setArmTarget(armPosition.getDegrees());
+      arm.setArmTarget(wristPosition.getRadians());
       if (flyWheelSpeed == 0.0) {
-        shooter.stop();
+        flywheel.stop();
       } else {
-        shooter.setSetpoint(flyWheelSpeed, flyWheelSpeed);
+        flywheel.setSetpoint(flyWheelSpeed, flyWheelSpeed);
       }
     }
   }

@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
 import org.littletonrobotics.junction.AutoLog;
@@ -19,11 +12,11 @@ public interface ArmIO {
     public double[] armTempCelcius = new double[] {};
   }
 
-  public default void setArmTarget(double target) {}
+  public default void setArmTarget(double target, double armAbsolutePositionDeg) {}
 
   public default void updateInputs(ArmIOInputs inputs) {}
 
-  public default void setBrakeMode(boolean armBrake) {}
+  public default void setBrakeMode(boolean armBrake, boolean wristBrake) {}
 
   public default void stop() {}
 }

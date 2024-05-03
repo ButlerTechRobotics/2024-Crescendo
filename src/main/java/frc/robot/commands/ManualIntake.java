@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
 
@@ -13,13 +10,13 @@ import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.arm.ArmConstants.ArmPositions;
-import frc.robot.subsystems.linebreak.LineBreak;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.lineBreak.LineBreak;
 import java.util.function.DoubleSupplier;
 
 public class ManualIntake extends Command {
   Arm arm;
-  Shooter shooter;
+  Flywheel flywheel;
   ArmPositions armPosition;
   DoubleSupplier flywheelSpeed;
   LineBreak lineBreak;
@@ -27,25 +24,25 @@ public class ManualIntake extends Command {
   /** Creates a new moveArm. */
   public ManualIntake(
       Arm arm,
-      Shooter shooter,
+      Flywheel flywheel,
       ArmPositions armPosition,
       DoubleSupplier flywheelSpeed,
       LineBreak lineBreak) {
     this.arm = arm;
-    this.shooter = shooter;
+    this.flywheel = flywheel;
     this.armPosition = armPosition;
     this.flywheelSpeed = flywheelSpeed;
     this.lineBreak = lineBreak;
-    addRequirements(arm, shooter);
+    addRequirements(arm, flywheel);
   }
 
   @Override
   public void initialize() {
     arm.setArmTarget(armPosition.arm().getDegrees());
     if (flywheelSpeed.getAsDouble() == 0.0) {
-      shooter.stop();
+      flywheel.stop();
     } else {
-      shooter.setSetpoint(flywheelSpeed.getAsDouble(), flywheelSpeed.getAsDouble());
+      flywheel.setSetpoint(flywheelSpeed.getAsDouble(), flywheelSpeed.getAsDouble());
     }
   }
 
@@ -56,7 +53,7 @@ public class ManualIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stop();
+    flywheel.stop();
     arm.setArmTarget(ArmConstants.intake.arm().getDegrees());
     SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER);
   }

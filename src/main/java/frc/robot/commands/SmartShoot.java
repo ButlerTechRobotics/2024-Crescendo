@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
 
@@ -17,16 +14,16 @@ import frc.robot.Constants;
 import frc.robot.SmartController;
 import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.linebreak.LineBreak;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.lineBreak.LineBreak;
 import frc.robot.subsystems.magazine.Magazine;
-import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SmartShoot extends Command {
   Supplier<Pose2d> pose;
   Arm arm;
-  Shooter shooter;
+  Flywheel flywheel;
   Magazine magazine;
   LineBreak lineBreak;
   Timer timer;
@@ -36,13 +33,13 @@ public class SmartShoot extends Command {
   /** Creates a new Shoot. */
   public SmartShoot(
       Arm arm,
-      Shooter shooter,
+      Flywheel flywheel,
       Magazine magazine,
       LineBreak lineBreak,
       Supplier<Pose2d> pose,
       double forceShootTimeout) {
     this.arm = arm;
-    this.shooter = shooter;
+    this.flywheel = flywheel;
     this.magazine = magazine;
     this.pose = pose;
     this.lineBreak = lineBreak;
@@ -70,7 +67,7 @@ public class SmartShoot extends Command {
     boolean isFlywheelAtTargetSpeed = isFlywheelAtTargetSpeed();
     boolean isShooting = false;
     double realForceShoot = forceShootTimeout;
-    if (SmartController.getInstance().getDriveModeType() == DriveModeType.CLIMBER) {
+    if (SmartController.getInstance().getDriveModeType() == DriveModeType.CLIMB) {
       realForceShoot = 0.0;
     }
     if ((isSmartControlEnabled
@@ -111,15 +108,15 @@ public class SmartShoot extends Command {
   }
 
   public boolean isFlywheelAtTargetSpeed() {
-    Logger.recordOutput("SmartShoot/IsFlywheelAtTargetSpeed", shooter.atTargetSpeed());
-    Logger.recordOutput("SmartShoot/TopFlywheelSpeed", shooter.getTopCharacterizationVelocity());
+    Logger.recordOutput("SmartShoot/IsFlywheelAtTargetSpeed", flywheel.atSetpoint());
+    Logger.recordOutput("SmartShoot/TopFlywheelSpeed", flywheel.getTopCharacterizationVelocity());
     Logger.recordOutput(
-        "SmartShoot/BottomFlywheelSpeed", shooter.getBottomCharacterizationVelocity());
+        "SmartShoot/BottomFlywheelSpeed", flywheel.getBottomCharacterizationVelocity());
 
     Logger.recordOutput(
         "SmartShoot/TargetFlywheelSpeed",
         SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
-    return shooter.atTargetSpeed();
+    return flywheel.atSetpoint();
   }
 
   public boolean isDriveAngleInTarget() {

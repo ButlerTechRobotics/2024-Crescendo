@@ -1,43 +1,63 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.util.Units;
-import frc.robot.VendorWrappers.Neo;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import edu.wpi.first.math.controller.PIDController;
+import frc.robot.util.vendorwrappers.Neo;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ArmIONeo implements ArmIO {
 
   Neo armMotor;
 
+  AbsoluteEncoder armEncoder;
+
+  PIDController pidController;
+
+  private double targetAngle = 0.0;
+
   public ArmIONeo() {
     armMotor = new Neo(20);
+    armEncoder = armMotor.getAbsoluteEncoder();
+    pidController = new PIDController(0.0, 0.0, 0.0);
+    pidController.setP(ArmConstants.armControlConstants.kP());
+    pidController.setI(ArmConstants.armControlConstants.kI());
+    pidController.setD(ArmConstants.armControlConstants.kD());
 
-    armMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    armMotor.setInverted(true); // NEEDS TO BE TRUE
+    armMotor.setIdleMode(IdleMode.kBrake);
   }
 
-  @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.armRelativePositionDeg = armMotor.getAbsoluteEncoder().getPosition() * Math.PI * 2;
-    inputs.armAbsolutePositionDeg = inputs.armRelativePositionDeg;
-    inputs.armVelocityRadPerSec = armMotor.getAbsoluteEncoder().getVelocity() * Math.PI * 2;
+    double output = pidController.calculate(getPosition(), targetAngle);
+    double downSpeedFactor = 0.175; // Adjust this value to control the down speed
+    double upSpeedFactor = 0.2; // Adjust this value to control the up speed
+    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
+    armMotor.set(output * speedFactor);
+
+    inputs.armRelativePositionDeg = armMotor.getPosition();
+    inputs.armAbsolutePositionDeg = armEncoder.getPosition();
+    inputs.armVelocityRadPerSec = armMotor.getVelocity();
     inputs.armCurrentAmps = new double[] {armMotor.getOutputCurrent()};
     inputs.armTempCelcius = new double[] {armMotor.getMotorTemperature()};
   }
 
-  @Override
-  public void setArmTarget(double target) {
-    armMotor.set(Units.radiansToRotations(target));
+  public void setArmTarget(double target, double currentPosition) {
+    targetAngle = target;
+    pidController.setSetpoint(targetAngle);
+    double output = pidController.calculate(currentPosition, targetAngle);
+    armMotor.set(output);
   }
 
-  @Override
-  public void setBrakeMode(boolean armBrake) {
-    armMotor.setIdleMode(armBrake ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
+  @AutoLogOutput(key = "Arm/CurrentPosition")
+  public double getPosition() {
+    return (armEncoder.getPosition() * 360);
+  }
+
+  @AutoLogOutput(key = "Arm/IsAtTargetPosition")
+  public boolean isAtTargetPosition() {
+    double tolerance = 1.0; // This is the tolerance in degrees
+    return Math.abs(getPosition() - targetAngle) < tolerance;
   }
 
   @Override

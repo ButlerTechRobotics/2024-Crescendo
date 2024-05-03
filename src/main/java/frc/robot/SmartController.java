@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,27 +11,35 @@ import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The SmartController class represents a controller for the robot's system. It provides methods to
+ * The SmartController class represents a controller for the robot's system. It
+ * provides methods to
  * control the robot.
  *
- * <p>Most of the methods in this class handle state machine logic, which is a way to represent the
+ * <p>
+ * Most of the methods in this class handle state machine logic, which is a way
+ * to represent the
  * state of the robot and the transitions between states.
  *
- * <p>The SmartController class is a singleton, which means that there is only one instance of the
+ * <p>
+ * The SmartController class is a singleton, which means that there is only one
+ * instance of the
  * class that is shared across the entire robot code.
  */
 public class SmartController {
   private static SmartController instance;
 
   private DriveModeType driveModeType = DriveModeType.SAFE;
-  private AimingParameters targetAimingParameters =
-      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 0.0, ArmConstants.shoot.arm(), 1, 0);
+  private AimingParameters targetAimingParameters = new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5,
+      ArmConstants.shoot.arm(), 2, 0);
 
-  // Whether or not the robot is in smart control mode. Smart control mode is a mode where the robot
+  // Whether or not the robot is in smart control mode. Smart control mode is a
+  // mode where the robot
   // automatically adjusts its heading to face a target.
   private boolean smartControl = false;
+  private boolean emergencyIntakeMode = false;
 
-  // Distance to the target when we should start running flywheel if we have a game piece
+  // Distance to the target when we should start running flywheel if we have a
+  // game piece
   private double prerollDistance = 8.002;
 
   // Interpolation maps for shooting into the speaker
@@ -65,13 +66,13 @@ public class SmartController {
     shooterSpeedMap.put(4.002, 45.0);
 
     // // Units: Degress
-    shooterAngleMap.put(1.24036, Units.degreesToRadians(78.5));
-    shooterAngleMap.put(1.509, Units.degreesToRadians(73.0));
-    shooterAngleMap.put(2.006, Units.degreesToRadians(65.0));
-    shooterAngleMap.put(2.5018, Units.degreesToRadians(60.0));
-    shooterAngleMap.put(3.002, Units.degreesToRadians(56.5));
-    shooterAngleMap.put(3.5116, Units.degreesToRadians(53.75));
-    shooterAngleMap.put(4.002, Units.degreesToRadians(50.75));
+    shooterAngleMap.put(1.24036, 78.5);
+    shooterAngleMap.put(1.509, 73.0);
+    shooterAngleMap.put(2.006, 65.0);
+    shooterAngleMap.put(2.5018, 60.0);
+    shooterAngleMap.put(3.002, 56.5);
+    shooterAngleMap.put(3.5116, 53.75);
+    shooterAngleMap.put(4.002, 50.75);
 
     flightTimeMap.put(1.2, 0.2);
     flightTimeMap.put(4.002, 0.8);
@@ -83,8 +84,8 @@ public class SmartController {
     feederSpeedMap.put(9.071, 30.0);
     feederSpeedMap.put(5.4, 15.0);
 
-    feederAngleMap.put(9.071, Units.degreesToRadians(50.5 + 23));
-    feederAngleMap.put(5.4, Units.degreesToRadians(50.5 + 23));
+    feederAngleMap.put(9.071, 50.5 + 23);
+    feederAngleMap.put(5.4, 50.5 + 23);
 
     feederFlightTimeMap.put(30.0, 3.0); // Way further than we should ever be shooting
     feederFlightTimeMap.put(9.071, 1.9);
@@ -138,6 +139,32 @@ public class SmartController {
   }
 
   /**
+   * Sets the emergency intake mode. This is used if the normal intake is not
+   * working properly.
+   * Emergency intake mode allows us to pick up directly from the source using the
+   * shooter.
+   *
+   * @param emergencyMode The emergency mode to set.
+   */
+  public void setEmergencyIntakeMode(boolean emergencyMode) {
+    this.emergencyIntakeMode = emergencyMode;
+  }
+
+  /**
+   * Gets the emergency intake mode.
+   *
+   * @return True if the emergency intake mode is enabled, false otherwise.
+   */
+  public boolean getEmergencyIntakeMode() {
+    return this.emergencyIntakeMode;
+  }
+
+  /** Toggles the emergency intake mode. */
+  public void toggleEmergencyIntakeMode() {
+    this.emergencyIntakeMode = !emergencyIntakeMode;
+  }
+
+  /**
    * Gets the current drive mode.
    *
    * @return The supplier that provides the current drive mode.
@@ -166,16 +193,21 @@ public class SmartController {
   }
 
   /**
-   * Calculates the shooter parameters for a given field relative pose, velocity, and acceleration.
+   * Calculates the shooter parameters for a given field relative pose, velocity,
+   * and acceleration.
    *
-   * <p>This handles calculating target robot angle, radial velocity, shooter speed, shooter angle,
-   * and arm error.
+   * <p>
+   * This handles calculating target robot angle, radial velocity, shooter speed,
+   * shooter angle,
+   * and wrist error.
    *
-   * <p>It also is done in a way that if the robot is moving, it will adjust the location of the
+   * <p>
+   * It also is done in a way that if the robot is moving, it will adjust the
+   * location of the
    * target to account for the robot's movement so the shot will still hit.
    *
-   * @param fieldRelativePose The pose of the robot on the field
-   * @param fieldRelativeVelocity The velocity of the robot on the field
+   * @param fieldRelativePose         The pose of the robot on the field
+   * @param fieldRelativeVelocity     The velocity of the robot on the field
    * @param fieldRelativeAcceleration The acceleration of the robot on the field
    */
   public void calculateSpeaker(
@@ -188,8 +220,7 @@ public class SmartController {
 
     setPrerollDistance(8.002);
 
-    Translation2d speakerPose =
-        AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
+    Translation2d speakerPose = AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.getTranslation());
 
     // Calculate the distance to the speaker and the time it will take to get there
     double distanceToSpeaker = fieldRelativePose.getTranslation().getDistance(speakerPose);
@@ -215,8 +246,8 @@ public class SmartController {
     }
 
     // Set the target angle of the robot to point at the target
-    Rotation2d setpointAngle =
-        movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
+    Rotation2d setpointAngle = (movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle())
+        .plus(Rotation2d.fromDegrees(180));
     double angleDifference = setpointAngle.minus(fieldRelativePose.getRotation()).getRadians();
 
     // Assuming a constant linear velocity (you can adjust this)
@@ -224,9 +255,11 @@ public class SmartController {
 
     // Calculate tangential velocity using linear velocity and angle difference
 
-    // double tangentialVelocity = assumedLinearVelocity * Math.sin(angleDifference);
+    // double tangentialVelocity = assumedLinearVelocity *
+    // Math.sin(angleDifference);
 
-    // Now, calculate angular velocity using tangential velocity and newDistanceToSpeaker
+    // Now, calculate angular velocity using tangential velocity and
+    // newDistanceToSpeaker
 
     // double radialVelocity = tangentialVelocity / newDistanceToSpeaker;
     double radialVelocity = 0.0;
@@ -251,17 +284,20 @@ public class SmartController {
   /**
    * Calculates the shooter parameters for the amp shot.
    *
-   * <p>This will always be static and will not adjust for the robot's movement.
+   * <p>
+   * This will always be static and will not adjust for the robot's movement.
    */
   public void calculateAmp() {
     setTargetAimingParameters(
-        new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 20, ArmConstants.amp.arm(), 1, 0));
+        new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 0, ArmConstants.amp.arm(), 1, 0));
   }
 
   /**
    * Calculates the shooter parameters for the feeding shot.
    *
-   * <p>This is identical to the speaker shot, but the target is the feed location next to the amp.
+   * <p>
+   * This is identical to the speaker shot, but the target is the feed location
+   * next to the amp.
    */
   public void calculateFeed(Pose2d fieldRelativePose, Translation2d fieldRelativeVelocity) {
     setPrerollDistance(FieldConstants.fieldLength);
@@ -271,8 +307,7 @@ public class SmartController {
     Translation2d movingGoalLocation = feedLocation.minus(fieldRelativeVelocity.times(shotTime));
     Translation2d toTestGoal = movingGoalLocation.minus(fieldRelativePose.getTranslation());
     double effectiveDistanceToFeedLocation = toTestGoal.getNorm();
-    Rotation2d setpointAngle =
-        movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
+    Rotation2d setpointAngle = movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
     double angleDifference = setpointAngle.minus(fieldRelativePose.getRotation()).getRadians();
     double radialVelocity = 0.0;
     Logger.recordOutput(
@@ -304,7 +339,9 @@ public class SmartController {
   /**
    * Gets the target aiming parameters.
    *
-   * <p>The target aiming parameters are the information that the robot should use to hit the
+   * <p>
+   * The target aiming parameters are the information that the robot should use to
+   * hit the
    * target.
    *
    * @return The target aiming parameters.
@@ -314,7 +351,8 @@ public class SmartController {
   }
 
   /**
-   * Gets the distance to the target when we should start running the flywheel if we have a game
+   * Gets the distance to the target when we should start running the flywheel if
+   * we have a game
    * piece.
    *
    * @return The preroll distance.
@@ -324,7 +362,8 @@ public class SmartController {
   }
 
   /**
-   * Sets the distance to the target when we should start running the flywheel if we have a game
+   * Sets the distance to the target when we should start running the flywheel if
+   * we have a game
    * piece.
    *
    * @param prerollDistance The preroll distance to set.
@@ -339,15 +378,15 @@ public class SmartController {
       double shooterSpeed,
       Rotation2d shooterAngle,
       double armError,
-      double effectiveDistanceToTarget) {}
+      double effectiveDistanceToTarget) {
+  }
 
   /** Possible Drive Modes. */
   public enum DriveModeType {
     AMP,
     SPEAKER,
     SAFE,
-    CLIMBER,
-    QUICK_CLIMB,
+    CLIMB,
     FEED
   }
 }

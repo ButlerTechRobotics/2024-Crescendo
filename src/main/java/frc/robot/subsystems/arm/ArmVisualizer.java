@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -25,6 +18,8 @@ public class ArmVisualizer {
   private final MechanismRoot2d mechanismRoot;
   private final MechanismLigament2d fixedLigament;
   private final MechanismLigament2d armLigament;
+  private final MechanismLigament2d wristLigament;
+  private final MechanismLigament2d wristLigamentBack;
 
   double armLength = Units.inchesToMeters(18);
 
@@ -38,10 +33,17 @@ public class ArmVisualizer {
     armLigament =
         fixedLigament.append(
             new MechanismLigament2d("Arm", armLength, 90, 4, new Color8Bit(Color.kDarkBlue)));
+    wristLigament =
+        armLigament.append(
+            new MechanismLigament2d("Wrist", 0.2032, 0, 4, new Color8Bit(Color.kDarkGreen)));
+    wristLigamentBack =
+        armLigament.append(
+            new MechanismLigament2d("WristBack", 0.2032, 180, 4, new Color8Bit(Color.kDarkRed)));
   }
 
-  public void update(double armAngle) {
-    armLigament.setAngle(Units.radiansToDegrees(armAngle));
+  public void update(double wristAngle) {
+    wristLigament.setAngle(Units.radiansToDegrees(wristAngle) + 90);
+    wristLigamentBack.setAngle(Units.radiansToDegrees(wristAngle) + 270);
 
     Logger.recordOutput("Mechanism2d/" + logKey, mechanism);
     // Transform3d hardpoint =
@@ -51,14 +53,14 @@ public class ArmVisualizer {
 
     // Pose3d armPose = new Pose3d(Units.inchesToMeters(10), 0, 0, new Rotation3d(0,
     // armAngle, 0));
-    Pose3d armPose = getArmPose(armAngle);
+    Pose3d wristPose = getArmPose(wristAngle);
 
-    Logger.recordOutput("Mechanism3d/" + logKey, armPose);
+    Logger.recordOutput("Mechanism3d/" + logKey, wristPose);
   }
 
   Translation2d armRoot = new Translation2d(-0.31, 0.64);
 
-  public Pose3d getArmPose(double armAngle) {
-    return new Pose3d(armRoot.getX(), 0, armRoot.getY(), new Rotation3d(0, -armAngle, 0));
+  public Pose3d getArmPose(double wristAngle) {
+    return new Pose3d(armRoot.getX(), 0, armRoot.getY(), new Rotation3d(0, -wristAngle, 0));
   }
 }

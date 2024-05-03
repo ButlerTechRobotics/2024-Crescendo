@@ -1,5 +1,5 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
+// Copyright (c) 2024 FRC 6328
+// http://github.com/Mechanical-Advantage
 //
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file at
@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.VisionHelpers;
 import frc.robot.util.VisionHelpers.PoseEstimate;
@@ -27,12 +27,12 @@ public interface AprilTagVisionIO {
         int posePosition = poseEstimates.indexOf(poseEstimate);
         table.put(
             "estimatedPose/" + Integer.toString(posePosition),
-            VisionHelpers.getPose3dToArray(poseEstimate.pose()));
+            VisionHelpers.getPose2dToArray(poseEstimate.pose()));
         table.put(
-            "captureTimestamp/" + Integer.toString(posePosition), poseEstimate.timestampSeconds());
-        table.put("tagIDs/" + Integer.toString(posePosition), poseEstimate.tagIDs());
+            "captureTimestamp/" + Double.toString(posePosition), poseEstimate.timestampSeconds());
+        table.put("tagIDs/" + Double.toString(posePosition), poseEstimate.tagCount());
         table.put(
-            "averageTagDistance/" + Integer.toString(posePosition),
+            "averageTagDistance/" + Double.toString(posePosition),
             poseEstimate.averageTagDistance());
       }
       table.put("valid", !poseEstimates.isEmpty());
@@ -42,13 +42,14 @@ public interface AprilTagVisionIO {
     public void fromLog(LogTable table) {
       int estimatedPoseCount = table.get("poseEstimates", 0);
       for (int i = 0; i < estimatedPoseCount; i++) {
-        Pose3d poseEstimation =
-            LimelightHelpers.toPose3D(
+        Pose2d poseEstimation =
+            LimelightHelpers.toPose2D(
                 table.get("estimatedPose/" + Integer.toString(i), new double[] {}));
-        double timestamp = table.get("captureTimestamp/" + Integer.toString(i), 0.0);
-        double averageTagDistance = table.get("averageTagDistance/" + Integer.toString(i), 0.0);
-        int[] tagIDs = table.get("tagIDs/" + Integer.toString(i), new int[] {});
-        poseEstimates.add(new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagIDs));
+        double timestamp = table.get("captureTimestamp/" + Double.toString(i), 0.0);
+        double averageTagDistance = table.get("averageTagDistance/" + Double.toString(i), 0.0);
+        int tagCount = table.get("tagCount/" + Integer.toString(i), 0);
+        poseEstimates.add(
+            new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagCount));
       }
       table.get("valid", false);
     }

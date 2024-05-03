@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
 
@@ -12,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmConstants;
-import frc.robot.subsystems.linebreak.LineBreak;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.lineBreak.LineBreak;
 import frc.robot.subsystems.magazine.Magazine;
-import frc.robot.subsystems.shooter.Shooter;
 
 public class ManualShoot extends Command {
   Arm arm;
-  Shooter shooter;
+  Flywheel flywheel;
   Magazine magazine;
   LineBreak lineBreak;
   Timer timer;
@@ -27,15 +24,19 @@ public class ManualShoot extends Command {
 
   /** Creates a new Shoot. */
   public ManualShoot(
-      Arm arm, Shooter shooter, Magazine magazine, LineBreak lineBreak, double forceShootTimeout) {
+      Arm arm,
+      Flywheel flywheel,
+      Magazine magazine,
+      LineBreak lineBreak,
+      double forceShootTimeout) {
     this.arm = arm;
-    this.shooter = shooter;
+    this.flywheel = flywheel;
     this.magazine = magazine;
     this.lineBreak = lineBreak;
     timer = new Timer();
     flywheelTimer = new Timer();
     this.forceShootTimeout = forceShootTimeout;
-    addRequirements(magazine, arm, shooter);
+    addRequirements(magazine, arm, flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -45,15 +46,15 @@ public class ManualShoot extends Command {
     // SmartController.getInstance().enableSmartControl();
     // if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
     // flywheel.setSpeedRotPerSec(30);
-    shooter.setSetpoint(2000, 2000);
-    arm.setArmTarget(ArmConstants.manualShot.arm().getRadians());
+    flywheel.setSetpoint(2500, 2500);
+    arm.setArmTarget(ArmConstants.manualShot.arm().getDegrees());
     flywheelTimer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((arm.isArmInTargetPose() && (shooter.atTargetSpeed() || flywheelTimer.hasElapsed(2)))
+    if ((arm.isArmInTargetPose() && (flywheel.atSetpoint() || flywheelTimer.hasElapsed(2)))
         || flywheelTimer.hasElapsed(forceShootTimeout)) {
       magazine.shoot();
       if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.75)) {

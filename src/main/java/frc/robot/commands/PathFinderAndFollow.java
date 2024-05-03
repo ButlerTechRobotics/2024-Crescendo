@@ -1,66 +1,117 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
+import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.SmartController;
+import frc.robot.SmartController.DriveModeType;
+import frc.robot.subsystems.lineBreak.LineBreak;
 
-/** A command that runs pathfindThenFollowPath based on the current path name. */
+/** A command that runs pathfindThenFollowPath based on the current drive mode. */
 public class PathFinderAndFollow extends Command {
-  // Command to score
   private Command scoreCommand;
-  // Command to run the path
   private Command pathRun;
-  // Name of the path to follow
-  private String pathName;
+  private LineBreak lineBreak;
+  boolean lastLineBreak = false;
+  private DriveModeType lastDriveMode = DriveModeType.AMP;
 
   /**
    * Creates a new PathFinderAndFollow command.
    *
-   * @param pathName the path name
+   * @param driveModeSupplier a supplier for the drive mode type
    */
-  public PathFinderAndFollow(String pathName) {
-    this.pathName = pathName;
+  public PathFinderAndFollow(LineBreak lineBreak) {
+    this.lineBreak = lineBreak;
   }
 
-  // Initializes the command and runs a new autonomous path
   @Override
   public void initialize() {
-    runNewAutonPath();
+    DriveModeType currentDriveMode = SmartController.getInstance().getDriveModeType();
+    if (lineBreak.hasNoGamePiece()) {
+      scoreCommand = getIntakeAutonPathCommand();
+
+    } else if (DriveModeType.AMP == currentDriveMode) {
+      scoreCommand = getAmpAutonPathCommand();
+    } else if (DriveModeType.SPEAKER == currentDriveMode) {
+      scoreCommand =
+          Commands.startEnd(
+              () -> SmartController.getInstance().enableSmartControl(),
+              () -> SmartController.getInstance().disableSmartControl());
+    }
+    scoreCommand.schedule();
+    lastLineBreak = lineBreak.hasNoGamePiece();
+    lastDriveMode = SmartController.getInstance().getDriveModeType();
   }
 
-  // Ends the command and cancels the score command
+  @Override
+  public void execute() {
+    DriveModeType currentDriveMode = SmartController.getInstance().getDriveModeType();
+    boolean hasChangedLineBreak = (lineBreak.hasNoGamePiece() != lastLineBreak);
+
+    if (lineBreak.hasNoGamePiece() && hasChangedLineBreak) {
+      scoreCommand.cancel();
+      scoreCommand = getIntakeAutonPathCommand();
+      scoreCommand.schedule();
+    } else if (DriveModeType.AMP == currentDriveMode
+        && ((lastDriveMode != currentDriveMode) || hasChangedLineBreak)) {
+      scoreCommand.cancel();
+      scoreCommand = getAmpAutonPathCommand();
+      scoreCommand.schedule();
+    } else if (DriveModeType.SPEAKER == currentDriveMode
+        && ((lastDriveMode != currentDriveMode) || hasChangedLineBreak)) {
+      scoreCommand.cancel();
+      scoreCommand =
+          Commands.startEnd(
+              () -> SmartController.getInstance().enableSmartControl(),
+              () -> SmartController.getInstance().disableSmartControl());
+      scoreCommand.schedule();
+    }
+
+    lastLineBreak = lineBreak.hasNoGamePiece();
+    lastDriveMode = SmartController.getInstance().getDriveModeType();
+  }
+
   @Override
   public void end(boolean interrupted) {
     super.end(interrupted);
     scoreCommand.cancel();
   }
 
-  // Checks if the path run command is finished
   @Override
   public boolean isFinished() {
     return pathRun.isFinished();
   }
 
-  /**
-   * Runs a new autonomous path based on the current path name. It creates a new path from the path
-   * file, sets the path constraints, and schedules the path run command.
-   */
-  public void runNewAutonPath() {
-    PathPlannerPath ampPath = PathPlannerPath.fromPathFile(pathName);
+  /** Runs a new autonomous path based on the current drive mode. */
+  public Command getAmpAutonPathCommand() {
+    PathPlannerPath ampPath = PathPlannerPath.fromPathFile("Amp Placement Path");
     PathConstraints constraints =
-        new PathConstraints(4.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        new PathConstraints(
+            drivetrainConfig.maxLinearVelocity(),
+            drivetrainConfig.maxLinearAcceleration(),
+            drivetrainConfig.maxAngularVelocity(),
+            drivetrainConfig.maxAngularAcceleration());
     pathRun = AutoBuilder.pathfindThenFollowPath(ampPath, constraints, 0.0);
-    scoreCommand = Commands.sequence(pathRun);
-    scoreCommand.schedule();
+    return Commands.sequence(pathRun);
+  }
+
+  public Command getIntakeAutonPathCommand() {
+    PathPlannerPath intakePath = PathPlannerPath.fromPathFile("Intake Path");
+    PathConstraints constraints =
+        new PathConstraints(
+            drivetrainConfig.maxLinearVelocity(),
+            drivetrainConfig.maxLinearAcceleration(),
+            drivetrainConfig.maxAngularVelocity(),
+            drivetrainConfig.maxAngularAcceleration());
+    pathRun = AutoBuilder.pathfindThenFollowPath(intakePath, constraints, 0.0);
+    return Commands.sequence(pathRun);
   }
 }

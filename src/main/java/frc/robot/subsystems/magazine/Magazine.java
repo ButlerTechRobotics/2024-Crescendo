@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.magazine;
 
@@ -31,27 +28,27 @@ public class Magazine extends SubsystemBase {
   }
 
   public void forward() {
-    setSpeedRPM(6);
+    setSpeedRadPerSec(6);
     isShooting = false;
   }
 
   public void shoot() {
-    setSpeedRPM(7);
+    setSpeedRadPerSec(7);
     isShooting = true;
   }
 
   public void backward() {
-    setSpeedRPM(-7);
+    setSpeedRadPerSec(-7);
     isShooting = false;
   }
 
   public void slowForward() {
-    setSpeedRPM(1.8);
+    setSpeedRadPerSec(1.8);
     isShooting = false;
   }
 
   public void slowBackward() {
-    setSpeedRPM(-1.8);
+    setSpeedRadPerSec(-1.8);
     isShooting = false;
   }
 
@@ -65,25 +62,19 @@ public class Magazine extends SubsystemBase {
     return isShooting;
   }
 
-  public void setSpeedRPM(double speedRPM) {
-    targetVoltage = speedRPM;
-    magazineIO.runVoltage(targetVoltage, targetVoltage);
+  public void setSpeedRadPerSec(double speedRadPerSec) {
+    targetVoltage = speedRadPerSec;
+    magazineIO.runVoltage(targetVoltage);
   }
 
-  @AutoLogOutput(key = "Magazine/TargetRPM")
-  public double getTargetRPM() {
+  @AutoLogOutput(key = "Magazine/TargetRadPerSec")
+  public double getTargetRadPerSec() {
     return targetVoltage;
   }
 
-  @AutoLogOutput(key = "Magazine/TopVelocityRPM")
-  public double topVelocityRPM() {
+  @AutoLogOutput(key = "Magazine/VelocitRadPerSec")
+  public double velocitRadsPerSec() {
     // Convert Radians per second to Meters per second
-    return inputs.topVelocityRPM;
-  }
-
-  @AutoLogOutput(key = "Magazine/BottomVelocityRPM")
-  public double bottomVelocityRPM() {
-    // Convert Radians per second to Meters per second
-    return inputs.bottomVelocityRPM;
+    return inputs.velocityRadPerSec;
   }
 }

@@ -1,13 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+package frc.robot.subsystems.lineBreak;
 
-package frc.robot.subsystems.linebreak;
-
-import frc.robot.subsystems.linebreak.LineBreakHelper.LineBreakValues;
+import frc.robot.subsystems.lineBreak.LineBreakHelper.LineBreakValues;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -18,18 +11,20 @@ public interface LineBreakIO {
 
     @Override
     public void toLog(LogTable table) {
-      table.put("LineBreaker/Intake", lineBreakValues.Intake());
+      table.put("LineBreaker/intake", lineBreakValues.intake());
     }
 
     @Override
     public void fromLog(LogTable table) {
-      table.get("LineBreaker/Intake", lineBreakValues.Intake());
+      table.get("LineBreaker/intake", lineBreakValues.intake());
     }
   }
 
+  public default void bumpGamePiece() {}
+
   public default void shootGamePiece() {}
 
-  public default void setGamePiece(boolean Intake) {}
+  public default void setGamePiece(boolean intake) {}
 
   default void updateInputs(LineBreakIOInputs inputs) {}
 }

@@ -1,45 +1,38 @@
-<p align="center">
-<img src="./docs/images/Github%20Header.png" width="500">
+![Hemlock's Gray Matter - 2024 Robot Code](./docs/images/Github%20Header.png)
 
+## Key Concepts
 
-<p align="center">
-  <a href="https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.2.1"><img src="https://img.shields.io/badge/WPILib-2024.2.1-AC2B37" /></a>
-  <a href="https://v6.docs.ctr-electronics.com/en/stable/"><img src="https://img.shields.io/badge/Phoenix6-24.1.0-97D700"></a>
-  <a href="https://docs.revrobotics.com/sparkmax/software-resources/spark-max-api-information"><img src="https://img.shields.io/badge/REVLib-2024.2.0-f05a28"></a>
-</p>
+### State Machine
 
-<p align="center">This is the code used by Butler Tech Robotics, teams 325 and 144 during their 2024 season. The code is based off of (insert AK link here) It provides support for swerve drivetrains, as well as April Tag field tracking with Limelight and full robot simulation with code replay.
+Most of our code for this year follows a state machine style, while running in the Command Based framework.
+Depending on what buttons are pressed by the drivers, the robot will go into different modes.
+Using sensors on the robot, the code determines what the best thing to do in that mode is.
 
-## What is AdvantageKit?
-<ul>
-<li>AdvantageKit is a logging, telemetry, and replay framework developed by Team 6328. AdvantageKit enables log replay, where the full state of the robot code can be replayed in simulation based on a log file.</li>
-<li>AdvantageKit is intended to be used with (AdvantageScope).
-  </ul>
+For example, if the driver tells the robot they want to score in the amp, but the robot doesn't have a game piece,
+the robot will stay in intake mode, until the game piece is in the scoring position for amp. Then, with no
+additional effort from the driver, the robot will move into amp mode.
 
-## What is AdvantageScope?
-<ul>
-<li>AdvantageScope is a robot diagnostics, log review/analysis, and data visualization application for FIRST Robotics Competition teams.</li>
+The same is true for all of the different modes.
 
-</ul>
+### SmartController
 
-When deploying code to your robot, you'll need to change the value of `currentMode` to `Mode.REAL` in `Constants.java`
+Building on top of the state machine, we have a singleton called the "SmartController". This is what actually handles
+all of the state setting, as well as calculating shooting parameters for the different targets when relevant. Pretty
+much all of the subsystems in the robot rely heavily on the SmartController to function.
 
-## Other values to adjust
+In order for anything to happen on the robot, the drivers press buttons, which
+tell the code that they are requesting for an action to happen. If the robot isn't
+in a state that can handle that, it will either do something to prepare for that mode,
+or will remain in the intake mode.
 
-### Drive.java
-  * `MAX_LINEAR_SPEED` , `TRACK_WIDTH_X` , `TRACK_WIDTH_Y`
+### "Smart" Commands
 
-### GyroIOPigeon2.java
-  * `pigeon`
+The backbone of every subsystem is a default command that's running, which handles
+all of the normal operating procedures of the robot. For example, `SmartMagazine`
+is constantly watching the values of the line breaks, so if a game piece touches one of them, it will automatically run and move the game piece to the loaded state.
 
-### Module.java
-  * `WHEEL_RADIUS`
+This allows us to not have to juggle several commands for every subsystem, and instead handle the logic in one centralized place, while keeping that logic out
+of the subsystem itself to allow it to be overridden.
 
-### ModuleIOTalonFX.java or ModuleIOSparkMax.java
-  * `DRIVE_GEAR_RATIO`, `TURN_GEAR_RATIO`, `IS_TURN_MOTOR_INVERTED`, along with all drive, turn, CANcoder, CANbus, and `absoluteEncoderOffsets` values
-
-
-
-## Credits
-
-This project is heavily based on example code from Team 5712 - Hemlock's Gray Matter from their [AdvantageKitSwerveTemplate repository](https://github.com/Hemlock5712/AdvantageKitSwerveTemplate)
+During autonomous, we often run similar commands, with slight variations since
+it's in a much more predictable state during autonomous.

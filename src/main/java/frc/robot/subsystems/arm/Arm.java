@@ -1,10 +1,3 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -24,7 +17,7 @@ public class Arm extends SubsystemBase {
   ArmVisualizer visualizerMeasured;
   ArmVisualizer visualizerSetpoint;
 
-  private double armTarget = ArmConstants.intake.arm().getRadians();
+  private double armTarget = ArmConstants.intake.arm().getDegrees();
 
   public Arm(ArmIO io) {
     this.io = io;
@@ -41,7 +34,7 @@ public class Arm extends SubsystemBase {
 
   public void setArmTarget(double armTarget) {
     this.armTarget = armTarget;
-    io.setArmTarget(armTarget);
+    io.setArmTarget(armTarget, inputs.armAbsolutePositionDeg);
     Logger.recordOutput("Arm/ArmTargetPositionDeg", armTarget);
     visualizerSetpoint.update(this.armTarget);
   }
@@ -69,8 +62,7 @@ public class Arm extends SubsystemBase {
 
   @AutoLogOutput(key = "Arm/isArmInIntakePosition")
   public boolean isArmInIntakePosition() {
-    return (Math.abs(ArmConstants.intake.arm().getDegrees() - getArmAngleRelative())
-        < (Units.degreesToRadians(1)));
+    return (Math.abs(ArmConstants.intake.arm().getDegrees() - getArmAngleRelative()) < 1.0);
   }
 
   @AutoLogOutput(key = "Arm/isArmInTargetPose")

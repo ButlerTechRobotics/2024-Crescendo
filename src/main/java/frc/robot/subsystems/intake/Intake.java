@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.intake;
 
@@ -32,15 +29,15 @@ public class Intake extends SubsystemBase {
   }
 
   public void intake() {
-    setSpeedRPM(40);
+    setSpeedRotPerSec(40);
   }
 
   public void intakeSlow() {
-    setSpeedRPM(20);
+    setSpeedRotPerSec(20);
   }
 
   public void outtake() {
-    setSpeedRPM(-50);
+    setSpeedRotPerSec(-50);
   }
 
   /** Stops the intake. */
@@ -61,15 +58,15 @@ public class Intake extends SubsystemBase {
     return intakeRequest;
   }
 
-  public void setSpeedRPM(double speedRPM) {
-    targetSpeed = speedRPM;
-    wheelsIO.setSpeedRPM(targetSpeed);
+  public void setSpeedRotPerSec(double speedRotPerSec) {
+    targetSpeed = speedRotPerSec;
+    wheelsIO.setSpeedRotPerSec(targetSpeed);
   }
 
   /** Returns the current velocity in Rot Per Sec. */
   @AutoLogOutput
-  public double getVelocityRPM() {
-    return wheelsInputs.velocityRPM;
+  public double getVelocityRotPerSec() {
+    return wheelsInputs.velocityRotPerSec;
   }
 
   @AutoLogOutput(key = "Intake/TargetSpeed")
@@ -78,7 +75,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean atTargetSpeed() {
-    return Math.abs(wheelsInputs.velocityRPM - getTargetRot()) < 0.5;
+    return Math.abs(wheelsInputs.velocityRotPerSec - getTargetRot()) < 0.5;
   }
 
   public enum IntakePositions {

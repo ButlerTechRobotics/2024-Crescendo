@@ -1,9 +1,6 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.util.visualizer;
 
@@ -14,21 +11,21 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.flywheel.Flywheel;
 
 public class ShotVisualizer extends Command {
 
   Drive drive;
   Arm arm;
-  Shooter shooter;
+  Flywheel flywheel;
 
   private double lastTime;
 
   /** Creates a new ShotVisualizer. */
-  public ShotVisualizer(Drive drive, Arm arm, Shooter shooter) {
+  public ShotVisualizer(Drive drive, Arm arm, Flywheel flywheel) {
     this.drive = drive;
     this.arm = arm;
-    this.shooter = shooter;
+    this.flywheel = flywheel;
     this.lastTime = Timer.getFPGATimestamp();
   }
 
@@ -45,7 +42,7 @@ public class ShotVisualizer extends Command {
             new Rotation3d(0, 0, robotPosition.getRotation().getRadians()));
 
     NoteVisualizer.shootNote(
-        robotPosition3d, -arm.getArmAngleAbsolute(), shooter.getTopCharacterizationVelocity());
+        robotPosition3d, -arm.getArmAngleAbsolute(), flywheel.getTopCharacterizationVelocity());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
