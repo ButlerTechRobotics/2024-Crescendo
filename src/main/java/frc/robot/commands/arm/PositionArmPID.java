@@ -8,16 +8,16 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
+import frc.robot.subsystems.arm.Arm;
 
 public class PositionArmPID extends Command {
   /** Creates a new ArmEncoderPosition. */
-  ArmPositionPID m_arm;
+  Arm m_arm;
 
   double m_position;
 
   /** Creates a new Arm. */
-  public PositionArmPID(ArmPositionPID arm, double position) {
+  public PositionArmPID(Arm arm, double position) {
     m_arm = arm;
     m_position = position;
     addRequirements(m_arm);
@@ -31,13 +31,13 @@ public class PositionArmPID extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.setPosition(m_position);
+    m_arm.setArmTargetAngle(m_position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setPosition(m_arm.getPosition());
+    m_arm.setArmTargetAngle(m_arm.getArmCurrentAngle());
   }
 
   // Returns true when the command should end.

@@ -8,7 +8,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.superstructure.climber.ClimberLeft;
+import frc.robot.subsystems.climber.ClimberLeft;
 
 public class PositionClimbLeftPID extends Command {
   /** Creates a new ClimbEncoderPosition. */

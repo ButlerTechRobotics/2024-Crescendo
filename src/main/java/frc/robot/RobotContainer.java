@@ -29,6 +29,11 @@ import frc.robot.commands.arm.MultiDistanceArm;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbLeftPID;
 import frc.robot.commands.climber.PositionClimbRightPID;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIONeo;
+import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.climber.ClimberLeft;
+import frc.robot.subsystems.climber.ClimberRight;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -46,13 +51,10 @@ import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOSim;
 import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
-import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
-import frc.robot.subsystems.superstructure.climber.ClimberLeft;
-import frc.robot.subsystems.superstructure.climber.ClimberRight;
-import frc.robot.subsystems.superstructure.shooter.Shooter;
-import frc.robot.subsystems.superstructure.shooter.ShooterIO;
-import frc.robot.subsystems.superstructure.shooter.ShooterIOSim;
-import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
@@ -83,7 +85,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
-  private ArmPositionPID armPID = new ArmPositionPID();
+  private Arm arm;
   private final ClimberLeft climberLeftPID = new ClimberLeft();
   private final ClimberRight climberRightPID = new ClimberRight();
 
@@ -104,7 +106,7 @@ public class RobotContainer {
                 new SwerveModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
-
+        arm = new Arm(new ArmIONeo());
         feeder1 = new Feeder(new FeederIOSparkFlexFront());
         feeder2 = new Feeder(new FeederIOSparkFlexBack());
         intake = new Intake(new IntakeIOSparkFlex());
@@ -128,7 +130,7 @@ public class RobotContainer {
                 new SwerveModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
-
+        arm = new Arm(new ArmIOSim());
         feeder1 = new Feeder(new FeederIOSim());
         feeder2 = new Feeder(new FeederIOSim());
         intake = new Intake(new IntakeIOSim());
@@ -232,7 +234,7 @@ public class RobotContainer {
                     new MultiDistanceArm(
                             drive::getPose,
                             FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            armPID)
+                            arm)
                         .alongWith(
                             new MultiDistanceShooter(
                                 drive::getPose,
@@ -253,7 +255,7 @@ public class RobotContainer {
         // Start by spinning up the shooter and setting the arm to 40
         Commands.parallel(
             Commands.runOnce(() -> shooter.setSetpoint(4000, 4000)),
-            Commands.runOnce(() -> new PositionArmPID(armPID, 40))));
+            Commands.runOnce(() -> new PositionArmPID(arm, 40))));
   }
 
   public void resetHasShot() {
@@ -318,11 +320,11 @@ public class RobotContainer {
     // SET AUTO START POSE (i think it sets the heading)
     // ================================================
     // driverController
-    //     .start()
-    //     .whileTrue(
-    //         Commands.run(
-    //             () -> drive.setAutoStartPose(
-    //                 new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+    // .start()
+    // .whileTrue(
+    // Commands.run(
+    // () -> drive.setAutoStartPose(
+    // new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -434,8 +436,8 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - LEFT TRIGGER
     // AIM AT SPEAKER AND PRE-SHOOT
     // ================================================
-    operatorController
-        .leftTrigger()
+    driverController
+        .button(7)
         .whileTrue(aimAndPreShoot())
         .onFalse(Commands.runOnce(() -> hasShot = false));
 
@@ -459,7 +461,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+    operatorController.povUp().onTrue(new PositionArmPID(arm, 96.0 + 2.8));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD RIGHT
@@ -471,19 +473,19 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD RIGHT
     // ARM POSITION BLURP SHOOT
     // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(armPID, 55));
+    operatorController.povRight().whileTrue(new PositionArmPID(arm, 55));
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
+    operatorController.povLeft().onTrue(new PositionArmPID(arm, 80));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2.0)); // 3
+    operatorController.povDown().onTrue(new PositionArmPID(arm, 2.0)); // 3
   }
 
   /**

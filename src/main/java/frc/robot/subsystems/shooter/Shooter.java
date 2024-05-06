@@ -5,9 +5,9 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package frc.robot.subsystems.superstructure.shooter;
+package frc.robot.subsystems.shooter;
 
-import static frc.robot.subsystems.superstructure.shooter.ShooterConstants.*;
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;

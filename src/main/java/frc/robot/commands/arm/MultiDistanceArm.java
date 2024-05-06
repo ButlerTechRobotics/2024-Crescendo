@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.superstructure.arm.ArmPositionPID;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.util.AllianceFlipUtil;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -21,7 +21,7 @@ import org.littletonrobotics.junction.Logger;
 /** A command that angles the arm from multi-distance position from the target. */
 public class MultiDistanceArm extends Command {
   Supplier<Pose2d> poseSupplier;
-  ArmPositionPID armPID;
+  Arm armPID;
   InterpolatingDoubleTreeMap distanceMap = new InterpolatingDoubleTreeMap();
 
   double distance;
@@ -37,8 +37,7 @@ public class MultiDistanceArm extends Command {
    * @param targetPose The target pose to shoot at.
    * @param armPID The arm subsystem.
    */
-  public MultiDistanceArm(
-      Supplier<Pose2d> poseSupplier, Translation2d targetPose, ArmPositionPID armPID) {
+  public MultiDistanceArm(Supplier<Pose2d> poseSupplier, Translation2d targetPose, Arm armPID) {
     this.poseSupplier = poseSupplier;
     this.armPID = armPID;
     this.orignalPose = targetPose;
@@ -79,7 +78,7 @@ public class MultiDistanceArm extends Command {
     angle = distanceMap.get(distance);
 
     // Run the flywheel at the calculated angle
-    armPID.setPosition(angle);
+    armPID.setArmTargetAngle(angle);
 
     // Put the distance on the SmartDashboard
     SmartDashboard.putNumber("Distance", getDistance());
@@ -88,7 +87,7 @@ public class MultiDistanceArm extends Command {
   @Override
   public void end(boolean interrupted) {
     // Sets the arm to home when the command ends
-    armPID.setPosition(2.0); // 3
+    armPID.setArmTargetAngle(2.0); // 3
   }
 
   @Override
