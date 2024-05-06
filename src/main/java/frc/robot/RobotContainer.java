@@ -480,6 +480,7 @@ public class RobotContainer {
                       rollers.setGoal(Rollers.Goal.IDLE);
                     })
                 .alongWith(candle.setColorOperationIdle()));
+
     guitarController
         .axisGreaterThan(1, 0.3)
         .whileTrue(shoot())
@@ -494,7 +495,7 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD UP
     // ARM POSITION MAX POSITION
     // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(armPID, 96.0 + 2.8));
+    operatorController.povUp().onTrue(new PositionArmPID(armPID, 40));
 
     // ================================================
     // OPERATOR GUITAR - SELECT
@@ -518,13 +519,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 80));
+    operatorController.povLeft().onTrue(new PositionArmPID(armPID, 82));
 
     // ================================================
     // OPERATOR GUITAR - YELLOW
     // ARM POSITION AMP
     // ================================================
-    guitarController.button(1).onTrue(new PositionArmPID(armPID, 80));
+    guitarController.button(1).onTrue(new PositionArmPID(armPID, 82));
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================

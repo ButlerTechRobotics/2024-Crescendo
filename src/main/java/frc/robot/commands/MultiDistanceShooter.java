@@ -46,10 +46,10 @@ public class MultiDistanceShooter extends Command {
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 3000.0);
     distanceMap.put(1.5, 3000.0); // 7.88 (V3s)
-    distanceMap.put(2.0, 3500.0); // 12.02(V3s)
-    distanceMap.put(2.5, 3600.0); // 18.08 match 18.15(V3s)
-    distanceMap.put(3.0, 3800.0); // 21.6 match 21.98(V3s)
-    distanceMap.put(3.5, 4000.0); // 22.98 match 23.3(V3s)
+    distanceMap.put(2.0, 3300.0); // 12.02(V3s)
+    distanceMap.put(2.5, 3500.0); // 18.08 match 18.15(V3s)
+    distanceMap.put(3.0, 3700.0); // 21.6 match 21.98(V3s)
+    distanceMap.put(3.5, 3900.0); // 22.98 match 23.3(V3s)
     distanceMap.put(3.75, 4000.0); // 23.46 (old) 23.8(V3s)
     distanceMap.put(4.0, 4200.0); // 24.5 (old 95%) 24.52 (V3s)
     distanceMap.put(4.2, 4250.0); // 26.02
