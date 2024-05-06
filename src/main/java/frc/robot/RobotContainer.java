@@ -14,13 +14,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.SmartController.DriveModeType;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToPoint;
 import frc.robot.commands.MultiDistanceShooter;
@@ -30,6 +32,7 @@ import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.PositionClimbLeftPID;
 import frc.robot.commands.climber.PositionClimbRightPID;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveController;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.SwerveModuleIO;
@@ -56,6 +59,7 @@ import frc.robot.subsystems.superstructure.shooter.ShooterIOSparkFlex;
 import frc.robot.subsystems.vision.AprilTagVision;
 import frc.robot.subsystems.vision.AprilTagVisionIO;
 import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
+import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVisionSIM;
 import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -71,6 +75,7 @@ public class RobotContainer {
   private Drive drive;
   private Shooter shooter;
   private AprilTagVision aprilTagVision;
+  private static DriveController driveMode = new DriveController();
   private Intake intake;
   private Feeder feeder1;
   private Feeder feeder2;
@@ -134,7 +139,12 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(feeder1, feeder2, intake);
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        aprilTagVision =
+            new AprilTagVision(
+                new AprilTagVisionIOPhotonVisionSIM(
+                    "photonCamera1",
+                    new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)),
+                    drive::getDrive));
 
         break;
 
@@ -197,7 +207,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
-    SmartController.getInstance().disableSmartControl();
+    DriveController.getInstance().disableHeadingControl();
     configureButtonBindings();
   }
 
@@ -223,11 +233,9 @@ public class RobotContainer {
 
   public Command aimAndPreShoot() {
     return Commands.sequence(
-            Commands.run(() -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)))
-        .alongWith(
             Commands.startEnd(
-                    () -> SmartController.getInstance().enableSmartControl(),
-                    () -> SmartController.getInstance().disableSmartControl())
+                    () -> DriveController.getInstance().enableHeadingControl(),
+                    () -> DriveController.getInstance().disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
                             drive::getPose,
@@ -301,28 +309,19 @@ public class RobotContainer {
             () -> -driverController.getRightX()));
     driverController
         .rightBumper()
-        .whileTrue(
-            Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)));
-
-    driverController
-        .leftStick()
-        .whileTrue(Commands.runOnce(SmartController.getInstance()::enableSmartControl));
-
-    driverController
-        .rightStick()
-        .whileTrue(Commands.runOnce(SmartController.getInstance()::disableSmartControl));
+        .whileTrue(Commands.runOnce(() -> DriveController.getInstance().toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - START
     // SET AUTO START POSE (i think it sets the heading)
     // ================================================
-    // driverController
-    //     .start()
-    //     .whileTrue(
-    //         Commands.run(
-    //             () -> drive.setAutoStartPose(
-    //                 new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+    driverController
+        .start()
+        .whileTrue(
+            Commands.run(
+                () ->
+                    drive.setAutoStartPose(
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
