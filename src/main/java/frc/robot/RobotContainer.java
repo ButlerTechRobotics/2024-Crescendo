@@ -207,8 +207,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
-    driveMode.setPoseSupplier(drive::getPose);
-    driveMode.disableHeadingControl();
+    DriveController.getInstance().disableHeadingControl();
     configureButtonBindings();
   }
 
@@ -235,7 +234,8 @@ public class RobotContainer {
   public Command aimAndPreShoot() {
     return Commands.sequence(
             Commands.startEnd(
-                    () -> driveMode.enableHeadingControl(), () -> driveMode.disableHeadingControl())
+                    () -> DriveController.getInstance().enableHeadingControl(),
+                    () -> DriveController.getInstance().disableHeadingControl())
                 .alongWith(
                     new MultiDistanceArm(
                             drive::getPose,
@@ -304,10 +304,12 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            driveMode,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
+    driverController
+        .rightBumper()
+        .whileTrue(Commands.runOnce(() -> DriveController.getInstance().toggleDriveMode()));
 
     // ================================================
     // DRIVER CONTROLLER - START
@@ -385,22 +387,15 @@ public class RobotContainer {
                 drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
 
     // ================================================
-    // DRIVER CONTROLLER - DPAD UP
-    // MOVE CLIMBER UP
-    // ================================================
-    driverController
-        .rightBumper()
-        .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, -140)
-                .alongWith(new PositionClimbRightPID(climberRightPID, -140)));
-
-    // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
     // MOVE CLIMBER DOWN
     // ================================================
     driverController
         .rightTrigger()
         .whileTrue(
+            new PositionClimbLeftPID(climberLeftPID, -140)
+                .alongWith(new PositionClimbRightPID(climberRightPID, -140)))
+        .whileFalse(
             new PositionClimbLeftPID(climberLeftPID, 0)
                 .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
 

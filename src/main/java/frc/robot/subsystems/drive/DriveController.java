@@ -1,93 +1,130 @@
-// Copyright (c) 2024 FRC 325 & 144
-// https://github.com/ButlerTechRobotics
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
-import java.util.Optional;
-import java.util.function.Supplier;
 
-// DriveController class handles the driving logic for the robot
+/**
+ * The DriveController class represents a controller for the robot's drive system. It provides
+ * methods to control the heading and drive mode of the robot.
+ */
 public class DriveController {
-  // Supplier for the heading angle of the robot
-  private Optional<Supplier<Rotation2d>> headingSupplier = Optional.empty();
-  // Supplier for the pose of the robot
-  private Supplier<Pose2d> poseSupplier = Pose2d::new;
-  // Current drive mode of the robot
-  private DriveModeType driveModeType = DriveModeType.SPEAKER;
+  public static DriveController instance;
 
-  // Sets the supplier for the heading angle of the robot
-  public void setHeadingSupplier(Supplier<Rotation2d> headingSupplier) {
-    this.headingSupplier = Optional.of(headingSupplier);
+  private Rotation2d headingSupplier = Rotation2d.fromDegrees(90);
+  private Boolean headingControl = false;
+  private DriveModeType driveModeType = DriveModeType.AMP;
+
+  public static DriveController getInstance() {
+    if (instance == null) {
+      instance = new DriveController();
+    }
+    return instance;
   }
 
-  // Sets the supplier for the pose of the robot
-  public void setPoseSupplier(Supplier<Pose2d> poseSupplier) {
-    this.poseSupplier = poseSupplier;
+  /**
+   * Sets the heading supplier that provides the desired heading for the robot.
+   *
+   * @param headingSupplier The supplier that provides the desired heading.
+   */
+  public void setHeading(Rotation2d headingSupplier) {
+    this.headingSupplier = headingSupplier;
   }
 
-  // Checks if the heading of the robot is controlled
+  /**
+   * Checks if the heading is being controlled.
+   *
+   * @return True if the heading is being controlled, false otherwise.
+   */
   public boolean isHeadingControlled() {
-    return this.headingSupplier.isPresent();
+    return this.headingControl;
   }
 
-  // Returns the current drive mode of the robot
-  public Supplier<DriveModeType> getDriveModeType() {
-    return () -> this.driveModeType;
+  /**
+   * Gets the current drive mode.
+   *
+   * @return The supplier that provides the current drive mode.
+   */
+  public DriveModeType getDriveModeType() {
+    return this.driveModeType;
   }
 
-  // Returns the current heading angle of the robot
-  public Supplier<Rotation2d> getHeadingAngle() {
-    return headingSupplier.get();
+  /**
+   * Gets the current heading angle.
+   *
+   * @return The supplier that provides the current heading angle.
+   */
+  public Rotation2d getHeadingAngle() {
+    return this.headingSupplier;
   }
 
-  // Sets the drive mode of the robot
+  /**
+   * Sets the drive mode.
+   *
+   * @param driveModeType The drive mode to set.
+   */
   public void setDriveMode(DriveModeType driveModeType) {
     this.driveModeType = driveModeType;
-    updateHeading();
   }
 
-  // Enables heading control for the robot
-  public void enableHeadingControl() {
-    enableSpeakerHeading();
-  }
-
-  // Disables heading control for the robot
-  public void disableHeadingControl() {
-    this.headingSupplier = Optional.empty();
-  }
-
-  // Updates the heading of the robot based on the current drive mode
-  private void updateHeading() {
-    if (isHeadingControlled()) {
-      enableHeadingControl();
+  /** Toggles the drive mode between AMP and SPEAKER. */
+  public void toggleDriveMode() {
+    if (getDriveModeType() == DriveModeType.AMP) {
+      setDriveMode(DriveController.DriveModeType.SPEAKER);
+    } else {
+      setDriveMode(DriveController.DriveModeType.AMP);
     }
   }
 
-  // Enables speaker heading for the robot
-  private void enableSpeakerHeading() {
-    setHeadingSupplier(
-        () ->
-            new Rotation2d(
-                poseSupplier.get().getX()
-                    - AllianceFlipUtil.apply(
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
-                        .getX(),
-                poseSupplier.get().getY()
-                    - AllianceFlipUtil.apply(
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
-                        .getY()));
+  /** Enables heading control based on the current drive mode. */
+  public void enableHeadingControl() {
+    this.headingControl = true;
   }
 
-  // Enum for the drive modes of the robot
+  /** Disables heading control (heading control is disabled). */
+  public void disableHeadingControl() {
+    this.headingControl = false;
+  }
+
+  /**
+   * Calculates the heading based on the current drive mode.
+   *
+   * @param pose The current pose of the robot.
+   */
+  public void calculateHeading(Pose2d pose) {
+    switch (getDriveModeType()) {
+      case AMP:
+        calculateAmpHeading();
+        break;
+      case SPEAKER:
+        calculateSpeakerHeading(pose);
+        break;
+    }
+  }
+
+  /** Turns on heading control and sets the heading to AMP mode (90 degrees). */
+  private void calculateAmpHeading() {
+    setHeading(Rotation2d.fromDegrees(90));
+  }
+
+  /** Turns on heading control and sets the heading to SPEAKER mode. */
+  private void calculateSpeakerHeading(Pose2d pose) {
+    setHeading(
+        new Rotation2d(
+            pose.getX()
+                - AllianceFlipUtil.apply(
+                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
+                    .getX(),
+            pose.getY()
+                - AllianceFlipUtil.apply(
+                        FieldConstants.Speaker.centerSpeakerOpening.getTranslation())
+                    .getY()));
+  }
+
+  /** Possible Drive Modes. */
   public enum DriveModeType {
+    AMP,
     SPEAKER,
   }
 }
