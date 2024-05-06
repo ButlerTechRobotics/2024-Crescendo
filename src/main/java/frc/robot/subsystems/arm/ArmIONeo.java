@@ -36,6 +36,15 @@ public class ArmIONeo implements ArmIO {
     armMotor.setVoltage(voltage);
   }
 
+  public void setArmTarget(double armTarget, double armAbsolutePositionDeg) {
+    double output = pidController.calculate(armAbsolutePositionDeg, armTarget);
+    double downSpeedFactor = 0.175;
+    double upSpeedFactor = 0.2;
+    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
+
+    armMotor.set(output * speedFactor);
+  }
+
   @Override
   public void stop() {
     armMotor.stopMotor();
