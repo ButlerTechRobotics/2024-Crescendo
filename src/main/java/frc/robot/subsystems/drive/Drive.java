@@ -1,15 +1,9 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2024 FRC 325 & 144
+// https://github.com/ButlerTechRobotics
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot.subsystems.drive;
 
@@ -49,7 +43,7 @@ public class Drive extends SubsystemBase {
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-  private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+  private final SwerveModule[] modules = new SwerveModule[4]; // FL, FR, BL, BR
 
   private double filteredX = 0;
   private double filteredY = 0;
@@ -78,15 +72,15 @@ public class Drive extends SubsystemBase {
 
   public Drive(
       GyroIO gyroIO,
-      ModuleIO flModuleIO,
-      ModuleIO frModuleIO,
-      ModuleIO blModuleIO,
-      ModuleIO brModuleIO) {
+      SwerveModuleIO flModuleIO,
+      SwerveModuleIO frModuleIO,
+      SwerveModuleIO blModuleIO,
+      SwerveModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
-    modules[0] = new Module(flModuleIO, 0);
-    modules[1] = new Module(frModuleIO, 1);
-    modules[2] = new Module(blModuleIO, 2);
-    modules[3] = new Module(brModuleIO, 3);
+    modules[0] = new SwerveModule(flModuleIO, 0);
+    modules[1] = new SwerveModule(frModuleIO, 1);
+    modules[2] = new SwerveModule(blModuleIO, 2);
+    modules[3] = new SwerveModule(brModuleIO, 3);
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
@@ -311,7 +305,8 @@ public class Drive extends SubsystemBase {
         && SmartController.getInstance().isSmartControlEnabled()
         && SmartController.getInstance().getDriveModeType()
             == SmartController.DriveModeType.SPEAKER) {
-      // Return an optional containing the rotation override (this should be a field relative
+      // Return an optional containing the rotation override (this should be a field
+      // relative
       // rotation)
       return Optional.of(SmartController.getInstance().getTargetAimingParameters().robotAngle());
     } else {

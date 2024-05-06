@@ -1,24 +1,18 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2024 FRC 325 & 144
+// https://github.com/ButlerTechRobotics
 //
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file at
+// the root directory of this project.
 
 package frc.robot;
 
-// import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.SmartController.DriveModeType;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -43,6 +37,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
+    RobotController.setBrownoutVoltage(5.5);
     Pathfinding.setPathfinder(new LocalADStarAK());
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -68,20 +63,6 @@ public class Robot extends LoggedRobot {
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
-        RobotController.setBrownoutVoltage(6.5);
-        // SignalLogger.start();
-        // StringLogEntry entry = new StringLogEntry(DataLogManager.getLog(), "/ntlog");
-        // NetworkTableInstance.getDefault()
-        //     .addLogger(
-        //         0,
-        //         100,
-        //         event ->
-        //             entry.append(
-        //                 event.logMessage.filename
-        //                     + ":"
-        //                     + event.logMessage.line
-        //                     + ":"
-        //                     + event.logMessage.message));
         break;
 
       case SIM:
@@ -105,10 +86,11 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our autonomous chooser on the dashboard.+
+    // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
 
-    // FollowPathCommand.warmupCommand().schedule();
+    FollowPathCommand.warmupCommand().schedule();
+    PathfindingCommand.warmupCommand().schedule();
   }
 
   /** This function is called periodically during all modes. */
@@ -134,7 +116,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
-    SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER);
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -156,7 +137,6 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
-    robotContainer.intakeUp();
   }
 
   /** This function is called periodically during operator control. */

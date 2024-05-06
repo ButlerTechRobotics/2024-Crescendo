@@ -3,55 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.888049050119454,
-        "y": 6.856133569918385
+        "x": 1.812988005851087,
+        "y": 7.084461618605997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.526699430623062,
-        "y": 6.856133569918385
+        "x": 1.8185766449725966,
+        "y": 7.358304935559972
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8230185926564035,
-        "y": 7.246010790953966
+        "x": 1.812988005851087,
+        "y": 7.671268726364514
       },
       "prevControl": {
-        "x": 2.0702578059960404,
-        "y": 6.818096767866134
+        "x": 1.812988005851087,
+        "y": 7.503609552719224
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [
+  "rotationTargets": [
     {
-      "name": "New Event Marker",
       "waypointRelativePos": 1.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Shoot"
-              }
-            }
-          ]
-        }
-      }
+      "rotationDegrees": 90.0,
+      "rotateFast": true
     }
   ],
+  "constraintZones": [],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -61,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tele",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
