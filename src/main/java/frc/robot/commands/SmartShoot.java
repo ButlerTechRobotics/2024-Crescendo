@@ -7,108 +7,120 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.SmartController;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.Rollers.Goal;
+import frc.robot.subsystems.shooter.Shooter;
+import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class SmartShoot extends Command {
-  // // Supplier<Pose2d> pose;
-  // // Arm arm;
-  // // Shooter shooter;
-  // // Feeder feeder;
-  // // Timer timer;
-  // // Timer shooterTimer;
-  // // double forceShootTimeout;
+  Arm arm;
+  Shooter shooter;
+  Rollers rollers;
+  Supplier<Pose2d> pose;
+  Timer timer;
+  Timer shooterTimer;
+  double forceShootTimeout;
 
-  // // /** Creates a new Shoot. */
-  // // public SmartShoot(
-  // //     Arm arm,
-  // //     Shooter shooter,
-  // //     Feeder feeder,
-  // //     Supplier<Pose2d> pose,
-  // //     double forceShootTimeout) {
-  // //   this.arm = arm;
-  // //   this.shooter = shooter;
-  // //   this.feeder = feeder;
-  // //   this.pose = pose;
-  // //   timer = new Timer();
-  // //   shooterTimer = new Timer();
-  // //   this.forceShootTimeout = forceShootTimeout;
-  // // }
+  /** Creates a new Shoot. */
+  public SmartShoot(
+      Arm arm, Shooter shooter, Rollers rollers, Supplier<Pose2d> pose, double forceShootTimeout) {
+    this.arm = arm;
+    this.shooter = shooter;
+    this.rollers = rollers;
+    this.pose = pose;
+    timer = new Timer();
+    shooterTimer = new Timer();
+    this.forceShootTimeout = forceShootTimeout;
+  }
 
-  // // // Called when the command is initially scheduled.
-  // // @Override
-  // // public void initialize() {
-  // //   SmartController.getInstance().enableSmartControl();
-  // //   if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
-  // //   shooterTimer.restart();
-  // // }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    SmartController.getInstance().enableSmartControl();
+    arm.setArmTargetAngle(SmartController.getInstance().getTargetAimingParameters().armAngle());
+    shooter.setSetpoint(
+        SmartController.getInstance().getTargetAimingParameters().shooterSpeed(),
+        SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
+    if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
+    shooterTimer.restart();
+  }
 
-  // // // Called every time the scheduler runs while the command is scheduled.
-  // // @Override
-  // // public void execute() {
-  // //   boolean isSmartControlEnabled = SmartController.getInstance().isSmartControlEnabled();
-  // //   boolean isWristInTargetPose = isWristInTargetPose();
-  // //   boolean isDriveAngleInTarget = isDriveAngleInTarget();
-  // //   boolean isShooterAtTargetSpeed = isShooterAtTargetSpeed();
-  // //   boolean isShooting = false;
-  // //   double realForceShoot = forceShootTimeout;
-  // //   if (SmartController.getInstance().getDriveModeType() == DriveModeType.CLIMBER) {
-  // //     realForceShoot = 0.0;
-  // //   }
-  // //   if ((isSmartControlEnabled
-  // //           && isWristInTargetPose
-  // //           && isDriveAngleInTarget
-  // //           && isFlywheelAtTargetSpeed)
-  // //       || flywheelTimer.hasElapsed(realForceShoot)) {
-  // //     magazine.shoot();
-  // //     isShooting = true;
-  // //     if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.75)) {
-  // //       lineBreak.shootGamePiece();
-  // //     }
-  // //   }
-  // //   Logger.recordOutput("SmartShoot/IsShooting", isShooting);
-  // // }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    boolean isSmartControlEnabled = SmartController.getInstance().isSmartControlEnabled();
+    boolean isWristInTargetPose = isArmInTargetPose();
+    boolean isDriveAngleInTarget = isDriveAngleInTarget();
+    boolean isShooterAtTargetSpeed = isShooterAtTargetSpeed();
+    boolean isShooting = false;
+    double realForceShoot = forceShootTimeout;
 
-  // // // Called once the command ends or is interrupted.
-  // // @Override
-  // // public void end(boolean interrupted) {
-  // //   SmartController.getInstance().disableSmartControl();
-  // //   magazine.stop();
-  // // }
+    if ((isSmartControlEnabled
+            && isWristInTargetPose
+            && isDriveAngleInTarget
+            && isShooterAtTargetSpeed)
+        || shooterTimer.hasElapsed(realForceShoot)) {
+      rollers.setGoal(Goal.SHOOT);
+      isShooting = true;
+    }
+    Logger.recordOutput("SmartShoot/IsShooting", isShooting);
+  }
 
-  // // // Returns true when the command should end.
-  // // @Override
-  // // public boolean isFinished() {
-  // //   if (DriverStation.isAutonomous()) {
-  // //     return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() > 0.1;
-  // //   }
-  // //   return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() > 0.5;
-  // // }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    SmartController.getInstance().disableSmartControl();
+    rollers.setGoal(Goal.IDLE);
+    arm.stop();
+    shooter.stop();
+  }
 
-  // // public boolean isWristInTargetPose() {
-  // //   Logger.recordOutput("SmartShoot/IsWristInTargetPose", arm.isArmWristInTargetPose());
-  // //   Logger.recordOutput("SmartShoot/WristAngle", arm.getWristAngleRelative());
-  // //   Logger.recordOutput("SmartShoot/TargetWristAngle", arm.getRelativeWristTarget());
-  // //   return arm.isArmWristInTargetPose();
-  // // }
-
-  // // public boolean isFlywheelAtTargetSpeed() {
-  // //   Logger.recordOutput("SmartShoot/IsFlywheelAtTargetSpeed", flywheel.atTargetSpeed());
-  // //   Logger.recordOutput("SmartShoot/FlywheelSpeed", flywheel.getVelocityRotPerSec());
-  // //   Logger.recordOutput(
-  // //       "SmartShoot/TargetFlywheelSpeed",
-  // //       SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
-  // //   return flywheel.atTargetSpeed();
-  // // }
-
-  // // public boolean isDriveAngleInTarget() {
-  // //   Rotation2d targetAngle =
-  // SmartController.getInstance().getTargetAimingParameters().robotAngle();
-  // //   Rotation2d robotAngle = this.pose.get().getRotation();
-  // //   boolean isDriveAngleInTarget =
-  // //       Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
-  // //   Logger.recordOutput("SmartShoot/IsDriveAngleInTarget", isDriveAngleInTarget);
-  // //   Logger.recordOutput("SmartShoot/DriveAngle", robotAngle.getDegrees());
-  // //   Logger.recordOutput("SmartShoot/TargetDriveAngle", targetAngle.getDegrees());
-  // //   return isDriveAngleInTarget;
+  // Returns true when the command should end.
+  // @Override
+  // public boolean isFinished() {
+  // if (DriverStation.isAutonomous()) {
+  // return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() >
+  // 0.1;
   // }
+  // return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() >
+  // 0.5;
+  // }
+
+  public boolean isArmInTargetPose() {
+    Logger.recordOutput("SmartShoot/IsArmAtSetpoint", arm.atSetpoint());
+    Logger.recordOutput("SmartShoot/WristAngle", arm.getArmCurrentAngle());
+    Logger.recordOutput("SmartShoot/TargetWristAngle", arm.getArmTargetAngle());
+    return arm.atSetpoint();
+  }
+
+  public boolean isShooterAtTargetSpeed() {
+    Logger.recordOutput("SmartShoot/IsShooterAtTargetSpeed", shooter.atTargetSpeed());
+    Logger.recordOutput("SmartShoot/TopShooterSpeed", shooter.getTopCharacterizationVelocity());
+    Logger.recordOutput(
+        "SmartShoot/BottomShooterSpeed", shooter.getBottomCharacterizationVelocity());
+    Logger.recordOutput(
+        "SmartShoot/TargetShooterSpeed",
+        SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
+    return shooter.atTargetSpeed();
+  }
+
+  public boolean isDriveAngleInTarget() {
+    Rotation2d targetAngle = SmartController.getInstance().getTargetAimingParameters().robotAngle();
+    Rotation2d robotAngle = this.pose.get().getRotation();
+    boolean isDriveAngleInTarget =
+        Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
+    Logger.recordOutput("SmartShoot/IsDriveAngleInTarget", isDriveAngleInTarget);
+    Logger.recordOutput("SmartShoot/DriveAngle", robotAngle.getDegrees());
+    Logger.recordOutput("SmartShoot/TargetDriveAngle", targetAngle.getDegrees());
+    return isDriveAngleInTarget;
+  }
 }

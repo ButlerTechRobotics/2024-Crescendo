@@ -36,7 +36,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void stop() {
-    armSetpointDeg = null;
+    armSetpointDeg = 0.0;
     io.stop();
   }
 
@@ -56,7 +56,7 @@ public class Arm extends SubsystemBase {
     Logger.processInputs("Arm", inputs);
 
     Logger.recordOutput("Arm/SetAngle", armSetpointDeg != null ? armSetpointDeg : 0.0);
-    Logger.recordOutput("Arm/CurrentAngle", inputs.armPositionDeg);
+    Logger.recordOutput("Arm/CurrentAngle", inputs.armCurrentAngleDeg);
   }
 
   public void runArmCharacterizationVolts(double volts) {
@@ -64,12 +64,16 @@ public class Arm extends SubsystemBase {
   }
 
   public double getArmCurrentAngle() {
-    return inputs.armPositionDeg;
+    return inputs.armCurrentAngleDeg;
+  }
+
+  public double getArmTargetAngle() {
+    return armSetpointDeg;
   }
 
   @AutoLogOutput(key = "Arm/AtSetpoint")
   public boolean atSetpoint() {
     return armSetpointDeg != null
-        && Math.abs(inputs.armPositionDeg - armSetpointDeg) <= armTolerance.get();
+        && Math.abs(inputs.armCurrentAngleDeg - armSetpointDeg) <= armTolerance.get();
   }
 }

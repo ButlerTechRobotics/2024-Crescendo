@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ArmIO {
   @AutoLog
   class ArmIOInputs {
-    public double armPositionDeg = 0.0;
+    public double armCurrentAngleDeg = 0.0;
     public double armVelocityRpm = 0.0;
     public double armAppliedVolts = 0.0;
     public double armOutputCurrent = 0.0;

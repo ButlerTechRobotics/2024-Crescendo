@@ -31,7 +31,7 @@ public class SmartController {
 
   private DriveModeType driveModeType = DriveModeType.SAFE;
   private AimingParameters targetAimingParameters =
-      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, Rotation2d.fromDegrees(0), 2, 0);
+      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, 0, 2, 0);
 
   // Whether or not the robot is in smart control mode. Smart control mode is a
   // mode where the robot
@@ -45,7 +45,7 @@ public class SmartController {
 
   // Interpolation maps for shooting into the speaker
   private final InterpolatingDoubleTreeMap shooterSpeedMap = new InterpolatingDoubleTreeMap();
-  private final InterpolatingDoubleTreeMap shooterAngleMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap armAngleMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap flightTimeMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap wristErrorMap = new InterpolatingDoubleTreeMap();
 
@@ -58,22 +58,22 @@ public class SmartController {
   private SmartController() {
 
     // Units: RPS
-    shooterSpeedMap.put(1.24036, 30.0);
-    shooterSpeedMap.put(1.509, 32.5);
-    shooterSpeedMap.put(2.006, 35.0);
-    shooterSpeedMap.put(2.5018, 37.5);
-    shooterSpeedMap.put(3.002, 40.0);
-    shooterSpeedMap.put(3.5116, 42.5);
-    shooterSpeedMap.put(4.002, 45.0);
+    shooterSpeedMap.put(1.24036, 3000.0);
+    shooterSpeedMap.put(1.509, 3000.0);
+    shooterSpeedMap.put(2.006, 3000.0);
+    shooterSpeedMap.put(2.5018, 3500.0);
+    shooterSpeedMap.put(3.002, 3750.0);
+    shooterSpeedMap.put(3.5116, 4000.0);
+    shooterSpeedMap.put(4.002, 4000.0);
 
     // // Units: Degress
-    shooterAngleMap.put(1.24036, Units.degreesToRadians(78.5));
-    shooterAngleMap.put(1.509, Units.degreesToRadians(73.0));
-    shooterAngleMap.put(2.006, Units.degreesToRadians(65.0));
-    shooterAngleMap.put(2.5018, Units.degreesToRadians(60.0));
-    shooterAngleMap.put(3.002, Units.degreesToRadians(56.5));
-    shooterAngleMap.put(3.5116, Units.degreesToRadians(53.75));
-    shooterAngleMap.put(4.002, Units.degreesToRadians(50.75));
+    armAngleMap.put(1.24036, 0.0);
+    armAngleMap.put(1.509, 2.0);
+    armAngleMap.put(2.006, 15.0);
+    armAngleMap.put(2.5018, 20.0);
+    armAngleMap.put(3.002, 25.0);
+    armAngleMap.put(3.5116, 30.0);
+    armAngleMap.put(4.002, 35.0);
 
     flightTimeMap.put(1.2, 0.2);
     flightTimeMap.put(4.002, 0.8);
@@ -126,8 +126,8 @@ public class SmartController {
    * @param distance The distance to the target in inches.
    * @return The shooter angle for the given distance.
    */
-  public Double getShooterAngle(double distance) {
-    return shooterAngleMap.get(Units.inchesToMeters(distance));
+  public Double getArmAngle(double distance) {
+    return armAngleMap.get(Units.inchesToMeters(distance));
   }
 
   /**
@@ -274,7 +274,7 @@ public class SmartController {
             setpointAngle,
             radialVelocity,
             shooterSpeedMap.get(effectiveDistanceToSpeaker),
-            new Rotation2d(shooterAngleMap.get(effectiveDistanceToSpeaker)),
+            armAngleMap.get(effectiveDistanceToSpeaker),
             wristErrorMap.get(effectiveDistanceToSpeaker),
             effectiveDistanceToSpeaker));
   }
@@ -285,8 +285,7 @@ public class SmartController {
    * <p>This will always be static and will not adjust for the robot's movement.
    */
   public void calculateAmp() {
-    setTargetAimingParameters(
-        new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 20, Rotation2d.fromDegrees(0), 1, 0));
+    setTargetAimingParameters(new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 20, 0, 1, 0));
   }
 
   /**
@@ -318,7 +317,7 @@ public class SmartController {
             setpointAngle,
             radialVelocity,
             feederSpeedMap.get(effectiveDistanceToFeedLocation),
-            new Rotation2d(feederAngleMap.get(effectiveDistanceToFeedLocation)),
+            feederAngleMap.get(effectiveDistanceToFeedLocation),
             feederWristErrorMap.get(effectiveDistanceToFeedLocation),
             effectiveDistanceToFeedLocation));
   }
@@ -368,7 +367,7 @@ public class SmartController {
       Rotation2d robotAngle,
       double radialVelocity,
       double shooterSpeed,
-      Rotation2d shooterAngle,
+      double armAngle,
       double wristError,
       double effectiveDistanceToTarget) {}
 

@@ -82,7 +82,7 @@ public class Shooter extends SubsystemBase {
   }
 
   @AutoLogOutput(key = "Shooter/AtSetpoint")
-  public boolean atSetpoint() {
+  public boolean atTargetSpeed() {
     return topSetpointRpm != null
         && bottomSetpointRPM != null
         && Math.abs(inputs.topVelocityRpm - topSetpointRpm) <= shooterTolerance.get()

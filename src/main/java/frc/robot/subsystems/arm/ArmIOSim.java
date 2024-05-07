@@ -46,7 +46,7 @@ public class ArmIOSim implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.armPositionDeg = Units.radiansToDegrees(armSim.getAngleRads());
+    inputs.armCurrentAngleDeg = Units.radiansToDegrees(armSim.getAngleRads());
     inputs.armVelocityRpm =
         Units.radiansPerSecondToRotationsPerMinute(armSim.getVelocityRadPerSec());
     inputs.armOutputCurrent = armSim.getCurrentDrawAmps();

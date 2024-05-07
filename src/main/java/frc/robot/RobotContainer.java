@@ -25,6 +25,7 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToPoint;
 import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
+import frc.robot.commands.SmartShoot;
 import frc.robot.commands.arm.MultiDistanceArm;
 import frc.robot.commands.arm.PositionArmPID;
 import frc.robot.commands.climber.ManualClimb;
@@ -300,11 +301,10 @@ public class RobotContainer {
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
+
     driverController
         .rightBumper()
-        .whileTrue(
-            Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)));
+        .whileTrue(new SmartShoot(arm, shooter, rollers, drive::getPose, 1));
 
     arm.setDefaultCommand(Commands.runOnce(() -> arm.setArmTargetAngle(2), arm));
 
@@ -440,7 +440,13 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - A
     // SETS SHOOTER TO BLURP SHOOT SPEED
     // ================================================
-    operatorController.a().whileTrue(blurpShoot());
+    operatorController
+        .a()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.FEED))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())))
+        .onFalse(Commands.runOnce(() -> SmartController.getInstance().disableSmartControl()));
 
     operatorController
         .rightTrigger()

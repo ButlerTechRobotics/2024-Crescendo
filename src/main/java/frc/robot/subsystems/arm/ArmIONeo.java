@@ -60,7 +60,7 @@ public class ArmIONeo implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.armPositionDeg = Units.rotationsToDegrees(armEncoder.getPosition());
+    inputs.armCurrentAngleDeg = Units.rotationsToDegrees(armEncoder.getPosition());
     inputs.armVelocityRpm = armEncoder.getVelocity() / reduction;
     inputs.armAppliedVolts = armMotor.getAppliedOutput();
     inputs.armOutputCurrent = armMotor.getOutputCurrent();
