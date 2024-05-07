@@ -29,7 +29,7 @@ import frc.robot.subsystems.drive.DriveConstants.ModuleConfig;
  * absolute encoders using AdvantageScope. These values are logged under
  * "/Drive/ModuleX/TurnAbsolutePositionRad"
  */
-public class SwerveModuleIONeo implements SwerveModuleIO {
+public class ModuleIONeo implements ModuleIO {
   private final Neo driveSparkMax;
   private final Neo turnSparkMax;
   private final CANcoder cancoder;
@@ -40,7 +40,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
 
   private final Rotation2d absoluteEncoderOffset;
 
-  public SwerveModuleIONeo(ModuleConfig config) {
+  public ModuleIONeo(ModuleConfig config) {
 
     driveSparkMax = new Neo(config.driveID());
     turnSparkMax = new Neo(config.turnID());
@@ -105,7 +105,7 @@ public class SwerveModuleIONeo implements SwerveModuleIO {
   }
 
   @Override
-  public void updateInputs(SwerveModuleIOInputs inputs) {
+  public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
         Units.rotationsToRadians(driveEncoder.getPosition()) / moduleConstants.driveReduction();
     inputs.driveVelocityRadPerSec =

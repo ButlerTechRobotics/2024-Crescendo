@@ -12,8 +12,7 @@ import static frc.robot.subsystems.arm.ArmConstants.*;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.revrobotics.SparkPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.VendorWrappers.Neo;
 
@@ -23,13 +22,11 @@ public class ArmIONeo implements ArmIO {
   private AbsoluteEncoder armEncoder;
 
   // Controllers
-  private SparkPIDController armController;
-  // Open loop
-  private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(0.0, 0.0, 0.0);
+  private PIDController armController;
 
   public ArmIONeo() {
     // Init Hardware
-    armMotor = new Neo(topID);
+    armMotor = new Neo(armID);
     armEncoder = armMotor.getAbsoluteEncoder();
 
     // Config Hardware
@@ -50,9 +47,10 @@ public class ArmIONeo implements ArmIO {
     armMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 154);
 
     // Get controllers
-    armController = armMotor.getPIDController();
-    setPID(gains.kP(), gains.kI(), gains.kD());
-    setFF(gains.kS(), gains.kV(), gains.kA());
+    armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
+    armController.setP(gains.kP());
+    armController.setI(gains.kI());
+    armController.setD(gains.kD());
 
     // Disable brake mode
     armMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
@@ -62,7 +60,7 @@ public class ArmIONeo implements ArmIO {
 
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.armPositionDeg = Units.rotationsToRadians(armEncoder.getPosition()) / reduction;
+    inputs.armPositionDeg = Units.rotationsToDegrees(armEncoder.getPosition());
     inputs.armVelocityRpm = armEncoder.getVelocity() / reduction;
     inputs.armAppliedVolts = armMotor.getAppliedOutput();
     inputs.armOutputCurrent = armMotor.getOutputCurrent();
@@ -74,12 +72,15 @@ public class ArmIONeo implements ArmIO {
   }
 
   public void runPosition(double targetAngle) {
-    armController.setReference(
-        targetAngle,
-        CANSparkBase.ControlType.kPosition,
-        0,
-        ff.calculate(targetAngle),
-        SparkPIDController.ArbFFUnits.kVoltage);
+    double output = armController.calculate(getPosition(), targetAngle);
+    double downSpeedFactor = 0.1; // Adjust this value to control the down speed
+    double upSpeedFactor = 0.1; // Adjust this value to control the up speed
+    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
+    armMotor.set(output * speedFactor);
+  }
+
+  public double getPosition() {
+    return armEncoder.getPosition() * 360;
   }
 
   @Override
@@ -87,11 +88,6 @@ public class ArmIONeo implements ArmIO {
     armController.setP(kP);
     armController.setI(kI);
     armController.setD(kD);
-  }
-
-  @Override
-  public void setFF(double kS, double kV, double kA) {
-    ff = new SimpleMotorFeedforward(kS, kV, kA);
   }
 
   @Override

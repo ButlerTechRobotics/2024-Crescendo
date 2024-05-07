@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
  * to a random value. The flywheel sims are not physically accurate, but provide a decent
  * approximation for the behavior of the module.
  */
-public class SwerveModuleIOSim implements SwerveModuleIO {
+public class ModuleIOSim implements ModuleIO {
   private static final double LOOP_PERIOD_SECS = 0.02;
 
   private DCMotorSim driveSim =
@@ -35,7 +35,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
   private double turnAppliedVolts = 0.0;
 
   @Override
-  public void updateInputs(SwerveModuleIOInputs inputs) {
+  public void updateInputs(ModuleIOInputs inputs) {
     driveSim.update(LOOP_PERIOD_SECS);
     turnSim.update(LOOP_PERIOD_SECS);
 

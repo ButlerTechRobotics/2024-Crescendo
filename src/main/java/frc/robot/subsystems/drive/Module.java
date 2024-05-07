@@ -17,9 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveModule {
-  private final SwerveModuleIO io;
-  private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
+public class Module {
+  private final ModuleIO io;
+  private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
 
   private final SimpleMotorFeedforward driveFeedforward;
@@ -30,7 +30,7 @@ public class SwerveModule {
   private Rotation2d turnRelativeOffset = null; // Relative + Offset = Absolute
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
-  public SwerveModule(SwerveModuleIO io, int index) {
+  public Module(ModuleIO io, int index) {
     this.io = io;
     this.index = index;
 
@@ -68,7 +68,7 @@ public class SwerveModule {
   }
 
   public void periodic() {
-    Logger.processInputs("Drive/SwerveModule" + Integer.toString(index), inputs);
+    Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
     // On first cycle, reset relative turn encoder
     // Wait until absolute angle is nonzero in case it wasn't initialized yet

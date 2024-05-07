@@ -14,14 +14,13 @@ public class ArmConstants {
   // encoder / flywheelReduction = flywheel
   public static double reduction = (125.0 / 1.0);
   public static double armToleranceDeg = 1.0;
-  public static int topID = 22;
-  public static int bottomID = 23;
+  public static int armID = 20;
 
   public static Gains gains =
       switch (Constants.getRobot()) {
         case SIMBOT -> new Gains(50.0, 0.0, 0.0, 0.0, 0.0, 0.0);
           // case COMPBOT -> new Gains(0.00009, 0.0000002, 0.05, 8.75, 0.0027, 0.0);
-        case COMPBOT -> new Gains(0.000175, 0.0, 0.0, 0.122, 0.00175, 0.0);
+        case COMPBOT -> new Gains(0.055, 0.00001, 0.0, 0.0, 0.0, 0.0);
 
           // case COMPBOT -> null;
       };

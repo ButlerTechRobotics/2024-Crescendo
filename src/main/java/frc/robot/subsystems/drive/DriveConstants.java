@@ -135,7 +135,7 @@ public final class DriveConstants {
 
   public static HeadingControllerConstants headingControllerConstants =
       switch (Constants.getRobot()) {
-        case COMPBOT -> new HeadingControllerConstants(2.0, .25);
+        case COMPBOT -> new HeadingControllerConstants(7.0, .125);
         case SIMBOT -> new HeadingControllerConstants(7, 0.125);
       };
 

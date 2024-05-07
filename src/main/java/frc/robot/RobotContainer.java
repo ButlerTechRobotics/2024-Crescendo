@@ -27,8 +27,7 @@ import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
 import frc.robot.commands.arm.MultiDistanceArm;
 import frc.robot.commands.arm.PositionArmPID;
-import frc.robot.commands.climber.PositionClimbLeftPID;
-import frc.robot.commands.climber.PositionClimbRightPID;
+import frc.robot.commands.climber.ManualClimb;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIONeo;
 import frc.robot.subsystems.arm.ArmIOSim;
@@ -37,9 +36,9 @@ import frc.robot.subsystems.climber.ClimberRight;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.SwerveModuleIO;
-import frc.robot.subsystems.drive.SwerveModuleIONeo;
-import frc.robot.subsystems.drive.SwerveModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIONeo;
+import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.feeder.Feeder;
@@ -86,8 +85,8 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private Arm arm;
-  private final ClimberLeft climberLeftPID = new ClimberLeft();
-  private final ClimberRight climberRightPID = new ClimberRight();
+  private final ClimberLeft climberLeft = new ClimberLeft();
+  private final ClimberRight climberRight = new ClimberRight();
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -100,10 +99,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new SwerveModuleIONeo(moduleConfigs[0]),
-                new SwerveModuleIONeo(moduleConfigs[1]),
-                new SwerveModuleIONeo(moduleConfigs[2]),
-                new SwerveModuleIONeo(moduleConfigs[3]));
+                new ModuleIONeo(moduleConfigs[0]),
+                new ModuleIONeo(moduleConfigs[1]),
+                new ModuleIONeo(moduleConfigs[2]),
+                new ModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         arm = new Arm(new ArmIONeo());
@@ -124,10 +123,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim(),
-                new SwerveModuleIOSim());
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
         arm = new Arm(new ArmIOSim());
@@ -145,10 +144,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {},
-                new SwerveModuleIO() {});
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
         shooter = new Shooter(new ShooterIO() {});
 
         feeder1 = new Feeder(new FeederIO() {});
@@ -307,6 +306,8 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)));
 
+    arm.setDefaultCommand(Commands.runOnce(() -> arm.setArmTargetAngle(2), arm));
+
     driverController
         .leftStick()
         .whileTrue(Commands.runOnce(SmartController.getInstance()::enableSmartControl));
@@ -375,9 +376,7 @@ public class RobotContainer {
         .whileTrue(
             new DriveToPoint(
                     drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
-                .andThen(
-                    new PositionClimbLeftPID(climberLeftPID, -140)
-                        .alongWith(new PositionClimbRightPID(climberRightPID, -140))));
+                .andThen(new ManualClimb(climberLeft, climberRight, -140)));
 
     // ================================================
     // DRIVER CONTROLLER - B
@@ -395,12 +394,8 @@ public class RobotContainer {
     // ================================================
     driverController
         .rightTrigger()
-        .whileTrue(
-            new PositionClimbLeftPID(climberLeftPID, -140)
-                .alongWith(new PositionClimbRightPID(climberRightPID, -140)))
-        .whileFalse(
-            new PositionClimbLeftPID(climberLeftPID, 0)
-                .alongWith(new PositionClimbRightPID(climberRightPID, 0)));
+        .whileTrue(new ManualClimb(climberLeft, climberRight, -140))
+        .whileFalse(new ManualClimb(climberLeft, climberRight, 0));
 
     // ================================================
     // OPERATOR CONTROLLER - LB
