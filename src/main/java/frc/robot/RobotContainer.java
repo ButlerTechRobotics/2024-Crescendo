@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.SmartController.DriveModeType;
 import frc.robot.commands.DriveCommands;
@@ -65,9 +66,12 @@ import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -95,18 +99,19 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     switch (Constants.getMode()) {
       case REAL:
         // Real robot, instantiate hardware I` implementations
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new ModuleIONeo(moduleConfigs[0]),
-                new ModuleIONeo(moduleConfigs[1]),
-                new ModuleIONeo(moduleConfigs[2]),
-                new ModuleIONeo(moduleConfigs[3]));
+        drive = new Drive(
+            new GyroIOPigeon2(),
+            new ModuleIONeo(moduleConfigs[0]),
+            new ModuleIONeo(moduleConfigs[1]),
+            new ModuleIONeo(moduleConfigs[2]),
+            new ModuleIONeo(moduleConfigs[3]));
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         arm = new Arm(new ArmIONeo());
@@ -115,22 +120,21 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSparkFlex());
         rollers = new Rollers(feeder1, feeder2, intake);
 
-        aprilTagVision =
-            new AprilTagVision(
-                new AprilTagVisionIOPhotonVision("BLCamera", ROBOT_TO_CAMERA_BL),
-                new AprilTagVisionIOPhotonVision("BRCamera", ROBOT_TO_CAMERA_BR),
-                new AprilTagVisionIOPhotonVision("BackCamera", ROBOT_TO_CAMERA_BACK));
+        aprilTagVision = new AprilTagVision(
+            new AprilTagVisionIOPhotonVision("BLCamera", ROBOT_TO_CAMERA_BL),
+            new AprilTagVisionIOPhotonVision("BRCamera", ROBOT_TO_CAMERA_BR),
+            new AprilTagVisionIOPhotonVision("BackCamera", ROBOT_TO_CAMERA_BACK));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim(),
-                new ModuleIOSim());
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim(),
+            new ModuleIOSim());
 
         shooter = new Shooter(new ShooterIOSim());
         arm = new Arm(new ArmIOSim());
@@ -139,28 +143,38 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         rollers = new Rollers(feeder1, feeder2, intake);
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {
+        });
 
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
-        shooter = new Shooter(new ShooterIO() {});
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            });
+        shooter = new Shooter(new ShooterIO() {
+        });
 
-        feeder1 = new Feeder(new FeederIO() {});
+        feeder1 = new Feeder(new FeederIO() {
+        });
 
-        feeder2 = new Feeder(new FeederIO() {});
+        feeder2 = new Feeder(new FeederIO() {
+        });
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {
+        });
 
-        intake = new Intake(new IntakeIO() {});
+        intake = new Intake(new IntakeIO() {
+        });
     }
     // ================================================
     // Register the Named Commands
@@ -214,28 +228,22 @@ public class RobotContainer {
 
   public Command aimAndPreShoot() {
     return Commands.sequence(
-            Commands.run(() -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)))
+        Commands.run(() -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)))
         .alongWith(
             Commands.startEnd(
-                    () -> SmartController.getInstance().enableSmartControl(),
-                    () -> SmartController.getInstance().disableSmartControl())
+                () -> SmartController.getInstance().enableSmartControl(),
+                () -> SmartController.getInstance().disableSmartControl())
                 .alongWith(
-                    new MultiDistanceArm(
-                            drive::getPose,
-                            FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                            arm)
+                    new SmartArm(arm)
                         .alongWith(
-                            new MultiDistanceShooter(
-                                drive::getPose,
-                                FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-                                shooter))))
+                            new SmartShooter(shooter))))
         .until(() -> hasShot);
   }
 
   public Command blurpShoot() {
     return Commands.sequence(
-            Commands.startEnd(
-                () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
+        Commands.startEnd(
+            () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
         .until(() -> hasShot);
   }
 
@@ -268,15 +276,17 @@ public class RobotContainer {
 
   public Command resetHeading() {
     return Commands.runOnce(
-            () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-            drive)
+        () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+        drive)
         .ignoringDisable(true);
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
