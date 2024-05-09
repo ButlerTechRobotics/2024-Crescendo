@@ -53,33 +53,35 @@ public class Drive extends SubsystemBase {
   private Pose2d previousPose;
   private long previousTime;
 
-  private static ProfiledPIDController thetaController = new ProfiledPIDController(
-      headingControllerConstants.Kp(),
-      0,
-      headingControllerConstants.Kd(),
-      new TrapezoidProfile.Constraints(
-          drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));
+  private static ProfiledPIDController thetaController =
+      new ProfiledPIDController(
+          headingControllerConstants.Kp(),
+          0,
+          headingControllerConstants.Kd(),
+          new TrapezoidProfile.Constraints(
+              drivetrainConfig.maxAngularVelocity(), drivetrainConfig.maxAngularAcceleration()));
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
-          new SwerveModulePosition(),
-          new SwerveModulePosition(),
-          new SwerveModulePosition(),
-          new SwerveModulePosition()
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-      kinematics,
-      rawGyroRotation,
-      lastModulePositions,
-      new Pose2d(),
-      stateStdDevs,
-      new Matrix<>(
-          VecBuilder.fill(xyStdDevCoefficient, xyStdDevCoefficient, thetaStdDevCoefficient)));
+  private SwerveDrivePoseEstimator poseEstimator =
+      new SwerveDrivePoseEstimator(
+          kinematics,
+          rawGyroRotation,
+          lastModulePositions,
+          new Pose2d(),
+          stateStdDevs,
+          new Matrix<>(
+              VecBuilder.fill(xyStdDevCoefficient, xyStdDevCoefficient, thetaStdDevCoefficient)));
 
-  private SwerveDrivePoseEstimator odometryDrive = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
-      lastModulePositions, new Pose2d());
+  private SwerveDrivePoseEstimator odometryDrive =
+      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public Drive(
       GyroIO gyroIO,
@@ -107,30 +109,33 @@ public class Drive extends SubsystemBase {
             drivetrainConfig.maxLinearVelocity(),
             drivetrainConfig.driveBaseRadius(),
             new ReplanningConfig()),
-        () -> DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red,
+        () ->
+            DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get() == Alliance.Red,
         this);
     PathPlannerLogging.setLogActivePathCallback(
-        activePath -> Logger.recordOutput(
-            "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()])));
+        activePath ->
+            Logger.recordOutput(
+                "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()])));
     PathPlannerLogging.setLogTargetPoseCallback(
         targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
 
     // Configure SysId
-    sysId = new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,
-            null,
-            null,
-            state -> Logger.recordOutput("Drive/SysIdState", state.toString())),
-        new SysIdRoutine.Mechanism(
-            voltage -> {
-              for (int i = 0; i < 4; i++) {
-                modules[i].runCharacterization(voltage.in(Volts));
-              }
-            },
-            null,
-            this));
+    sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null,
+                null,
+                null,
+                state -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism(
+                voltage -> {
+                  for (int i = 0; i < 4; i++) {
+                    modules[i].runCharacterization(voltage.in(Volts));
+                  }
+                },
+                null,
+                this));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     thetaController.setTolerance(Units.degreesToRadians(1.5));
 
@@ -168,10 +173,11 @@ public class Drive extends SubsystemBase {
     SwerveModulePosition[] modulePositions = getModulePositions();
     SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
     for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
-      moduleDeltas[moduleIndex] = new SwerveModulePosition(
-          modulePositions[moduleIndex].distanceMeters
-              - lastModulePositions[moduleIndex].distanceMeters,
-          modulePositions[moduleIndex].angle);
+      moduleDeltas[moduleIndex] =
+          new SwerveModulePosition(
+              modulePositions[moduleIndex].distanceMeters
+                  - lastModulePositions[moduleIndex].distanceMeters,
+              modulePositions[moduleIndex].angle);
       lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
     }
 
@@ -220,10 +226,8 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Stops the drive and turns the modules to an X arrangement to resist movement.
-   * The modules will
-   * return to their normal orientations the next time a nonzero velocity is
-   * requested.
+   * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
+   * return to their normal orientations the next time a nonzero velocity is requested.
    */
   public void stopWithX() {
     Rotation2d[] headings = new Rotation2d[4];
@@ -244,10 +248,7 @@ public class Drive extends SubsystemBase {
     return sysId.dynamic(direction);
   }
 
-  /**
-   * Returns the module states (turn angles and drive velocities) for all of the
-   * modules.
-   */
+  /** Returns the module states (turn angles and drive velocities) for all of the modules. */
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -257,10 +258,7 @@ public class Drive extends SubsystemBase {
     return states;
   }
 
-  /**
-   * Returns the module positions (turn angles and drive positions) for all of the
-   * modules.
-   */
+  /** Returns the module positions (turn angles and drive positions) for all of the modules. */
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
@@ -309,7 +307,7 @@ public class Drive extends SubsystemBase {
    * Adds a vision measurement to the pose estimator.
    *
    * @param visionPose The pose of the robot as measured by the vision camera.
-   * @param timestamp  The timestamp of the vision measurement in seconds.
+   * @param timestamp The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(
       Pose2d visionPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
@@ -323,8 +321,9 @@ public class Drive extends SubsystemBase {
    */
   public void addVisionData(List<TimestampedVisionUpdate> visionData) {
     visionData.forEach(
-        visionUpdate -> addVisionMeasurement(
-            visionUpdate.pose(), visionUpdate.timestamp(), visionUpdate.stdDevs()));
+        visionUpdate ->
+            addVisionMeasurement(
+                visionUpdate.pose(), visionUpdate.timestamp(), visionUpdate.stdDevs()));
   }
 
   public static ProfiledPIDController getThetaController() {
