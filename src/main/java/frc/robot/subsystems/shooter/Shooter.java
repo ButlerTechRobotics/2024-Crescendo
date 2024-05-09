@@ -38,8 +38,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void stop() {
-    topSetpointRpm = null;
-    bottomSetpointRPM = null;
+    topSetpointRpm = 0.0;
+    bottomSetpointRPM = 0.0;
     io.stop();
   }
 

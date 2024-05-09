@@ -31,7 +31,7 @@ public class SmartController {
 
   private DriveModeType driveModeType = DriveModeType.SAFE;
   private AimingParameters targetAimingParameters =
-      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, 0, 2, 0);
+      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, 0, 0);
 
   // Whether or not the robot is in smart control mode. Smart control mode is a
   // mode where the robot
@@ -47,53 +47,72 @@ public class SmartController {
   private final InterpolatingDoubleTreeMap shooterSpeedMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap armAngleMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap flightTimeMap = new InterpolatingDoubleTreeMap();
-  private final InterpolatingDoubleTreeMap wristErrorMap = new InterpolatingDoubleTreeMap();
 
   // Interpolation maps for feeding shots (passing from mid field to amp area)
   private final InterpolatingDoubleTreeMap feederSpeedMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap feederAngleMap = new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap feederFlightTimeMap = new InterpolatingDoubleTreeMap();
-  private final InterpolatingDoubleTreeMap feederWristErrorMap = new InterpolatingDoubleTreeMap();
 
   private SmartController() {
 
-    // Units: RPS
-    shooterSpeedMap.put(1.24036, 3000.0);
-    shooterSpeedMap.put(1.509, 3000.0);
-    shooterSpeedMap.put(2.006, 3000.0);
-    shooterSpeedMap.put(2.5018, 3500.0);
-    shooterSpeedMap.put(3.002, 3750.0);
-    shooterSpeedMap.put(3.5116, 4000.0);
-    shooterSpeedMap.put(4.002, 4000.0);
+    // Units: RPM
+    shooterSpeedMap.put(1.0, 3000.0);
+    shooterSpeedMap.put(1.5, 3000.0);
+    shooterSpeedMap.put(2.0, 3200.0);
+    shooterSpeedMap.put(2.5, 3500.0);
+    shooterSpeedMap.put(3.0, 3800.0);
+    shooterSpeedMap.put(3.5, 4250.0); // 4000 4/4/2024 3:56PM
+    shooterSpeedMap.put(3.75, 4250.0); // 4000 4/4/2024 3:56PM
+    shooterSpeedMap.put(4.0, 4400.0); // 4200 4/4/2024 3:56PM
+    shooterSpeedMap.put(4.2, 4400.0); // 4250 4/4/2024 3:56PM
+    shooterSpeedMap.put(4.5, 4400.0); // 4300 4/4/2024 3:56PM
+    shooterSpeedMap.put(5.0, 4400.0);
+    shooterSpeedMap.put(5.5, 4500.0);
+    shooterSpeedMap.put(6.0, 4750.0);
+    shooterSpeedMap.put(6.5, 5000.0);
+    shooterSpeedMap.put(7.0, 5500.0);
+    shooterSpeedMap.put(8.0, 6500.0);
 
     // // Units: Degress
-    armAngleMap.put(1.24036, 0.0);
-    armAngleMap.put(1.509, 2.0);
-    armAngleMap.put(2.006, 15.0);
-    armAngleMap.put(2.5018, 20.0);
-    armAngleMap.put(3.002, 25.0);
-    armAngleMap.put(3.5116, 30.0);
-    armAngleMap.put(4.002, 35.0);
+    armAngleMap.put(1.0, 0.0);
+    armAngleMap.put(1.5, 7.88 + 1.25);
+    armAngleMap.put(2.0, 12.02 + 1.25);
+    armAngleMap.put(2.25, 15.0 + 1.25);
+    armAngleMap.put(2.5, 19.7 + 1.25); // /20.0
+    armAngleMap.put(3.0, 23.1 + 1.25);
+    armAngleMap.put(3.5, 26.60 + 1.25); // 26.9
+    armAngleMap.put(3.75, 27.18 + 1.25); // 27.5
+    armAngleMap.put(4.0, 27.8 + 1.25); // 28.02
+    armAngleMap.put(4.5, 30.20 + 1.25); // 30.75
+    armAngleMap.put(5.0, 31.10 + 1.25); // 31.5
+    armAngleMap.put(5.5, 32.75 + 1.25);
+    armAngleMap.put(6.0, 33.50 + 1.25);
+    armAngleMap.put(6.5, 35.0 + 1.25);
+    armAngleMap.put(7.0, 35.5 + 1.25);
+    armAngleMap.put(8.0, 36.75 + 1.25);
+    armAngleMap.put(9.0, 38.75 + 1.25);
+    armAngleMap.put(9.5, 39.75 + 1.25);
 
-    flightTimeMap.put(1.2, 0.2);
-    flightTimeMap.put(4.002, 0.8);
-
-    wristErrorMap.put(1.2, 2.0);
-    wristErrorMap.put(4.002, 0.25);
+    flightTimeMap.put(5.0, 0.35);
+    flightTimeMap.put(4.0, 0.31);
+    flightTimeMap.put(3.0, 0.31);
+    flightTimeMap.put(2.0, 0.25);
+    flightTimeMap.put(1.0, 0.15);
 
     // Feed Maps
-    feederSpeedMap.put(9.071, 30.0);
-    feederSpeedMap.put(5.4, 15.0);
+    feederSpeedMap.put(9.071, 3500.0);
+    feederSpeedMap.put(7.0, 3000.0);
+    feederSpeedMap.put(5.4, 2000.0);
 
-    feederAngleMap.put(9.071, Units.degreesToRadians(50.5 + 23));
-    feederAngleMap.put(5.4, Units.degreesToRadians(50.5 + 23));
+    feederAngleMap.put(10.0, 5.0);
+    feederAngleMap.put(9.0, 3.0);
+    feederAngleMap.put(8.0, 0.0);
 
     feederFlightTimeMap.put(30.0, 3.0); // Way further than we should ever be shooting
-    feederFlightTimeMap.put(9.071, 1.9);
-    feederFlightTimeMap.put(5.4, 0.9);
+    feederFlightTimeMap.put(9.59, 1.0); // 1.9
+    feederFlightTimeMap.put(7.2, 0.9); // 1.68
+    feederFlightTimeMap.put(5.4, 0.8); // 1.36
     feederFlightTimeMap.put(0.0, 0.0); // Way less than we should ever be shooting
-
-    feederWristErrorMap.put(9.071, 2.0);
   }
 
   /**
@@ -194,8 +213,7 @@ public class SmartController {
   /**
    * Calculates the shooter parameters for a given field relative pose, velocity, and acceleration.
    *
-   * <p>This handles calculating target robot angle, radial velocity, shooter speed, shooter angle,
-   * and wrist error.
+   * <p>This handles calculating target robot angle, radial velocity, shooter speed, shooter angle.
    *
    * <p>It also is done in a way that if the robot is moving, it will adjust the location of the
    * target to account for the robot's movement so the shot will still hit.
@@ -275,7 +293,6 @@ public class SmartController {
             radialVelocity,
             shooterSpeedMap.get(effectiveDistanceToSpeaker),
             armAngleMap.get(effectiveDistanceToSpeaker),
-            wristErrorMap.get(effectiveDistanceToSpeaker),
             effectiveDistanceToSpeaker));
   }
 
@@ -285,7 +302,7 @@ public class SmartController {
    * <p>This will always be static and will not adjust for the robot's movement.
    */
   public void calculateAmp() {
-    setTargetAimingParameters(new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 20, 0, 1, 0));
+    setTargetAimingParameters(new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 20, 0, 0));
   }
 
   /**
@@ -302,7 +319,10 @@ public class SmartController {
     Translation2d toTestGoal = movingGoalLocation.minus(fieldRelativePose.getTranslation());
     double effectiveDistanceToFeedLocation = toTestGoal.getNorm();
     Rotation2d setpointAngle =
-        movingGoalLocation.minus(fieldRelativePose.getTranslation()).getAngle();
+        movingGoalLocation
+            .minus(fieldRelativePose.getTranslation())
+            .getAngle()
+            .plus(Rotation2d.fromDegrees(180));
     double angleDifference = setpointAngle.minus(fieldRelativePose.getRotation()).getRadians();
     double radialVelocity = 0.0;
     Logger.recordOutput(
@@ -318,7 +338,6 @@ public class SmartController {
             radialVelocity,
             feederSpeedMap.get(effectiveDistanceToFeedLocation),
             feederAngleMap.get(effectiveDistanceToFeedLocation),
-            feederWristErrorMap.get(effectiveDistanceToFeedLocation),
             effectiveDistanceToFeedLocation));
   }
 
@@ -368,7 +387,6 @@ public class SmartController {
       double radialVelocity,
       double shooterSpeed,
       double armAngle,
-      double wristError,
       double effectiveDistanceToTarget) {}
 
   /** Possible Drive Modes. */

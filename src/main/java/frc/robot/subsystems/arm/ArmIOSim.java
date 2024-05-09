@@ -10,29 +10,25 @@ package frc.robot.subsystems.arm;
 import static frc.robot.subsystems.arm.ArmConstants.*;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class ArmIOSim implements ArmIO {
-  // Hardware
+  // Simulation
   private SingleJointedArmSim armSim;
 
   // Controllers
   private PIDController armController;
 
-  // Open loop
-  private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(0.0, 0.0, 0.0);
-
   public ArmIOSim() {
-    // Init Hardware
+    // Init Simulation
     armSim =
         new SingleJointedArmSim(
             DCMotor.getNeoVortex(1),
             125,
-            SingleJointedArmSim.estimateMOI(Units.inchesToMeters(15), Units.lbsToKilograms(12)),
-            Units.inchesToMeters(30),
+            Units.lbsToKilograms(15),
+            Units.inchesToMeters(15),
             0,
             90,
             false,
@@ -40,8 +36,11 @@ public class ArmIOSim implements ArmIO {
 
     // Get controllers
     armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
-    setPID(gains.kP(), gains.kI(), gains.kD());
-    setFF(gains.kS(), gains.kV(), gains.kA());
+    armController.setP(gains.kP());
+    armController.setI(gains.kI());
+    armController.setD(gains.kD());
+    armSim.setState(0.0, 0.0);
+    runPosition(0);
   }
 
   @Override
@@ -49,7 +48,6 @@ public class ArmIOSim implements ArmIO {
     inputs.armCurrentAngleDeg = Units.radiansToDegrees(armSim.getAngleRads());
     inputs.armVelocityRpm =
         Units.radiansPerSecondToRotationsPerMinute(armSim.getVelocityRadPerSec());
-    inputs.armOutputCurrent = armSim.getCurrentDrawAmps();
   }
 
   public void runVolts(double armVolts) {
@@ -57,7 +55,18 @@ public class ArmIOSim implements ArmIO {
   }
 
   public void runPosition(double targetAngle) {
-    armController.calculate(armSim.getAngleRads(), Units.degreesToRadians(targetAngle));
+    // double output = armController.calculate(getPosition(), targetAngle);
+    // double downSpeedFactor = 0.1; // Adjust this value to control the down speed
+    // double upSpeedFactor = 0.1; // Adjust this value to control the up speed
+    // double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
+    // armSim.setInput(output, speedFactor);
+    var pidOutput =
+        armController.calculate(armSim.getAngleRads(), Units.degreesToRadians(targetAngle));
+    armSim.setInput(pidOutput);
+  }
+
+  public double getPosition() {
+    return Units.radiansToDegrees(armSim.getAngleRads());
   }
 
   @Override
@@ -68,17 +77,12 @@ public class ArmIOSim implements ArmIO {
   }
 
   @Override
-  public void setFF(double kS, double kV, double kA) {
-    ff = new SimpleMotorFeedforward(kS, kV, kA);
-  }
-
-  @Override
   public void runCharacterizationArmVolts(double volts) {
     armSim.setInputVoltage(volts);
   }
 
   @Override
   public void stop() {
-    armSim.setInputVoltage(0.0);
+    armSim.setInputVoltage(0);
   }
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.SmartController;
+import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.Goal;
@@ -46,10 +47,6 @@ public class SmartShoot extends Command {
   @Override
   public void initialize() {
     SmartController.getInstance().enableSmartControl();
-    arm.setArmTargetAngle(SmartController.getInstance().getTargetAimingParameters().armAngle());
-    shooter.setSetpoint(
-        SmartController.getInstance().getTargetAimingParameters().shooterSpeed(),
-        SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
     if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
     shooterTimer.restart();
   }
@@ -80,8 +77,7 @@ public class SmartShoot extends Command {
   public void end(boolean interrupted) {
     SmartController.getInstance().disableSmartControl();
     rollers.setGoal(Goal.IDLE);
-    arm.stop();
-    shooter.stop();
+    SmartController.getInstance().setDriveMode(DriveModeType.SAFE);
   }
 
   // Returns true when the command should end.
@@ -97,8 +93,8 @@ public class SmartShoot extends Command {
 
   public boolean isArmInTargetPose() {
     Logger.recordOutput("SmartShoot/IsArmAtSetpoint", arm.atSetpoint());
-    Logger.recordOutput("SmartShoot/WristAngle", arm.getArmCurrentAngle());
-    Logger.recordOutput("SmartShoot/TargetWristAngle", arm.getArmTargetAngle());
+    Logger.recordOutput("SmartShoot/ArmAngle", arm.getArmCurrentAngle());
+    Logger.recordOutput("SmartShoot/TargetArmAngle", arm.getArmTargetAngle());
     return arm.atSetpoint();
   }
 

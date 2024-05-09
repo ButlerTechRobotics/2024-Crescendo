@@ -26,8 +26,10 @@ import frc.robot.commands.DriveToPoint;
 import frc.robot.commands.MultiDistanceShooter;
 import frc.robot.commands.PathFinderAndFollow;
 import frc.robot.commands.SmartShoot;
+import frc.robot.commands.SmartShooter;
 import frc.robot.commands.arm.MultiDistanceArm;
 import frc.robot.commands.arm.PositionArmPID;
+import frc.robot.commands.arm.SmartArm;
 import frc.robot.commands.climber.ManualClimb;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIONeo;
@@ -42,6 +44,7 @@ import frc.robot.subsystems.drive.ModuleIONeo;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.Rollers.Goal;
 import frc.robot.subsystems.rollers.feeder.Feeder;
 import frc.robot.subsystems.rollers.feeder.FeederIO;
 import frc.robot.subsystems.rollers.feeder.FeederIOSim;
@@ -73,6 +76,7 @@ public class RobotContainer {
   private Drive drive;
   private Shooter shooter;
   private AprilTagVision aprilTagVision;
+  private Arm arm;
   private Intake intake;
   private Feeder feeder1;
   private Feeder feeder2;
@@ -85,7 +89,6 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
-  private Arm arm;
   private final ClimberLeft climberLeft = new ClimberLeft();
   private final ClimberRight climberRight = new ClimberRight();
 
@@ -165,20 +168,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake", intakeNote());
     NamedCommands.registerCommand("Eject", ejectNote());
     NamedCommands.registerCommand("blurpShoot", blurpShoot());
-
-    // // ================================================
-    // // Register the Auto Aim Command
-    // // ================================================
-    // NamedCommands.registerCommand(
-    // "Auto Aim",
-    // new MultiDistanceArm(
-    // drive::getPose,
-    // FieldConstants.Speaker.centerSpeakerOpening.getTranslation(),
-    // armPID)
-    // .andThen(
-    // new InstantCommand(
-    // () -> armPID.setPosition(3.0), armPID))); // Reset the arm
-    // position
 
     // ================================================
     // Register the Auto Command AimAndPreShoot
@@ -302,30 +291,8 @@ public class RobotContainer {
             () -> -driverController.getLeftX(),
             () -> -driverController.getRightX()));
 
-    driverController
-        .rightBumper()
-        .whileTrue(new SmartShoot(arm, shooter, rollers, drive::getPose, 1));
-
-    arm.setDefaultCommand(Commands.runOnce(() -> arm.setArmTargetAngle(2), arm));
-
-    driverController
-        .leftStick()
-        .whileTrue(Commands.runOnce(SmartController.getInstance()::enableSmartControl));
-
-    driverController
-        .rightStick()
-        .whileTrue(Commands.runOnce(SmartController.getInstance()::disableSmartControl));
-
-    // ================================================
-    // DRIVER CONTROLLER - START
-    // SET AUTO START POSE (i think it sets the heading)
-    // ================================================
-    // driverController
-    // .start()
-    // .whileTrue(
-    // Commands.run(
-    // () -> drive.setAutoStartPose(
-    // new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+    arm.setDefaultCommand(new SmartArm(arm));
+    shooter.setDefaultCommand(new SmartShooter(shooter));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -354,29 +321,29 @@ public class RobotContainer {
                 }));
 
     // ================================================
+    // DRIVER CONTROLLER - RIGHT BUMPER
+    // SET DRIVE MODE TO SPEAKER
+    // ================================================
+    operatorController
+        .leftTrigger()
+        .onTrue(
+            Commands.runOnce(
+                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)));
+
+    // ================================================
+    // DRIVER CONTROLLER - DPAD DOWN
+    // MOVE CLIMBER DOWN
+    // ================================================
+    driverController
+        .rightTrigger()
+        .whileTrue(new ManualClimb(climberLeft, climberRight, -140))
+        .whileFalse(new ManualClimb(climberLeft, climberRight, 0));
+
+    // ================================================
     // DRIVER CONTROLLER - A
     // PATHFIND TO AMP
     // ================================================
     driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povLeft().whileTrue(new PathFinderAndFollow("toPos1"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO SPEAKER
-    // ================================================
-    driverController.povRight().whileTrue(new PathFinderAndFollow("toPos3"));
-
-    driverController
-        .x()
-        .whileTrue(
-            new DriveToPoint(
-                    drive, new Pose2d(new Translation2d(4.17, 3.0), Rotation2d.fromDegrees(240)))
-                .andThen(new ManualClimb(climberLeft, climberRight, -140)));
 
     // ================================================
     // DRIVER CONTROLLER - B
@@ -388,14 +355,8 @@ public class RobotContainer {
             new DriveToPoint(
                 drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
 
-    // ================================================
-    // DRIVER CONTROLLER - DPAD DOWN
-    // MOVE CLIMBER DOWN
-    // ================================================
-    driverController
-        .rightTrigger()
-        .whileTrue(new ManualClimb(climberLeft, climberRight, -140))
-        .whileFalse(new ManualClimb(climberLeft, climberRight, 0));
+    // ========================================================================================================
+    // ========================================================================================================
 
     // ================================================
     // OPERATOR CONTROLLER - LB
@@ -418,23 +379,16 @@ public class RobotContainer {
     // ================================================
     operatorController
         .rightBumper()
-        .whileTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTERRED), rollers)))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        .whileTrue(Commands.runOnce(() -> rollers.setGoal(Goal.SHOOT), rollers))
+        .onFalse(Commands.runOnce(() -> rollers.setGoal(Goal.IDLE), rollers));
 
     // ================================================
-    // OPERATOR CONTROLLER - LEFT TRIGGER
-    // AIM AT SPEAKER AND PRE-SHOOT
+    // OPERATOR CONTROLLER - RIGHT TRIGGER
+    // SHOOT
     // ================================================
-    driverController
-        .button(7)
-        .whileTrue(aimAndPreShoot())
-        .onFalse(Commands.runOnce(() -> hasShot = false));
+    operatorController
+        .rightTrigger()
+        .whileTrue(new SmartShoot(arm, shooter, rollers, drive::getPose, 1));
 
     // ================================================
     // OPERATOR CONTROLLER - A
@@ -448,45 +402,26 @@ public class RobotContainer {
                     Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())))
         .onFalse(Commands.runOnce(() -> SmartController.getInstance().disableSmartControl()));
 
-    operatorController
-        .rightTrigger()
-        .whileTrue(shoot())
-        .onFalse(
-            Commands.runOnce(
-                    () -> {
-                      rollers.setGoal(Rollers.Goal.IDLE);
-                    })
-                .alongWith(candle.setColorRespawnIdle()));
-
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD UP
-    // ARM POSITION MAX POSITION
-    // ================================================
-    operatorController.povUp().onTrue(new PositionArmPID(arm, 96.0 + 2.8));
-
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION STAGE SHOOT
-    // ================================================
-    operatorController.povRight().onTrue(autoBlurp());
-
-    // ================================================
-    // OPERATOR CONTROLLER - DPAD RIGHT
-    // ARM POSITION BLURP SHOOT
-    // ================================================
-    operatorController.povRight().whileTrue(new PositionArmPID(arm, 55));
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT
     // ARM POSITION AMP
     // ================================================
-    operatorController.povLeft().onTrue(new PositionArmPID(arm, 80));
+    operatorController
+        .povLeft()
+        .whileTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.AMP))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())))
+        .onFalse(Commands.runOnce(() -> SmartController.getInstance().disableSmartControl()));
 
-    // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(arm, 2.0)); // 3
+    operatorController
+        .povDown()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
   }
 
   /**
