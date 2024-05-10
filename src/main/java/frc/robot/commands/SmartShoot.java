@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -55,7 +54,8 @@ public class SmartShoot extends Command {
   @Override
   public void initialize() {
     SmartController.getInstance().enableSmartControl();
-    if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
+    if (Constants.getMode() == Constants.Mode.SIM)
+      timer.restart();
     shooterTimer.restart();
   }
 
@@ -70,9 +70,9 @@ public class SmartShoot extends Command {
     double realForceShoot = forceShootTimeout;
 
     if ((isSmartControlEnabled
-            && isArmInTargetPose
-            && isDriveAngleInTarget
-            && isFlywheelAtTargetSpeed)
+        && isArmInTargetPose
+        && isDriveAngleInTarget
+        && isFlywheelAtTargetSpeed)
         || shooterTimer.hasElapsed(realForceShoot)) {
       magazine.shoot();
       isShooting = true;
@@ -93,10 +93,7 @@ public class SmartShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (DriverStation.isAutonomous()) {
-      return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.1;
-    }
-    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.5;
+    return shooterTimer.hasElapsed(1.5);
   }
 
   public boolean isArmInTargetPose() {
@@ -120,8 +117,7 @@ public class SmartShoot extends Command {
   public boolean isDriveAngleInTarget() {
     Rotation2d targetAngle = SmartController.getInstance().getTargetAimingParameters().robotAngle();
     Rotation2d robotAngle = this.pose.get().getRotation();
-    boolean isDriveAngleInTarget =
-        Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
+    boolean isDriveAngleInTarget = Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
     Logger.recordOutput("SmartShoot/IsDriveAngleInTarget", isDriveAngleInTarget);
     Logger.recordOutput("SmartShoot/DriveAngle", robotAngle.getDegrees());
     Logger.recordOutput("SmartShoot/TargetDriveAngle", targetAngle.getDegrees());

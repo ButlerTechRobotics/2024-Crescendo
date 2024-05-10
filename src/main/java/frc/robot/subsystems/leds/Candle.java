@@ -15,6 +15,7 @@ import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Candle extends SubsystemBase {
@@ -61,7 +62,10 @@ public class Candle extends SubsystemBase {
   }
 
   public Command setColorGreenCommand() {
-    return runOnce(() -> setColor(Color.GREEN));
+    return Commands.sequence(
+        runOnce(() -> setColor(Color.GREEN)),
+        Commands.waitSeconds(1),
+        runOnce(() -> setColor(Color.BLUE)));
   }
 
   public Command setColorRespawnIdle() {

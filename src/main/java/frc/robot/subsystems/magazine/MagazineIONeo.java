@@ -14,11 +14,14 @@ public class MagazineIONeo implements MagazineIO {
   Neo backMotor;
 
   public MagazineIONeo() {
-    frontMotor = new Neo(21);
-    backMotor = new Neo(24);
+    frontMotor = new Neo(24);
+    backMotor = new Neo(21);
 
     frontMotor.setSmartCurrentLimit(30);
     backMotor.setSmartCurrentLimit(30);
+
+    frontMotor.setInverted(true);
+    backMotor.setInverted(false);
   }
 
   @Override

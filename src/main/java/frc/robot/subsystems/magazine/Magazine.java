@@ -32,7 +32,7 @@ public class Magazine extends SubsystemBase {
   }
 
   public void intake() {
-    setVoltage(6, 6);
+    setVoltage(8, 8);
   }
 
   public void shoot() {
@@ -40,7 +40,7 @@ public class Magazine extends SubsystemBase {
   }
 
   public void outtake() {
-    setVoltage(-6, -6);
+    setVoltage(-8, -8);
   }
 
   public void slowForward() {
