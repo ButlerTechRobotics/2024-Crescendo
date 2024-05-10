@@ -125,7 +125,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote4Fast"
+                        "pathName": "toNote4"
                       }
                     },
                     {
@@ -208,7 +208,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "toNote5Fast"
+                        "pathName": "toNote5"
                       }
                     },
                     {
