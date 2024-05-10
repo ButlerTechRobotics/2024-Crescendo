@@ -89,7 +89,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShootFar"
+                  "pathName": "toSourcesideShoot"
                 }
               },
               {
@@ -99,7 +99,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.5
+                        "waitTime": 1.75
                       }
                     },
                     {
@@ -185,7 +185,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShootFar"
+                  "pathName": "toSourcesideShoot"
                 }
               },
               {
@@ -195,7 +195,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.5
+                        "waitTime": 1.75
                       }
                     },
                     {
