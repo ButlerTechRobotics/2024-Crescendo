@@ -61,10 +61,10 @@ public class Rollers extends SubsystemBase {
         feeder2.setGoal(Feeder.Goal.FLOOR_INTAKING);
         intake.setGoal(Intake.Goal.FLOOR_INTAKING);
         // } else {
-        //   // The arm is not at its home position, so set the goals to IDLE
-        //   feeder1.setGoal(Feeder.Goal.IDLE);
-        //   feeder2.setGoal(Feeder.Goal.IDLE);
-        //   intake.setGoal(Intake.Goal.IDLE);
+        // // The arm is not at its home position, so set the goals to IDLE
+        // feeder1.setGoal(Feeder.Goal.IDLE);
+        // feeder2.setGoal(Feeder.Goal.IDLE);
+        // intake.setGoal(Intake.Goal.IDLE);
         // }
       }
 

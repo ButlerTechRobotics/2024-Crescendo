@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.SmartController;
-import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.Goal;
@@ -29,6 +28,7 @@ public class SmartShoot extends Command {
   Supplier<Pose2d> pose;
   Timer timer;
   Timer shooterTimer;
+  boolean isShooting;
   double forceShootTimeout;
 
   /** Creates a new Shoot. */
@@ -40,6 +40,7 @@ public class SmartShoot extends Command {
     this.pose = pose;
     timer = new Timer();
     shooterTimer = new Timer();
+    isShooting = false;
     this.forceShootTimeout = forceShootTimeout;
   }
 
@@ -58,7 +59,6 @@ public class SmartShoot extends Command {
     boolean isWristInTargetPose = isArmInTargetPose();
     boolean isDriveAngleInTarget = isDriveAngleInTarget();
     boolean isShooterAtTargetSpeed = isShooterAtTargetSpeed();
-    boolean isShooting = false;
     double realForceShoot = forceShootTimeout;
 
     if ((isSmartControlEnabled
@@ -77,19 +77,14 @@ public class SmartShoot extends Command {
   public void end(boolean interrupted) {
     SmartController.getInstance().disableSmartControl();
     rollers.setGoal(Goal.IDLE);
-    SmartController.getInstance().setDriveMode(DriveModeType.SAFE);
+    isShooting = false;
   }
 
   // Returns true when the command should end.
-  // @Override
-  // public boolean isFinished() {
-  // if (DriverStation.isAutonomous()) {
-  // return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() >
-  // 0.1;
-  // }
-  // return lineBreak.hasNoGamePiece() && lineBreak.timeSinceLastGamePiece() >
-  // 0.5;
-  // }
+  @Override
+  public boolean isFinished() {
+    return isShooting;
+  }
 
   public boolean isArmInTargetPose() {
     Logger.recordOutput("SmartShoot/IsArmAtSetpoint", arm.atSetpoint());
