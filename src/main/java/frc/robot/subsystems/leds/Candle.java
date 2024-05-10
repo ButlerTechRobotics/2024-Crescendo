@@ -116,8 +116,6 @@ public class Candle extends SubsystemBase {
     return runOnce(() -> candle.animate(shoot()));
   }
 
-  // TODO: Add following options: Blinking, quick-flash, fade/breathe mode, more colors???
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

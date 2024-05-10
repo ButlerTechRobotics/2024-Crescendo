@@ -17,12 +17,18 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.SmartController.DriveModeType;
 import frc.robot.commands.*;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIONeo;
 import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.beambreak.BeamBreak;
+import frc.robot.subsystems.beambreak.BeamBreakIO;
+import frc.robot.subsystems.beambreak.BeamBreakIODigitalInput;
+import frc.robot.subsystems.beambreak.BeamBreakIOSim;
 import frc.robot.subsystems.climber.ClimberLeft;
 import frc.robot.subsystems.climber.ClimberRight;
 import frc.robot.subsystems.drive.Drive;
@@ -31,18 +37,15 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIONeo;
 import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIONeo;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.leds.Candle;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.Rollers.Goal;
-import frc.robot.subsystems.rollers.feeder.Feeder;
-import frc.robot.subsystems.rollers.feeder.FeederIO;
-import frc.robot.subsystems.rollers.feeder.FeederIOSim;
-import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexBack;
-import frc.robot.subsystems.rollers.feeder.FeederIOSparkFlexFront;
-import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.subsystems.rollers.intake.IntakeIO;
-import frc.robot.subsystems.rollers.intake.IntakeIOSim;
-import frc.robot.subsystems.rollers.intake.IntakeIOSparkFlex;
+import frc.robot.subsystems.magazine.Magazine;
+import frc.robot.subsystems.magazine.MagazineIO;
+import frc.robot.subsystems.magazine.MagazineIONeo;
+import frc.robot.subsystems.magazine.MagazineIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
@@ -66,9 +69,8 @@ public class RobotContainer {
   private AprilTagVision aprilTagVision;
   private Arm arm;
   private Intake intake;
-  private Feeder feeder1;
-  private Feeder feeder2;
-  private Rollers rollers;
+  private BeamBreak beamBreak;
+  private Magazine magazine;
   private Candle candle = new Candle();
 
   private boolean hasShot = false;
@@ -98,10 +100,9 @@ public class RobotContainer {
 
         shooter = new Shooter(new ShooterIOSparkFlex());
         arm = new Arm(new ArmIONeo());
-        feeder1 = new Feeder(new FeederIOSparkFlexFront());
-        feeder2 = new Feeder(new FeederIOSparkFlexBack());
-        intake = new Intake(new IntakeIOSparkFlex());
-        rollers = new Rollers(feeder1, feeder2, intake);
+        magazine = new Magazine(new MagazineIONeo());
+        beamBreak = new BeamBreak(new BeamBreakIODigitalInput());
+        intake = new Intake(new IntakeIONeo());
 
         aprilTagVision =
             new AprilTagVision(
@@ -122,10 +123,9 @@ public class RobotContainer {
 
         shooter = new Shooter(new ShooterIOSim());
         arm = new Arm(new ArmIOSim());
-        feeder1 = new Feeder(new FeederIOSim());
-        feeder2 = new Feeder(new FeederIOSim());
+        magazine = new Magazine(new MagazineIOSim());
+        beamBreak = new BeamBreak(new BeamBreakIOSim());
         intake = new Intake(new IntakeIOSim());
-        rollers = new Rollers(feeder1, feeder2, intake);
 
         aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
 
@@ -142,19 +142,21 @@ public class RobotContainer {
                 new ModuleIO() {});
         shooter = new Shooter(new ShooterIO() {});
 
-        feeder1 = new Feeder(new FeederIO() {});
+        arm = new Arm(new ArmIO() {});
 
-        feeder2 = new Feeder(new FeederIO() {});
+        magazine = new Magazine(new MagazineIO() {});
 
-        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
+        beamBreak = new BeamBreak(new BeamBreakIO() {});
 
         intake = new Intake(new IntakeIO() {});
+
+        aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
     }
     // ================================================
     // Register the Named Commands
     // ================================================
-    NamedCommands.registerCommand("Intake", intakeNote());
-    NamedCommands.registerCommand("Eject", ejectNote());
+    NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
+
     NamedCommands.registerCommand("blurpShoot", blurpShoot());
 
     // ================================================
@@ -180,43 +182,17 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public Command intakeNote() {
-    return Commands.sequence(
-        candle.runPrettyLightsCommand(),
-        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.FLOOR_INTAKE), rollers),
-        Commands.waitUntil(() -> !rollers.getBeamBreak()),
-        Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECTALIGN)),
-        candle.setColorGreenCommand(),
-        Commands.waitUntil(() -> rollers.getBeamBreak()),
-        Commands.runOnce(
-            () -> {
-              rollers.setGoal(Rollers.Goal.IDLE);
-            }),
-        Commands.waitSeconds(0.1),
-        candle.setColorRespawnIdle());
-  }
-
-  public Command ejectNote() {
-    return Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.EJECT_TO_FLOOR), rollers);
-  }
-
   public Command aimAndPreShoot() {
-    return Commands.runOnce(() -> new SmartShoot(arm, shooter, rollers, drive::getPose, 1));
+    return Commands.runOnce(
+        () -> new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
   }
 
   public Command blurpShoot() {
     return Commands.sequence(
-            Commands.startEnd(
-                () -> shooter.setSetpoint(3000, 3000), () -> shooter.setSetpoint(0, 0)))
-        .until(() -> hasShot);
-  }
-
-  public Command autoBlurp() {
-    return Commands.sequence(
-        // Start by spinning up the shooter and setting the arm to 40
-        Commands.parallel(
-            Commands.runOnce(() -> shooter.setSetpoint(4000, 4000)),
-            Commands.runOnce(() -> new PositionArmPID(arm, 40))));
+        Commands.runOnce(() -> shooter.setSetpoint(3000, 3000)),
+        Commands.waitSeconds(0.5),
+        Commands.runOnce(() -> magazine.shoot()),
+        Commands.runOnce(() -> shooter.setSetpoint(0, 0)));
   }
 
   public void resetHasShot() {
@@ -227,14 +203,14 @@ public class RobotContainer {
     return Commands.sequence(
         Commands.runOnce(
             () -> {
-              rollers.setGoal(Rollers.Goal.SHOOT);
+              magazine.shoot();
               candle.runShootCommand();
             }),
         Commands.waitSeconds(0.4),
         Commands.runOnce(
             () -> {
               hasShot = true; // set hasShot to true
-              rollers.setGoal(Rollers.Goal.IDLE);
+              // rollers.setGoal(Rollers.Goal.IDLE);
               shooter.stop();
               candle.setColorRespawnIdle();
             }),
@@ -262,6 +238,9 @@ public class RobotContainer {
 
     arm.setDefaultCommand(new SmartArm(arm));
     shooter.setDefaultCommand(new SmartShooter(shooter));
+    intake.setDefaultCommand(
+        new SmartIntake(intake, beamBreak, magazine, candle).ignoringDisable(true));
+    magazine.setDefaultCommand(new SmartMagazine(magazine, intake, beamBreak, candle));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT BUMPER
@@ -269,12 +248,7 @@ public class RobotContainer {
     // ================================================
     driverController
         .leftBumper()
-        .whileTrue(intakeNote())
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        .whileTrue(Commands.startEnd(intake::enableIntakeRequest, intake::disableIntakeRequest));
 
     // ================================================
     // DRIVER CONTROLLER - LEFT TRIGGER
@@ -282,12 +256,13 @@ public class RobotContainer {
     // ================================================
     driverController
         .leftTrigger()
-        .whileTrue(ejectNote())
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        .whileTrue(Commands.startEnd(intake::enableOuttakeRequest, intake::disableOuttakeRequest));
+
+    // .onFalse(
+    // Commands.runOnce(
+    // () -> {
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // }));
 
     // ================================================
     // DRIVER CONTROLLER - RIGHT BUMPER
@@ -297,7 +272,9 @@ public class RobotContainer {
         .leftTrigger()
         .onTrue(
             Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)));
+                    () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 
     // ================================================
     // DRIVER CONTROLLER - DPAD DOWN
@@ -333,14 +310,12 @@ public class RobotContainer {
     // ================================================
     operatorController
         .leftBumper()
-        .whileTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> rollers.setGoal(Rollers.Goal.AMP_SHOOTER), rollers)))
-        .onFalse(
-            Commands.runOnce(
-                () -> {
-                  rollers.setGoal(Rollers.Goal.IDLE);
-                }));
+        .whileTrue(Commands.sequence(Commands.run(magazine::outtake, magazine)));
+    // .onFalse(
+    // Commands.runOnce(
+    // () -> {
+    // rollers.setGoal(Rollers.Goal.IDLE);
+    // }));
 
     // ================================================
     // OPERATOR CONTROLLER - RB
@@ -348,8 +323,8 @@ public class RobotContainer {
     // ================================================
     operatorController
         .rightBumper()
-        .whileTrue(Commands.runOnce(() -> rollers.setGoal(Goal.SHOOT), rollers))
-        .onFalse(Commands.runOnce(() -> rollers.setGoal(Goal.IDLE), rollers));
+        .whileTrue(Commands.runOnce(() -> magazine.shoot(), magazine))
+        .onFalse(Commands.runOnce(() -> magazine.stop(), magazine));
 
     // ================================================
     // OPERATOR CONTROLLER - RIGHT TRIGGER
@@ -357,7 +332,7 @@ public class RobotContainer {
     // ================================================
     operatorController
         .rightTrigger()
-        .whileTrue(new SmartShoot(arm, shooter, rollers, drive::getPose, 1));
+        .whileTrue(new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
 
     // ================================================
     // OPERATOR CONTROLLER - A
@@ -368,8 +343,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.FEED))
                 .alongWith(
-                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())))
-        .onFalse(Commands.runOnce(() -> SmartController.getInstance().disableSmartControl()));
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 
     // ================================================
     // OPERATOR CONTROLLER - DPAD LEFT

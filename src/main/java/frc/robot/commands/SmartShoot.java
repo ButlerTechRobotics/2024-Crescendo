@@ -10,13 +10,14 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.SmartController;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.Rollers.Goal;
+import frc.robot.subsystems.beambreak.BeamBreak;
+import frc.robot.subsystems.magazine.Magazine;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
@@ -24,24 +25,30 @@ import org.littletonrobotics.junction.Logger;
 public class SmartShoot extends Command {
   Arm arm;
   Shooter shooter;
-  Rollers rollers;
+  Magazine magazine;
+  BeamBreak beamBreak;
   Supplier<Pose2d> pose;
   Timer timer;
   Timer shooterTimer;
-  boolean isShooting;
   double forceShootTimeout;
 
   /** Creates a new Shoot. */
   public SmartShoot(
-      Arm arm, Shooter shooter, Rollers rollers, Supplier<Pose2d> pose, double forceShootTimeout) {
+      Arm arm,
+      Shooter shooter,
+      Magazine magazine,
+      BeamBreak beamBreak,
+      Supplier<Pose2d> pose,
+      double forceShootTimeout) {
     this.arm = arm;
     this.shooter = shooter;
-    this.rollers = rollers;
+    this.magazine = magazine;
     this.pose = pose;
+    this.beamBreak = beamBreak;
     timer = new Timer();
     shooterTimer = new Timer();
-    isShooting = false;
     this.forceShootTimeout = forceShootTimeout;
+    addRequirements(magazine);
   }
 
   // Called when the command is initially scheduled.
@@ -56,18 +63,22 @@ public class SmartShoot extends Command {
   @Override
   public void execute() {
     boolean isSmartControlEnabled = SmartController.getInstance().isSmartControlEnabled();
-    boolean isWristInTargetPose = isArmInTargetPose();
+    boolean isArmInTargetPose = isArmInTargetPose();
     boolean isDriveAngleInTarget = isDriveAngleInTarget();
-    boolean isShooterAtTargetSpeed = isShooterAtTargetSpeed();
+    boolean isFlywheelAtTargetSpeed = isShooterAtTargetSpeed();
+    boolean isShooting = false;
     double realForceShoot = forceShootTimeout;
 
     if ((isSmartControlEnabled
-            && isWristInTargetPose
+            && isArmInTargetPose
             && isDriveAngleInTarget
-            && isShooterAtTargetSpeed)
+            && isFlywheelAtTargetSpeed)
         || shooterTimer.hasElapsed(realForceShoot)) {
-      rollers.setGoal(Goal.SHOOT);
+      magazine.shoot();
       isShooting = true;
+      if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.75)) {
+        beamBreak.shootGamePiece();
+      }
     }
     Logger.recordOutput("SmartShoot/IsShooting", isShooting);
   }
@@ -76,14 +87,16 @@ public class SmartShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartController.getInstance().disableSmartControl();
-    rollers.setGoal(Goal.IDLE);
-    isShooting = false;
+    magazine.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isShooting;
+    if (DriverStation.isAutonomous()) {
+      return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.1;
+    }
+    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.5;
   }
 
   public boolean isArmInTargetPose() {

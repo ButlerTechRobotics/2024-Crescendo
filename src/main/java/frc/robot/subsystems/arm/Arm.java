@@ -9,6 +9,8 @@ package frc.robot.subsystems.arm;
 
 import static frc.robot.subsystems.arm.ArmConstants.*;
 
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -28,21 +30,16 @@ public class Arm extends SubsystemBase {
   private final ArmIO io;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
 
+  ArmVisualizer visualizerMeasured;
+  ArmVisualizer visualizerSetpoint;
+
   private Double armSetpointDeg = null;
-
-  public void setArmTargetAngle(double angle) {
-    armSetpointDeg = angle;
-    io.runPosition(angle);
-  }
-
-  public void stop() {
-    armSetpointDeg = 0.0;
-    io.stop();
-  }
 
   public Arm(ArmIO io) {
     System.out.println("[Init] Creating Arm");
     this.io = io;
+    visualizerMeasured = new ArmVisualizer("ArmMeasured", null);
+    visualizerSetpoint = new ArmVisualizer("ArmSetpoint", new Color8Bit(Color.kOrange));
   }
 
   @Override
@@ -57,6 +54,7 @@ public class Arm extends SubsystemBase {
 
     Logger.recordOutput("Arm/SetAngle", armSetpointDeg != null ? armSetpointDeg : 0.0);
     Logger.recordOutput("Arm/CurrentAngle", inputs.armCurrentAngleDeg);
+    visualizerMeasured.update(inputs.armCurrentAngleDeg);
   }
 
   public void runArmCharacterizationVolts(double volts) {
@@ -69,6 +67,17 @@ public class Arm extends SubsystemBase {
 
   public double getArmTargetAngle() {
     return armSetpointDeg;
+  }
+
+  public void setArmTargetAngle(double angle) {
+    armSetpointDeg = angle;
+    io.runPosition(angle);
+    visualizerSetpoint.update(this.armSetpointDeg);
+  }
+
+  public void stop() {
+    armSetpointDeg = 0.0;
+    io.stop();
   }
 
   @AutoLogOutput(key = "Arm/AtSetpoint")
