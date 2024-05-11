@@ -18,11 +18,11 @@ import org.littletonrobotics.junction.Logger;
 public class ArmPositionPID extends SubsystemBase {
   private Neo motor = new Neo(20);
   private PIDController pidController;
-  private double targetAngle = 2; // 3
+  private double targetAngle = 2.5; // 3
   private final ArmVisualizer measuredVisualizer;
   private final ArmVisualizer setpointVisualizer;
 
-  public double armHomePosition = 2;
+  public double armHomePosition = 2.5;
 
   TunableNumber kP = new TunableNumber("Arm P Gain", 0.055); // 0.057
   TunableNumber kI = new TunableNumber("Arm I Gain", 0.0001); // 0.00023

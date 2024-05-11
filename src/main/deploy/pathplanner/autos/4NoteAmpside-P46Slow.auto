@@ -38,6 +38,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "bypassNote3"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -46,15 +52,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 1.25
+                        "pathName": "toNote4Slow"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake"
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -65,15 +71,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote8"
+                        "waitTime": 0.5
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "Intake"
                       }
                     }
                   ]
@@ -89,7 +95,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShootFar"
+                  "pathName": "toAmpSideShot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -99,26 +111,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.75
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimAndPreShoot"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.65
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -142,15 +135,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "path",
                       "data": {
-                        "waitTime": 0.5
+                        "pathName": "toNote6AmpSideSlow"
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Intake"
+                        "waitTime": 1.0
                       }
                     }
                   ]
@@ -161,15 +154,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "path",
+                      "type": "wait",
                       "data": {
-                        "pathName": "toNote7"
+                        "waitTime": 0.75
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.0
+                        "name": "Intake"
                       }
                     }
                   ]
@@ -185,7 +178,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "toSourcesideShootFar"
+                  "pathName": "AutoAimAmpside"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimAndPreShoot"
                 }
               },
               {
@@ -195,26 +194,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.75
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AimAndPreShoot"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.65
+                        "waitTime": 1.5
                       }
                     },
                     {

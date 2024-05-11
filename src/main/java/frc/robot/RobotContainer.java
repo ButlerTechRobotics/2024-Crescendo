@@ -532,14 +532,14 @@ public class RobotContainer {
     // OPERATOR CONTROLLER - DPAD DOWN
     // ARM POSITION LOWEST POSITION
     // ================================================
-    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2)); // 3
+    operatorController.povDown().onTrue(new PositionArmPID(armPID, 2.5)); // 3
 
     // .whileFalse(new PositionArmPID(armPID, 0));
     // ================================================
     // OPERATOR GUITAR - RED
     // ARM POSITION LOWEST POSITION
     // ================================================
-    guitarController.button(2).onTrue(new PositionArmPID(armPID, 3)); // 3
+    guitarController.button(2).onTrue(new PositionArmPID(armPID, 2.5)); // 3
   }
 
   /**
