@@ -46,22 +46,22 @@ public class MultiDistanceArm extends Command {
     // Populate the distance map with distance-angle pairs
     distanceMap.put(1.0, 0.0);
     distanceMap.put(1.5, 7.88);
-    distanceMap.put(2.0, 12.02);
-    distanceMap.put(2.25, 15.0);
-    distanceMap.put(2.5, 19.7); // /20.0
-    distanceMap.put(3.0, 23.1);
-    distanceMap.put(3.5, 26.60); // 26.9
-    distanceMap.put(3.75, 27.18); // 27.5
-    distanceMap.put(4.0, 27.8); // 28.02
-    distanceMap.put(4.5, 30.20); // 30.75
-    distanceMap.put(5.0, 31.10); // 31.5
-    distanceMap.put(5.5, 32.75);
-    distanceMap.put(6.0, 33.50);
-    distanceMap.put(6.5, 35.0);
-    distanceMap.put(7.0, 35.5);
-    distanceMap.put(8.0, 36.75);
-    distanceMap.put(9.0, 38.75);
-    distanceMap.put(9.5, 39.75);
+    distanceMap.put(2.0, 12.02 - 1.5);
+    distanceMap.put(2.25, 15.0 - 1.5);
+    distanceMap.put(2.5, 19.7 - 1.5); // /20.0
+    distanceMap.put(3.0, 23.1 - 1.5);
+    distanceMap.put(3.5, 26.60 - 1.5); // 26.9
+    distanceMap.put(3.75, 27.18 - 1.5); // 27.5
+    distanceMap.put(4.0, 27.8 - 1.5); // 28.02
+    distanceMap.put(4.5, 30.20 - 1.5); // 30.75
+    distanceMap.put(5.0, 31.10 - 1.5); // 31.5
+    distanceMap.put(5.5, 32.75 - 1.5);
+    distanceMap.put(6.0, 33.50 - 1.5);
+    distanceMap.put(6.5, 35.0 - 1.5);
+    distanceMap.put(7.0, 35.5 - 1.5);
+    distanceMap.put(8.0, 36.75 - 1.5);
+    distanceMap.put(9.0, 38.75 - 1.5);
+    distanceMap.put(9.5, 39.75 - 1.5);
   }
 
   @Override
