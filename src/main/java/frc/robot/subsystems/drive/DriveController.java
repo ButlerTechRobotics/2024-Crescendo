@@ -21,7 +21,7 @@ public class DriveController {
 
   private Rotation2d headingSupplier = Rotation2d.fromDegrees(90);
   private Boolean headingControl = false;
-  private DriveModeType driveModeType = DriveModeType.AMP;
+  private DriveModeType driveModeType = DriveModeType.SPEAKER;
 
   public static DriveController getInstance() {
     if (instance == null) {
