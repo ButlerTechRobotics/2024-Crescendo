@@ -25,20 +25,17 @@ public class ArmIOSim implements ArmIO {
     // Init Simulation
     armSim =
         new SingleJointedArmSim(
-            DCMotor.getNeoVortex(1),
+            DCMotor.getVex775Pro(2),
             125,
             Units.lbsToKilograms(15),
             Units.inchesToMeters(15),
             0,
             90,
-            false,
+            true,
             0);
 
     // Get controllers
     armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
-    armController.setP(gains.kP());
-    armController.setI(gains.kI());
-    armController.setD(gains.kD());
     armSim.setState(0.0, 0.0);
     runPosition(0);
   }
@@ -55,14 +52,9 @@ public class ArmIOSim implements ArmIO {
   }
 
   public void runPosition(double targetAngle) {
-    // double output = armController.calculate(getPosition(), targetAngle);
-    // double downSpeedFactor = 0.1; // Adjust this value to control the down speed
-    // double upSpeedFactor = 0.1; // Adjust this value to control the up speed
-    // double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
-    // armSim.setInput(output, speedFactor);
     var pidOutput =
         armController.calculate(armSim.getAngleRads(), Units.degreesToRadians(targetAngle));
-    armSim.setInput(pidOutput);
+    armSim.setInputVoltage(pidOutput);
   }
 
   public double getPosition() {

@@ -54,8 +54,7 @@ public class SmartShoot extends Command {
   @Override
   public void initialize() {
     SmartController.getInstance().enableSmartControl();
-    if (Constants.getMode() == Constants.Mode.SIM)
-      timer.restart();
+    if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
     shooterTimer.restart();
   }
 
@@ -70,9 +69,9 @@ public class SmartShoot extends Command {
     double realForceShoot = forceShootTimeout;
 
     if ((isSmartControlEnabled
-        && isArmInTargetPose
-        && isDriveAngleInTarget
-        && isFlywheelAtTargetSpeed)
+            && isArmInTargetPose
+            && isDriveAngleInTarget
+            && isFlywheelAtTargetSpeed)
         || shooterTimer.hasElapsed(realForceShoot)) {
       magazine.shoot();
       isShooting = true;
@@ -117,7 +116,8 @@ public class SmartShoot extends Command {
   public boolean isDriveAngleInTarget() {
     Rotation2d targetAngle = SmartController.getInstance().getTargetAimingParameters().robotAngle();
     Rotation2d robotAngle = this.pose.get().getRotation();
-    boolean isDriveAngleInTarget = Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
+    boolean isDriveAngleInTarget =
+        Math.abs(robotAngle.minus(targetAngle).getRadians()) < Units.degreesToRadians(1.5);
     Logger.recordOutput("SmartShoot/IsDriveAngleInTarget", isDriveAngleInTarget);
     Logger.recordOutput("SmartShoot/DriveAngle", robotAngle.getDegrees());
     Logger.recordOutput("SmartShoot/TargetDriveAngle", targetAngle.getDegrees());
