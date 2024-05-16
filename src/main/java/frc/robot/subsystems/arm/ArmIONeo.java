@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import frc.robot.VendorWrappers.Neo;
 
@@ -26,7 +25,7 @@ public class ArmIONeo implements ArmIO {
 
   // Controllers
   private PIDController armController;
-  private SimpleMotorFeedforward armFeedforward;
+  private ArmFeedforward armFeedforward;
 
   public ArmIONeo() {
     // Init Hardware
@@ -54,7 +53,7 @@ public class ArmIONeo implements ArmIO {
     armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
     armController.setPID(gains.kP(), gains.kI(), gains.kD());
 
-    armFeedforward = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+    armFeedforward = new ArmFeedforward(gains.kS(), gains.kG(), gains.kV());
 
     // Disable brake mode
     armMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
@@ -77,7 +76,7 @@ public class ArmIONeo implements ArmIO {
 
   public void runPosition(double targetAngle) {
     double output = armController.calculate(getPosition(), targetAngle);
-    double feedforward = armFeedforward.calculate(0);
+    double feedforward = armFeedforward.calculate(targetAngle, 0);
     double downSpeedFactor = 0.08; // Adjust this value to control the down speed
     double upSpeedFactor = 0.1; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;

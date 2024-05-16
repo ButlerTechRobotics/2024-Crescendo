@@ -25,5 +25,5 @@ public class ArmConstants {
           // case COMPBOT -> null;
       };
 
-  public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
+  public record Gains(double kP, double kI, double kD, double kS, double kG, double kV) {}
 }
