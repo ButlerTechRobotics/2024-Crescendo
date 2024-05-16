@@ -53,6 +53,7 @@ public class Magazine extends SubsystemBase {
 
   public void stop() {
     magazineIO.stop();
+    setVoltage(0, 0);
   }
 
   public void enableIntakeRequest() {
