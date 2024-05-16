@@ -75,7 +75,7 @@ public class ArmIONeo implements ArmIO {
 
   public void runPosition(double targetAngle) {
     double output = armController.calculate(getPosition(), targetAngle);
-    double feedforward = armFeedforward.calculate(targetAngle, 0);
+    double feedforward = armFeedforward.calculate(getPosition(), 0);
     double downSpeedFactor = 0.08; // Adjust this value to control the down speed
     double upSpeedFactor = 0.1; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
