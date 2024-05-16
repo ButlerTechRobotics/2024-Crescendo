@@ -17,7 +17,7 @@ public class CameraConstants {
       new Transform3d(
           new Translation3d(
               Units.inchesToMeters(-10.625), Units.inchesToMeters(11.5), Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-28.), Math.toRadians(150.)));
+          new Rotation3d(0, Math.toRadians(-18.), Math.toRadians(210.)));
 
   public static final Transform3d ROBOT_TO_CAMERA_BR =
       new Transform3d(
@@ -25,7 +25,7 @@ public class CameraConstants {
               Units.inchesToMeters(-10.625),
               Units.inchesToMeters(-11.5),
               Units.inchesToMeters(9.5)),
-          new Rotation3d(0, Math.toRadians(-27.), Math.toRadians(-150.)));
+          new Rotation3d(0, Math.toRadians(-18.), Math.toRadians(-210.)));
 
   public static final Transform3d ROBOT_TO_CAMERA_BACK =
       new Transform3d(

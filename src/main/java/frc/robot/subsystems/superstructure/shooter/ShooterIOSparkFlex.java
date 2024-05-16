@@ -85,7 +85,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
     bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
     topMotor.setInverted(true);
-    bottomMotor.follow(topMotor, false);
+    bottomMotor.follow(topMotor, true);
 
     topMotor.burnFlash();
     bottomMotor.burnFlash();
