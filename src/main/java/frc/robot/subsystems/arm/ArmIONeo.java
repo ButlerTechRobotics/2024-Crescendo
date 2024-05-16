@@ -12,7 +12,10 @@ import static frc.robot.subsystems.arm.ArmConstants.*;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import frc.robot.VendorWrappers.Neo;
 
@@ -23,6 +26,7 @@ public class ArmIONeo implements ArmIO {
 
   // Controllers
   private PIDController armController;
+  private SimpleMotorFeedforward armFeedforward;
 
   public ArmIONeo() {
     // Init Hardware
@@ -48,9 +52,9 @@ public class ArmIONeo implements ArmIO {
 
     // Get controllers
     armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
-    armController.setP(gains.kP());
-    armController.setI(gains.kI());
-    armController.setD(gains.kD());
+    armController.setPID(gains.kP(), gains.kI(), gains.kD());
+
+    armFeedforward = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
     // Disable brake mode
     armMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
@@ -73,10 +77,11 @@ public class ArmIONeo implements ArmIO {
 
   public void runPosition(double targetAngle) {
     double output = armController.calculate(getPosition(), targetAngle);
+    double feedforward = armFeedforward.calculate(0);
     double downSpeedFactor = 0.08; // Adjust this value to control the down speed
     double upSpeedFactor = 0.1; // Adjust this value to control the up speed
     double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
-    armMotor.set(output * speedFactor);
+    armMotor.set((output + feedforward) * speedFactor);
   }
 
   public double getPosition() {
