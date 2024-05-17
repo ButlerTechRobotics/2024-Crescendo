@@ -31,7 +31,7 @@ public class SmartController {
 
   private DriveModeType driveModeType = DriveModeType.SAFE;
   private AimingParameters targetAimingParameters =
-      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, -48.11, 0);
+      new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 40.5, 129, 0);
 
   // Whether or not the robot is in smart control mode. Smart control mode is a
   // mode where the robot
@@ -74,24 +74,24 @@ public class SmartController {
     shooterSpeedMap.put(8.0, 6500.0);
 
     // // Units: Degress
-    armAngleMap.put(1.0, 0.0 - 48.11);
-    armAngleMap.put(1.5, 7.88 + 1.25 - 48.11);
-    armAngleMap.put(2.0, 12.02 + 1.25 - 48.11);
-    armAngleMap.put(2.25, 15.0 + 1.25 - 48.11);
-    armAngleMap.put(2.5, 19.7 + 1.25 - 48.11); // /20.0
-    armAngleMap.put(3.0, 23.1 + 1.25 - 48.11);
-    armAngleMap.put(3.5, 26.60 + 1.25 - 48.11); // 26.9
-    armAngleMap.put(3.75, 27.18 + 1.25 - 48.11); // 27.5
-    armAngleMap.put(4.0, 27.8 + 1.25 - 48.11); // 28.02
-    armAngleMap.put(4.5, 30.20 + 1.25 - 48.11); // 30.75
-    armAngleMap.put(5.0, 31.10 + 1.25 - 48.11); // 31.5
-    armAngleMap.put(5.5, 32.75 + 1.25 - 48.11);
-    armAngleMap.put(6.0, 33.50 + 1.25 - 48.11);
-    armAngleMap.put(6.5, 35.0 + 1.25 - 48.11);
-    armAngleMap.put(7.0, 35.5 + 1.25 - 48.11);
-    armAngleMap.put(8.0, 36.75 + 1.25 - 48.11);
-    armAngleMap.put(9.0, 38.75 + 1.25 - 48.11);
-    armAngleMap.put(9.5, 39.75 + 1.25 - 48.11);
+    armAngleMap.put(1.0, 0.0 + 128);
+    armAngleMap.put(1.5, 7.88 + 1.25 + 128);
+    armAngleMap.put(2.0, 12.02 + 1.25 + 128);
+    armAngleMap.put(2.25, 15.0 + 1.25 + 128);
+    armAngleMap.put(2.5, 19.7 + 1.25 + 128); // /20.0
+    armAngleMap.put(3.0, 23.1 + 1.25 + 128);
+    armAngleMap.put(3.5, 26.60 + 1.25 + 128); // 26.9
+    armAngleMap.put(3.75, 27.18 + 1.25 + 128); // 27.5
+    armAngleMap.put(4.0, 27.8 + 1.25 + 128); // 28.02
+    armAngleMap.put(4.5, 30.20 + 1.25 + 128); // 30.75
+    armAngleMap.put(5.0, 31.10 + 1.25 + 128); // 31.5
+    armAngleMap.put(5.5, 32.75 + 1.25 + 128);
+    armAngleMap.put(6.0, 33.50 + 1.25 + 128);
+    armAngleMap.put(6.5, 35.0 + 1.25 + 128);
+    armAngleMap.put(7.0, 35.5 + 1.25 + 128);
+    armAngleMap.put(8.0, 36.75 + 1.25 + 128);
+    armAngleMap.put(9.0, 38.75 + 1.25 + 128);
+    armAngleMap.put(9.5, 39.75 + 1.25 + 128);
 
     flightTimeMap.put(5.0, 0.35);
     flightTimeMap.put(4.0, 0.31);
@@ -104,9 +104,9 @@ public class SmartController {
     feederSpeedMap.put(7.0, 3000.0);
     feederSpeedMap.put(5.4, 2000.0);
 
-    feederAngleMap.put(10.0, 5.0 - 48.11);
-    feederAngleMap.put(9.0, 3.0 - 48.11);
-    feederAngleMap.put(8.0, 0.0 - 48.11);
+    feederAngleMap.put(10.0, 5.0 + 128);
+    feederAngleMap.put(9.0, 3.0 + 128);
+    feederAngleMap.put(8.0, 0.0 + 128);
 
     feederFlightTimeMap.put(30.0, 3.0); // Way further than we should ever be shooting
     feederFlightTimeMap.put(9.59, 1.0); // 1.9

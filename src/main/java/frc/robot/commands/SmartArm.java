@@ -39,7 +39,7 @@ public class SmartArm extends Command {
 
     // If the drive mode is SAFE, stop the arm and return.
     if (driveModeType == DriveModeType.SAFE) {
-      arm.setArmTargetAngle(1);
+      arm.setArmTargetAngle(129);
       return;
     }
 
@@ -47,7 +47,7 @@ public class SmartArm extends Command {
     // position of the arm to 80.
     if (isSmartControlled) {
       if (driveModeType == DriveModeType.AMP) {
-        arm.setArmTargetAngle(10);
+        arm.setArmTargetAngle(190);
         return;
       }
       if (driveModeType == DriveModeType.SPEAKER || driveModeType == DriveModeType.FEED) {

@@ -11,9 +11,9 @@ import static frc.robot.subsystems.arm.ArmConstants.*;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.util.Units;
 import frc.robot.VendorWrappers.Neo;
 
@@ -23,8 +23,7 @@ public class ArmIONeo implements ArmIO {
   private AbsoluteEncoder armEncoder;
 
   // Controllers
-  private PIDController armController;
-  private ArmFeedforward armFeedforward;
+  private SparkPIDController armController;
 
   public ArmIONeo() {
     // Init Hardware
@@ -49,10 +48,12 @@ public class ArmIONeo implements ArmIO {
     armMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 154);
 
     // Get controllers
-    armController = new PIDController(gains.kP(), gains.kI(), gains.kD());
-    armController.setPID(gains.kP(), gains.kI(), gains.kD());
-
-    armFeedforward = new ArmFeedforward(gains.kS(), gains.kG(), gains.kV());
+    armController.setP(gains.kP());
+    armController.setI(gains.kI());
+    armController.setD(gains.kD());
+    armController.setIZone(gains.kIz());
+    armController.setFF(gains.kFF());
+    armController.setOutputRange(gains.kMinOutput(), gains.kMaxOutput());
 
     // Disable brake mode
     armMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
@@ -74,12 +75,7 @@ public class ArmIONeo implements ArmIO {
   }
 
   public void runPosition(double targetAngle) {
-    double output = armController.calculate(getPosition(), targetAngle);
-    double feedforward = armFeedforward.calculate(getPosition(), 0);
-    double downSpeedFactor = 0.08; // Adjust this value to control the down speed
-    double upSpeedFactor = 0.1; // Adjust this value to control the up speed
-    double speedFactor = (output > 0) ? upSpeedFactor : downSpeedFactor;
-    armMotor.set((output + feedforward) * speedFactor);
+    armController.setReference(targetAngle, ControlType.kPosition);
   }
 
   public double getPosition() {
