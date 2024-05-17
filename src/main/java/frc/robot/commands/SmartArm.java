@@ -47,7 +47,7 @@ public class SmartArm extends Command {
     // position of the arm to 80.
     if (isSmartControlled) {
       if (driveModeType == DriveModeType.AMP) {
-        arm.setArmTargetAngle(80);
+        arm.setArmTargetAngle(10);
         return;
       }
       if (driveModeType == DriveModeType.SPEAKER || driveModeType == DriveModeType.FEED) {

@@ -20,7 +20,7 @@ public class ArmConstants {
       switch (Constants.getRobot()) {
         case SIMBOT -> new Gains(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
           // case COMPBOT -> new Gains(0.00009, 0.0000002, 0.05, 8.75, 0.0027, 0.0);
-        case COMPBOT -> new Gains(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        case COMPBOT -> new Gains(0.1, 0.0, 0.0, 0.0, 0.57, 0.0); // kG as .57
 
           // case COMPBOT -> null;
       };
