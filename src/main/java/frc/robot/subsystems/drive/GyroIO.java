@@ -16,7 +16,13 @@ public interface GyroIO {
     public boolean connected = false;
     public Rotation2d yawPosition = new Rotation2d();
     public double yawVelocityRadPerSec = 0.0;
+    public double xVelocity = 0.0;
+    public double yVelocity = 0.0;
   }
 
-  public default void updateInputs(GyroIOInputs inputs) {}
+  public default void updateInputs(GyroIOInputs inputs) {
+  }
+
+  // Add this method
+  public GyroIOInputs getInputs();
 }

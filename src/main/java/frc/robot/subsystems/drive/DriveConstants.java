@@ -53,14 +53,20 @@ public final class DriveConstants {
         case SIMBOT -> 50.0;
         case COMPBOT -> 100.0;
       };
-  public static final Matrix<N3, N1> stateStdDevs =
+  public static Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
         default -> new Matrix<>(VecBuilder.fill(0.003, 0.003, 0.0002));
       };
+
+  public static void updateStateStdDevs(double n1, double n2, double n3) {
+    stateStdDevs = new Matrix<>(VecBuilder.fill(n1, n2, n3));
+  }
+
   public static final double xyStdDevCoefficient =
       switch (Constants.getRobot()) {
         default -> 0.01;
       };
+
   public static final double thetaStdDevCoefficient =
       switch (Constants.getRobot()) {
         default -> 0.01;
