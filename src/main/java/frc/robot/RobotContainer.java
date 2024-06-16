@@ -156,17 +156,10 @@ public class RobotContainer {
     // ================================================
     NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
 
-    NamedCommands.registerCommand("blurpShoot", blurpShoot());
-
     // ================================================
     // Register the Auto Command AimAndPreShoot
     // ================================================
     NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
-
-    // ================================================
-    // Register the Auto Command BlurpShoot
-    // ================================================
-    NamedCommands.registerCommand("BlurpShoot", blurpShoot());
 
     // ================================================
     // Register the Auto Command Shoot
@@ -186,9 +179,9 @@ public class RobotContainer {
         () -> new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
   }
 
-  public Command blurpShoot() {
+  public Command manualBlurp() {
     return Commands.sequence(
-        Commands.runOnce(() -> shooter.setSetpoint(3000, 3000)),
+        Commands.runOnce(() -> shooter.manualBlurp()),
         Commands.waitSeconds(0.5),
         Commands.runOnce(() -> magazine.shoot()),
         Commands.runOnce(() -> shooter.setSetpoint(0, 0)));

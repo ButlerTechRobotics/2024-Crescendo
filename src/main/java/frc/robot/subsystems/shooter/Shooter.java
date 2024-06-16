@@ -22,8 +22,8 @@ public class Shooter extends SubsystemBase {
   private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
   private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
 
-  private static final LoggedTunableNumber shooterTolerance =
-      new LoggedTunableNumber("Flywheels/ToleranceRPM", shooterToleranceRPM);
+  private static final LoggedTunableNumber shooterTolerance = new LoggedTunableNumber("Flywheels/ToleranceRPM",
+      shooterToleranceRPM);
 
   private final ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
@@ -35,6 +35,12 @@ public class Shooter extends SubsystemBase {
     topSetpointRpm = top + 100;
     bottomSetpointRPM = bottom;
     io.runVelocity(top, bottom);
+  }
+
+  public void manualBlurp() {
+    topSetpointRpm = 3000.0;
+    bottomSetpointRPM = 3000.0;
+    io.runVelocity(topSetpointRpm, bottomSetpointRPM);
   }
 
   public void stop() {
