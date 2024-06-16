@@ -14,45 +14,21 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.SmartController.DriveModeType;
 import frc.robot.commands.*;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIONeo;
-import frc.robot.subsystems.arm.ArmIOSim;
-import frc.robot.subsystems.beambreak.BeamBreak;
-import frc.robot.subsystems.beambreak.BeamBreakIO;
-import frc.robot.subsystems.beambreak.BeamBreakIODigitalInput;
-import frc.robot.subsystems.beambreak.BeamBreakIOSim;
-import frc.robot.subsystems.climber.ClimberLeft;
-import frc.robot.subsystems.climber.ClimberRight;
-import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIOPigeon2;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIONeo;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIO;
-import frc.robot.subsystems.intake.IntakeIONeo;
-import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.arm.*;
+import frc.robot.subsystems.beambreak.*;
+import frc.robot.subsystems.climber.*;
+import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.Candle;
-import frc.robot.subsystems.magazine.Magazine;
-import frc.robot.subsystems.magazine.MagazineIO;
-import frc.robot.subsystems.magazine.MagazineIONeo;
-import frc.robot.subsystems.magazine.MagazineIOSim;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOSim;
-import frc.robot.subsystems.shooter.ShooterIOSparkFlex;
-import frc.robot.subsystems.vision.AprilTagVision;
-import frc.robot.subsystems.vision.AprilTagVisionIO;
-import frc.robot.subsystems.vision.AprilTagVisionIOPhotonVision;
+import frc.robot.subsystems.magazine.*;
+import frc.robot.subsystems.shooter.*;
+import frc.robot.subsystems.vision.*;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -77,7 +53,6 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final ClimberLeft climberLeft = new ClimberLeft();
   private final ClimberRight climberRight = new ClimberRight();
@@ -157,17 +132,10 @@ public class RobotContainer {
     // ================================================
     NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
 
-    NamedCommands.registerCommand("blurpShoot", blurpShoot());
-
     // ================================================
     // Register the Auto Command AimAndPreShoot
     // ================================================
     NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
-
-    // ================================================
-    // Register the Auto Command BlurpShoot
-    // ================================================
-    NamedCommands.registerCommand("BlurpShoot", blurpShoot());
 
     // ================================================
     // Register the Auto Command Shoot
@@ -187,9 +155,9 @@ public class RobotContainer {
         () -> new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
   }
 
-  public Command blurpShoot() {
+  public Command manualBlurp() {
     return Commands.sequence(
-        Commands.runOnce(() -> shooter.setSetpoint(3000, 3000)),
+        Commands.runOnce(() -> shooter.manualBlurp()),
         Commands.waitSeconds(0.5),
         Commands.runOnce(() -> magazine.shoot()),
         Commands.runOnce(() -> shooter.setSetpoint(0, 0)));
@@ -265,11 +233,22 @@ public class RobotContainer {
     // }));
 
     // ================================================
-    // DRIVER CONTROLLER - RIGHT BUMPER
+    // DRIVER CONTROLLER - A
+    // SET DRIVE MODE TO AMP
+    // ================================================
+    driverController
+        .a()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.AMP))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
+
+    // ================================================
+    // DRIVER CONTROLLER - B
     // SET DRIVE MODE TO SPEAKER
     // ================================================
-    operatorController
-        .leftTrigger()
+    driverController
+        .b()
         .onTrue(
             Commands.runOnce(
                     () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER))
@@ -277,94 +256,56 @@ public class RobotContainer {
                     Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 
     // ================================================
-    // DRIVER CONTROLLER - DPAD DOWN
-    // MOVE CLIMBER DOWN
+    // DRIVER CONTROLLER - X
+    // SET DRIVE MODE TO SAFE
     // ================================================
     driverController
-        .rightTrigger()
-        .whileTrue(new ManualClimb(climberLeft, climberRight, -140))
-        .whileFalse(new ManualClimb(climberLeft, climberRight, 0));
+        .x()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
 
     // ================================================
-    // DRIVER CONTROLLER - A
-    // PATHFIND TO AMP
-    // ================================================
-    driverController.a().whileTrue(new PathFinderAndFollow("Amp Placement Path"));
-
-    // ================================================
-    // DRIVER CONTROLLER - B
-    // PATHFIND TO STAGE SHOOT
+    // DRIVER CONTROLLER - Y
+    // SET DRIVE MODE TO FEED
     // ================================================
     driverController
-        .b()
-        .whileTrue(
-            new DriveToPoint(
-                drive, new Pose2d(new Translation2d(3.9, 5.0), Rotation2d.fromDegrees(345))));
-
-    // ========================================================================================================
-    // ========================================================================================================
-
-    // ================================================
-    // OPERATOR CONTROLLER - LB
-    // SCORE AMP
-    // ================================================
-    operatorController
-        .leftBumper()
-        .whileTrue(Commands.sequence(Commands.run(magazine::outtake, magazine)));
-    // .onFalse(
-    // Commands.runOnce(
-    // () -> {
-    // rollers.setGoal(Rollers.Goal.IDLE);
-    // }));
-
-    // ================================================
-    // OPERATOR CONTROLLER - RB
-    // SCORE AMP RED
-    // ================================================
-    operatorController
-        .rightBumper()
-        .whileTrue(Commands.runOnce(() -> magazine.shoot(), magazine))
-        .onFalse(Commands.runOnce(() -> magazine.stop(), magazine));
-
-    // ================================================
-    // OPERATOR CONTROLLER - RIGHT TRIGGER
-    // SHOOT
-    // ================================================
-    operatorController
-        .rightTrigger()
-        .whileTrue(new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
-
-    // ================================================
-    // OPERATOR CONTROLLER - A
-    // SETS SHOOTER TO BLURP SHOOT SPEED
-    // ================================================
-    operatorController
-        .a()
+        .y()
         .onTrue(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.FEED))
                 .alongWith(
                     Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 
     // ================================================
-    // OPERATOR CONTROLLER - DPAD LEFT
-    // ARM POSITION AMP
+    // DRIVER CONTROLLER - RIGHT TRIGGER
+    // SCORE
     // ================================================
-    operatorController
-        .povLeft()
+    driverController
+        .rightTrigger()
         .whileTrue(
-            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.AMP))
-                .alongWith(
-                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())))
-        .onFalse(Commands.runOnce(() -> SmartController.getInstance().disableSmartControl()));
+            Commands.run(
+                () -> {
+                  if (SmartController.getInstance().getDriveModeType() == DriveModeType.AMP) {
+                    Commands.runOnce(() -> magazine.outtake());
+                  } else if (SmartController.getInstance().getDriveModeType()
+                      == DriveModeType.SPEAKER) {
+                    new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1);
+                  } else if (SmartController.getInstance().getDriveModeType()
+                      == DriveModeType.FEED) {
+                    Commands.runOnce(() -> magazine.shoot());
+                  }
+                }));
 
     // ================================================
-    // OPERATOR CONTROLLER - DPAD DOWN
-    // ARM POSITION LOWEST POSITION
+    // DRIVER CONTROLLER - DPAD UP
+    // MOVE CLIMBER UP
     // ================================================
-    operatorController
-        .povDown()
-        .onTrue(
-            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
+    driverController.povUp().onTrue(new ManualClimb(climberLeft, climberRight, -140));
+
+    // ================================================
+    // DRIVER CONTROLLER - DPAD DOWN
+    // MOVE CLIMBER DOWN
+    // ================================================
+    driverController.povDown().onTrue(new ManualClimb(climberLeft, climberRight, 0));
   }
 
   /**

@@ -37,6 +37,12 @@ public class Shooter extends SubsystemBase {
     io.runVelocity(top, bottom);
   }
 
+  public void manualBlurp() {
+    topSetpointRpm = 3000.0;
+    bottomSetpointRPM = 3000.0;
+    io.runVelocity(topSetpointRpm, bottomSetpointRPM);
+  }
+
   public void stop() {
     topSetpointRpm = 0.0;
     bottomSetpointRPM = 0.0;
