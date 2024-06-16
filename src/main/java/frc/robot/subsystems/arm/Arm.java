@@ -17,13 +17,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
-  private static final LoggedTunableNumber kP = new LoggedTunableNumber("Arm/kP", gains.kP());
-  private static final LoggedTunableNumber kI = new LoggedTunableNumber("Arm/kI", gains.kI());
-  private static final LoggedTunableNumber kD = new LoggedTunableNumber("Arm/kD", gains.kD());
-  private static final LoggedTunableNumber kS = new LoggedTunableNumber("Arm/kS", gains.kS());
-  private static final LoggedTunableNumber kG = new LoggedTunableNumber("Arm/kG", gains.kG());
-  private static final LoggedTunableNumber kV = new LoggedTunableNumber("Arm/kV", gains.kV());
-
   private static final LoggedTunableNumber armTolerance =
       new LoggedTunableNumber("Arm/ToleranceDeg", armToleranceDeg);
 
@@ -44,9 +37,6 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // check controllers
-    LoggedTunableNumber.ifChanged(hashCode(), pid -> io.setPID(pid[0], pid[1], pid[2]), kP, kI, kD);
-
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
 
