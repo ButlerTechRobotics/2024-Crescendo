@@ -90,7 +90,23 @@ public class RobotContainer {
         // Sim robot, instantiate physics sim IO implementations
         drive =
             new Drive(
-                new GyroIO() {},
+                new GyroIO() {
+                  @Override
+                  public GyroIOInputs getInputs() {
+                    // Create a new GyroIOInputs object
+                    GyroIOInputs inputs = new GyroIOInputs();
+
+                    // Set the inputs values
+                    // Replace these with actual values from your gyro
+                    inputs.connected = true;
+                    inputs.yawPosition = new Rotation2d();
+                    inputs.yawVelocityRadPerSec = 0.0;
+                    inputs.xVelocity = 0.0;
+                    inputs.yVelocity = 0.0;
+
+                    return inputs;
+                  }
+                },
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim(),
@@ -110,7 +126,23 @@ public class RobotContainer {
         // Replayed robot, disable IO implementations
         drive =
             new Drive(
-                new GyroIO() {},
+                new GyroIO() {
+                  @Override
+                  public GyroIOInputs getInputs() {
+                    // Create a new GyroIOInputs object
+                    GyroIOInputs inputs = new GyroIOInputs();
+
+                    // Set the inputs values
+                    // Replace these with actual values from your gyro
+                    inputs.connected = true;
+                    inputs.yawPosition = new Rotation2d();
+                    inputs.yawVelocityRadPerSec = 0.0;
+                    inputs.xVelocity = 0.0;
+                    inputs.yVelocity = 0.0;
+
+                    return inputs;
+                  }
+                },
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
@@ -262,7 +294,9 @@ public class RobotContainer {
     driverController
         .x()
         .onTrue(
-            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
 
     // ================================================
     // DRIVER CONTROLLER - Y

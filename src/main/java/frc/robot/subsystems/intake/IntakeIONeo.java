@@ -20,7 +20,7 @@ public class IntakeIONeo implements IntakeIO {
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.velocityRadPerSec = intakeMotor.getEncoder().getVelocity();
+    inputs.velocityRadPerSec = intakeMotor.getVelocity();
     inputs.appliedVolts = intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage();
     inputs.currentAmps = intakeMotor.getOutputCurrent();
   }

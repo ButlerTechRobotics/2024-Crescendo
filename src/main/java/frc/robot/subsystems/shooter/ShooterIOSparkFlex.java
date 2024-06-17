@@ -11,7 +11,6 @@ import static frc.robot.subsystems.shooter.ShooterConstants.*;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
@@ -21,8 +20,6 @@ public class ShooterIOSparkFlex implements ShooterIO {
   // Hardware
   private Neo topMotor;
   private Neo bottomMotor;
-  private RelativeEncoder topEncoder;
-  private RelativeEncoder bottomEncoder;
 
   // Controllers
   private SparkPIDController topController;
@@ -34,8 +31,6 @@ public class ShooterIOSparkFlex implements ShooterIO {
     // Init Hardware
     topMotor = new Neo(topID);
     bottomMotor = new Neo(bottomID);
-    topEncoder = topMotor.getEncoder();
-    bottomEncoder = bottomMotor.getEncoder();
 
     // Config Hardware
     // Default
@@ -67,12 +62,12 @@ public class ShooterIOSparkFlex implements ShooterIO {
     bottomMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 159);
 
     // Reset encoders
-    topEncoder.setPosition(0.0);
-    bottomEncoder.setPosition(0.0);
-    topEncoder.setMeasurementPeriod(10);
-    bottomEncoder.setMeasurementPeriod(10);
-    topEncoder.setAverageDepth(2);
-    bottomEncoder.setAverageDepth(2);
+    // topEncoder.setPosition(0.0);
+    // bottomEncoder.setPosition(0.0);
+    // topEncoder.setMeasurementPeriod(10);
+    // bottomEncoder.setMeasurementPeriod(10);
+    // topEncoder.setAverageDepth(2);
+    // bottomEncoder.setAverageDepth(2);
 
     // Get controllers
     topController = topMotor.getPIDController();
@@ -93,14 +88,14 @@ public class ShooterIOSparkFlex implements ShooterIO {
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    inputs.topPositionRads = Units.rotationsToRadians(topEncoder.getPosition()) / reduction;
-    inputs.topVelocityRpm = topEncoder.getVelocity() / reduction;
+    inputs.topPositionRads = Units.rotationsToRadians(topMotor.getPosition()) / reduction;
+    inputs.topVelocityRpm = topMotor.getVelocity() / reduction;
     inputs.topAppliedVolts = topMotor.getAppliedOutput();
     inputs.topOutputCurrent = topMotor.getOutputCurrent();
     inputs.topTempCelsius = topMotor.getMotorTemperature();
 
-    inputs.bottomPositionRads = Units.rotationsToRadians(bottomEncoder.getPosition()) / reduction;
-    inputs.bottomVelocityRpm = bottomEncoder.getVelocity() / reduction;
+    inputs.bottomPositionRads = Units.rotationsToRadians(bottomMotor.getPosition()) / reduction;
+    inputs.bottomVelocityRpm = bottomMotor.getVelocity() / reduction;
     inputs.bottomAppliedVolts = bottomMotor.getAppliedOutput();
     inputs.bottomOutputCurrent = bottomMotor.getOutputCurrent();
     inputs.bottomTempCelsius = bottomMotor.getMotorTemperature();

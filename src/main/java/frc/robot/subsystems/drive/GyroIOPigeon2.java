@@ -19,6 +19,8 @@ import edu.wpi.first.math.util.Units;
 
 /** IO implementation for Pigeon2 */
 public class GyroIOPigeon2 implements GyroIO {
+  private GyroIOInputs inputs;
+
   private final Pigeon2 pigeon = new Pigeon2(30);
   private final StatusSignal<Double> yaw = pigeon.getYaw();
   private final StatusSignal<Double> yawVelocity = pigeon.getAngularVelocityZWorld();
@@ -26,6 +28,8 @@ public class GyroIOPigeon2 implements GyroIO {
   private final StatusSignal<Double> yVelocity = pigeon.getAccelerationY();
 
   public GyroIOPigeon2() {
+    inputs = new GyroIOInputs();
+
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
     pigeon.getConfigurator().setYaw(0.0);
     yaw.setUpdateFrequency(odometryFrequency);
@@ -33,6 +37,12 @@ public class GyroIOPigeon2 implements GyroIO {
     xVelocity.setUpdateFrequency(odometryFrequency);
     yVelocity.setUpdateFrequency(odometryFrequency);
     pigeon.optimizeBusUtilization();
+  }
+
+  @Override
+  public GyroIOInputs getInputs() {
+    // Update inputs with current gyro values
+    return inputs;
   }
 
   @Override

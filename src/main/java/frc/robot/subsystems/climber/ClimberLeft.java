@@ -52,7 +52,7 @@ public class ClimberLeft extends SubsystemBase {
   }
 
   public double getPosition() {
-    return motor.getEncoder().getPosition();
+    return motor.getPosition();
   }
 
   private void setPID() {
@@ -74,7 +74,7 @@ public class ClimberLeft extends SubsystemBase {
   public void periodic() {
     setPID();
     pidController.setReference(targetDistance, ControlType.kPosition, 0);
-    SmartDashboard.putNumber("ClimberLeftDistance", motor.getEncoder().getPosition());
+    SmartDashboard.putNumber("ClimberLeftDistance", motor.getPosition());
     // This method will be called once per scheduler run
   }
 }

@@ -14,7 +14,6 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.VendorWrappers.Neo;
@@ -34,8 +33,6 @@ public class ModuleIONeo implements ModuleIO {
   private final Neo turnSparkMax;
   private final CANcoder cancoder;
 
-  private final RelativeEncoder driveEncoder;
-  private final RelativeEncoder turnRelativeEncoder;
   private final StatusSignal<Double> turnAbsolutePosition;
 
   private final Rotation2d absoluteEncoderOffset;
@@ -70,22 +67,19 @@ public class ModuleIONeo implements ModuleIO {
     turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 208);
     turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus7, 209);
 
-    driveEncoder = driveSparkMax.getEncoder();
-    turnRelativeEncoder = turnSparkMax.getEncoder();
-
     turnSparkMax.setInverted(config.turnMotorInverted());
     driveSparkMax.setSmartCurrentLimit(60);
     turnSparkMax.setSmartCurrentLimit(30);
     driveSparkMax.enableVoltageCompensation(12.0);
     turnSparkMax.enableVoltageCompensation(12.0);
 
-    driveEncoder.setPosition(0.0);
-    driveEncoder.setMeasurementPeriod(10);
-    driveEncoder.setAverageDepth(2);
+    driveSparkMax.setPosition(0.0);
+    // driveEncoder.setMeasurementPeriod(10);
+    // driveEncoder.setAverageDepth(2);
 
-    turnRelativeEncoder.setPosition(0.0);
-    turnRelativeEncoder.setMeasurementPeriod(10);
-    turnRelativeEncoder.setAverageDepth(2);
+    turnSparkMax.setPosition(0.0);
+    // turnRelativeEncoder.setMeasurementPeriod(10);
+    // turnRelativeEncoder.setAverageDepth(2);
 
     // driveSparkMax.setCANTimeout(0);
     // turnSparkMax.setCANTimeout(0);
@@ -107,9 +101,9 @@ public class ModuleIONeo implements ModuleIO {
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
     inputs.drivePositionRad =
-        Units.rotationsToRadians(driveEncoder.getPosition()) / moduleConstants.driveReduction();
+        Units.rotationsToRadians(driveSparkMax.getPosition()) / moduleConstants.driveReduction();
     inputs.driveVelocityRadPerSec =
-        Units.rotationsPerMinuteToRadiansPerSecond(driveEncoder.getVelocity())
+        Units.rotationsPerMinuteToRadiansPerSecond(driveSparkMax.getVelocity())
             / moduleConstants.driveReduction();
     inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
     inputs.driveCurrentAmps = new double[] {driveSparkMax.getOutputCurrent()};
@@ -119,10 +113,9 @@ public class ModuleIONeo implements ModuleIO {
         Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble())
             .minus(absoluteEncoderOffset);
     inputs.turnPosition =
-        Rotation2d.fromRotations(
-            turnRelativeEncoder.getPosition() / moduleConstants.turnReduction());
+        Rotation2d.fromRotations(turnSparkMax.getPosition() / moduleConstants.turnReduction());
     inputs.turnVelocityRadPerSec =
-        Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity())
+        Units.rotationsPerMinuteToRadiansPerSecond(turnSparkMax.getVelocity())
             / moduleConstants.turnReduction();
     inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
     inputs.turnCurrentAmps = new double[] {turnSparkMax.getOutputCurrent()};

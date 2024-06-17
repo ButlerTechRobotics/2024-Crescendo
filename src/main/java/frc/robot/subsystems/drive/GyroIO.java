@@ -20,9 +20,8 @@ public interface GyroIO {
     public double yVelocity = 0.0;
   }
 
-  public default void updateInputs(GyroIOInputs inputs) {
-  }
-
   // Add this method
   public GyroIOInputs getInputs();
+
+  public default void updateInputs(GyroIOInputs inputs) {}
 }

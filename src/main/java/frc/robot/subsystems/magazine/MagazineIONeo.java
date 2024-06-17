@@ -26,11 +26,11 @@ public class MagazineIONeo implements MagazineIO {
 
   @Override
   public void updateInputs(MagazineIOInputs inputs) {
-    inputs.frontMotorVelocityRadPerSec = frontMotor.getEncoder().getVelocity();
+    inputs.frontMotorVelocityRadPerSec = frontMotor.getVelocity();
     inputs.frontMotorAppliedVolts = frontMotor.getAppliedOutput() * frontMotor.getBusVoltage();
     inputs.frontMotorCurrentAmps = frontMotor.getOutputCurrent();
 
-    inputs.backMotorVelocityRadPerSec = backMotor.getEncoder().getVelocity();
+    inputs.backMotorVelocityRadPerSec = backMotor.getVelocity();
     inputs.backMotorAppliedVolts = backMotor.getAppliedOutput() * backMotor.getBusVoltage();
     inputs.backMotorCurrentAmps = backMotor.getOutputCurrent();
   }
