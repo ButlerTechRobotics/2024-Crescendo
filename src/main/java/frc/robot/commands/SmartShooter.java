@@ -46,7 +46,7 @@ public class SmartShooter extends Command {
             < SmartController.getInstance().getPrerollDistance()) {
       shooter.setSetpoint(
           SmartController.getInstance().getTargetAimingParameters().shooterSpeed(),
-          SmartController.getInstance().getTargetAimingParameters().shooterSpeed());
+          SmartController.getInstance().getTargetAimingParameters().shooterSpeed() - 300);
       return;
     } else {
       shooter.stop();

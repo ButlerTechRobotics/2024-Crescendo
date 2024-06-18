@@ -100,9 +100,20 @@ public class SmartController {
     flightTimeMap.put(1.0, 0.15);
 
     // Feed Maps
-    feederSpeedMap.put(9.071, 3500.0);
-    feederSpeedMap.put(7.0, 3000.0);
-    feederSpeedMap.put(5.4, 2000.0);
+    feederSpeedMap.put(1.0, 1000.0);
+    feederSpeedMap.put(1.5, 1500.0);
+    feederSpeedMap.put(2.0, 1750.0);
+    feederSpeedMap.put(2.5, 2000.0);
+    feederSpeedMap.put(3.0, 2500.0);
+    feederSpeedMap.put(3.5, 2500.0);
+    feederSpeedMap.put(4.0, 3000.0);
+    feederSpeedMap.put(4.5, 3000.0);
+    feederSpeedMap.put(5.0, 3000.0);
+    feederSpeedMap.put(5.5, 3000.0);
+    feederSpeedMap.put(6.0, 3000.0);
+    feederSpeedMap.put(6.5, 3000.0);
+    feederSpeedMap.put(7.0, 3500.0);
+    feederSpeedMap.put(8.0, 3500.0);
 
     feederAngleMap.put(10.0, 5.0 + 128);
     feederAngleMap.put(9.0, 3.0 + 128);

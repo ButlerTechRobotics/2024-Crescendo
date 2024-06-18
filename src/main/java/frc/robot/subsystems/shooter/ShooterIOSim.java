@@ -22,11 +22,10 @@ public class ShooterIOSim implements ShooterIO {
   private final FlywheelSim bottomSim =
       new FlywheelSim(DCMotor.getNeoVortex(1), reduction, 0.00363458292);
 
-  private final PIDController topController = new PIDController(gains.kP(), gains.kI(), gains.kD());
-  private final PIDController bottomController =
-      new PIDController(gains.kP(), gains.kI(), gains.kD());
+  private final PIDController topController = new PIDController(gains.topkP(), 0.0, 0.0);
+  private final PIDController bottomController = new PIDController(gains.bottomkP(), 0.0, 0.0);
   private SimpleMotorFeedforward ff =
-      new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+      new SimpleMotorFeedforward(gains.topkS(), gains.topkV(), gains.topkA());
 
   private double topAppliedVolts = 0.0;
   private double bottomAppliedVolts = 0.0;
@@ -74,14 +73,15 @@ public class ShooterIOSim implements ShooterIO {
   }
 
   @Override
-  public void setPID(double kP, double kI, double kD) {
-    topController.setPID(kP, kI, kD);
-    bottomController.setPID(kP, kI, kD);
+  public void setPID(double topkP, double bottomkP) {
+    topController.setPID(topkP, 0.0, 0.0);
+    bottomController.setPID(bottomkP, 0.0, 0.0);
   }
 
   @Override
-  public void setFF(double kS, double kV, double kA) {
-    ff = new SimpleMotorFeedforward(kS, kV, kA);
+  public void setFF(
+      double topkS, double topkV, double topkA, double bottomkS, double bottomkV, double bottomkA) {
+    ff = new SimpleMotorFeedforward(topkS, topkV, topkA);
   }
 
   @Override

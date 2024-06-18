@@ -15,12 +15,22 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
-  private static final LoggedTunableNumber kP = new LoggedTunableNumber("Flywheels/kP", gains.kP());
-  private static final LoggedTunableNumber kI = new LoggedTunableNumber("Flywheels/kI", gains.kI());
-  private static final LoggedTunableNumber kD = new LoggedTunableNumber("Flywheels/kD", gains.kD());
-  private static final LoggedTunableNumber kS = new LoggedTunableNumber("Flywheels/kS", gains.kS());
-  private static final LoggedTunableNumber kV = new LoggedTunableNumber("Flywheels/kV", gains.kV());
-  private static final LoggedTunableNumber kA = new LoggedTunableNumber("Flywheels/kA", gains.kA());
+  private static final LoggedTunableNumber topkP =
+      new LoggedTunableNumber("Flywheels/topkP", gains.topkP());
+  private static final LoggedTunableNumber bottomkP =
+      new LoggedTunableNumber("Flywheels/bottomkP", gains.bottomkP());
+  private static final LoggedTunableNumber topkS =
+      new LoggedTunableNumber("Flywheels/topkS", gains.topkS());
+  private static final LoggedTunableNumber topkV =
+      new LoggedTunableNumber("Flywheels/topkV", gains.topkV());
+  private static final LoggedTunableNumber topkA =
+      new LoggedTunableNumber("Flywheels/topkA", gains.topkA());
+  private static final LoggedTunableNumber bottomkS =
+      new LoggedTunableNumber("Flywheels/bottomkS", gains.bottomkS());
+  private static final LoggedTunableNumber bottomkV =
+      new LoggedTunableNumber("Flywheels/bottomkV", gains.bottomkV());
+  private static final LoggedTunableNumber bottomkA =
+      new LoggedTunableNumber("Flywheels/bottomkA", gains.bottomkA());
 
   private static final LoggedTunableNumber shooterTolerance =
       new LoggedTunableNumber("Flywheels/ToleranceRPM", shooterToleranceRPM);
@@ -32,7 +42,9 @@ public class Shooter extends SubsystemBase {
   private Double bottomSetpointRPM = null;
 
   public void setSetpoint(double top, double bottom) {
-    topSetpointRpm = top + 100;
+    // topSetpointRpm = top + 100;
+    // bottomSetpointRPM - bottom;
+    topSetpointRpm = top;
     bottomSetpointRPM = bottom;
     io.runVelocity(top, bottom);
   }
@@ -57,9 +69,16 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // check controllers
-    LoggedTunableNumber.ifChanged(hashCode(), pid -> io.setPID(pid[0], pid[1], pid[2]), kP, kI, kD);
+    LoggedTunableNumber.ifChanged(hashCode(), pp -> io.setPID(pp[0], pp[1]), topkP, bottomkP);
     LoggedTunableNumber.ifChanged(
-        hashCode(), kSVA -> io.setFF(kSVA[0], kSVA[1], kSVA[2]), kS, kV, kA);
+        hashCode(),
+        kSVASVA -> io.setFF(kSVASVA[0], kSVASVA[1], kSVASVA[2], kSVASVA[3], kSVASVA[4], kSVASVA[5]),
+        topkS,
+        topkV,
+        topkA,
+        bottomkS,
+        bottomkV,
+        bottomkA);
 
     io.updateInputs(inputs);
     Logger.processInputs("Flywheels", inputs);

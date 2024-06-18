@@ -25,7 +25,8 @@ public class ShooterIOSparkFlex implements ShooterIO {
   private SparkPIDController topController;
   private SparkPIDController bottomController;
   // Open loop
-  private SimpleMotorFeedforward ff = new SimpleMotorFeedforward(0.0, 0.0, 0.0);
+  private SimpleMotorFeedforward topFF = new SimpleMotorFeedforward(0.0, 0.0, 0.0);
+  private SimpleMotorFeedforward bottomFF = new SimpleMotorFeedforward(0.0, 0.0, 0.0);
 
   public ShooterIOSparkFlex() {
     // Init Hardware
@@ -72,15 +73,22 @@ public class ShooterIOSparkFlex implements ShooterIO {
     // Get controllers
     topController = topMotor.getPIDController();
     bottomController = bottomMotor.getPIDController();
-    setPID(gains.kP(), gains.kI(), gains.kD());
-    setFF(gains.kS(), gains.kV(), gains.kA());
+    setPID(gains.topkP(), gains.bottomkP());
+    setFF(
+        gains.topkS(),
+        gains.topkV(),
+        gains.topkA(),
+        gains.bottomkS(),
+        gains.bottomkV(),
+        gains.bottomkA());
 
     // Disable brake mode
     topMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
     bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
     topMotor.setInverted(true);
-    bottomMotor.follow(topMotor, false);
+    // bottomMotor.follow(topMotor, true);
+    bottomMotor.setInverted(false);
 
     topMotor.burnFlash();
     bottomMotor.burnFlash();
@@ -113,29 +121,27 @@ public class ShooterIOSparkFlex implements ShooterIO {
         topRpm * reduction,
         CANSparkBase.ControlType.kVelocity,
         0,
-        ff.calculate(topRpm),
+        topFF.calculate(topRpm),
         SparkPIDController.ArbFFUnits.kVoltage);
     bottomController.setReference(
         bottomRpm * reduction,
         CANSparkBase.ControlType.kVelocity,
         0,
-        ff.calculate(bottomRpm),
+        bottomFF.calculate(bottomRpm),
         SparkPIDController.ArbFFUnits.kVoltage);
   }
 
   @Override
-  public void setPID(double kP, double kI, double kD) {
-    topController.setP(kP);
-    topController.setI(kI);
-    topController.setD(kD);
-    bottomController.setP(kP);
-    bottomController.setI(kI);
-    bottomController.setD(kD);
+  public void setPID(double topkP, double bottomkP) {
+    topController.setP(topkP);
+    bottomController.setP(bottomkP);
   }
 
   @Override
-  public void setFF(double kS, double kV, double kA) {
-    ff = new SimpleMotorFeedforward(kS, kV, kA);
+  public void setFF(
+      double topkS, double topkV, double topkA, double bottomkS, double bottomkV, double bottomkA) {
+    topFF = new SimpleMotorFeedforward(topkS, topkV, topkA);
+    bottomFF = new SimpleMotorFeedforward(bottomkS, bottomkV, bottomkA);
   }
 
   @Override

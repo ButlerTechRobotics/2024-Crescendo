@@ -38,10 +38,16 @@ public interface ShooterIO {
   default void runVelocity(double topRpm, double bottomRpm) {}
 
   /** Config PID values for both motors */
-  default void setPID(double kP, double kI, double kD) {}
+  default void setPID(double topkP, double bottomkP) {}
 
   /** Config FF values for both motors */
-  default void setFF(double kS, double kV, double kA) {}
+  default void setFF(
+      double topkS,
+      double topkV,
+      double topkA,
+      double bottomkS,
+      double bottomkV,
+      double bottomkA) {}
 
   /** Run top flywheels at voltage */
   default void runCharacterizationTopVolts(double volts) {}

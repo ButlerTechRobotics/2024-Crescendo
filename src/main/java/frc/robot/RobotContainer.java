@@ -315,20 +315,7 @@ public class RobotContainer {
     // ================================================
     driverController
         .rightTrigger()
-        .whileTrue(
-            Commands.run(
-                () -> {
-                  if (SmartController.getInstance().getDriveModeType() == DriveModeType.AMP) {
-                    Commands.runOnce(() -> magazine.outtake());
-                  } else if (SmartController.getInstance().getDriveModeType()
-                      == DriveModeType.SPEAKER) {
-                    new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1);
-                  } else if (SmartController.getInstance().getDriveModeType()
-                      == DriveModeType.FEED) {
-                    Commands.runOnce(() -> magazine.shoot());
-                  }
-                }));
-
+        .whileTrue(new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5));
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP

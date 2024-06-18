@@ -13,7 +13,7 @@ public class ArmConstants {
 
   // encoder / flywheelReduction = flywheel
   public static double reduction = (125.0 / 1.0);
-  public static double armToleranceDeg = 1.0;
+  public static double armToleranceDeg = 3.0;
   public static int armID = 20;
 
   public static Gains gains =

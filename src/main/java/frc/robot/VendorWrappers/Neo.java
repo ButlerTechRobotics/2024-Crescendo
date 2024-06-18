@@ -7,6 +7,7 @@
 
 package frc.robot.VendorWrappers;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
@@ -91,6 +92,15 @@ public class Neo extends CANSparkFlex {
     return this.waitForConfig(
         () -> {
           return super.setSmartCurrentLimit(limitAmps);
+        },
+        errorMessage);
+  }
+
+  public REVLibError follow(CANSparkBase leader, boolean invert) {
+    String errorMessage = "Failed to follow " + leader + " for  motor " + name + "!";
+    return this.waitForConfig(
+        () -> {
+          return super.follow(leader, invert);
         },
         errorMessage);
   }
