@@ -61,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tele",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

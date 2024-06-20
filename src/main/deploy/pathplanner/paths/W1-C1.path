@@ -32,20 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.4,
-    "maxAcceleration": 4.418,
-    "maxAngularVelocity": 646.0,
-    "maxAngularAcceleration": 1277.1229
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 726.05,
+    "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 179.7135234897229,
+    "velocity": 0.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Random Middle",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -174.57285586029437,
+    "rotation": 7.219247039513735,
     "velocity": 0
   },
   "useDefaultConstraints": true

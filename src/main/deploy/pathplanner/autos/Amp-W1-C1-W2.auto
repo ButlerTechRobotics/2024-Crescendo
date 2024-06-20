@@ -18,38 +18,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid-W3"
+                  "pathName": "Amp-W1"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Magazine"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PodiumPreroll"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Magazine"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PodiumPreroll"
                 }
               }
             ]
@@ -58,31 +33,19 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "PS-W2"
+            "name": "SIMGamePiecePickup"
           }
         },
         {
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SA-C1"
+                }
+              },
               {
                 "type": "named",
                 "data": {
@@ -117,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "W2-W1"
+                  "pathName": "C1-SA"
                 }
               },
               {
@@ -125,20 +88,26 @@
                 "data": {
                   "name": "Magazine"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PodiumPreroll"
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SIMGamePiecePickup"
           }
         },
         {
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SA-W2"
+                }
+              },
               {
                 "type": "named",
                 "data": {

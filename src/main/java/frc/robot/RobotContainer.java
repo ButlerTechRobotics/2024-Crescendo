@@ -166,6 +166,10 @@ public class RobotContainer {
 
         aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
     }
+    // ================================================
+    // Register the Named Command Intake
+    // ================================================
+    NamedCommands.registerCommand("Intake", Commands.runOnce(intake::enableIntakeRequest));
 
     // ================================================
     // Register the Named Command Shoot

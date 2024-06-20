@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.5890502690096286,
-        "y": 6.632738356385804
+        "x": 2.8,
+        "y": 6.95
       },
       "prevControl": {
-        "x": 2.206571685870644,
-        "y": 6.390190962200107
+        "x": 2.4175214168610153,
+        "y": 6.707452605814303
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.4,
-    "maxAcceleration": 4.418,
-    "maxAngularVelocity": 646.0,
-    "maxAngularAcceleration": 1277.1229
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 726.05,
+    "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
     "velocity": 0,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Close 4 Piece",
+  "folder": null,
   "previewStartingState": {
     "rotation": 179.52844044592385,
     "velocity": 0

@@ -18,19 +18,19 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid-W3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Magazine"
+                  "pathName": "Amp-W1"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "PodiumPreroll"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Magazine"
                 }
               }
             ]
@@ -65,49 +65,12 @@
           "type": "named",
           "data": {
             "name": "Intake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "PS-W2"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Magazine"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PodiumPreroll"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PreRollShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
+            "pathName": "W1-C1"
           }
         },
         {
@@ -117,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "W2-W1"
+                  "pathName": "C1-SA"
                 }
               },
               {
@@ -136,9 +99,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SA-C2"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C2-SA"
+                }
+              },
               {
                 "type": "named",
                 "data": {

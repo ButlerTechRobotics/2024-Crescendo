@@ -31,27 +31,27 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -168.0,
+      "rotationDegrees": 12.0,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.4,
-    "maxAcceleration": 4.418,
-    "maxAngularVelocity": 646.0,
-    "maxAngularAcceleration": 1277.1229
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 726.05,
+    "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -168.61613752892788,
+    "rotation": 11.379999999999995,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Random Middle",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -179.21517539700812,
+    "rotation": -0.46409540671484495,
     "velocity": 0
   },
   "useDefaultConstraints": true

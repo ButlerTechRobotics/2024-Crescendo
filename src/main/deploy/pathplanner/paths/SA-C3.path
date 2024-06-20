@@ -47,7 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "IntakeDown"
+                "name": "Intake"
               }
             }
           ]
@@ -56,10 +56,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.4,
-    "maxAcceleration": 4.418,
-    "maxAngularVelocity": 646.0,
-    "maxAngularAcceleration": 1277.1229
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 726.05,
+    "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
     "velocity": 0,
@@ -67,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Random Middle",
+  "folder": null,
   "previewStartingState": {
     "rotation": -150.94539590092288,
     "velocity": 0
