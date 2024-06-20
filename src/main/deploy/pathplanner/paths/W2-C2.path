@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.888049050119454,
-        "y": 6.856133569918385
+        "x": 3.65252730505461,
+        "y": 5.82113746045674
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.526699430623062,
-        "y": 6.856133569918385
+        "x": 5.247742859122082,
+        "y": 6.632738356385804
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8230185926564035,
-        "y": 7.246010790953966
+        "x": 7.925092941094973,
+        "y": 5.82113746045674
       },
       "prevControl": {
-        "x": 2.0702578059960404,
-        "y": 6.818096767866134
+        "x": 6.609739764934075,
+        "y": 6.6140808645253655
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,15 +33,15 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.35,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "IntakeDown"
               }
             }
           ]
@@ -50,18 +50,21 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 4.4,
+    "maxAcceleration": 4.418,
+    "maxAngularVelocity": 646.0,
+    "maxAngularAcceleration": 1277.1229
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0,
+    "rotation": 153.51034807242428,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tele",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Random Middle",
+  "previewStartingState": {
+    "rotation": 179.62426175825718,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

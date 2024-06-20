@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.78495393354423,
+        "y": 5.521816553472311
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4140951135347755,
+        "y": 5.692982162707444
+      },
+      "isLocked": false,
+      "linkedName": "W2"
+    },
+    {
+      "anchor": {
+        "x": 2.0666404969173575,
+        "y": 6.548779643013831
+      },
+      "prevControl": {
+        "x": 2.3465028748239316,
+        "y": 6.054356108712217
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "PS2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2,
+      "rotationDegrees": -156.11120938419998,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.4,
+    "maxAcceleration": 4.418,
+    "maxAngularVelocity": 646.0,
+    "maxAngularAcceleration": 1277.1229
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -149.34933204294714,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Close 4 Piece",
+  "previewStartingState": {
+    "rotation": 179.52844044592385,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

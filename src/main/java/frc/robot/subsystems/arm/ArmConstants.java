@@ -7,9 +7,11 @@
 
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 
 public class ArmConstants {
+  public static final ArmPositions home = new ArmPositions(Rotation2d.fromDegrees(129));
 
   // encoder / flywheelReduction = flywheel
   public static double reduction = (125.0 / 1.0);
@@ -26,4 +28,6 @@ public class ArmConstants {
       };
 
   public record Gains(double kP, double kI, double kD, double kS, double kG, double kV) {}
+
+  public record ArmPositions(Rotation2d arm) {}
 }

@@ -28,7 +28,8 @@ public final class DriveConstants {
                 Units.inchesToMeters(2.0), // double wheelRadius
                 Units.inchesToMeters(22.0), // double trackwidthX
                 Units.inchesToMeters(22.0), // double trackwidthY
-                Units.feetToMeters(16.055), // double maxLinearVelocity
+                // Units.feetToMeters(16.055), // double maxLinearVelocity
+                Units.feetToMeters(1.0), // double maxLinearVelocity
                 Units.feetToMeters(28.718), // double maxLinearAcceleration
                 12.384, // double maxAngularVelocity
                 31.319); // double maxAngularAcceleration)

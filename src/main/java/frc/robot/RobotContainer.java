@@ -14,10 +14,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.SmartController.DriveModeType;
 import frc.robot.commands.*;
 import frc.robot.subsystems.arm.*;
@@ -29,6 +34,8 @@ import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.magazine.*;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.vision.*;
+import frc.robot.util.visualizer.ShotVisualizer;
+import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -159,20 +166,119 @@ public class RobotContainer {
 
         aprilTagVision = new AprilTagVision(new AprilTagVisionIO() {});
     }
-    // ================================================
-    // Register the Named Commands
-    // ================================================
-    NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
 
     // ================================================
-    // Register the Auto Command AimAndPreShoot
+    // Register the Named Command Shoot
     // ================================================
-    NamedCommands.registerCommand("AimAndPreShoot", aimAndPreShoot());
+    NamedCommands.registerCommand(
+        "Shoot",
+        new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5)
+            .deadlineWith(DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0))
+            .andThen(
+                new ScheduleCommand(
+                    Commands.defer(() -> new ShotVisualizer(drive, arm, shooter), Set.of()))));
 
     // ================================================
-    // Register the Auto Command Shoot
+    // Register the Named Command QuickShoot
     // ================================================
-    NamedCommands.registerCommand("Shoot", shoot());
+    NamedCommands.registerCommand(
+        "QuickShoot",
+        new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.0)
+            .deadlineWith(DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0))
+            .andThen(
+                new ScheduleCommand(
+                    Commands.defer(() -> new ShotVisualizer(drive, arm, shooter), Set.of()))));
+
+    // ================================================
+    // Register the Named Command EnableSmartControl
+    // ================================================
+    NamedCommands.registerCommand(
+        "EnableSmartControl", Commands.runOnce(SmartController.getInstance()::enableSmartControl));
+
+    // ================================================
+    // Register the Named Command SmartControl
+    // ================================================
+    NamedCommands.registerCommand(
+        "SmartControl",
+        Commands.parallel(
+            new SmartShooter(shooter),
+            new SmartArm(arm),
+            new SmartIntake(intake, beamBreak, magazine, candle)));
+
+    // ================================================
+    // Register the Named Command SmartIntake
+    // ================================================
+    NamedCommands.registerCommand(
+        "SmartIntake", new SmartIntake(intake, beamBreak, magazine, candle));
+
+    NamedCommands.registerCommand(
+        "PreRollShoot",
+        Commands.deadline(
+                new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
+                new SmartShooter(shooter),
+                new SmartArm(arm),
+                DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0))
+            .andThen(
+                Commands.runOnce(
+                    () -> {
+                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                    })));
+
+    NamedCommands.registerCommand(
+        "PreRollShootAndMove",
+        Commands.deadline(
+                new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.5),
+                new SmartShooter(shooter),
+                new SmartArm(arm))
+            .andThen(
+                Commands.runOnce(
+                    () -> {
+                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                    })));
+
+    NamedCommands.registerCommand(
+        "ManualUpCloseShot",
+        new SequentialCommandGroup(
+            new ManualShoot(arm, shooter, magazine, beamBreak, 0.5),
+            Commands.runOnce(
+                () -> {
+                  arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                })));
+
+    NamedCommands.registerCommand(
+        "PreRollShootFast",
+        Commands.deadline(
+            new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.5),
+            new SmartShooter(shooter),
+            new SmartArm(arm),
+            DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0)));
+
+    NamedCommands.registerCommand("Magazine", new ManualMagazine(magazine, beamBreak));
+
+    NamedCommands.registerCommand(
+        "Preload", new InstantCommand(() -> beamBreak.setGamePiece(true)));
+    // PodiumShot
+    // x=2.817 y=3.435
+    NamedCommands.registerCommand(
+        "PodiumPreroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(20), 3000));
+    NamedCommands.registerCommand(
+        "ClosePreroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(20), 3000));
+    NamedCommands.registerCommand(
+        "ManualPreroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(0), 2500));
+
+    // Run SmartController updates in autonomousma
+    new Trigger(DriverStation::isAutonomousEnabled)
+        .and(
+            new Trigger(
+                () -> SmartController.getInstance().getDriveModeType() == DriveModeType.SPEAKER))
+        .whileTrue(
+            new InstantCommand(
+                () -> {
+                  SmartController.getInstance()
+                      .calculateSpeaker(
+                          drive.getPose(), new Translation2d(0, 0), new Translation2d(0, 0));
+                }));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
