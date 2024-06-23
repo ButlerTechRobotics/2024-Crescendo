@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.SmartController.DriveModeType;
@@ -169,7 +168,10 @@ public class RobotContainer {
     // ================================================
     // Register the Named Command Intake
     // ================================================
-    NamedCommands.registerCommand("Intake", Commands.runOnce(intake::enableIntakeRequest));
+    NamedCommands.registerCommand(
+        "Intake",
+        Commands.runOnce(intake::enableIntakeRequest)
+            .alongWith(Commands.runOnce(magazine::enableIntakeRequest)));
 
     // ================================================
     // Register the Named Command Shoot
@@ -242,12 +244,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "ManualUpCloseShot",
-        new SequentialCommandGroup(
-            new ManualShoot(arm, shooter, magazine, beamBreak, 0.5),
-            Commands.runOnce(
-                () -> {
-                  arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
-                })));
+        Commands.sequence(new ManualShoot(arm, shooter, magazine, beamBreak, 1)));
 
     NamedCommands.registerCommand(
         "PreRollShootFast",
@@ -265,11 +262,13 @@ public class RobotContainer {
     // x=2.817 y=3.435
     NamedCommands.registerCommand(
         "PodiumPreroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(20), 3000));
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(140), 3000));
     NamedCommands.registerCommand(
-        "ClosePreroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(20), 3000));
+        "ClosePreroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 3000));
     NamedCommands.registerCommand(
-        "ManualPreroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(0), 2500));
+        "ManualPreroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
 
     // Run SmartController updates in autonomousma
     new Trigger(DriverStation::isAutonomousEnabled)
@@ -289,6 +288,7 @@ public class RobotContainer {
     // Configure the button bindings
     aprilTagVision.setDataInterfaces(drive::addVisionData);
     SmartController.getInstance().disableSmartControl();
+
     configureButtonBindings();
   }
 

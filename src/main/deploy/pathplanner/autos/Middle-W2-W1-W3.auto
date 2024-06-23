@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.4319201113429978,
+      "y": 5.522617590689727
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -14,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SS-C4"
+            "pathName": "Mid-W2"
           }
         },
         {
@@ -26,55 +32,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C4-SS"
+            "pathName": "W2-Mid"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "ManualUpCloseShot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source-C5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C5-SS"
+            "pathName": "Mid-W1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "ManualUpCloseShot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source-C5"
+            "pathName": "Mid-W3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ManualUpCloseShot"
           }
         }
       ]

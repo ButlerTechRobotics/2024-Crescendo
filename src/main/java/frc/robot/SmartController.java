@@ -76,22 +76,22 @@ public class SmartController {
     // // Units: Degress
     armAngleMap.put(1.0, 0.0 + 128);
     armAngleMap.put(1.5, 7.88 + 1.25 + 128);
-    armAngleMap.put(2.0, 12.02 + 1.25 + 128);
+    armAngleMap.put(2.0, 12.02 + 2 + 128);
     armAngleMap.put(2.25, 15.0 + 1.25 + 128);
     armAngleMap.put(2.5, 19.7 + 1.25 + 128); // /20.0
     armAngleMap.put(3.0, 23.1 + 1.25 + 128);
-    armAngleMap.put(3.5, 26.60 + 1.25 + 128); // 26.9
+    armAngleMap.put(3.5, 26.60 + 2 + 128); // 26.9
     armAngleMap.put(3.75, 27.18 + 1.25 + 128); // 27.5
-    armAngleMap.put(4.0, 27.8 + 1.25 + 128); // 28.02
-    armAngleMap.put(4.5, 30.20 + 1.25 + 128); // 30.75
-    armAngleMap.put(5.0, 31.10 + 1.25 + 128); // 31.5
-    armAngleMap.put(5.5, 32.75 + 1.25 + 128);
-    armAngleMap.put(6.0, 33.50 + 1.25 + 128);
-    armAngleMap.put(6.5, 35.0 + 1.25 + 128);
-    armAngleMap.put(7.0, 35.5 + 1.25 + 128);
-    armAngleMap.put(8.0, 36.75 + 1.25 + 128);
-    armAngleMap.put(9.0, 38.75 + 1.25 + 128);
-    armAngleMap.put(9.5, 39.75 + 1.25 + 128);
+    armAngleMap.put(4.0, 27.8 + 2 + 128); // 28.02
+    armAngleMap.put(4.5, 30.20 + 2 + 128); // 30.75
+    armAngleMap.put(5.0, 31.10 + 2 + 128); // 31.5
+    armAngleMap.put(5.5, 32.75 + 2 + 128);
+    armAngleMap.put(6.0, 33.50 + 2 + 128);
+    armAngleMap.put(6.5, 35.0 + 2 + 128);
+    armAngleMap.put(7.0, 35.5 + 2 + 128);
+    armAngleMap.put(8.0, 36.75 + 2 + 128);
+    armAngleMap.put(9.0, 38.75 + 2 + 128);
+    armAngleMap.put(9.5, 39.75 + 2 + 128);
 
     flightTimeMap.put(5.0, 0.35);
     flightTimeMap.put(4.0, 0.31);
@@ -102,11 +102,11 @@ public class SmartController {
     // Feed Maps
     feederSpeedMap.put(1.0, 1000.0);
     feederSpeedMap.put(1.5, 1500.0);
-    feederSpeedMap.put(2.0, 1750.0);
-    feederSpeedMap.put(2.5, 2000.0);
-    feederSpeedMap.put(3.0, 2500.0);
-    feederSpeedMap.put(3.5, 2500.0);
-    feederSpeedMap.put(4.0, 3000.0);
+    feederSpeedMap.put(2.0, 1600.0);
+    feederSpeedMap.put(2.5, 1700.0);
+    feederSpeedMap.put(3.0, 1800.0);
+    feederSpeedMap.put(3.5, 1900.0);
+    feederSpeedMap.put(4.0, 2000.0);
     feederSpeedMap.put(4.5, 3000.0);
     feederSpeedMap.put(5.0, 3000.0);
     feederSpeedMap.put(5.5, 3000.0);

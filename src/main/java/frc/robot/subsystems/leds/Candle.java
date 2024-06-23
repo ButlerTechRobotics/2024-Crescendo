@@ -19,9 +19,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Candle extends SubsystemBase {
-  private final CANdle candle;
-  private final int NUM_LEDS = 75;
-  private Color color;
+  CANdle candle;
+  int NUM_LEDS = 75;
+  Color color;
+  boolean hasGamePiece = false;
 
   enum Color {
     GREEN(0, 254, 0),
@@ -66,6 +67,10 @@ public class Candle extends SubsystemBase {
         runOnce(() -> setColor(Color.GREEN)),
         Commands.waitSeconds(1),
         runOnce(() -> setColor(Color.BLUE)));
+  }
+
+  public void setHasGamePiece(boolean hasGamePiece) {
+    this.hasGamePiece = hasGamePiece;
   }
 
   public Command setColorRespawnIdle() {
@@ -123,5 +128,13 @@ public class Candle extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (hasGamePiece) {
+      Commands.sequence(
+          Commands.runOnce(() -> candle.setLEDs(0, 255, 0)),
+          Commands.waitSeconds(1),
+          Commands.runOnce(() -> candle.setLEDs(0, 0, 255)));
+    } else {
+      Commands.runOnce(() -> candle.setLEDs(0, 0, 255));
+    }
   }
 }

@@ -14,7 +14,7 @@ public class IntakeIONeo implements IntakeIO {
 
   public IntakeIONeo() {
     intakeMotor = new Neo(25);
-    intakeMotor.setSmartCurrentLimit(30);
+    intakeMotor.setSmartCurrentLimit(40);
     intakeMotor.setInverted(true);
   }
 

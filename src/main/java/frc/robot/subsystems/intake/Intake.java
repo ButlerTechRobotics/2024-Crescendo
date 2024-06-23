@@ -31,11 +31,11 @@ public class Intake extends SubsystemBase {
   }
 
   public void intake() {
-    setVoltage(10);
+    setVoltage(12);
   }
 
   public void outtake() {
-    setVoltage(-10);
+    setVoltage(-12);
   }
 
   public void stop() {
