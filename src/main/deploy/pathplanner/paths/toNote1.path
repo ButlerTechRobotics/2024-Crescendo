@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.086934844340443,
-        "y": 2.8808657902622503
+        "x": 6.223345099298412,
+        "y": 6.638045329364799
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.1971819715233885,
-        "y": 1.2691560102778672
+        "x": 7.067810805987872,
+        "y": 7.152067933436644
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AS-Wingline"
     },
     {
       "anchor": {
-        "x": 8.399075742516676,
-        "y": 2.4241431649767726
+        "x": 8.114213964276987,
+        "y": 7.454974110836125
       },
       "prevControl": {
-        "x": 7.064040376297584,
-        "y": 1.346746202764873
+        "x": 7.114213964276987,
+        "y": 7.454974110836125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C4"
+      "linkedName": "Note1"
     }
   ],
   "rotationTargets": [],
@@ -33,9 +33,9 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.2,
+      "waypointRelativePos": 0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
@@ -51,20 +51,20 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 726.05,
     "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 23.409999999999968,
-    "rotateFast": true
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -0.31579344941086784,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

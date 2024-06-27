@@ -8,19 +8,26 @@
         {
           "type": "named",
           "data": {
-            "name": "ManualUpCloseShot"
+            "name": "PreRollShootAndMove"
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "SS-C4"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SS-C4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Magazine"
+                }
+              }
+            ]
           }
         },
         {
@@ -36,21 +43,22 @@
           }
         },
         {
-          "type": "wait",
+          "type": "deadline",
           "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-C5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Source-C5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Magazine"
+                }
+              }
+            ]
           }
         },
         {
@@ -63,12 +71,6 @@
           "type": "named",
           "data": {
             "name": "PreRollShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
           }
         },
         {

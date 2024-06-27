@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.599683077279585,
-        "y": 5.793579622675338
+        "x": 5.232015791445568,
+        "y": 6.527897628492261
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.350144987132514,
-        "y": 5.04311771282241
+        "x": 4.910751663900665,
+        "y": 6.516911683656887
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AS-FarShot"
     },
     {
       "anchor": {
-        "x": 8.150929864567832,
-        "y": 4.260690785532515
+        "x": 4.231507508520012,
+        "y": 6.353497102110742
       },
       "prevControl": {
-        "x": 7.271638668241684,
-        "y": 5.139981981858663
+        "x": 4.571129586210339,
+        "y": 6.399391977474299
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Note3"
+      "linkedName": "AS-MidShot"
     }
   ],
   "rotationTargets": [],
@@ -35,13 +35,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "EnableSmartSpeaker"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SmartShoot"
               }
             }
           ]
@@ -57,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -44.999999999999964,
-    "rotateFast": false
+    "rotation": 9.21102654081666,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -47.06011102372312,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

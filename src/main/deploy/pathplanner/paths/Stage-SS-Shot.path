@@ -3,51 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5085249599885775,
-        "y": 2.845733280624907
+        "x": 5.489027093481491,
+        "y": 4.1046482092964185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.618772087171516,
-        "y": 1.3501212390292305
+        "x": 4.617024461573896,
+        "y": 3.6915943310244006
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage-Entry"
     },
     {
       "anchor": {
-        "x": 8.387364905970896,
-        "y": 0.749493538930016
+        "x": 3.653232078939186,
+        "y": 3.030708125789171
       },
       "prevControl": {
-        "x": 6.351827379833088,
-        "y": 0.749493538930016
+        "x": 4.286581358956282,
+        "y": 3.3795091785522087
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage-SS-Shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "EnableSmartSpeaker"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "SmartShoot"
               }
             }
           ]
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.6299999999999955,
-    "rotateFast": true
+    "rotation": -31.522177246758723,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -59.83910169574676,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

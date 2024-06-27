@@ -40,7 +40,6 @@ public class SmartIntake extends Command {
     if ((intake.getIntakeRequest() && beamBreak.hasNoGamePiece()) || intake.getOuttakeRequest()) {
       if (intake.getIntakeRequest() && beamBreak.hasNoGamePiece()) {
         intake.intake();
-        candle.prettyLights();
       } else if (intake.getOuttakeRequest()) {
         intake.outtake();
       }

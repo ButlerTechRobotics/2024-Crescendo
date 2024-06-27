@@ -48,6 +48,12 @@ public class BeamBreak extends SubsystemBase {
     return inputs.beamBreakValues.hasGamePiece();
   }
 
+  // TODO once we add a laser for the intake, change this to the intake's laser
+  @AutoLogOutput(key = "/BeamBreak/HasNoteForAuto")
+  public boolean hasNoteForAuto() {
+    return inputs.beamBreakValues.hasGamePiece();
+  }
+
   @AutoLogOutput(key = "/BeamBreak/isShooterLoaded")
   public boolean isShooterLoaded() {
     return inputs.beamBreakValues.isShooterLoaded();

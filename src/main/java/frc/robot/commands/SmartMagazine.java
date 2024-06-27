@@ -40,17 +40,14 @@ public class SmartMagazine extends Command {
     if ((intake.getIntakeRequest() && beamBreak.hasNoGamePiece()) || intake.getOuttakeRequest()) {
       if (intake.getIntakeRequest() && beamBreak.hasNoGamePiece()) {
         magazine.intake();
-        candle.prettyLights();
       } else if (intake.getOuttakeRequest()) {
         magazine.outtake();
       }
     } else {
       if (!beamBreak.isShooterLoaded() && beamBreak.hasGamePiece()) {
         magazine.stop();
-        candle.setColorGreenCommand();
       } else {
         magazine.stop();
-        candle.setColorGreenCommand();
       }
     }
   }

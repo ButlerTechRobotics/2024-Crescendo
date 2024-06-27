@@ -43,6 +43,14 @@ public class ManualMagazine extends Command {
       magazine.stop();
       return;
     }
+
+    if (beamBreak.hasGamePiece()) {
+      magazine.slowBackward();
+    } else {
+      if (beamBreak.hasNoGamePiece()) {
+        magazine.intake();
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
