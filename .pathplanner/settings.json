@@ -5,6 +5,7 @@
   "pathFolders": [],
   "autoFolders": [
     "Amp",
+    "Source",
     "Stage"
   ],
   "defaultMaxVel": 4.0,

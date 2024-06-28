@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.73,
-        "y": 7.19
+        "x": 6.22,
+        "y": 1.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.429655944766436,
-        "y": 7.185750571501144
+        "x": 6.939305154969911,
+        "y": 1.1949131112468658
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SS-Wingline"
     },
     {
       "anchor": {
-        "x": 8.2,
-        "y": 7.19
+        "x": 8.07749806398614,
+        "y": 0.7818592329748474
       },
       "prevControl": {
-        "x": 6.894782742617058,
-        "y": 7.185750571501144
+        "x": 7.251390307442103,
+        "y": 1.0664074602289046
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -56,14 +56,14 @@
     "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 0.0,
+    "velocity": 0,
+    "rotation": -11.167030609261861,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 7.219247039513735,
+    "rotation": -0.059089599985303914,
     "velocity": 0
   },
   "useDefaultConstraints": true

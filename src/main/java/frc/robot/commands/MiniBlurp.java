@@ -45,7 +45,7 @@ public class MiniBlurp extends Command {
     // SmartController.getInstance().enableSmartControl();
     // if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
     // flywheel.setSpeedRotPerSec(30);
-    shooter.setSetpoint(500, 500);
+    shooter.setSetpoint(1500, 1500);
     arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
     flywheelTimer.restart();
   }
@@ -53,10 +53,10 @@ public class MiniBlurp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((arm.atSetpoint() && (shooter.atTargetSpeed() || flywheelTimer.hasElapsed(0.25)))
+    if ((arm.atSetpoint() && (shooter.atTargetSpeed() || flywheelTimer.hasElapsed(0.5)))
         || flywheelTimer.hasElapsed(forceShootTimeout)) {
       magazine.shoot();
-      if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.25)) {
+      if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.5)) {
         beamBreak.shootGamePiece();
       }
     }
@@ -71,6 +71,6 @@ public class MiniBlurp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.05;
+    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 1.0;
   }
 }

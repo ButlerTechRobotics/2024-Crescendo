@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.817945347322438,
-        "y": 5.522617590689727
+        "x": 6.22,
+        "y": 1.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7380908058451148,
-        "y": 5.522617590689727
+        "x": 5.898735872455097,
+        "y": 1.4890140551646258
       },
       "isLocked": false,
-      "linkedName": "W2"
+      "linkedName": "SS-Wingline"
     },
     {
       "anchor": {
-        "x": 1.41,
-        "y": 5.521816553472311
+        "x": 5.061487326968947,
+        "y": 1.862023010779259
       },
       "prevControl": {
-        "x": 1.5017930409171847,
-        "y": 5.521816553472311
+        "x": 5.424523259888174,
+        "y": 1.6629387895009735
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mid"
+      "linkedName": "SS-FarShot"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.2599999999999909,
-    "rotateFast": false
+    "rotation": -30.837831944687284,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -0.3385137231609398,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

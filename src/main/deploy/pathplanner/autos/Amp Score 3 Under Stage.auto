@@ -10,6 +10,12 @@
           "data": {
             "pathName": "Stage-AS-Shot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
         }
       ]
     }

@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.41,
-        "y": 5.521816553472311
+        "x": 6.22,
+        "y": 1.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6123388332274378,
-        "y": 4.889531176362933
+        "x": 6.94693201083977,
+        "y": 1.5341195874973776
       },
       "isLocked": false,
-      "linkedName": "Mid"
+      "linkedName": "SS-Wingline"
     },
     {
       "anchor": {
-        "x": 2.613922488900611,
-        "y": 4.087081954477746
+        "x": 8.153148175055266,
+        "y": 2.389010655339427
       },
       "prevControl": {
-        "x": 2.46706566566997,
-        "y": 3.7786826256934
-      },
-      "nextControl": {
-        "x": 2.7417685715344895,
-        "y": 4.355558728008891
-      },
-      "isLocked": false,
-      "linkedName": "W3"
-    },
-    {
-      "anchor": {
-        "x": 1.553559470755305,
-        "y": 5.521816553472311
-      },
-      "prevControl": {
-        "x": 1.758791881220126,
-        "y": 5.056180294178771
+        "x": 7.398277362193472,
+        "y": 1.833733479547685
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "PS"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -49,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -73,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -0.10000000000002274,
+    "rotation": 34.231707638798405,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -0.5233562533530296,
+    "rotation": -0.059089599985303914,
     "velocity": 0
   },
   "useDefaultConstraints": true

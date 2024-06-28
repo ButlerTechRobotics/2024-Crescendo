@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -44,8 +43,7 @@ public class AprilTagVision extends SubsystemBase {
 
   private boolean enableVisionUpdates = true;
 
-  private Consumer<List<TimestampedVisionUpdate>> visionConsumer = x -> {
-  };
+  private Consumer<List<TimestampedVisionUpdate>> visionConsumer = x -> {};
   private Map<Integer, Double> lastFrameTimes = new HashMap<>();
   private Map<Integer, Double> lastTagDetectionTimes = new HashMap<>();
 
@@ -167,7 +165,7 @@ public class AprilTagVision extends SubsystemBase {
    * Calculate the standard deviation of the x and y coordinates.
    *
    * @param poseEstimates The pose estimate
-   * @param tagPosesSize  The number of detected tag poses
+   * @param tagPosesSize The number of detected tag poses
    * @return The standard deviation of the x and y coordinates
    */
   private double calculateXYStdDev(PoseEstimate poseEstimates, int tagPosesSize) {
@@ -178,7 +176,7 @@ public class AprilTagVision extends SubsystemBase {
    * Calculate the standard deviation of the theta coordinate.
    *
    * @param poseEstimates The pose estimate
-   * @param tagPosesSize  The number of detected tag poses
+   * @param tagPosesSize The number of detected tag poses
    * @return The standard deviation of the theta coordinate
    */
   private double calculateThetaStdDev(PoseEstimate poseEstimates, int tagPosesSize) {
@@ -191,9 +189,9 @@ public class AprilTagVision extends SubsystemBase {
    * Log the data for a specific instance.
    *
    * @param instanceIndex The index of the instance
-   * @param timestamp     The timestamp of the data
-   * @param robotPose     The robot pose
-   * @param tagPoses      The tag poses
+   * @param timestamp The timestamp of the data
+   * @param robotPose The robot pose
+   * @param tagPoses The tag poses
    */
   private void logData(
       int instanceIndex, double timestamp, Pose3d robotPose, List<Pose3d> tagPoses) {

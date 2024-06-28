@@ -8,12 +8,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "AS-Collect-P"
+            "pathName": "toNote5"
           }
         }
       ]
     }
   },
-  "folder": "Amp",
+  "folder": "Source",
   "choreoAuto": false
 }

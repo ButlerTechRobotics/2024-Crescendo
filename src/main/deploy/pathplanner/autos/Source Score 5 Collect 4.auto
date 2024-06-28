@@ -6,26 +6,20 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ManualUpCloseShot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "SS-MidShot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source-Sweep"
+            "pathName": "toNote4"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Source",
   "choreoAuto": false
 }
