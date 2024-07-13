@@ -356,11 +356,6 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public Command aimAndPreShoot() {
-    return Commands.runOnce(
-        () -> new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1));
-  }
-
   public Command manualBlurp() {
     return Commands.sequence(
         Commands.runOnce(() -> shooter.manualBlurp()),
@@ -410,12 +405,6 @@ public class RobotContainer {
     driverController
         .leftTrigger()
         .whileTrue(Commands.startEnd(intake::enableOuttakeRequest, intake::disableOuttakeRequest));
-
-    // .onFalse(
-    // Commands.runOnce(
-    // () -> {
-    // rollers.setGoal(Rollers.Goal.IDLE);
-    // }));
 
     // ================================================
     // DRIVER CONTROLLER - A
