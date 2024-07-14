@@ -29,6 +29,8 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.beambreak.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.gamepieceVision.GamepieceVision;
+import frc.robot.subsystems.gamepieceVision.GamepieceVisionIOPhoton;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.magazine.*;
@@ -47,9 +49,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
 
   // Subsystems
-  private Drive drive;
+  public static Drive drive;
   private Shooter shooter;
   private AprilTagVision aprilTagVision;
+  public static GamepieceVision gamepieceVision;
   private Arm arm;
   private Intake intake;
   private BeamBreak beamBreak;
@@ -89,6 +92,7 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonVision("BLCamera", ROBOT_TO_CAMERA_BL),
                 new AprilTagVisionIOPhotonVision("BRCamera", ROBOT_TO_CAMERA_BR),
                 new AprilTagVisionIOPhotonVision("BackCamera", ROBOT_TO_CAMERA_BACK));
+        gamepieceVision = new GamepieceVision(new GamepieceVisionIOPhoton("GENERAL_WEBCAM"));
         candle = new Candle(aprilTagVision);
         break;
 
@@ -208,27 +212,27 @@ public class RobotContainer {
     // // Register the Named Command EnableSmartSpeaker
     // // ================================================
     // NamedCommands.registerCommand(
-    //     "EnableSmartSpeaker",
-    //     Commands.sequence(
-    //         Commands.runOnce(
-    //             () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-    //         Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
+    // "EnableSmartSpeaker",
+    // Commands.sequence(
+    // Commands.runOnce(
+    // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+    // Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
 
     // // ================================================
     // // Register the Named Command DisableSmartControl
     // // ================================================
     // NamedCommands.registerCommand(
-    //     "DisableSmartControl",
-    //     Commands.runOnce(SmartController.getInstance()::disableSmartControl));
+    // "DisableSmartControl",
+    // Commands.runOnce(SmartController.getInstance()::disableSmartControl));
 
     // // ================================================
     // // Register the Named Command SmartShoot
     // // ================================================
     // NamedCommands.registerCommand(
-    //     "SmartShoot",
-    //     Commands.sequence(
-    //         new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
-    //         Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
+    // "SmartShoot",
+    // Commands.sequence(
+    // new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
+    // Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
 
     // =========================%=======================
     // Register the Named Command SmartIntake
@@ -448,6 +452,18 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.FEED))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
+
+    // ================================================
+    // DRIVER CONTROLLER - A
+    // SET DRIVE MODE TO AMP
+    // ================================================
+    driverController
+        .povDown()
+        .onTrue(
+            Commands.runOnce(
+                    () -> SmartController.getInstance().setDriveMode(DriveModeType.GAMEPIECE))
                 .alongWith(
                     Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 

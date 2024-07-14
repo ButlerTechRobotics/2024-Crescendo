@@ -316,6 +316,18 @@ public class SmartController {
     setTargetAimingParameters(new AimingParameters(Rotation2d.fromDegrees(90), 0.0, 0, 10, 0));
   }
 
+  public void calculateGamepiece(Pose2d fieldRelativePose) {
+    setTargetAimingParameters(
+        new AimingParameters(
+            (RobotContainer.gamepieceVision
+                .getAngleToTarget()
+                .plus(fieldRelativePose.getRotation())),
+            0.0,
+            0,
+            127,
+            0));
+  }
+
   /**
    * Calculates the shooter parameters for the feeding shot.
    *
@@ -405,6 +417,7 @@ public class SmartController {
     AMP,
     SPEAKER,
     SAFE,
-    FEED
+    FEED,
+    GAMEPIECE
   }
 }

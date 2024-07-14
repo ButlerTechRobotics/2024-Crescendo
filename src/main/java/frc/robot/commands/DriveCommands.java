@@ -124,6 +124,14 @@ public class DriveCommands {
                 SmartController.getInstance().getTargetAimingParameters();
             targetGyroAngle = Optional.of(calculatedAim.robotAngle());
             feedForwardRadialVelocity = calculatedAim.radialVelocity();
+          }
+          // Gamepiece Mode
+          else if (SmartController.getInstance().isSmartControlEnabled()
+              && SmartController.getInstance().getDriveModeType() == DriveModeType.GAMEPIECE) {
+            SmartController.getInstance().calculateGamepiece(drive.getPose());
+            AimingParameters calculatedAim =
+                SmartController.getInstance().getTargetAimingParameters();
+            targetGyroAngle = Optional.of(calculatedAim.robotAngle());
           } else {
             SmartController.getInstance()
                 .calculateSpeaker(
