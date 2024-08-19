@@ -61,6 +61,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController demoController = new CommandXboxController(1);
 
   private final ClimberLeft climberLeft = new ClimberLeft();
   private final ClimberRight climberRight = new ClimberRight();
@@ -266,8 +267,7 @@ public class RobotContainer {
                     })));
 
     NamedCommands.registerCommand(
-        "ManualUpCloseShot",
-        Commands.sequence(new ManualShoot(arm, shooter, magazine, beamBreak, 1)));
+        "ManualUpCloseShot", Commands.sequence(new ManualShoot(shooter, magazine, beamBreak, 1)));
 
     NamedCommands.registerCommand(
         "PreRollShootFast",
@@ -399,6 +399,18 @@ public class RobotContainer {
     // RUN INTAKE IN
     // ================================================
     driverController
+        .start()
+        .whileTrue(
+            Commands.run(
+                () ->
+                    drive.setAutoStartPose(
+                        new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
+
+    // ================================================
+    // DRIVER CONTROLLER - LEFT BUMPER
+    // RUN INTAKE IN
+    // ================================================
+    driverController
         .leftBumper()
         .whileTrue(Commands.startEnd(intake::enableIntakeRequest, intake::disableIntakeRequest));
 
@@ -485,6 +497,50 @@ public class RobotContainer {
     // MOVE CLIMBER DOWN
     // ================================================
     driverController.povDown().onTrue(new ManualClimb(climberLeft, climberRight, 0));
+
+    // ================================================
+    // DEMO CONTROLLER - LEFT BUMPER
+    // RUN INTAKE IN
+    // ================================================
+    demoController
+        .leftBumper()
+        .whileTrue(Commands.startEnd(intake::enableIntakeRequest, intake::disableIntakeRequest));
+
+    // ================================================
+    // DEMO CONTROLLER - LEFT TRIGGER
+    // RUN INTAKE OUT
+    // ================================================
+    demoController
+        .leftTrigger()
+        .whileTrue(Commands.startEnd(intake::enableOuttakeRequest, intake::disableOuttakeRequest));
+
+    // ================================================
+    // DEMO CONTROLLER - RIGHT TRIGGER
+    // SCORE
+    // ================================================
+    demoController
+        .rightTrigger()
+        .whileTrue(new ManualShoot(shooter, magazine, beamBreak, 0.5))
+        .onFalse(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
+
+    // ================================================
+    // DEMO CONTROLLER - RIGHT TRIGGER
+    // SCORE
+    // ================================================
+    demoController
+        .b()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.DEMO))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
+
+    demoController
+        .x()
+        .onTrue(
+            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE))
+                .alongWith(
+                    Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
   }
 
   /**

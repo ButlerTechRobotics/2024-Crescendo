@@ -48,6 +48,9 @@ public class SmartShooter extends Command {
           SmartController.getInstance().getTargetAimingParameters().shooterSpeed(),
           SmartController.getInstance().getTargetAimingParameters().shooterSpeed() - 300);
       return;
+    } else if (SmartController.getInstance().getDriveModeType() == DriveModeType.DEMO) {
+      shooter.setSetpoint(2500, 2500);
+      return;
     } else {
       shooter.stop();
       return;

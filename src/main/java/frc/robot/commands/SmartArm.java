@@ -43,6 +43,12 @@ public class SmartArm extends Command {
       return;
     }
 
+    // If the drive mode is SAFE, stop the arm and return.
+    if (driveModeType == DriveModeType.DEMO) {
+      arm.setArmTargetAngle(160);
+      return;
+    }
+
     // If smart control is enabled, and the drive mode is AMP, set the target
     // position of the arm to 80.
     if (isSmartControlled) {

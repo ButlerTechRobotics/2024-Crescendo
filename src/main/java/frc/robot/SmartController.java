@@ -418,6 +418,7 @@ public class SmartController {
     SPEAKER,
     SAFE,
     FEED,
-    GAMEPIECE
+    GAMEPIECE,
+    DEMO
   }
 }

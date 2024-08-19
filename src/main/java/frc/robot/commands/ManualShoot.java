@@ -10,8 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.SmartController;
+import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmConstants;
 import frc.robot.subsystems.beambreak.BeamBreak;
 import frc.robot.subsystems.magazine.Magazine;
 import frc.robot.subsystems.shooter.Shooter;
@@ -22,20 +23,19 @@ public class ManualShoot extends Command {
   Magazine magazine;
   BeamBreak beamBreak;
   Timer timer;
-  Timer flywheelTimer;
+  Timer shooterTimer;
   double forceShootTimeout;
 
   /** Creates a new Shoot. */
   public ManualShoot(
-      Arm arm, Shooter shooter, Magazine magazine, BeamBreak beamBreak, double forceShootTimeout) {
-    this.arm = arm;
+      Shooter shooter, Magazine magazine, BeamBreak beamBreak, double forceShootTimeout) {
     this.shooter = shooter;
     this.magazine = magazine;
     this.beamBreak = beamBreak;
     timer = new Timer();
-    flywheelTimer = new Timer();
+    shooterTimer = new Timer();
     this.forceShootTimeout = forceShootTimeout;
-    addRequirements(magazine, arm, shooter);
+    addRequirements(magazine, shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -45,16 +45,16 @@ public class ManualShoot extends Command {
     // SmartController.getInstance().enableSmartControl();
     // if (Constants.getMode() == Constants.Mode.SIM) timer.restart();
     // flywheel.setSpeedRotPerSec(30);
-    shooter.setSetpoint(2500, 2500);
-    arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
-    flywheelTimer.restart();
+    if (SmartController.getInstance().getDriveModeType() == DriveModeType.DEMO) {
+      shooter.setSetpoint(2500, 2500);
+    }
+    shooterTimer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((arm.atSetpoint() && (shooter.atTargetSpeed() || flywheelTimer.hasElapsed(2)))
-        || flywheelTimer.hasElapsed(forceShootTimeout)) {
+    if (shooterTimer.hasElapsed(0.5)) {
       magazine.shoot();
       if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.75)) {
         beamBreak.shootGamePiece();
@@ -65,12 +65,13 @@ public class ManualShoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartController.getInstance().disableSmartControl();
     magazine.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 0.05;
+    return shooterTimer.hasElapsed(1.5);
   }
 }
