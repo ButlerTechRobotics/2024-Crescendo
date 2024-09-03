@@ -8,18 +8,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SS-DriveawayShot"
+            "pathName": "toNoteB"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "toNote5"
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
           }
         }
       ]
     }
   },
-  "folder": "Source",
+  "folder": "Middle",
   "choreoAuto": false
 }

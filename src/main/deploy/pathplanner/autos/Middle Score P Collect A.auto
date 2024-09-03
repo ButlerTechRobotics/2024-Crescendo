@@ -6,20 +6,26 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "SS-DriveawayShot"
+            "name": "PreRollShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "toNote5"
+            "pathName": "toNoteA"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         }
       ]
     }
   },
-  "folder": "Source",
+  "folder": "Middle",
   "choreoAuto": false
 }

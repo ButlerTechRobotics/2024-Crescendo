@@ -6,9 +6,22 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "PreRollShootAndMove"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "EnableSmartSpeaker"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SmartShootTestPath"
+                }
+              }
+            ]
           }
         }
       ]

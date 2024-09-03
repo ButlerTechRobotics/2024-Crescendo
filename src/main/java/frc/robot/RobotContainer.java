@@ -212,12 +212,12 @@ public class RobotContainer {
     // // ================================================
     // // Register the Named Command EnableSmartSpeaker
     // // ================================================
-    // NamedCommands.registerCommand(
-    // "EnableSmartSpeaker",
-    // Commands.sequence(
-    // Commands.runOnce(
-    // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-    // Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
+    NamedCommands.registerCommand(
+        "EnableSmartSpeaker",
+        Commands.sequence(
+            Commands.runOnce(
+                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+            Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
 
     // // ================================================
     // // Register the Named Command DisableSmartControl
@@ -229,11 +229,11 @@ public class RobotContainer {
     // // ================================================
     // // Register the Named Command SmartShoot
     // // ================================================
-    // NamedCommands.registerCommand(
-    // "SmartShoot",
-    // Commands.sequence(
-    // new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
-    // Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
+    NamedCommands.registerCommand(
+        "SmartShoot",
+        Commands.sequence(
+            new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
+            Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
 
     // =========================%=======================
     // Register the Named Command SmartIntake
@@ -330,15 +330,25 @@ public class RobotContainer {
     // ================================================
     Command threeNoteSourceSideP54 =
         Commands.sequence(
-            Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-            Commands.runOnce(SmartController.getInstance()::enableSmartControl),
+            // Commands.runOnce(
+            //     () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+            // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
             new PathPlannerAuto("Source Score P Collect 5"),
             Commands.either(
                 new PathPlannerAuto("Source Score 5 Collect 4"),
                 new PathPlannerAuto("Source Score 5 Collect 4"),
                 beamBreak::hasNoteForAuto));
     autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
+
+    Command fourNoteMiddlePABC =
+        Commands.sequence(
+            Commands.runOnce(
+                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+            Commands.runOnce(SmartController.getInstance()::enableSmartControl),
+            new PathPlannerAuto("Middle Score P Collect A"),
+            new PathPlannerAuto("Middle Align B Score A"),
+            new PathPlannerAuto("Middle Collect B Score B"));
+    autoChooser.addOption("4 Note Middle P-A-B-C", fourNoteMiddlePABC);
 
     // Run SmartController updates in autonomous
     new Trigger(DriverStation::isAutonomousEnabled)
@@ -525,8 +535,8 @@ public class RobotContainer {
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
 
     // ================================================
-    // DEMO CONTROLLER - RIGHT TRIGGER
-    // SCORE
+    // DEMO CONTROLLER - B
+    // PREPARE SHOOT
     // ================================================
     demoController
         .b()
@@ -535,12 +545,28 @@ public class RobotContainer {
                 .alongWith(
                     Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
 
+    // ================================================
+    // DEMO CONTROLLER - X
+    // SET DRIVE MODE TO SAFE
+    // ================================================
     demoController
         .x()
         .onTrue(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE))
                 .alongWith(
                     Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
+
+    // ================================================
+    // DEMO CONTROLLER - DPAD UP
+    // MOVE CLIMBER UP
+    // ================================================
+    demoController.povUp().onTrue(new ManualClimb(climberLeft, climberRight, -140));
+
+    // ================================================
+    // DEMO CONTROLLER - DPAD DOWN
+    // MOVE CLIMBER DOWN
+    // ================================================
+    demoController.povDown().onTrue(new ManualClimb(climberLeft, climberRight, 0));
   }
 
   /**

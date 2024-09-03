@@ -6,7 +6,8 @@
   "autoFolders": [
     "Amp",
     "Source",
-    "Stage"
+    "Stage",
+    "Middle"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
