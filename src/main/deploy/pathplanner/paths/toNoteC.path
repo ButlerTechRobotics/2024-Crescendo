@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3179319293111518,
-        "y": 5.5430292057165325
+        "x": 2.15,
+        "y": 4.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.528751296638213,
-        "y": 5.5430292057165325
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.124828585839508,
-        "y": 5.5430292057165325
-      },
-      "prevControl": {
-        "x": 3.0546636591848677,
-        "y": 5.823688912335091
-      },
-      "nextControl": {
-        "x": 3.187611635060186,
-        "y": 5.291897008833821
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.1542137671169925,
-        "y": 4.490555305896938
-      },
-      "prevControl": {
         "x": 2.353014392638472,
-        "y": 4.958321483594535
+        "y": 4.350225452587657
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.62197994481459,
+        "y": 4.244978062605699
+      },
+      "prevControl": {
+        "x": 2.446567628177991,
+        "y": 4.303448834817899
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.25,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -73,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -26.075355583948838,
+    "rotation": -22.21759426951825,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -21.124719146072625,
     "velocity": 0
   },
   "useDefaultConstraints": true

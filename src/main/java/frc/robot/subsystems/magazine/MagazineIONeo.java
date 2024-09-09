@@ -17,8 +17,8 @@ public class MagazineIONeo implements MagazineIO {
     frontMotor = new Neo(24);
     backMotor = new Neo(21);
 
-    frontMotor.setSmartCurrentLimit(40);
-    backMotor.setSmartCurrentLimit(40);
+    frontMotor.setSmartCurrentLimit(60);
+    backMotor.setSmartCurrentLimit(60);
 
     frontMotor.setInverted(true);
     backMotor.setInverted(false);

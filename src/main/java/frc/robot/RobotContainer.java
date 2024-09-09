@@ -300,7 +300,6 @@ public class RobotContainer {
 
     // ================================================
     // 4 NOTE AMP SIDE 1-2-3-P
-    // SET DRIVE MODE TO AMP
     // ================================================
     Command fourNoteAmpSide123P =
         Commands.sequence(
@@ -326,12 +325,11 @@ public class RobotContainer {
 
     // ================================================
     // 3 NOTE SOURCE SIDE P-5-4
-    // SET DRIVE MODE TO AMP
     // ================================================
     Command threeNoteSourceSideP54 =
         Commands.sequence(
             // Commands.runOnce(
-            //     () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+            // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
             // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
             new PathPlannerAuto("Source Score P Collect 5"),
             Commands.either(
@@ -340,14 +338,18 @@ public class RobotContainer {
                 beamBreak::hasNoteForAuto));
     autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
 
+    // ================================================
+    // 3 NOTE SOURCE SIDE P-A-B-C
+    // ================================================
     Command fourNoteMiddlePABC =
         Commands.sequence(
             Commands.runOnce(
                 () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
             Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-            new PathPlannerAuto("Middle Score P Collect A"),
-            new PathPlannerAuto("Middle Align B Score A"),
-            new PathPlannerAuto("Middle Collect B Score B"));
+            new PathPlannerAuto("Middle Score P Collect A Score A"),
+            // new PathPlannerAuto("Middle Align B Score A"),
+            new PathPlannerAuto("Middle Collect B Score B"),
+            new PathPlannerAuto("Middle Collect C Score C"));
     autoChooser.addOption("4 Note Middle P-A-B-C", fourNoteMiddlePABC);
 
     // Run SmartController updates in autonomous

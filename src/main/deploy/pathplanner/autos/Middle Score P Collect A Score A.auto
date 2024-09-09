@@ -6,9 +6,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "toNoteBFromNoteA"
+            "pathName": "toNoteA"
           }
         },
         {

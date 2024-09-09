@@ -6,21 +6,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "PreRollShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "toNoteA"
+            "pathName": "toNoteC"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
           }
         }
       ]
