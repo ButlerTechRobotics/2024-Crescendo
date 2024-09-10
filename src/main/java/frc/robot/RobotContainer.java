@@ -219,6 +219,9 @@ public class RobotContainer {
                 () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
             Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
 
+    NamedCommands.registerCommand(
+        "EnableSmartControl", Commands.runOnce(SmartController.getInstance()::enableSmartControl));
+
     // // ================================================
     // // Register the Named Command DisableSmartControl
     // // ================================================
@@ -232,6 +235,8 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "SmartShoot",
         Commands.sequence(
+            Commands.runOnce(
+                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
             new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
             Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
 
@@ -240,6 +245,16 @@ public class RobotContainer {
     // ================================================
     NamedCommands.registerCommand(
         "SmartIntake", new SmartIntake(intake, beamBreak, magazine, candle));
+
+    // =========================%=======================
+    // Register the Named Command SmartIntake
+    // ================================================
+    NamedCommands.registerCommand(
+        "SmartControl",
+        Commands.parallel(
+            new SmartShooter(shooter),
+            new SmartArm(arm),
+            new SmartIntake(intake, beamBreak, magazine, candle)));
 
     NamedCommands.registerCommand(
         "PreRollShoot",
@@ -286,7 +301,7 @@ public class RobotContainer {
     // x=2.817 y=3.435
     NamedCommands.registerCommand(
         "PodiumPreroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(140), 3000));
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(153), 4100));
     NamedCommands.registerCommand(
         "ClosePreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 3000));
@@ -294,52 +309,55 @@ public class RobotContainer {
         "ManualPreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
 
+    NamedCommands.registerCommand(
+        "PodiumShot", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
+
     // AUTON PATHS ========================
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // ================================================
-    // 4 NOTE AMP SIDE 1-2-3-P
-    // ================================================
-    Command fourNoteAmpSide123P =
-        Commands.sequence(
-            // Commands.runOnce(
-            // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-            // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-            // new ManualShoot(arm, shooter, magazine, beamBreak, 0.5),
-            new PathPlannerAuto("Amp Drop P Collect 1"),
-            Commands.either(
-                new PathPlannerAuto("Amp Score 1 Collect 2"),
-                new PathPlannerAuto("Amp Missed 1 Collect 2"),
-                beamBreak::hasNoteForAuto),
-            Commands.either(
-                new PathPlannerAuto("Amp Score 2 Collect 3"),
-                new PathPlannerAuto("Amp Missed 2 Collect 3"),
-                beamBreak::hasNoteForAuto),
-            new PathPlannerAuto("Amp Score 3 Under Stage"),
-            Commands.either(
-                new PathPlannerAuto("Amp Collect P Score P"),
-                new PathPlannerAuto("Amp Missed 2 Collect 3"),
-                beamBreak::hasNoteForAuto));
-    autoChooser.addOption("4 Note Amp Side 1-2-3-P", fourNoteAmpSide123P);
+    // // ================================================
+    // // 4 NOTE AMP SIDE 1-2-3-P
+    // // ================================================
+    // Command fourNoteAmpSide123P =
+    // Commands.sequence(
+    // // Commands.runOnce(
+    // // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+    // // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
+    // // new ManualShoot(arm, shooter, magazine, beamBreak, 0.5),
+    // new PathPlannerAuto("Amp Drop P Collect 1"),
+    // Commands.either(
+    // new PathPlannerAuto("Amp Score 1 Collect 2"),
+    // new PathPlannerAuto("Amp Missed 1 Collect 2"),
+    // beamBreak::hasNoteForAuto),
+    // Commands.either(
+    // new PathPlannerAuto("Amp Score 2 Collect 3"),
+    // new PathPlannerAuto("Amp Missed 2 Collect 3"),
+    // beamBreak::hasNoteForAuto),
+    // new PathPlannerAuto("Amp Score 3 Under Stage"),
+    // Commands.either(
+    // new PathPlannerAuto("Amp Collect P Score P"),
+    // new PathPlannerAuto("Amp Missed 2 Collect 3"),
+    // beamBreak::hasNoteForAuto));
+    // autoChooser.addOption("4 Note Amp Side 1-2-3-P", fourNoteAmpSide123P);
+
+    // // ================================================
+    // // 3 NOTE SOURCE SIDE P-5-4
+    // // ================================================
+    // Command threeNoteSourceSideP54 =
+    // Commands.sequence(
+    // // Commands.runOnce(
+    // // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
+    // // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
+    // new PathPlannerAuto("Source Score P Collect 5"),
+    // Commands.either(
+    // new PathPlannerAuto("Source Score 5 Collect 4"),
+    // new PathPlannerAuto("Source Score 5 Collect 4"),
+    // beamBreak::hasNoteForAuto));
+    // autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
 
     // ================================================
-    // 3 NOTE SOURCE SIDE P-5-4
-    // ================================================
-    Command threeNoteSourceSideP54 =
-        Commands.sequence(
-            // Commands.runOnce(
-            // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-            // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-            new PathPlannerAuto("Source Score P Collect 5"),
-            Commands.either(
-                new PathPlannerAuto("Source Score 5 Collect 4"),
-                new PathPlannerAuto("Source Score 5 Collect 4"),
-                beamBreak::hasNoteForAuto));
-    autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
-
-    // ================================================
-    // 3 NOTE SOURCE SIDE P-A-B-C
+    // 4 NOTE MIDDLE P-A-B-C
     // ================================================
     Command fourNoteMiddlePABC =
         Commands.sequence(

@@ -2,7 +2,10 @@
   "robotWidth": 0.907,
   "robotLength": 0.926,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "4 NOTE MIDDLE P-A-B-C",
+    "5 NOTE MIDDLE P-B-3-A-C"
+  ],
   "autoFolders": [
     "Amp",
     "Source",
