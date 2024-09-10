@@ -3,41 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3179319293111518,
-        "y": 5.5430292057165325
+        "x": 8.13,
+        "y": 4.11
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.528751296638213,
-        "y": 5.5430292057165325
+        "x": 7.817362169444678,
+        "y": 4.11
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.124828585839508,
-        "y": 5.5430292057165325
+        "x": 5.248860711701451,
+        "y": 4.356431195030721
       },
       "prevControl": {
-        "x": 3.0546636591848677,
-        "y": 5.823688912335091
+        "x": 5.998354250631467,
+        "y": 4.063660281386183
       },
       "nextControl": {
-        "x": 3.187611635060186,
-        "y": 5.291897008833821
+        "x": 4.403567465581295,
+        "y": 4.686623869296408
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1542137671169925,
-        "y": 4.490555305896938
+        "x": 3.609343595292039,
+        "y": 5.059081387777612
       },
       "prevControl": {
-        "x": 2.353014392638472,
-        "y": 4.958321483594535
+        "x": 4.265661084972583,
+        "y": 4.8236631577835025
+      },
+      "nextControl": {
+        "x": 2.5319466330801403,
+        "y": 5.445538993788403
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.9112722961537205,
+        "y": 5.550936522700434
+      },
+      "prevControl": {
+        "x": 2.145781615229545,
+        "y": 5.550936522700434
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,25 +62,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.25,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -73,11 +71,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -26.075355583948838,
+    "rotation": -1.080924186660722,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "5 NOTE MIDDLE P-B-3-A-C",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

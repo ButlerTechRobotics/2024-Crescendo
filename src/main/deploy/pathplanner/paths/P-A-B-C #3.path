@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.240686483592724,
-        "y": 4.921576990767744
+        "x": 2.15,
+        "y": 4.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.286581358956282,
-        "y": 5.967980149056858
+        "x": 2.353014392638472,
+        "y": 4.350225452587657
       },
       "isLocked": false,
-      "linkedName": "Stage-AS-Shot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.635382411719319,
-        "y": 7.234678709091049
+        "x": 2.62197994481459,
+        "y": 4.244978062605699
       },
       "prevControl": {
-        "x": 4.506876760701358,
-        "y": 6.64324966163806
+        "x": 2.446567628177991,
+        "y": 4.303448834817899
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 87.41957501976255,
-    "rotateFast": true
+    "rotation": -22.21759426951825,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "4 NOTE MIDDLE P-A-B-C",
   "previewStartingState": {
-    "rotation": -15.945395900922856,
+    "rotation": -21.124719146072625,
     "velocity": 0
   },
   "useDefaultConstraints": true
