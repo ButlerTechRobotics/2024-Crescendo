@@ -80,8 +80,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake B",
-      "waypointRelativePos": 2.25,
+      "name": "Intake 3",
+      "waypointRelativePos": 2.4,
       "command": {
         "type": "sequential",
         "data": {
@@ -109,7 +109,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "5 NOTE MIDDLE P-B-3-A-C",
+  "folder": "5 NOTE MIDDLE P-3-B-A-C",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

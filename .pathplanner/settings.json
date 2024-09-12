@@ -3,8 +3,9 @@
   "robotLength": 0.926,
   "holonomicMode": true,
   "pathFolders": [
+    "4 NOTE AMP PD-1-2-3-P",
     "4 NOTE MIDDLE P-A-B-C",
-    "5 NOTE MIDDLE P-B-3-A-C"
+    "5 NOTE MIDDLE P-3-B-A-C"
   ],
   "autoFolders": [
     "Amp",

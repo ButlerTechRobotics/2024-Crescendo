@@ -12,7 +12,6 @@ import static frc.robot.subsystems.vision.CameraConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -287,10 +286,14 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "PreRollShootFast",
         Commands.deadline(
-            new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.5),
-            new SmartShooter(shooter),
-            new SmartArm(arm),
-            DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0)));
+                new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.5),
+                new SmartShooter(shooter),
+                new SmartArm(arm))
+            .andThen(
+                Commands.runOnce(
+                    () -> {
+                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                    })));
 
     NamedCommands.registerCommand(
         "Magazine", new SmartMagazine(magazine, intake, beamBreak, candle));
@@ -301,7 +304,7 @@ public class RobotContainer {
     // x=2.817 y=3.435
     NamedCommands.registerCommand(
         "PodiumPreroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(153), 4100));
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(158), 4500));
     NamedCommands.registerCommand(
         "ClosePreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 3000));
@@ -355,20 +358,6 @@ public class RobotContainer {
     // new PathPlannerAuto("Source Score 5 Collect 4"),
     // beamBreak::hasNoteForAuto));
     // autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
-
-    // ================================================
-    // 4 NOTE MIDDLE P-A-B-C
-    // ================================================
-    Command fourNoteMiddlePABC =
-        Commands.sequence(
-            Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-            Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-            new PathPlannerAuto("Middle Score P Collect A Score A"),
-            // new PathPlannerAuto("Middle Align B Score A"),
-            new PathPlannerAuto("Middle Collect B Score B"),
-            new PathPlannerAuto("Middle Collect C Score C"));
-    autoChooser.addOption("4 Note Middle P-A-B-C", fourNoteMiddlePABC);
 
     // Run SmartController updates in autonomous
     new Trigger(DriverStation::isAutonomousEnabled)

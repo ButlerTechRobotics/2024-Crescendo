@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4291761916857164,
-        "y": 5.531335051274091
+        "x": 2.832474724778509,
+        "y": 7.6713653142406
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1542137671169925,
-        "y": 6.548726487766366
+        "x": 3.475653219112706,
+        "y": 7.6713653142406
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.855863033663389,
-        "y": 7.110045901003483
+        "x": 8.176703304973561,
+        "y": 7.425788070949362
       },
       "prevControl": {
-        "x": 3.101440276954628,
-        "y": 6.9346335843668845
+        "x": 8.059761760549161,
+        "y": 7.70644777756792
       },
       "nextControl": {
-        "x": 2.40699775446032,
-        "y": 7.430663957577102
+        "x": 8.308835199033041,
+        "y": 7.108671525206608
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.037272222692593,
-        "y": 5.531335051274091
+        "x": 7.323030030675445,
+        "y": 6.922939429924444
       },
       "prevControl": {
-        "x": 2.0255780682501525,
-        "y": 6.443479097784407
+        "x": 7.708937127275964,
+        "y": 7.004798511021523
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,16 +46,33 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 53.63416231311078,
-      "rotateFast": true
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
+      "name": "Drop P",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "MiniBlurp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake 1",
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -78,14 +95,14 @@
     "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.6820603931726318,
+    "velocity": 2.0,
+    "rotation": 10.22,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 NOTE MIDDLE P-A-B-C",
+  "folder": "4 NOTE AMP PD-1-2-3-P",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 1.8183029644518487,
     "velocity": 0
   },
   "useDefaultConstraints": true

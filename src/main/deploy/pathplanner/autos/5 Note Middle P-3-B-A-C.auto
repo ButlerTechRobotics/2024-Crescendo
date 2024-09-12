@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootFast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-3-B-A-C #1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-3-B-A-C #2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootFast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-3-B-A-C #3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-3-B-A-C #4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Middle",
+  "choreoAuto": false
+}

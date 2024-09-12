@@ -3,59 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4291761916857164,
-        "y": 5.531335051274091
+        "x": 2.3179319293111518,
+        "y": 5.5430292057165325
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1542137671169925,
-        "y": 6.548726487766366
+        "x": 2.528751296638213,
+        "y": 5.5430292057165325
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.855863033663389,
-        "y": 7.110045901003483
+        "x": 3.124828585839508,
+        "y": 5.5430292057165325
       },
       "prevControl": {
-        "x": 3.101440276954628,
-        "y": 6.9346335843668845
+        "x": 3.0546636591848677,
+        "y": 5.823688912335091
       },
       "nextControl": {
-        "x": 2.40699775446032,
-        "y": 7.430663957577102
+        "x": 3.187611635060186,
+        "y": 5.291897008833821
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.037272222692593,
-        "y": 5.531335051274091
+        "x": 1.8735540604984342,
+        "y": 4.560720232551577
       },
       "prevControl": {
-        "x": 2.0255780682501525,
-        "y": 6.443479097784407
+        "x": 2.388096855965791,
+        "y": 4.876462402497455
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 53.63416231311078,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
+      "name": "Intake",
+      "waypointRelativePos": 0.25,
       "command": {
         "type": "parallel",
         "data": {
@@ -79,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.6820603931726318,
+    "rotation": -26.075355583948838,
     "rotateFast": false
   },
   "reversed": false,

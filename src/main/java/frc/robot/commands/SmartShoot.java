@@ -92,7 +92,7 @@ public class SmartShoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterTimer.hasElapsed(1.5);
+    return shooterTimer.hasElapsed(forceShootTimeout + 0.25);
   }
 
   public boolean isArmInTargetPose() {

@@ -58,7 +58,7 @@ public class Candle extends SubsystemBase {
     // This method will be called once per scheduler run
     if (DriverStation.isDisabled()) {
       if (aprilTags.getPoseEstimationCount() == 0 || DriverStation.getAlliance().isEmpty()) {
-        candle.animate(new SingleFadeAnimation(0, 100, 0, 0, 0.3, stripLength, startOffset));
+        candle.animate(new SingleFadeAnimation(100, 0, 0, 0, 0.2, stripLength, startOffset));
         return;
       }
       if (DriverStation.getAlliance().get() == Alliance.Red) {

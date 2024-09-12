@@ -3,59 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4291761916857164,
-        "y": 5.531335051274091
+        "x": 6.41088598416513,
+        "y": 6.209596008935608
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1542137671169925,
-        "y": 6.548726487766366
+        "x": 6.972205397402248,
+        "y": 6.01079538341413
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.855863033663389,
-        "y": 7.110045901003483
+        "x": 8.211785768300881,
+        "y": 5.74182983123801
       },
       "prevControl": {
-        "x": 3.101440276954628,
-        "y": 6.9346335843668845
+        "x": 7.943920045375648,
+        "y": 5.457222500629949
       },
       "nextControl": {
-        "x": 2.40699775446032,
-        "y": 7.430663957577102
+        "x": 8.39889223937992,
+        "y": 5.940630456759489
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.037272222692593,
-        "y": 5.531335051274091
+        "x": 7.311335876233006,
+        "y": 6.373314171129768
       },
       "prevControl": {
-        "x": 2.0255780682501525,
-        "y": 6.443479097784407
+        "x": 7.545218965081804,
+        "y": 6.314843398917567
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 53.63416231311078,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
+      "name": "Intake 2",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -78,14 +72,14 @@
     "maxAngularAcceleration": 2866.34
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.6820603931726318,
+    "velocity": 2.0,
+    "rotation": 10.22,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 NOTE MIDDLE P-A-B-C",
+  "folder": "4 NOTE AMP PD-1-2-3-P",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 1.1017061152062582,
     "velocity": 0
   },
   "useDefaultConstraints": true

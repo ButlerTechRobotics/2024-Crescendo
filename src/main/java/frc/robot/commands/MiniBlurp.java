@@ -53,10 +53,10 @@ public class MiniBlurp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if ((arm.atSetpoint() && (shooter.atTargetSpeed() || flywheelTimer.hasElapsed(0.5)))
+    if ((flywheelTimer.hasElapsed(0.25))
         || flywheelTimer.hasElapsed(forceShootTimeout)) {
       magazine.shoot();
-      if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.5)) {
+      if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.25)) {
         beamBreak.shootGamePiece();
       }
     }
