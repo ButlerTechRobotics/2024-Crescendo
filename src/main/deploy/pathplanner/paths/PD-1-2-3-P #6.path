@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.8261782620431335,
-        "y": 6.466867406669286
+        "x": 6.608862052352296,
+        "y": 6.059769899783973
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.475353628769935,
-        "y": 6.396702480014646
+        "x": 6.195808174080278,
+        "y": 6.206633500947357
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "PD-1-2-3-P #5 End"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 6.232984317820488
       },
       "prevControl": {
-        "x": 5.007587451072338,
-        "y": 6.303149244475128
+        "x": 5.013914218561973,
+        "y": 6.232984317820488
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,20 +50,19 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 6.12,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 726.05,
-    "maxAngularAcceleration": 2866.34
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.22,
-    "rotateFast": true
+    "rotation": 10.22
   },
   "reversed": false,
-  "folder": "4 NOTE AMP PD-1-2-3-P",
-  "previewStartingState": {
-    "rotation": 9.462322208025515,
+  "folder": null,
+  "idealStartingState": {
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

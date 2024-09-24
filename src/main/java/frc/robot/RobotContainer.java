@@ -300,14 +300,15 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "Preload", new InstantCommand(() -> beamBreak.setGamePiece(true)));
-    // PodiumShot
-    // x=2.817 y=3.435
+
     NamedCommands.registerCommand(
         "PodiumPreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(158), 4500));
+
     NamedCommands.registerCommand(
         "ClosePreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 3000));
+
     NamedCommands.registerCommand(
         "ManualPreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
@@ -318,6 +319,17 @@ public class RobotContainer {
     // AUTON PATHS ========================
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    autoChooser.addOption(
+        "Drive FF Characterization",
+        new FeedForwardCharacterization(
+            drive, drive::runCharacterizationVolts, drive::getCharacterizationVelocity));
+
+    autoChooser.addOption(
+        "Wheel Radius Characterization",
+        Commands.run(drive::setWheelsToCircle)
+            .withTimeout(2)
+            .andThen(new WheelRadiusCharacterization(drive)));
 
     // // ================================================
     // // 4 NOTE AMP SIDE 1-2-3-P

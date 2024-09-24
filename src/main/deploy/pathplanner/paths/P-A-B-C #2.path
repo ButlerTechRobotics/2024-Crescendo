@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3179319293111518,
-        "y": 5.5430292057165325
+        "x": 1.4291761916857164,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.528751296638213,
-        "y": 5.5430292057165325
+        "x": 1.5291761916857165,
+        "y": 5.531335051274091
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     },
     {
       "anchor": {
-        "x": 3.124828585839508,
-        "y": 5.5430292057165325
+        "x": 2.9005561229768415,
+        "y": 5.531335051274091
       },
       "prevControl": {
-        "x": 3.0546636591848677,
-        "y": 5.823688912335091
+        "x": 2.9410203997498328,
+        "y": 5.879870407928109
       },
       "nextControl": {
-        "x": 3.187611635060186,
-        "y": 5.291897008833821
+        "x": 2.8715608929078047,
+        "y": 5.28158728214746
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Note-B"
     },
     {
       "anchor": {
-        "x": 1.8735540604984342,
-        "y": 4.560720232551577
+        "x": 1.4291761916857164,
+        "y": 5.531335051274091
       },
       "prevControl": {
-        "x": 2.388096855965791,
-        "y": 4.876462402497455
+        "x": 1.5291761916857165,
+        "y": 5.531335051274091
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     }
   ],
   "rotationTargets": [],
@@ -66,19 +66,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 6.12,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 726.05,
-    "maxAngularAcceleration": 2866.34
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -26.075355583948838,
-    "rotateFast": false
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "4 NOTE MIDDLE P-A-B-C",
-  "previewStartingState": {
+  "folder": null,
+  "idealStartingState": {
     "rotation": 0,
     "velocity": 0
   },

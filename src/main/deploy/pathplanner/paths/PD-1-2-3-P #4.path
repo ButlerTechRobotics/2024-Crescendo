@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.323030030675445,
-        "y": 6.922939429924444
+        "x": 6.351850750316373,
+        "y": 6.34431812703803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.972205397402246,
-        "y": 6.852774503269804
+        "x": 5.801112245953683,
+        "y": 6.3902130024015875
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #1 End"
+      "linkedName": "PD-1-2-3-P #3 End"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Ampside Far Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

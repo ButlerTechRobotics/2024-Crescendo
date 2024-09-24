@@ -48,19 +48,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 6.12,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 726.05,
-    "maxAngularAcceleration": 2866.34
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.080924186660722,
-    "rotateFast": false
+    "rotation": -1.080924186660722
   },
   "reversed": false,
-  "folder": "5 NOTE MIDDLE P-3-B-A-C",
-  "previewStartingState": {
+  "folder": null,
+  "idealStartingState": {
     "rotation": 0,
     "velocity": 0
   },

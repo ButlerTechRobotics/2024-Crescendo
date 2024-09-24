@@ -1,6 +1,5 @@
 {
   "version": 1.0,
-  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -20,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "PreRollShootFast"
           }
         },
         {
@@ -32,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "PreRollShootFast"
           }
         },
         {
@@ -44,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "PreRollShootFast"
           }
         },
         {
@@ -56,6 +55,7 @@
       ]
     }
   },
-  "folder": "Middle",
+  "resetOdom": true,
+  "folder": null,
   "choreoAuto": false
 }

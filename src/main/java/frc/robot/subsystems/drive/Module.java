@@ -86,7 +86,8 @@ public class Module {
       if (speedSetpoint != null) {
         // Scale velocity based on turn error
         //
-        // When the error is 90 degrees, the velocity setpoint should be 0. As the wheel turns
+        // When the error is 90 degrees, the velocity setpoint should be 0. As the wheel
+        // turns
         // towards the setpoint, its velocity should increase. This is achieved by
         // taking the component of the velocity in the direction of the setpoint.
         double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
@@ -162,6 +163,10 @@ public class Module {
   /** Returns the current drive position of the module in meters. */
   public double getPositionMeters() {
     return inputs.drivePositionRad * wheelRadius;
+  }
+
+  public double getPositionRadians() {
+    return inputs.drivePositionRad;
   }
 
   /** Returns the current drive velocity of the module in meters per second. */

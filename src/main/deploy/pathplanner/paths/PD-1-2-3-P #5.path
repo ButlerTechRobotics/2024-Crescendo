@@ -3,75 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.832474724778509,
-        "y": 7.6713653142406
+        "x": 4.6216803544718195,
+        "y": 6.232984317820488
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.475653219112706,
-        "y": 7.6713653142406
+        "x": 7.6216803544718195,
+        "y": 6.232984317820488
+      },
+      "isLocked": false,
+      "linkedName": "Ampside Far Shot"
+    },
+    {
+      "anchor": {
+        "x": 8.25189859036766,
+        "y": 4.150543084659977
+      },
+      "prevControl": {
+        "x": 7.947850574864224,
+        "y": 4.127154775775097
+      },
+      "nextControl": {
+        "x": 8.524097240993473,
+        "y": 4.171481442400424
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.176703304973561,
-        "y": 7.425788070949362
+        "x": 6.608862052352296,
+        "y": 6.059769899783973
       },
       "prevControl": {
-        "x": 8.337990860339502,
-        "y": 7.74248039964956
-      },
-      "nextControl": {
-        "x": 7.976529338186315,
-        "y": 7.032741257491394
-      },
-      "isLocked": false,
-      "linkedName": "Note-1"
-    },
-    {
-      "anchor": {
-        "x": 7.323030030675445,
-        "y": 6.922939429924444
-      },
-      "prevControl": {
-        "x": 7.708937127275964,
-        "y": 7.004798511021523
+        "x": 7.3248221080237945,
+        "y": 5.940443223838724
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #1 End"
+      "linkedName": "PD-1-2-3-P #5 End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": 0
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -43.75391507170142
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Drop P",
-      "waypointRelativePos": 0.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PreRollShootFast"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Intake 1",
-      "waypointRelativePos": 0.7,
+      "name": "Intake 3",
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -100,7 +83,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": 10.22,
     "velocity": 0
   },
   "useDefaultConstraints": true

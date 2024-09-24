@@ -3,48 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0021897593652738,
-        "y": 4.478861151454497
+        "x": 1.4291761916857164,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1659079215594326,
-        "y": 4.397002070357417
+        "x": 1.5928943538798752,
+        "y": 5.449475970177011
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     },
     {
       "anchor": {
-        "x": 2.797392261451189,
-        "y": 4.256672217048139
+        "x": 2.7427416909042077,
+        "y": 4.215901156481343
       },
       "prevControl": {
-        "x": 2.855363359724664,
-        "y": 4.042179153436282
+        "x": 2.5905008158090483,
+        "y": 4.379852868122284
       },
       "nextControl": {
-        "x": 2.5635091726023904,
-        "y": 5.122039645788694
+        "x": 2.8511270706643885,
+        "y": 4.099178439816534
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.475653219112706,
-        "y": 5.168816263558454
+        "x": 1.4291761916857164,
+        "y": 5.531335051274091
       },
       "prevControl": {
-        "x": 2.972804578087788,
-        "y": 5.040180564691614
+        "x": 1.9226457098863132,
+        "y": 5.426347756989888
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -28.377590076538404
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -66,20 +71,19 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 6.12,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 726.05,
-    "maxAngularAcceleration": 2866.34
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -7.12501634890179,
-    "rotateFast": false
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "4 NOTE MIDDLE P-A-B-C",
-  "previewStartingState": {
-    "rotation": -21.124719146072625,
+  "folder": null,
+  "idealStartingState": {
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

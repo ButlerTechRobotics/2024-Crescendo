@@ -12,43 +12,42 @@
         "y": 6.548726487766366
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     },
     {
       "anchor": {
-        "x": 2.855863033663389,
-        "y": 7.110045901003483
+        "x": 2.8481392198162414,
+        "y": 7.06163443710625
       },
       "prevControl": {
-        "x": 3.101440276954628,
-        "y": 6.9346335843668845
+        "x": 3.027788790701598,
+        "y": 7.11862050212105
       },
       "nextControl": {
-        "x": 2.40699775446032,
-        "y": 7.430663957577102
+        "x": 2.6663582431470325,
+        "y": 7.003972275689032
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Note-A"
     },
     {
       "anchor": {
-        "x": 2.037272222692593,
+        "x": 1.4291761916857164,
         "y": 5.531335051274091
       },
       "prevControl": {
-        "x": 2.0255780682501525,
-        "y": 6.443479097784407
+        "x": 1.618501382509183,
+        "y": 6.440960100179829
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sub-Middle"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 53.63416231311078,
-      "rotateFast": true
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 37.55963084021242
     }
   ],
   "constraintZones": [],
@@ -72,19 +71,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 6.12,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 726.05,
-    "maxAngularAcceleration": 2866.34
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.6820603931726318,
-    "rotateFast": false
+    "rotation": 0.6820603931726318
   },
   "reversed": false,
-  "folder": "4 NOTE MIDDLE P-A-B-C",
-  "previewStartingState": {
+  "folder": null,
+  "idealStartingState": {
     "rotation": 0,
     "velocity": 0
   },

@@ -39,8 +39,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SmartController;
-import frc.robot.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.robot.util.VisionHelpers.TimestampedVisionUpdate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
@@ -218,30 +218,12 @@ public class Drive extends SubsystemBase {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+    setModuleStates(setpointStates);
+  }
+
+  public void setModuleStates(SwerveModuleState[] setpointStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         setpointStates, drivetrainConfig.maxLinearVelocity());
-
-    // Get the current gyro inputs
-    GyroIOInputs inputs = gyroIO.getInputs();
-
-    // Calculate expected motion
-    double expectedSpeed = 0;
-    for (SwerveModuleState state : setpointStates) {
-      expectedSpeed += state.speedMetersPerSecond;
-    }
-    expectedSpeed /= setpointStates.length;
-
-    // Compare expected and actual motion
-    if ((inputs.xVelocity > 0 || inputs.yVelocity > 0) && expectedSpeed > 0) {
-      // Slip is detected, increase stateStdDevs
-      updateStateStdDevs(0.005, 0.005, 0.0004);
-      Logger.recordOutput("StateStdDevs", new double[] {0.005, 0.005, 0.0004});
-
-    } else {
-      // No slip detected, use normal stateStdDevs
-      updateStateStdDevs(0.003, 0.003, 0.0002);
-      Logger.recordOutput("StateStdDevs", new double[] {0.003, 0.003, 0.0002});
-    }
 
     // Send setpoints to modules
     SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
@@ -300,6 +282,22 @@ public class Drive extends SubsystemBase {
       states[i] = modules[i].getPosition();
     }
     return states;
+  }
+
+  /** Runs forwards at the commanded voltage. */
+  public void runCharacterizationVolts(double volts) {
+    for (int i = 0; i < 4; i++) {
+      modules[i].runCharacterization(volts);
+    }
+  }
+
+  /** Returns the average drive velocity in radians/sec. */
+  public double getCharacterizationVelocity() {
+    double driveVelocityAverage = 0.0;
+    for (var module : modules) {
+      driveVelocityAverage += module.getCharacterizationVelocity();
+    }
+    return driveVelocityAverage / 4.0;
   }
 
   /** Returns the current pose estimation. */
@@ -376,13 +374,28 @@ public class Drive extends SubsystemBase {
         && SmartController.getInstance().isSmartControlEnabled()
         && SmartController.getInstance().getDriveModeType()
             == SmartController.DriveModeType.SPEAKER) {
-      // Return an optional containing the rotation override (this should be a field
-      // relative
+      // Return an optional containing the rotation override (this should be a field relative
       // rotation)
       return Optional.of(SmartController.getInstance().getTargetAimingParameters().robotAngle());
     } else {
       // return an empty optional when we don't want to override the path's rotation
       return Optional.empty();
     }
+  }
+
+  public double[] getWheelRadiusCharacterizationPosition() {
+    return Arrays.stream(modules).mapToDouble(Module::getPositionRadians).toArray();
+  }
+
+  public void setWheelsToCircle() {
+    Rotation2d[] turnAngles =
+        Arrays.stream(DriveConstants.moduleTranslations)
+            .map(translation -> translation.getAngle().plus(new Rotation2d(Math.PI / 2.0)))
+            .toArray(Rotation2d[]::new);
+    SwerveModuleState[] desiredStates =
+        Arrays.stream(turnAngles)
+            .map(angle -> new SwerveModuleState(0, angle))
+            .toArray(SwerveModuleState[]::new);
+    setModuleStates(desiredStates);
   }
 }
