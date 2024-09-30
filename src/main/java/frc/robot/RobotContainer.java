@@ -191,11 +191,13 @@ public class RobotContainer {
     // ================================================
     NamedCommands.registerCommand(
         "Shoot",
-        new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5)
-            .deadlineWith(DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0))
+        new ManualShoot(shooter, magazine, beamBreak, 0.0)
             .andThen(
-                new ScheduleCommand(
-                    Commands.defer(() -> new ShotVisualizer(drive, arm, shooter), Set.of()))));
+                Commands.runOnce(
+                    () -> {
+                      shooter.setSetpoint(0, 0);
+                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                    })));
 
     // ================================================
     // Register the Named Command QuickShoot
@@ -265,6 +267,7 @@ public class RobotContainer {
             .andThen(
                 Commands.runOnce(
                     () -> {
+                      shooter.setSetpoint(0, 0);
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
@@ -277,6 +280,7 @@ public class RobotContainer {
             .andThen(
                 Commands.runOnce(
                     () -> {
+                      shooter.setSetpoint(0, 0);
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
@@ -292,6 +296,20 @@ public class RobotContainer {
             .andThen(
                 Commands.runOnce(
                     () -> {
+                      shooter.setSetpoint(0, 0);
+                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                    })));
+
+    NamedCommands.registerCommand(
+        "PreRollShootInstant",
+        Commands.deadline(
+                new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.0),
+                new SmartShooter(shooter),
+                new SmartArm(arm))
+            .andThen(
+                Commands.runOnce(
+                    () -> {
+                      shooter.setSetpoint(0, 0);
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
@@ -307,14 +325,23 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "ClosePreroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 3000));
-
-    NamedCommands.registerCommand(
-        "ManualPreroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
 
     NamedCommands.registerCommand(
+        "PB3AC Preroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(141), 3150));
+
+    NamedCommands.registerCommand(
+        "P45 Preroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(145), 3150));
+
+    NamedCommands.registerCommand(
         "PodiumShot", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
+
+    NamedCommands.registerCommand(
+        "PB3AC Note B",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(151.5), 3700)
+            .andThen(Commands.waitSeconds(0.5))
+            .andThen());
 
     // AUTON PATHS ========================
 

@@ -40,6 +40,6 @@
   },
   "java.debug.settings.onBuildFailureProceed": true,
   "java.format.settings.url": "eclipse-formatter.xml",
-  "wpilib.autoStartRioLog": true,
+  "wpilib.autoStartRioLog": false,
   "java.compile.nullAnalysis.mode": "automatic"
 }

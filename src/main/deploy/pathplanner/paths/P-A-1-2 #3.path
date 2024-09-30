@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.94693201083977,
+        "y": 6.850839379282182
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 6.080330106451938,
+        "y": 6.604911811820771
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "P-A-1-2 #2 End"
     },
     {
       "anchor": {
@@ -20,35 +20,17 @@
         "y": 6.232984317820488
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 5.272282384793014,
+        "y": 6.417538427088266
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Ampside Far Shot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Enable Smart Control",
-      "waypointRelativePos": 0.15,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PodiumPreroll"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
@@ -60,9 +42,9 @@
     "rotation": 10.22
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-A-1-2",
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": 10.22,
     "velocity": 0
   },
   "useDefaultConstraints": true

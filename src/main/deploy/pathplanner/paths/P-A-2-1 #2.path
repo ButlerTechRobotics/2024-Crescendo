@@ -3,58 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.6216803544718195,
-        "y": 6.232984317820488
+        "x": 2.8598500563620233,
+        "y": 7.026501927468906
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.6216803544718195,
-        "y": 6.232984317820488
+        "x": 3.8084278165703256,
+        "y": 6.792285196553275
       },
       "isLocked": false,
-      "linkedName": "Ampside Far Shot"
+      "linkedName": "Note-A"
     },
     {
       "anchor": {
-        "x": 8.25189859036766,
-        "y": 4.150543084659977
+        "x": 8.211785768300881,
+        "y": 5.74182983123801
       },
       "prevControl": {
-        "x": 7.947850574864224,
-        "y": 4.127154775775097
+        "x": 7.520763001583063,
+        "y": 5.574358195791997
       },
       "nextControl": {
-        "x": 8.524097240993473,
-        "y": 4.171481442400424
+        "x": 9.069793544078722,
+        "y": 5.949770831673367
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Note-2"
     },
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.537052731737417,
+        "y": 6.476092609817173
       },
       "prevControl": {
-        "x": 7.3248221080237945,
-        "y": 5.940443223838724
+        "x": 7.298257107213216,
+        "y": 6.581490138729208
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "P-A-2-1 #2 End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8,
-      "rotationDegrees": -43.75391507170142
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake 3",
-      "waypointRelativePos": 0.8,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -77,13 +77,13 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 2.0,
+    "velocity": 3.0,
     "rotation": 10.22
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-A-2-1",
   "idealStartingState": {
-    "rotation": 10.22,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

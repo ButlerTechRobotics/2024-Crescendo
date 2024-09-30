@@ -7,13 +7,31 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShootFast"
+            "name": "PreRollShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P-A-B-C #1"
+            "pathName": "P-A-1-2 #1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-A-2-1 #2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-A-2-1 #3"
           }
         },
         {
@@ -25,31 +43,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P-A-B-C #2"
+            "pathName": "P-A-2-1 #4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-A-2-1 #5"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "PreRollShootInstant"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P-A-B-C #3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PreRollShootInstant"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P-A-B-C #4"
           }
         }
       ]

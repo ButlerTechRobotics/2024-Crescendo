@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.595606914466325,
+        "y": 4.239322829572906
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 4.604764701683467,
+        "y": 4.50867207012588
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.6216803544718195,
-        "y": 6.232984317820488
+        "x": 2.0,
+        "y": 5.539225686154654
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 3.2296378373070587,
+        "y": 5.141057243598083
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "P-B-3-A-C #3 End"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Enable Smart Control",
-      "waypointRelativePos": 0.15,
+      "name": "PreRoll",
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,24 @@
             {
               "type": "named",
               "data": {
-                "name": "PodiumPreroll"
+                "name": "PB3AC Preroll"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 0.95,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PB3AC Preroll"
               }
             }
           ]
@@ -57,10 +74,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.22
+    "rotation": 0
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-B-3-A-C",
   "idealStartingState": {
     "rotation": 0,
     "velocity": 0

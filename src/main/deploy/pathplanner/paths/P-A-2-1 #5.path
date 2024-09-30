@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.560474404828979,
+        "y": 6.5463576290918635
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 5.752426683170055,
+        "y": 6.405827590542485
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "P-A-2-1 #4 End"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 6.232984317820488
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 5.412812423342392,
+        "y": 6.335562571267796
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Ampside Far Shot"
     }
   ],
   "rotationTargets": [],
@@ -60,9 +60,9 @@
     "rotation": 10.22
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-A-2-1",
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": 10.22,
     "velocity": 0
   },
   "useDefaultConstraints": true

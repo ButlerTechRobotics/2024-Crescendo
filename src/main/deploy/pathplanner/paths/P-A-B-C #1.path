@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.8481392198162414,
-        "y": 7.06163443710625
+        "x": 2.8598500563620233,
+        "y": 7.026501927468906
       },
       "prevControl": {
-        "x": 3.027788790701598,
-        "y": 7.11862050212105
+        "x": 3.0394996272473795,
+        "y": 7.083487992483706
       },
       "nextControl": {
-        "x": 2.6663582431470325,
-        "y": 7.003972275689032
+        "x": 2.678069079692814,
+        "y": 6.968839766051688
       },
       "isLocked": false,
       "linkedName": "Note-A"
@@ -56,13 +56,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0.35,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "Intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ClosePreroll"
               }
             }
           ]
@@ -71,7 +77,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.12,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -81,7 +87,7 @@
     "rotation": 0.6820603931726318
   },
   "reversed": false,
-  "folder": null,
+  "folder": "P-A-B-C",
   "idealStartingState": {
     "rotation": 0,
     "velocity": 0

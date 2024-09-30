@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.537052731737417,
+        "y": 6.476092609817173
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 5.799270029353182,
+        "y": 6.405827590542485
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "P-A-2-1 #2 End"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 6.232984317820488
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 5.202017365518325,
+        "y": 6.2770083885388885
       },
       "nextControl": null,
       "isLocked": false,
@@ -60,9 +60,9 @@
     "rotation": 10.22
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-A-2-1",
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": 10.22,
     "velocity": 0
   },
   "useDefaultConstraints": true

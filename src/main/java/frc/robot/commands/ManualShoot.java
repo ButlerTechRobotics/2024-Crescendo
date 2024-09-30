@@ -16,6 +16,7 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.beambreak.BeamBreak;
 import frc.robot.subsystems.magazine.Magazine;
 import frc.robot.subsystems.shooter.Shooter;
+import org.littletonrobotics.junction.Logger;
 
 public class ManualShoot extends Command {
   Arm arm;
@@ -54,24 +55,28 @@ public class ManualShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (shooterTimer.hasElapsed(0.5)) {
+    boolean isShooting = false;
+    double realForceShoot = forceShootTimeout;
+
+    if (shooterTimer.hasElapsed(realForceShoot)) {
       magazine.shoot();
+      isShooting = true;
       if (Constants.getMode() == Constants.Mode.SIM && timer.hasElapsed(0.75)) {
         beamBreak.shootGamePiece();
       }
     }
+    Logger.recordOutput("ManualShoot/IsShooting", isShooting);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartController.getInstance().disableSmartControl();
     magazine.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterTimer.hasElapsed(1.5);
+    return shooterTimer.hasElapsed(forceShootTimeout + 0.25);
   }
 }

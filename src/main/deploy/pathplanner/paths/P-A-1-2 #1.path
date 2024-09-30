@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 1.4291761916857164,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 2.086934844340443,
+        "y": 6.241875878901544
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "Sub-Middle"
     },
     {
       "anchor": {
-        "x": 4.6216803544718195,
-        "y": 6.232984317820488
+        "x": 2.8598500563620233,
+        "y": 7.026501927468906
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 2.1923323732524773,
+        "y": 6.464381773271394
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Note-A"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Enable Smart Control",
-      "waypointRelativePos": 0.15,
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "PodiumPreroll"
+                "name": "Intake"
               }
             }
           ]
@@ -57,10 +57,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.22
+    "rotation": 26.569999999999993
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-A-1-2",
   "idealStartingState": {
     "rotation": 0,
     "velocity": 0

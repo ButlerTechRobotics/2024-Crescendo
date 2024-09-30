@@ -50,7 +50,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.12,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -60,7 +60,7 @@
     "rotation": 10.22
   },
   "reversed": false,
-  "folder": null,
+  "folder": "PD-1-2-3-P",
   "idealStartingState": {
     "rotation": 10.22,
     "velocity": 0

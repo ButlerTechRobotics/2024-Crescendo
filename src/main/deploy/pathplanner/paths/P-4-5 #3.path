@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.608862052352296,
-        "y": 6.059769899783973
+        "x": 6.595606914466325,
+        "y": 2.295323962973175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.195808174080278,
-        "y": 6.206633500947357
+        "x": 5.565053298437551,
+        "y": 1.639517116409411
       },
       "isLocked": false,
-      "linkedName": "PD-1-2-3-P #5 End"
+      "linkedName": "P-4-5 #2 End"
     },
     {
       "anchor": {
-        "x": 4.6216803544718195,
-        "y": 6.232984317820488
+        "x": 4.007512037848611,
+        "y": 2.4709865111598974
       },
       "prevControl": {
-        "x": 5.013914218561973,
-        "y": 6.232984317820488
+        "x": 4.733583903687064,
+        "y": 2.0611072320575454
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Sourceside Far Shot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Enable Smart Control",
-      "waypointRelativePos": 0.15,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "PodiumPreroll"
+                "name": "P45 Preroll"
               }
             }
           ]
@@ -57,12 +57,12 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 10.22
+    "rotation": -32.27564431457767
   },
   "reversed": false,
-  "folder": "PD-1-2-3-P",
+  "folder": "P-4-5",
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": 23.68,
     "velocity": 0
   },
   "useDefaultConstraints": true
