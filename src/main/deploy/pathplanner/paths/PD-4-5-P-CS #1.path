@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.595606914466325,
-        "y": 2.295323962973175
+        "x": 1.356139746680443,
+        "y": 1.5970635974486669
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.565053298437551,
-        "y": 1.639517116409411
+        "x": 2.2748248310661525,
+        "y": 1.5970635974486669
       },
       "isLocked": false,
-      "linkedName": "P-4-5 #2 End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.007512037848611,
-        "y": 2.4709865111598974
+        "x": 5.3877515109715866,
+        "y": 1.5970635974486669
       },
       "prevControl": {
-        "x": 4.733583903687064,
-        "y": 2.0611072320575454
+        "x": 4.602339307524346,
+        "y": 1.5970635974486669
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Sourceside Far Shot"
+      "linkedName": "P-4-5 #1 End"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "name": "Blurp Preload",
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "P45 Preroll"
+                "name": "MiniBlurp"
               }
             }
           ]
@@ -56,13 +56,13 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -32.27564431457767
+    "velocity": 3.0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "P-4-5",
+  "folder": "PD-4-5-P-CS",
   "idealStartingState": {
-    "rotation": 23.68,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

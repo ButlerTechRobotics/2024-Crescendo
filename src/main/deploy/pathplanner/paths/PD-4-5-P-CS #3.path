@@ -4,36 +4,36 @@
     {
       "anchor": {
         "x": 6.595606914466325,
-        "y": 4.239322829572906
+        "y": 2.295323962973175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.604764701683467,
-        "y": 4.50867207012588
+        "x": 5.835708373670603,
+        "y": 1.665230946120256
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "P-4-5 #2 End"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 5.539225686154654
+        "x": 4.443146822236706,
+        "y": 2.295323962973175
       },
       "prevControl": {
-        "x": 3.2296378373070587,
-        "y": 5.141057243598083
+        "x": 5.095605730950489,
+        "y": 2.1229260014866425
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "P-B-3-A-C #3 End"
+      "linkedName": "Sourceside Far Shot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "PreRoll",
-      "waypointRelativePos": 0.35,
+      "name": "Preroll",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,24 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "PB3AC Preroll"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot",
-      "waypointRelativePos": 0.95,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PB3AC Preroll"
+                "name": "P45 Preroll"
               }
             }
           ]
@@ -74,12 +57,12 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0
+    "rotation": -32.27564431457767
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": "PD-4-5-P-CS",
   "idealStartingState": {
-    "rotation": 0,
+    "rotation": -32.27999999999997,
     "velocity": 3.0
   },
   "useDefaultConstraints": true

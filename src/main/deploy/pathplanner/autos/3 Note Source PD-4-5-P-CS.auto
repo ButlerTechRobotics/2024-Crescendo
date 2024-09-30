@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PD-4-5-P-CS #7"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

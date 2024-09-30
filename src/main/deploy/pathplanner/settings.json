@@ -3,7 +3,7 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "P-4-5",
+    "PD-4-5-P-CS",
     "P-A-1-2",
     "P-A-2-1",
     "P-A-B-C",
@@ -21,7 +21,8 @@
   "robotTrackwidth": 0.559,
   "driveWheelRadius": 0.0508,
   "driveGearing": 5.9,
-  "maxDriveRPM": 5650.0,
-  "driveMotor": "VORTEX_60A",
+  "maxDriveSpeed": 5.45,
+  "driveMotorType": "vortex",
+  "driveCurrentLimit": 60.0,
   "wheelCOF": 1.0
 }

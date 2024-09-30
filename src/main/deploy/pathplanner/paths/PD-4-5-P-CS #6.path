@@ -3,58 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.007512037848611,
-        "y": 2.4709865111598974
+        "x": 4.443146822236706,
+        "y": 2.295323962973175
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.073198163514728,
-        "y": 1.6980712991383184
+        "x": 3.430454646773241,
+        "y": 2.491103353196207
       },
       "isLocked": false,
       "linkedName": "Sourceside Far Shot"
     },
     {
       "anchor": {
-        "x": 8.04775064614323,
-        "y": 2.295323962973175
+        "x": 3.3524692434912753,
+        "y": 1.3243942027623088
       },
       "prevControl": {
-        "x": 6.900088664656641,
-        "y": 1.5926737702262852
+        "x": 2.96313101673241,
+        "y": 1.6381070414926713
       },
       "nextControl": {
-        "x": 9.19541262762982,
-        "y": 2.997974155720065
+        "x": 3.7418074702501407,
+        "y": 1.0106813640319463
       },
       "isLocked": false,
-      "linkedName": "Note -4"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.595606914466325,
+        "x": 4.443146822236706,
         "y": 2.295323962973175
       },
       "prevControl": {
-        "x": 7.274835434121655,
-        "y": 2.869154953716469
+        "x": 4.273132995757655,
+        "y": 1.6663466919453374
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "P-4-5 #2 End"
+      "linkedName": "Sourceside Far Shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 33.05582281155366
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "name": "Intake",
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -62,7 +57,7 @@
             {
               "type": "named",
               "data": {
-                "name": "P45 Preroll"
+                "name": "Intake"
               }
             }
           ]
@@ -77,14 +72,14 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 2.5,
-    "rotation": 23.68
+    "velocity": 0,
+    "rotation": -32.60914333931912
   },
   "reversed": false,
-  "folder": "P-4-5",
+  "folder": "PD-4-5-P-CS",
   "idealStartingState": {
     "rotation": -32.27999999999997,
-    "velocity": 0
+    "velocity": 3.0
   },
   "useDefaultConstraints": true
 }

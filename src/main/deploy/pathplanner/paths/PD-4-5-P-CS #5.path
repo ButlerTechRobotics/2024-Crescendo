@@ -3,41 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2788871226815193,
-        "y": 3.3844317617308555
+        "x": 6.29,
+        "y": 1.89
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.157199863615132,
-        "y": 3.115082521177881
+        "x": 5.419351867231634,
+        "y": 1.7054144401450697
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.007512037848611,
-        "y": 2.4709865111598974
+        "x": 4.443146822236706,
+        "y": 2.295323962973175
       },
       "prevControl": {
-        "x": 3.2697293354643757,
-        "y": 2.740335751712873
+        "x": 4.930952434893514,
+        "y": 2.185571130387785
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Sourceside Far Shot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": -32.27999999999997
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Preroll",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -65,10 +60,10 @@
     "rotation": -32.27999999999997
   },
   "reversed": false,
-  "folder": "P-4-5",
+  "folder": "PD-4-5-P-CS",
   "idealStartingState": {
-    "rotation": 0,
-    "velocity": 0
+    "rotation": -32.27999999999997,
+    "velocity": 3.0
   },
   "useDefaultConstraints": true
 }
