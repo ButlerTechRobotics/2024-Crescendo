@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShootInstant"
+            "name": "PreRollShootFast"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShootInstant"
+            "name": "PreRollShootFast"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreRollShootInstant"
+            "name": "PreRollShootFast"
           }
         },
         {

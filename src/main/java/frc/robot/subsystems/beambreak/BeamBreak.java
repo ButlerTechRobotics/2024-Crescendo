@@ -33,28 +33,28 @@ public class BeamBreak extends SubsystemBase {
     }
   }
 
-  @AutoLogOutput(key = "/BeamBreak/timeSinceLastGamePiece")
+  @AutoLogOutput(key = "BeamBreak/timeSinceLastGamePiece")
   public double timeSinceLastGamePiece() {
     return Timer.getFPGATimestamp() - lastGamePieceSeenTime;
   }
 
-  @AutoLogOutput(key = "/BeamBreak/hasNoGamePiece")
+  @AutoLogOutput(key = "BeamBreak/hasNoGamePiece")
   public boolean hasNoGamePiece() {
     return !hasGamePiece();
   }
 
-  @AutoLogOutput(key = "/BeamBreak/hasGamePiece")
+  @AutoLogOutput(key = "BeamBreak/hasGamePiece")
   public boolean hasGamePiece() {
     return inputs.beamBreakValues.hasGamePiece();
   }
 
   // TODO once we add a laser for the intake, change this to the intake's laser
-  @AutoLogOutput(key = "/BeamBreak/HasNoteForAuto")
+  @AutoLogOutput(key = "BeamBreak/HasNoteForAuto")
   public boolean hasNoteForAuto() {
     return inputs.beamBreakValues.hasGamePiece();
   }
 
-  @AutoLogOutput(key = "/BeamBreak/isShooterLoaded")
+  @AutoLogOutput(key = "BeamBreak/isShooterLoaded")
   public boolean isShooterLoaded() {
     return inputs.beamBreakValues.isShooterLoaded();
   }

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.beambreak.BeamBreakHelper.BeamBreakValues;
 
 public class BeamBreakIODigitalInput implements BeamBreakIO {
-  DigitalInput magazine = new DigitalInput(7);
+  DigitalInput magazine = new DigitalInput(9);
 
   public void updateInputs(BeamBreakIOInputs inputs) {
     inputs.beamBreakValues = new BeamBreakValues(!magazine.get());
