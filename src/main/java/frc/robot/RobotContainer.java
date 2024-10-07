@@ -181,12 +181,6 @@ public class RobotContainer {
             .alongWith(new SmartMagazine(magazine, intake, beamBreak, candle)));
 
     // ================================================
-    // Register the Named Command MiniBlurp
-    // ================================================
-    NamedCommands.registerCommand(
-        "MiniBlurp", new MiniBlurp(arm, shooter, magazine, beamBreak, 0.25));
-
-    // ================================================
     // Register the Named Command Shoot
     // ================================================
     NamedCommands.registerCommand(
@@ -332,7 +326,8 @@ public class RobotContainer {
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(141), 3150));
 
     NamedCommands.registerCommand(
-        "P45 Preroll", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(145), 3150));
+        "P45 Preroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(162.8), 4500));
 
     NamedCommands.registerCommand(
         "PodiumShot", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
@@ -340,6 +335,12 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "PB3AC Note B",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(151.5), 3700)
+            .andThen(Commands.waitSeconds(0.5))
+            .andThen());
+
+    NamedCommands.registerCommand(
+        "MiniBlurp Preroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2000)
             .andThen(Commands.waitSeconds(0.5))
             .andThen());
 
