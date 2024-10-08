@@ -175,10 +175,7 @@ public class RobotContainer {
     // ================================================
     // Register the Named Command Intake
     // ================================================
-    NamedCommands.registerCommand(
-        "Intake",
-        new InstantCommand(intake::enableIntakeRequest)
-            .alongWith(new SmartMagazine(magazine, intake, beamBreak, candle)));
+    NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
 
     // ================================================
     // Register the Named Command Shoot
@@ -307,8 +304,7 @@ public class RobotContainer {
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
-    NamedCommands.registerCommand(
-        "Magazine", new SmartMagazine(magazine, intake, beamBreak, candle));
+    NamedCommands.registerCommand("Magazine", new ManualMagazine(magazine, beamBreak));
 
     NamedCommands.registerCommand(
         "Preload", new InstantCommand(() -> beamBreak.setGamePiece(true)));

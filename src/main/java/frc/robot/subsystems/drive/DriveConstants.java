@@ -35,7 +35,7 @@ public final class DriveConstants {
                 12.384, // double maxAngularVelocity
                 31.319); // double maxAngularAcceleration)
       };
-  public static final double wheelRadius = Units.inchesToMeters(2.0);
+  public static final double wheelRadius = Units.inchesToMeters(1.8290591717891558);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
         new Translation2d(
