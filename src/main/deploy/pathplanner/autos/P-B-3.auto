@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "PreRollShootFast"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -23,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Magazine"
+                  "name": "Intake"
                 }
               }
             ]
@@ -40,11 +34,17 @@
           "data": {
             "name": "PreRollShoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-B-3-A-C B to 3"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "P-B-3-A-C",
+  "folder": "Center P-B-3or2-A-C",
   "choreoAuto": false
 }

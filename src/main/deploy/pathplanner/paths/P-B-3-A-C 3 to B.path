@@ -1,0 +1,132 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.29947111851519,
+        "y": 4.099779112962734
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.46502039386048,
+        "y": 4.6548560950028195
+      },
+      "isLocked": false,
+      "linkedName": "3"
+    },
+    {
+      "anchor": {
+        "x": 7.043,
+        "y": 4.781
+      },
+      "prevControl": {
+        "x": 7.978110760491984,
+        "y": 4.947001875023917
+      },
+      "nextControl": {
+        "x": 6.796848491789047,
+        "y": 4.737302917654925
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.533824400987005,
+        "y": 4.58668874632636
+      },
+      "prevControl": {
+        "x": 5.781768867645511,
+        "y": 4.554695911918811
+      },
+      "nextControl": {
+        "x": 4.436509330909816,
+        "y": 4.728277787626642
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.748701298114341,
+        "y": 5.5410316277334815
+      },
+      "prevControl": {
+        "x": 3.230741835149152,
+        "y": 5.389637041715489
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "B"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 2.2,
+      "maxWaypointRelativePos": 2.95,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "PB3AC Preroll",
+      "waypointRelativePos": 1.3,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PB3AC Preroll"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "PreRollShootFast",
+      "waypointRelativePos": 2.5,
+      "endWaypointRelativePos": 3.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "PreRollShootFast"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "P-B-3-A-C",
+  "idealStartingState": {
+    "velocity": 0.5,
+    "rotation": 37.238
+  },
+  "useDefaultConstraints": true
+}

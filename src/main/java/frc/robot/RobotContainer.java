@@ -12,6 +12,7 @@ import static frc.robot.subsystems.vision.CameraConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -355,45 +356,17 @@ public class RobotContainer {
             .withTimeout(2)
             .andThen(new WheelRadiusCharacterization(drive)));
 
-    // // ================================================
-    // // 4 NOTE AMP SIDE 1-2-3-P
-    // // ================================================
-    // Command fourNoteAmpSide123P =
-    // Commands.sequence(
-    // // Commands.runOnce(
-    // // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-    // // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-    // // new ManualShoot(arm, shooter, magazine, beamBreak, 0.5),
-    // new PathPlannerAuto("Amp Drop P Collect 1"),
-    // Commands.either(
-    // new PathPlannerAuto("Amp Score 1 Collect 2"),
-    // new PathPlannerAuto("Amp Missed 1 Collect 2"),
-    // beamBreak::hasNoteForAuto),
-    // Commands.either(
-    // new PathPlannerAuto("Amp Score 2 Collect 3"),
-    // new PathPlannerAuto("Amp Missed 2 Collect 3"),
-    // beamBreak::hasNoteForAuto),
-    // new PathPlannerAuto("Amp Score 3 Under Stage"),
-    // Commands.either(
-    // new PathPlannerAuto("Amp Collect P Score P"),
-    // new PathPlannerAuto("Amp Missed 2 Collect 3"),
-    // beamBreak::hasNoteForAuto));
-    // autoChooser.addOption("4 Note Amp Side 1-2-3-P", fourNoteAmpSide123P);
-
-    // // ================================================
-    // // 3 NOTE SOURCE SIDE P-5-4
-    // // ================================================
-    // Command threeNoteSourceSideP54 =
-    // Commands.sequence(
-    // // Commands.runOnce(
-    // // () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-    // // Commands.runOnce(SmartController.getInstance()::enableSmartControl),
-    // new PathPlannerAuto("Source Score P Collect 5"),
-    // Commands.either(
-    // new PathPlannerAuto("Source Score 5 Collect 4"),
-    // new PathPlannerAuto("Source Score 5 Collect 4"),
-    // beamBreak::hasNoteForAuto));
-    // autoChooser.addOption("3 Note Source Side P-5-4", threeNoteSourceSideP54);
+    // ================================================
+    // 5 Note Center P-B-3or2-A-C
+    // ================================================
+    Command fiveNoteCenterPB3or2AC =
+        Commands.sequence(
+            new PathPlannerAuto("P-B-3"),
+            Commands.either(
+                new PathPlannerAuto("3-A-C"), // Collect 3 and score
+                new PathPlannerAuto("2-A-C"), // Missed 3 collect 2 and score
+                beamBreak::hasNoteForAuto));
+    autoChooser.addOption("5 Note Center P-B-3or2-A-C", fiveNoteCenterPB3or2AC);
 
     // Run SmartController updates in autonomous
     new Trigger(DriverStation::isAutonomousEnabled)

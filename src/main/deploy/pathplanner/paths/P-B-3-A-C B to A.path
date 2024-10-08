@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2879723980088535,
+        "x": 2.748701298114341,
         "y": 5.5410316277334815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5379723980088535,
-        "y": 5.5410316277334815
+        "x": 2.261791664745845,
+        "y": 6.066894031771457
       },
       "isLocked": false,
-      "linkedName": "S2"
+      "linkedName": "B"
     },
     {
       "anchor": {
         "x": 2.748701298114341,
-        "y": 5.5410316277334815
+        "y": 7.011498720506339
       },
       "prevControl": {
-        "x": 2.498701298114341,
-        "y": 5.5410316277334815
+        "x": 2.4370791327585035,
+        "y": 6.690138362483131
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "A"
     }
   ],
   "rotationTargets": [],
@@ -34,19 +34,12 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.35,
       "endWaypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
+          "commands": []
         }
       }
     }
@@ -59,10 +52,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 28.301
   },
   "reversed": false,
-  "folder": null,
+  "folder": "P-B-3-A-C",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

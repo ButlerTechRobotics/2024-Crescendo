@@ -3,38 +3,60 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2879723980088535,
-        "y": 5.5410316277334815
+        "x": 2.748701298114341,
+        "y": 7.011498720506339
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5379723980088535,
-        "y": 5.5410316277334815
+        "x": 1.9599076920573775,
+        "y": 6.281134270453595
       },
       "isLocked": false,
-      "linkedName": "S2"
+      "linkedName": "A"
     },
     {
       "anchor": {
         "x": 2.748701298114341,
-        "y": 5.5410316277334815
+        "y": 4.158208268966954
       },
       "prevControl": {
-        "x": 2.498701298114341,
-        "y": 5.5410316277334815
+        "x": 2.018336848061597,
+        "y": 4.995692838360767
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "C"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.05,
+      "maxWaypointRelativePos": 0.95,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
+      "name": "PreRollShootFast",
+      "waypointRelativePos": 0.05,
+      "endWaypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
       "name": "Intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.75,
       "endWaypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
@@ -59,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -30.96375653207353
   },
   "reversed": false,
-  "folder": null,
+  "folder": "P-B-3-A-C",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 28.301
   },
   "useDefaultConstraints": true
 }

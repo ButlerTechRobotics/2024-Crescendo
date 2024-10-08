@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
@@ -23,19 +24,16 @@ public final class DriveConstants {
   public static DrivetrainConfig drivetrainConfig =
       switch (Constants.getRobot()) {
         default ->
-            // These values are from Choreo
             new DrivetrainConfig(
-                Units.inchesToMeters(2.0), // double wheelRadius
+                Units.inchesToMeters(1.829), // double wheelRadius
                 Units.inchesToMeters(22.0), // double trackwidthX
                 Units.inchesToMeters(22.0), // double trackwidthY
                 Units.feetToMeters(16.055), // double maxLinearVelocity
-                // Units.feetToMeters(6.56), // double maxLinearVelocity
                 Units.feetToMeters(28.718), // double maxLinearAcceleration
-                // Units.feetToMeters(9.84), // double maxLinearAcceleration
                 12.384, // double maxAngularVelocity
                 31.319); // double maxAngularAcceleration)
       };
-  public static final double wheelRadius = Units.inchesToMeters(1.8290591717891558);
+
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
         new Translation2d(
@@ -147,6 +145,9 @@ public final class DriveConstants {
         case SIMBOT -> new HeadingControllerConstants(7, 0.125);
       };
 
+  // ================================================
+  // Pathplanner Config
+  // ================================================
   public static final PIDConstants PPtranslationConstants =
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
@@ -157,6 +158,29 @@ public final class DriveConstants {
       switch (Constants.getRobot()) {
         case COMPBOT -> new PIDConstants(3, 0.0, 0.0);
         case SIMBOT -> new PIDConstants(10, 0.0, 0.0);
+      };
+
+  public static PPModuleConfig ppModuleConfig =
+      switch (Constants.getRobot()) {
+        default ->
+            new PPModuleConfig(
+                Units.inchesToMeters(drivetrainConfig.wheelRadius), // double wheelRadiusMeters
+                Units.feetToMeters(17.88058), // double maxDriveVelocityMPS
+                1.000, // double wheelCOF
+                DCMotor.getNeoVortex(1), // DCMotor driveMotor
+                60, // double driveCurrentLimit
+                1); // int numMotors
+      };
+
+  public static PPRobotConfig ppRobotConfig =
+      switch (Constants.getRobot()) {
+        default ->
+            new PPRobotConfig(
+                Units.lbsToKilograms(120), // double massKG
+                6.883, // double MOI
+                ppModuleConfig, // PPModuleConfig ppModuleConfig
+                Units.inchesToMeters(drivetrainConfig.trackwidthX), // double trackwidthMeters
+                Units.inchesToMeters(drivetrainConfig.trackwidthY)); // double wheelbaseMeters
       };
 
   public record DrivetrainConfig(
@@ -188,6 +212,21 @@ public final class DriveConstants {
       double turnkD,
       double driveReduction,
       double turnReduction) {}
+
+  public record PPModuleConfig(
+      double wheelRadiusMeters,
+      double maxDriveVelocityMPS,
+      double wheelCOF,
+      DCMotor driveMotor,
+      double driveCurrentLimit,
+      int numMotors) {}
+
+  public record PPRobotConfig(
+      double massKG,
+      double MOI,
+      PPModuleConfig ppModuleConfig,
+      double trackwidthMeters,
+      double wheelbaseMeters) {}
 
   public record HeadingControllerConstants(double Kp, double Kd) {}
 

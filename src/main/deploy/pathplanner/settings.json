@@ -6,7 +6,7 @@
     "P-B-3-A-C"
   ],
   "autoFolders": [
-    "P-B-3-A-C"
+    "Center P-B-3or2-A-C"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
@@ -16,10 +16,10 @@
   "robotMOI": 6.883,
   "robotWheelbase": 0.546,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.048,
+  "driveWheelRadius": 0.0464566,
   "driveGearing": 5.9,
   "maxDriveSpeed": 5.45,
   "driveMotorType": "vortex",
   "driveCurrentLimit": 60.0,
-  "wheelCOF": 1.2
+  "wheelCOF": 1.0
 }
