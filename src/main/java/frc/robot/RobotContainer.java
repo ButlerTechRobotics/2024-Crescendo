@@ -29,8 +29,6 @@ import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.beambreak.*;
 import frc.robot.subsystems.climber.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.gamepieceVision.GamepieceVision;
-import frc.robot.subsystems.gamepieceVision.GamepieceVisionIOPhoton;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.leds.Candle;
 import frc.robot.subsystems.magazine.*;
@@ -52,7 +50,6 @@ public class RobotContainer {
   public static Drive drive;
   private Shooter shooter;
   private AprilTagVision aprilTagVision;
-  public static GamepieceVision gamepieceVision;
   private Arm arm;
   private Intake intake;
   private BeamBreak beamBreak;
@@ -93,7 +90,6 @@ public class RobotContainer {
                 new AprilTagVisionIOPhotonVision("BLCamera", ROBOT_TO_CAMERA_BL),
                 new AprilTagVisionIOPhotonVision("BRCamera", ROBOT_TO_CAMERA_BR),
                 new AprilTagVisionIOPhotonVision("BackCamera", ROBOT_TO_CAMERA_BACK));
-        gamepieceVision = new GamepieceVision(new GamepieceVisionIOPhoton("GENERAL_WEBCAM"));
         candle = new Candle(aprilTagVision);
         break;
 
