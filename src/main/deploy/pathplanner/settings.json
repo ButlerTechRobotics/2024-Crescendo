@@ -1,25 +1,22 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.81,
+  "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
-    "PD-4-5-P-CS",
-    "P-A-1-2",
-    "P-A-2-1",
-    "P-A-B-C",
-    "P-B-3-A-C",
-    "PD-1-2-3-P"
+    "P-B-3-A-C"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Center P-B-3or2-A-C"
+  ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
-  "robotMass": 54.4311,
+  "robotMass": 57.0,
   "robotMOI": 6.883,
-  "robotWheelbase": 0.5588,
-  "robotTrackwidth": 0.559,
-  "driveWheelRadius": 0.0508,
+  "robotWheelbase": 0.546,
+  "robotTrackwidth": 0.546,
+  "driveWheelRadius": 0.046,
   "driveGearing": 5.9,
   "maxDriveSpeed": 5.45,
   "driveMotorType": "vortex",

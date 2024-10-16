@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.SmartController;
-import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.beambreak.BeamBreak;
 import frc.robot.subsystems.magazine.Magazine;
@@ -87,7 +86,6 @@ public class SmartShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     SmartController.getInstance().disableSmartControl();
-    SmartController.getInstance().setDriveMode(DriveModeType.SAFE);
     magazine.stop();
   }
 

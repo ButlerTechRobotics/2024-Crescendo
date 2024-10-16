@@ -11,11 +11,10 @@ import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -34,7 +33,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -42,7 +40,6 @@ import frc.robot.SmartController;
 import frc.robot.util.VisionHelpers.TimestampedVisionUpdate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -96,30 +93,47 @@ public class Drive extends SubsystemBase {
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
       ModuleIO brModuleIO) {
+    System.out.println("[Init] Creating Drive");
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
     modules[2] = new Module(blModuleIO, 2);
     modules[3] = new Module(brModuleIO, 3);
 
-    // Configure AutoBuilder for PathPlanner
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::setAutoStartPose,
-        () -> kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            new PIDConstants(
-                PPtranslationConstants.kP, PPtranslationConstants.kI, PPtranslationConstants.kD),
-            new PIDConstants(
-                PProtationConstants.kP, PProtationConstants.kI, PProtationConstants.kD),
-            drivetrainConfig.maxLinearVelocity(),
-            drivetrainConfig.driveBaseRadius(),
-            new ReplanningConfig()),
-        () ->
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
-        this);
+    try {
+      RobotConfig config = RobotConfig.fromGUISettings();
+
+      // Configure AutoBuilder
+      AutoBuilder.configure(
+          this::getPose,
+          this::setAutoStartPose,
+          () -> kinematics.toChassisSpeeds(getModuleStates()),
+          this::runVelocity,
+          new PPHolonomicDriveController(
+              new PIDConstants(
+                  PPtranslationConstants.kP, PPtranslationConstants.kI, PPtranslationConstants.kD),
+              new PIDConstants(
+                  PProtationConstants.kP, PProtationConstants.kI, PProtationConstants.kD)),
+          config,
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this);
+
+    } catch (Exception e) {
+      DriverStation.reportError(
+          "Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    }
+
     PathPlannerLogging.setLogActivePathCallback(
         activePath ->
             Logger.recordOutput(
@@ -127,7 +141,7 @@ public class Drive extends SubsystemBase {
     PathPlannerLogging.setLogTargetPoseCallback(
         targetPose -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
 
-    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+    PPHolonomicDriveController.overrideRotationFeedback(this::getOverrideRotationFeedback);
 
     // Configure SysId
     sysId =
@@ -339,7 +353,7 @@ public class Drive extends SubsystemBase {
   /**
    * Adds a vision measurement to the pose estimator.
    *
-   * @param visionPose The pose of the robot as measured by the vision camera.
+   * @param visionPose The pose of the bot as measured by the vision camera.
    * @param timestamp The timestamp of the vision measurement in seconds.
    */
   public void addVisionMeasurement(
@@ -368,18 +382,17 @@ public class Drive extends SubsystemBase {
     return thetaController;
   }
 
-  public Optional<Rotation2d> getRotationTargetOverride() {
+  public double getOverrideRotationFeedback() {
     // Some condition that should decide if we want to override rotation
     if (DriverStation.isAutonomous()
         && SmartController.getInstance().isSmartControlEnabled()
         && SmartController.getInstance().getDriveModeType()
             == SmartController.DriveModeType.SPEAKER) {
-      // Return an optional containing the rotation override (this should be a field relative
-      // rotation)
-      return Optional.of(SmartController.getInstance().getTargetAimingParameters().robotAngle());
+      // Return the rotation override (this should be a field relative rotation)
+      return SmartController.getInstance().getTargetAimingParameters().robotAngle().getDegrees();
     } else {
-      // return an empty optional when we don't want to override the path's rotation
-      return Optional.empty();
+      // return a default value when we don't want to override the path's rotation
+      return 0.0; // or any default value
     }
   }
 

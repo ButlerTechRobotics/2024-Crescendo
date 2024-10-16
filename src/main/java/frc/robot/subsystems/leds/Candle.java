@@ -28,6 +28,7 @@ public class Candle extends SubsystemBase {
   AprilTagVision aprilTags;
 
   boolean hasGamePiece = false;
+  boolean blueAfterGamepiece = true;
   boolean safeMode = false;
   boolean speakerMode = false;
   int stripLength = 75;
@@ -77,7 +78,7 @@ public class Candle extends SubsystemBase {
     if (isSafeMode) {
       candle.animate(
           new TwinkleAnimation(
-              100, 100, 100, 0, 0.5, stripLength, TwinklePercent.Percent64, startOffset));
+              255, 50, 0, 0, 0.5, stripLength, TwinklePercent.Percent64, startOffset));
 
       if (hasGamePiece) {
         candle.animate(new StrobeAnimation(255, 50, 0, 0, 1, stripLength, startOffset));

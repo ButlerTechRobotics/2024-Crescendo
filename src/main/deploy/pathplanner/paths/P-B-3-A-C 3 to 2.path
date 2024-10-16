@@ -1,39 +1,41 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "waypoints": [
     {
       "anchor": {
-        "x": 6.29,
-        "y": 1.89
+        "x": 8.29947111851519,
+        "y": 4.099779112962734
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.419351867231634,
-        "y": 1.7054144401450697
+        "x": 8.382659813114254,
+        "y": 4.3503614109557915
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "3"
     },
     {
       "anchor": {
-        "x": 4.443146822236706,
-        "y": 2.295323962973175
+        "x": 8.29947111851519,
+        "y": 5.774748251750359
       },
       "prevControl": {
-        "x": 4.930952434893514,
-        "y": 2.185571130387785
+        "x": 8.727947948492673,
+        "y": 5.307311660304897
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Sourceside Far Shot"
+      "linkedName": "2"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Preroll",
-      "waypointRelativePos": 0,
+      "name": "",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +43,7 @@
             {
               "type": "named",
               "data": {
-                "name": "P45 Preroll"
+                "name": "Intake"
               }
             }
           ]
@@ -53,17 +55,19 @@
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -32.27999999999997
+    "velocity": 2.0,
+    "rotation": 126.193
   },
   "reversed": false,
-  "folder": "PD-4-5-P-CS",
+  "folder": "P-B-3-A-C",
   "idealStartingState": {
-    "rotation": -32.27999999999997,
-    "velocity": 3.0
+    "velocity": 1.0,
+    "rotation": 37.238
   },
   "useDefaultConstraints": true
 }
