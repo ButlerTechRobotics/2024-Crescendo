@@ -75,23 +75,23 @@ public class SmartController {
 
     // // Units: Degress
     armAngleMap.put(1.0, 0.0 + 128);
-    armAngleMap.put(1.5, 7.88 + 1.25 + 128);
-    armAngleMap.put(2.0, 12.02 + 2 + 128);
-    armAngleMap.put(2.25, 15.0 + 1.25 + 128);
-    armAngleMap.put(2.5, 19.7 + 1.25 + 128); // /20.0
-    armAngleMap.put(3.0, 23.1 + 1.25 + 128);
-    armAngleMap.put(3.5, 26.60 + 2 + 128); // 26.9
-    armAngleMap.put(3.75, 27.18 + 1.25 + 128); // 27.5
-    armAngleMap.put(4.0, 27.8 + 2 + 128); // 28.02
-    armAngleMap.put(4.5, 30.20 + 2 + 128); // 30.75
-    armAngleMap.put(5.0, 31.10 + 2 + 128); // 31.5
-    armAngleMap.put(5.5, 32.75 + 2 + 128);
-    armAngleMap.put(6.0, 33.50 + 2 + 128);
-    armAngleMap.put(6.5, 35.0 + 2 + 128);
-    armAngleMap.put(7.0, 35.5 + 2 + 128);
-    armAngleMap.put(8.0, 36.75 + 2 + 128);
-    armAngleMap.put(9.0, 38.75 + 2 + 128);
-    armAngleMap.put(9.5, 39.75 + 2 + 128);
+    armAngleMap.put(1.5, 7.88 + 128);
+    armAngleMap.put(2.0, 12.02 + 128);
+    armAngleMap.put(2.25, 15.0 + 128);
+    armAngleMap.put(2.5, 19.7 + 128); // /20.0
+    armAngleMap.put(3.0, 23.1 + 128);
+    armAngleMap.put(3.5, 26.60 + 128); // 26.9
+    armAngleMap.put(3.75, 27.18 + 128); // 27.5
+    armAngleMap.put(4.0, 27.8 + 128); // 28.02
+    armAngleMap.put(4.5, 30.20 + 128); // 30.75
+    armAngleMap.put(5.0, 31.10 + 128); // 31.5
+    armAngleMap.put(5.5, 32.75 + 128);
+    armAngleMap.put(6.0, 33.50 + 128);
+    armAngleMap.put(6.5, 35.0 + 128);
+    armAngleMap.put(7.0, 35.5 + 128);
+    armAngleMap.put(8.0, 36.75 + 128);
+    armAngleMap.put(9.0, 38.75 + 128);
+    armAngleMap.put(9.5, 39.75 + 128);
 
     flightTimeMap.put(5.0, 0.35);
     flightTimeMap.put(4.0, 0.31);

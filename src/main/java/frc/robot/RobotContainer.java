@@ -172,7 +172,7 @@ public class RobotContainer {
     // ================================================
     // Register the Named Command Intake
     // ================================================
-    NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
+    NamedCommands.registerCommand("Intake", new ManualIntake(intake, magazine, beamBreak));
 
     // ================================================
     // Register the Named Command Shoot

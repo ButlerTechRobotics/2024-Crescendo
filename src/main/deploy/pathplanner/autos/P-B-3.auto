@@ -1,26 +1,19 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "S2-B"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "PreRollShootFast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-B"
           }
         },
         {
