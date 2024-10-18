@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootFast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-B"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-B-3-A-C B to 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-B-3-A-C 3 to B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-B-3-A-C B to A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-B-3-A-C A to C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Center P-B-3-A-C",
+  "choreoAuto": false
+}

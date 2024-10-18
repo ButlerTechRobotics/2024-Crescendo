@@ -3,10 +3,11 @@
   "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
+    "S2-B-A-C",
     "P-B-3-A-C"
   ],
   "autoFolders": [
-    "Center P-B-3or2-A-C"
+    "Center P-B-3-A-C"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,

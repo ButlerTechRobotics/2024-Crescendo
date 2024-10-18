@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.29947111851519,
-        "y": 4.099779112962734
+        "x": 8.480751320477001,
+        "y": 4.083598731300027
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.46502039386048,
-        "y": 4.6548560950028195
+        "x": 8.232119166396838,
+        "y": 4.109714855772431
       },
       "isLocked": false,
       "linkedName": "3"
     },
     {
       "anchor": {
-        "x": 7.043,
-        "y": 4.781
+        "x": 5.3877515109715866,
+        "y": 4.421139470985942
       },
       "prevControl": {
-        "x": 7.978110760491984,
-        "y": 4.947001875023917
+        "x": 5.862800485274182,
+        "y": 4.230428290525229
       },
       "nextControl": {
-        "x": 6.796848491789046,
-        "y": 4.737302917654925
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.533824400987005,
-        "y": 4.58668874632636
-      },
-      "prevControl": {
-        "x": 5.781768867645511,
-        "y": 4.554695911918811
-      },
-      "nextControl": {
-        "x": 4.436509330909816,
-        "y": 4.728277787626642
+        "x": 4.244389611967943,
+        "y": 4.880148771601531
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +36,8 @@
         "y": 5.5410316277334815
       },
       "prevControl": {
-        "x": 3.458353361455332,
-        "y": 5.389637041715489
+        "x": 3.9913350633433016,
+        "y": 5.2820701098907685
       },
       "nextControl": null,
       "isLocked": false,
@@ -69,15 +53,15 @@
         "y": 5.5
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 2.2,
-      "maxWaypointRelativePos": 2.95,
+      "minWaypointRelativePos": 1.2000000000000002,
+      "maxWaypointRelativePos": 1.9500000000000002,
       "name": "Point Towards Zone"
     }
   ],
   "eventMarkers": [
     {
       "name": "PB3AC Preroll",
-      "waypointRelativePos": 1.3,
+      "waypointRelativePos": 1.244739756367637,
       "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
@@ -87,24 +71,6 @@
               "type": "named",
               "data": {
                 "name": "PB3AC Preroll"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "PreRollShootFast",
-      "waypointRelativePos": 2.5,
-      "endWaypointRelativePos": 3.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PreRollShootFast"
               }
             }
           ]
@@ -127,8 +93,8 @@
   "reversed": false,
   "folder": "P-B-3-A-C",
   "idealStartingState": {
-    "velocity": 0.5,
-    "rotation": 37.238
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
