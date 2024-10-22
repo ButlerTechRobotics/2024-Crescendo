@@ -32,6 +32,7 @@ public class FeedForwardCharacterization extends Command {
     addRequirements(subsystem);
     this.voltageConsumer = voltageConsumer;
     this.velocitySupplier = velocitySupplier;
+    voltageConsumer.accept(Double.valueOf(0.0));
   }
 
   // Called when the command is initially scheduled.
