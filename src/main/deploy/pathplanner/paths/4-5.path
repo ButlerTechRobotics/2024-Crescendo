@@ -8,40 +8,29 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.441935154075363,
-        "y": 2.2417655230144082
+        "x": 8.343347388777207,
+        "y": 2.232220920388828
       },
       "isLocked": false,
       "linkedName": "4"
     },
     {
       "anchor": {
-        "x": 5.218082231036258,
-        "y": 1.7786808906951153
+        "x": 8.206958288175176,
+        "y": 0.7595790280548544
       },
       "prevControl": {
-        "x": 6.410521968889634,
-        "y": 2.048841400173618
+        "x": 8.203459884866893,
+        "y": 1.0095545492050115
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Far"
+      "linkedName": "5"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [
-    {
-      "fieldPosition": {
-        "x": 0.4,
-        "y": 5.5
-      },
-      "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.25,
-      "maxWaypointRelativePos": 1.0,
-      "name": "Point Towards Zone"
-    }
-  ],
+  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.87805,
@@ -53,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
