@@ -1,0 +1,77 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.153398228504642,
+        "y": 5.78
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.884317736255866,
+        "y": 5.912409650916536
+      },
+      "isLocked": false,
+      "linkedName": "2"
+    },
+    {
+      "anchor": {
+        "x": 6.238981913861264,
+        "y": 6.156972313944628
+      },
+      "prevControl": {
+        "x": 7.197876673559613,
+        "y": 5.800805820337775
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "AS Far"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.5714285714285586,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "AS Far Preroll",
+      "waypointRelativePos": 0.2547065337762899,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "AS Far Preroll"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.87805,
+    "maxAcceleration": 4.87805,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 9.336
+  },
+  "reversed": false,
+  "folder": "P-1-2-3",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -10.525
+  },
+  "useDefaultConstraints": true
+}

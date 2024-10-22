@@ -8,40 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.904766074424479,
-        "y": 4.120239594770626
+        "x": 7.663189948088082,
+        "y": 4.651934637202608
       },
       "isLocked": false,
       "linkedName": "3"
     },
     {
       "anchor": {
-        "x": 5.3877515109715866,
-        "y": 4.421139470985942
+        "x": 5.02863692906873,
+        "y": 6.56743713487427
       },
       "prevControl": {
-        "x": 5.862800485274182,
-        "y": 4.230428290525229
-      },
-      "nextControl": {
-        "x": 4.244389611967943,
-        "y": 4.880148771601531
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.976312824420521,
-        "y": 5.5410316277334815
-      },
-      "prevControl": {
-        "x": 3.9913350633433016,
-        "y": 5.2820701098907685
+        "x": 7.249356857688074,
+        "y": 6.525338178881486
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "AS Mid"
     }
   ],
   "rotationTargets": [],
@@ -53,27 +37,20 @@
         "y": 5.5
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 1.2000000000000002,
-      "maxWaypointRelativePos": 1.9500000000000002,
+      "minWaypointRelativePos": 0.5514950166112779,
+      "maxWaypointRelativePos": 1.0,
       "name": "Point Towards Zone"
     }
   ],
   "eventMarkers": [
     {
-      "name": "PB3AC Preroll",
-      "waypointRelativePos": 1.244739756367637,
+      "name": "AS Mid Preroll",
+      "waypointRelativePos": 0.25027685492800283,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "PB3AC Preroll"
-              }
-            }
-          ]
+          "name": "AS Mid Preroll"
         }
       }
     }
@@ -88,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 11.31
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": "P-1-2-3",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 0.0
+    "velocity": 0,
+    "rotation": -35.639
   },
   "useDefaultConstraints": true
 }

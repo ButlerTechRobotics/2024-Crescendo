@@ -3,54 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.976312824420521,
-        "y": 5.5410316277334815
+        "x": 8.206958288175176,
+        "y": 2.441739447581459
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.489403191052025,
-        "y": 6.066894031771457
+        "x": 6.460001432823379,
+        "y": 2.3470167965976962
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "4"
     },
     {
       "anchor": {
-        "x": 2.748701298114341,
-        "y": 7.011498720506339
+        "x": 5.649596529962291,
+        "y": 1.8102551076897033
       },
       "prevControl": {
-        "x": 2.4370791327585035,
-        "y": 6.690138362483131
+        "x": 5.7337944419478575,
+        "y": 2.1470467556319726
+      },
+      "nextControl": {
+        "x": 5.588962623703208,
+        "y": 1.5677194826533705
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.996912916902756,
+        "y": 1.147196550803357
+      },
+      "prevControl": {
+        "x": 5.691695485955075,
+        "y": 1.3892655477618654
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": "SS Preload Drop"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.35,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.87805,
     "maxAcceleration": 4.87805,
@@ -61,10 +58,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 28.301
+    "rotation": -36.656
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": "Source",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

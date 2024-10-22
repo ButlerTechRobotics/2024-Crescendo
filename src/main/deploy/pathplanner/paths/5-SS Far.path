@@ -3,54 +3,46 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2879723980088535,
-        "y": 5.5410316277334815
+        "x": 8.206958288175176,
+        "y": 0.7595790280548544
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5379723980088535,
-        "y": 5.5410316277334815
+        "x": 6.996763121731372,
+        "y": 1.052473899819594
       },
       "isLocked": false,
-      "linkedName": "S2"
+      "linkedName": "5"
     },
     {
       "anchor": {
-        "x": 2.976312824420521,
-        "y": 5.5410316277334815
+        "x": 5.218082231036258,
+        "y": 1.7786808906951153
       },
       "prevControl": {
-        "x": 2.726312824420521,
-        "y": 5.5410316277334815
+        "x": 5.923239743915386,
+        "y": 1.4313645037546496
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "SS Far"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
-  "eventMarkers": [
+  "pointTowardsZones": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.35215946843854096,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
     }
   ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.87805,
     "maxAcceleration": 4.87805,
@@ -61,7 +53,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -36.656
   },
   "reversed": false,
   "folder": null,

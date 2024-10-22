@@ -17,27 +17,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PreRollShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C B to 3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P-B-3-A-C 3 to B"
+            "pathName": "B-S2"
           }
         },
         {
@@ -49,31 +31,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C B to A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PreRollShoot"
+            "pathName": "S2-A"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C A to C"
+            "pathName": "A-S2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "PreRollShootInstant"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C-S2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Center P-B-3-A-C",
+  "folder": null,
   "choreoAuto": false
 }

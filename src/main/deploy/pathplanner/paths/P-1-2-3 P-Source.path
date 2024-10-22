@@ -3,54 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.976312824420521,
-        "y": 5.5410316277334815
+        "x": 5.839041831929817,
+        "y": 7.209446213764222
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.489403191052025,
-        "y": 6.066894031771457
+        "x": 6.341172257051934,
+        "y": 6.5904421888901625
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "AS Preload Drop"
     },
     {
       "anchor": {
-        "x": 2.748701298114341,
-        "y": 7.011498720506339
+        "x": 10.19628377718294,
+        "y": 1.747106673700526
       },
       "prevControl": {
-        "x": 2.4370791327585035,
-        "y": 6.690138362483131
+        "x": 9.878540873760105,
+        "y": 2.13915887706446
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.35,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.87805,
     "maxAcceleration": 4.87805,
@@ -61,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 28.301
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": "P-1-2-3",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

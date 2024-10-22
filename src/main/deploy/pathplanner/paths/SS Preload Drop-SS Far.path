@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.996912916902756,
+        "y": 1.147196550803357
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.491195671979852,
+        "y": 1.5744180166395343
+      },
+      "isLocked": false,
+      "linkedName": "SS Preload Drop"
+    },
+    {
+      "anchor": {
+        "x": 5.218082231036258,
+        "y": 1.7786808906951153
+      },
+      "prevControl": {
+        "x": 5.592885762726926,
+        "y": 1.479206058953466
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SS Far"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.87805,
+    "maxAcceleration": 4.87805,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -36.656
+  },
+  "reversed": false,
+  "folder": "Source",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -36.656
+  },
+  "useDefaultConstraints": true
+}
