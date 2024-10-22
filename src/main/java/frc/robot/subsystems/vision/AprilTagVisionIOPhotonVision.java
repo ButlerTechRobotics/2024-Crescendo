@@ -7,13 +7,17 @@
 
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.util.FieldConstants;
 import frc.robot.util.LimelightHelpers.PoseEstimate;
+import frc.robot.util.LimelightHelpers.RawFiducial;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -81,7 +85,11 @@ public class AprilTagVisionIOPhotonVision implements AprilTagVisionIO {
                 .getDistance(poseEstimation.getTranslation().toTranslation2d());
       }
       averageTagDistance /= tagIDs.length;
-      poseEstimates.add(new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagIDs));
+    RawFiducial[] rawFiducials =
+        Arrays.stream(tagIDs)
+            .mapToObj(id -> new RawFiducial((int) id, 0, 0, 0, 0, 0, 0))
+            .toArray(RawFiducial[]::new);
+      poseEstimates.add(new PoseEstimate(poseEstimation.toPose2d(), timestamp, 0, tagIDs.length, 0, averageTagDistance, 0, rawFiducials));
       inputs.poseEstimates = poseEstimates;
     }
   }
