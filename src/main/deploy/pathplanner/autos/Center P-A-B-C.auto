@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootFast"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-A"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A-S2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-B"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B-S2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S2-C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C-S2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

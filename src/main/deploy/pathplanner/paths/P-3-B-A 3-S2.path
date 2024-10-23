@@ -1,0 +1,77 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.153398228504642,
+        "y": 4.094123470298222
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.638138782017133,
+        "y": 4.307414852736036
+      },
+      "isLocked": false,
+      "linkedName": "3"
+    },
+    {
+      "anchor": {
+        "x": 2.902639651433149,
+        "y": 4.841379939170135
+      },
+      "prevControl": {
+        "x": 3.498240090801083,
+        "y": 4.709024285977262
+      },
+      "nextControl": {
+        "x": 2.2395810945468044,
+        "y": 4.988726285144878
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.2879723980088535,
+        "y": 5.5410316277334815
+      },
+      "prevControl": {
+        "x": 1.6922946666406153,
+        "y": 5.157122109116014
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ClosePreroll",
+      "waypointRelativePos": 1.032115171650052,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.87805,
+    "maxAcceleration": 4.87805,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "P-3-B-A",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

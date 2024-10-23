@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "P-1-2-3",
-    "Source",
-    "P-B-3-A-C"
+    "P-3-B-A",
+    "P-B-3-A-C",
+    "Source"
   ],
   "autoFolders": [
     "Amp P-1-2-3",
