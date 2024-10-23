@@ -5,39 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "PreRollShootFast"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "S2-B"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "P-1-2-3 2-Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PreRollShoot"
+            "name": "PreRollShootInstant"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C B to 3"
+            "pathName": "P-1-2-3 Shoot-3"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Center P-B-3or2-A-C",
+  "folder": "Amp P-1-2-3",
   "choreoAuto": false
 }

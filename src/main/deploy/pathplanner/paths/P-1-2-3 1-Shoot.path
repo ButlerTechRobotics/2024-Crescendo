@@ -3,50 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9824179221312184,
-        "y": 5.6
+        "x": 8.153398228504642,
+        "y": 7.439979197870614
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4955082887627227,
-        "y": 6.125862404037975
+        "x": 7.727308939283184,
+        "y": 7.238838411525349
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "1"
     },
     {
       "anchor": {
-        "x": 2.748701298114341,
-        "y": 7.011498720506339
+        "x": 6.238981913861264,
+        "y": 6.156972313944628
       },
       "prevControl": {
-        "x": 2.4370791327585035,
-        "y": 6.690138362483131
+        "x": 6.4778659127786495,
+        "y": 6.230690934802851
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": "AS Far"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.29696287964004603,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.35,
-      "endWaypointRelativePos": 1.0,
+      "name": "AS Far Preroll",
+      "waypointRelativePos": 0.2502768549280032,
+      "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
+          "name": "AS Far Preroll"
         }
       }
     }
@@ -61,10 +65,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 28.301
+    "rotation": 9.336
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

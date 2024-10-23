@@ -6,10 +6,12 @@
     "P-B-3-A-C"
   ],
   "autoFolders": [
-    "Center P-B-3or2-A-C"
+    "Center P-B-3or2-A-C",
+    "Amp P-1-2-3",
+    "Source"
   ],
   "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxAccel": 2.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "robotMass": 57.0,

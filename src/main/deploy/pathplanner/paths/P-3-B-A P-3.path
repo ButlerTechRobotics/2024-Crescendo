@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9824179221312184,
+        "x": 1.288,
         "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.624277205849786,
-        "y": 4.426735056517836
+        "x": 1.7765201806173292,
+        "y": 5.068744135407788
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "S2"
+    },
+    {
+      "anchor": {
+        "x": 2.9973623024169127,
+        "y": 4.7992809831773515
+      },
+      "prevControl": {
+        "x": 2.747390993528501,
+        "y": 4.803068427251419
+      },
+      "nextControl": {
+        "x": 3.691995076297845,
+        "y": 4.788756244179155
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 4.094123470298222
       },
       "prevControl": {
-        "x": 7.050660272686547,
-        "y": 4.172665739619279
+        "x": 7.039673566958334,
+        "y": 4.270102658019636
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,38 +45,17 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8460686600221556,
-      "maxWaypointRelativePos": 1,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.7021040974529287,
+      "waypointRelativePos": 1.7452934662237174,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
+          "name": "Intake"
         }
       }
     }
@@ -74,11 +69,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

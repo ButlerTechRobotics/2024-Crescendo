@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "P-1-2-3 P-Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Amp P-1-2-3",
+  "choreoAuto": false
+}

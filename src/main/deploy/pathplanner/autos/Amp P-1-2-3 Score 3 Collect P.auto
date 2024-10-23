@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C 3 to B"
+            "pathName": "P-1-2-3 3-Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P-B-3-A-C B to A"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P-B-3-A-C A to C"
+            "pathName": "P-1-2-3 Shoot-P"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Center P-B-3or2-A-C",
+  "folder": "Amp P-1-2-3",
   "choreoAuto": false
 }

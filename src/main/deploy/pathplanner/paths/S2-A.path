@@ -3,53 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9824179221312184,
+        "x": 1.288,
         "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.624277205849786,
-        "y": 4.426735056517836
+        "x": 1.4443544259702503,
+        "y": 5.795072533893199
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 8.153398228504642,
-        "y": 4.094123470298222
+        "x": 2.748701298114341,
+        "y": 7.011498720506339
       },
       "prevControl": {
-        "x": 7.050660272686547,
-        "y": 4.172665739619279
+        "x": 2.5813907328742927,
+        "y": 6.825737651498176
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "3"
+      "linkedName": "A"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8460686600221556,
-      "maxWaypointRelativePos": 1,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.7021040974529287,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 0.25,
+      "endWaypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -74,11 +60,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 0.0
+    "velocity": 0,
+    "rotation": 31.57
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

@@ -33,19 +33,44 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.SmartController;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.VisionHelpers.TimestampedVisionUpdate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
+  private static final LoggedTunableNumber coastWaitTime =
+      new LoggedTunableNumber("Drive/CoastWaitTimeSeconds", 0.5);
+  private static final LoggedTunableNumber coastMetersPerSecThreshold =
+      new LoggedTunableNumber("Drive/CoastMetersPerSecThreshold", 0.00);
+
+  public enum CoastRequest {
+    AUTOMATIC,
+    ALWAYS_BRAKE,
+    ALWAYS_COAST
+  }
+
+  private final Timer lastMovementTimer = new Timer();
+
+  @AutoLogOutput(key = "Drive/BrakeModeEnabled")
+  private boolean brakeModeEnabled = true;
+
+  @Setter
+  @AutoLogOutput(key = "Drive/CoastRequest")
+  private CoastRequest coastRequest = CoastRequest.AUTOMATIC;
+
+  private boolean lastEnabled = false;
+
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -246,6 +271,35 @@ public class Drive extends SubsystemBase {
       optimizedSetpointStates[i] = modules[i].runSetpoint(setpointStates[i]);
     }
 
+    // Update brake mode
+    // Reset movement timer if moved
+    if (Arrays.stream(modules)
+        .anyMatch(
+            module ->
+                Math.abs(module.getVelocityMetersPerSec()) > coastMetersPerSecThreshold.get())) {
+      lastMovementTimer.reset();
+    }
+    if (DriverStation.isEnabled() && !lastEnabled) {
+      coastRequest = CoastRequest.AUTOMATIC;
+    }
+
+    lastEnabled = DriverStation.isEnabled();
+    switch (coastRequest) {
+      case AUTOMATIC -> {
+        if (DriverStation.isEnabled()) {
+          setBrakeMode(true);
+        } else if (lastMovementTimer.hasElapsed(coastWaitTime.get())) {
+          setBrakeMode(false);
+        }
+      }
+      case ALWAYS_BRAKE -> {
+        setBrakeMode(true);
+      }
+      case ALWAYS_COAST -> {
+        setBrakeMode(false);
+      }
+    }
+
     // Log setpoint states
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
     Logger.recordOutput("SwerveStates/SetpointsOptimized", optimizedSetpointStates);
@@ -254,6 +308,14 @@ public class Drive extends SubsystemBase {
   /** Stops the drive. */
   public void stop() {
     runVelocity(new ChassisSpeeds());
+  }
+
+  /** Set brake mode to {@code enabled} doesn't change brake mode if already set. */
+  private void setBrakeMode(boolean enabled) {
+    if (brakeModeEnabled != enabled) {
+      Arrays.stream(modules).forEach(module -> module.setBrakeMode(enabled));
+    }
+    brakeModeEnabled = enabled;
   }
 
   /**

@@ -333,10 +333,7 @@ public class RobotContainer {
             .andThen());
 
     NamedCommands.registerCommand(
-        "MiniBlurp Preroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2000)
-            .andThen(Commands.waitSeconds(0.5))
-            .andThen());
+        "MiniBlurp", new MiniBlurp(arm, shooter, magazine, beamBreak, 0.5));
 
     // AUTON PATHS ========================
 
@@ -354,16 +351,58 @@ public class RobotContainer {
             .andThen(new WheelRadiusCharacterization(drive)));
 
     // ================================================
-    // 5 Note Center P-B-3or2-A-C
+    // 4 Note Amp P-1-2-3
     // ================================================
-    Command fiveNoteCenterPB3or2AC =
+    Command fourNoteAmpP123 =
         Commands.sequence(
-            new PathPlannerAuto("P-B-3"),
+            new PathPlannerAuto("Amp P-1-2-3 Drop P Collect 1"), // Drop P, collect 1
             Commands.either(
-                new PathPlannerAuto("3-A-C"), // Collect 3 and score
-                new PathPlannerAuto("2-A-C"), // Missed 3 collect 2 and score
+                new PathPlannerAuto("Amp P-1-2-3 Score 1 Collect 2"), // Score 1,
+                // collect 2
+                new PathPlannerAuto("Amp P-1-2-3 Missed 1 Collect 2"), // Missed 1,
+                // collect 2
+                beamBreak::hasNoteForAuto),
+            Commands.either(
+                new PathPlannerAuto("Amp P-1-2-3 Score 2 Collect 3"), // Score 2,
+                // collect 3
+                new PathPlannerAuto("Amp P-1-2-3 Missed 2 Collect 3"), // Missed 2,
+                // collect 3
+                beamBreak::hasNoteForAuto),
+            Commands.either(
+                new PathPlannerAuto("Amp P-1-2-3 Score 3 Collect P"), // Score 3,
+                // collect P
+                new PathPlannerAuto("Amp P-1-2-3 Missed 3 Collect P"), // Missed 3,
+                // collect P
+                beamBreak::hasNoteForAuto),
+            Commands.either(
+                new PathPlannerAuto("Amp P-1-2-3 Score P"), // Score P
+                new PathPlannerAuto("Amp P-1-2-3 Missed P Sprint Source"),
                 beamBreak::hasNoteForAuto));
-    autoChooser.addOption("5 Note Center P-B-3or2-A-C", fiveNoteCenterPB3or2AC);
+    autoChooser.addOption("4 Note Amp P-1-2-3", fourNoteAmpP123);
+
+    // ================================================
+    // 3 Note Source P-5-4
+    // ================================================
+    Command threeNoteSourceP54 =
+        Commands.sequence(
+            new PathPlannerAuto("Source Drop P Collect 5"), // Drop P, collect 1
+            Commands.either(
+                new PathPlannerAuto("Source Score 5 Collect 4"), // Score 1,
+                // collect 2
+                new PathPlannerAuto("Source Missed 5 Collect 4"), // Missed 1,
+                // collect 2
+                beamBreak::hasNoteForAuto),
+            Commands.either(
+                new PathPlannerAuto("Source Score 4 Collect P"), // Score 2,
+                // collect 3
+                new PathPlannerAuto("Source Missed 4 Collect P"), // Missed 2,
+                // collect 3
+                beamBreak::hasNoteForAuto),
+            Commands.either(
+                new PathPlannerAuto("Amp P-1-2-3 Score P"), // Score P
+                new PathPlannerAuto("Amp P-1-2-3 Missed P Sprint Source"),
+                beamBreak::hasNoteForAuto));
+    autoChooser.addOption("3 Note Source P-5-4", threeNoteSourceP54);
 
     // Run SmartController updates in autonomous
     new Trigger(DriverStation::isAutonomousEnabled)

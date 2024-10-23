@@ -3,54 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9824179221312184,
-        "y": 5.6
+        "x": 5.996912916902756,
+        "y": 1.147196550803357
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4955082887627227,
-        "y": 6.125862404037975
+        "x": 6.957434249518531,
+        "y": 1.0971256268688094
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "SS Preload Drop"
     },
     {
       "anchor": {
-        "x": 2.748701298114341,
-        "y": 7.011498720506339
+        "x": 10.208156881319693,
+        "y": 0.9056519180654026
       },
       "prevControl": {
-        "x": 2.4370791327585035,
-        "y": 6.690138362483131
+        "x": 9.24709194077524,
+        "y": 0.9489050458386891
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.35,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.5,
@@ -61,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 28.301
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "P-B-3-A-C",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

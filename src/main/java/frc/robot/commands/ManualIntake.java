@@ -9,8 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.SmartController;
-import frc.robot.SmartController.DriveModeType;
 import frc.robot.subsystems.beambreak.BeamBreak;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.magazine.Magazine;
@@ -28,7 +26,7 @@ public class ManualIntake extends Command {
     this.magazine = magazine;
     this.beamBreak = beamBreak;
     this.timer = new Timer();
-    addRequirements(intake, magazine);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -37,25 +35,17 @@ public class ManualIntake extends Command {
     timer.restart();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (SmartController.getInstance().getDriveModeType() == DriveModeType.SAFE
-        || beamBreak.isShooterLoaded()
-        || beamBreak.hasNoGamePiece()) {
-      magazine.stop();
+    if (beamBreak.isShooterLoaded() || beamBreak.hasGamePiece()) {
       intake.stop();
+      magazine.stop();
       return;
     }
 
-    if (beamBreak.hasGamePiece()) {
-      magazine.slowBackward();
-      intake.stop();
-    } else {
-      if (beamBreak.hasNoGamePiece()) {
-        magazine.intake();
-        intake.intake();
-      }
+    if (beamBreak.hasNoGamePiece()) {
+      intake.intake();
+      magazine.intake();
     }
   }
 
