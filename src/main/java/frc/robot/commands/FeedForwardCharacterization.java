@@ -32,6 +32,7 @@ public class FeedForwardCharacterization extends Command {
     addRequirements(subsystem);
     this.voltageConsumer = voltageConsumer;
     this.velocitySupplier = velocitySupplier;
+    voltageConsumer.accept(Double.valueOf(0.0));
   }
 
   // Called when the command is initially scheduled.
@@ -46,10 +47,10 @@ public class FeedForwardCharacterization extends Command {
   @Override
   public void execute() {
     if (timer.get() < START_DELAY_SECS) {
-      voltageConsumer.accept(0.0);
+      voltageConsumer.accept(Double.valueOf(0.0));
     } else {
       double voltage = (timer.get() - START_DELAY_SECS) * RAMP_VOLTS_PER_SEC;
-      voltageConsumer.accept(voltage);
+      voltageConsumer.accept(Double.valueOf(voltage));
       data.add(velocitySupplier.get(), voltage);
     }
   }
