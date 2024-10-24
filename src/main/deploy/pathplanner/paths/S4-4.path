@@ -52,13 +52,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "S4 Fade Shot",
+      "name": "SS Far Preroll",
       "waypointRelativePos": 0.1,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "S4 Fade Shot"
+          "name": "SS Far Preroll"
         }
       }
     }

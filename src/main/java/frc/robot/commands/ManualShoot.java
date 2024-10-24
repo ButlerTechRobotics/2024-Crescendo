@@ -45,7 +45,7 @@ public class ManualShoot extends Command {
     this.forceShootTimeout = forceShootTimeout;
     timer = new Timer();
     flywheelTimer = new Timer();
-    addRequirements(shooter, magazine);
+    addRequirements(arm, shooter, magazine);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

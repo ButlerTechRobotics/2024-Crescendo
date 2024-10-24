@@ -479,6 +479,16 @@ public class RobotContainer {
     driverController.povDown().onTrue(new ManualClimb(climberLeft, climberRight, 0));
 
     // ================================================
+    // DRIVER CONTROLLER - DPAD LEFT
+    // TEST MANUALSHOOT
+    // ================================================
+    driverController
+        .povLeft()
+        .whileTrue(
+            new ManualShoot(
+                arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(135), 2000, 1.0));
+
+    // ================================================
     // DEMO CONTROLLER - LEFT BUMPER
     // RUN INTAKE IN
     // ================================================
