@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.748701298114341,
-        "y": 4.158208268966954
+        "x": 2.723719088463818,
+        "y": 4.23094507727477
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.573922792634359,
-        "y": 4.336960818661172
+        "x": 2.5489405829838363,
+        "y": 4.409697626968988
       },
       "isLocked": false,
       "linkedName": "C"
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "ClosePreroll",
-      "waypointRelativePos": 0.35215946843854096,
+      "waypointRelativePos": 0.6,
       "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
@@ -43,7 +43,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "ClosePreroll"
               }
             }
           ]
@@ -52,8 +52,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.87805,
-    "maxAcceleration": 4.87805,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

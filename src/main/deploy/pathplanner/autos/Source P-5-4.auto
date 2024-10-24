@@ -7,43 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P-3-B-A S2-3"
+            "pathName": "S4-5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P-3-B-A 3-S2"
+            "pathName": "5-SS Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreRollShootInstant"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "S2-B"
+            "pathName": "SS Far-4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "B-S2"
+            "pathName": "4-SS Far"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "S2-A"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A-S2"
+            "name": "PreRollShootInstant"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Source",
   "choreoAuto": false
 }

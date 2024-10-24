@@ -29,7 +29,12 @@ public class MiniBlurp extends Command {
 
   /** Creates a new Shoot. */
   public MiniBlurp(
-      Arm arm, Shooter shooter, Intake intake, Magazine magazine, BeamBreak beamBreak, double forceShootTimeout) {
+      Arm arm,
+      Shooter shooter,
+      Intake intake,
+      Magazine magazine,
+      BeamBreak beamBreak,
+      double forceShootTimeout) {
     this.arm = arm;
     this.shooter = shooter;
     this.intake = intake;

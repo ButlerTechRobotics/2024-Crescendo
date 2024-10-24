@@ -20,44 +20,37 @@
         "y": 4.841379939170135
       },
       "prevControl": {
-        "x": 3.498240090801083,
-        "y": 4.709024285977262
+        "x": 4.6389583856038,
+        "y": 4.789549529194893
       },
       "nextControl": {
-        "x": 2.2395810945468044,
-        "y": 4.988726285144878
+        "x": 2.1974821385540206,
+        "y": 4.862429417166527
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2879723980088535,
-        "y": 5.5410316277334815
+        "x": 1.4081267136893247,
+        "y": 5.546537452049264
       },
       "prevControl": {
-        "x": 1.6922946666406153,
-        "y": 5.157122109116014
+        "x": 1.8124489823210865,
+        "y": 5.162627933431796
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S2"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ClosePreroll",
-      "waypointRelativePos": 1.032115171650052,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.87805,
-    "maxAcceleration": 4.87805,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

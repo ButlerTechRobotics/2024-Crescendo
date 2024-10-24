@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4397009306839128,
-        "y": 1.5155624157402166
+        "x": 1.4145689026846626,
+        "y": 3.5154875529205394
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.534461059432202,
-        "y": 1.5970635974486669
+        "x": 1.9954473509942325,
+        "y": 2.813245034338704
       },
       "isLocked": false,
       "linkedName": "S4"
@@ -20,21 +20,52 @@
         "y": 2.441739447581459
       },
       "prevControl": {
-        "x": 7.111411613096062,
-        "y": 2.2397843134950817
+        "x": 5.460151227994763,
+        "y": 1.1787707677979455
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "4"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.16140350877193593,
+      "rotationDegrees": -55.43399999999997
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.25,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 4.878,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "S4 Fade Shot",
+      "waypointRelativePos": 0.1,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "S4 Fade Shot"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 4.87805,
-    "maxAcceleration": 4.87805,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 15.121231773594785
   },
   "reversed": false,
   "folder": "Source",

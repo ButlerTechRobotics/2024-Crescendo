@@ -60,7 +60,7 @@
   ],
   "eventMarkers": [
     {
-      "name": "PB3AC Preroll",
+      "name": "",
       "waypointRelativePos": 1.244739756367637,
       "endWaypointRelativePos": null,
       "command": {
@@ -70,7 +70,7 @@
             {
               "type": "named",
               "data": {
-                "name": "PB3AC Preroll"
+                "name": null
               }
             }
           ]
@@ -79,8 +79,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.87805,
-    "maxAcceleration": 4.87805,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

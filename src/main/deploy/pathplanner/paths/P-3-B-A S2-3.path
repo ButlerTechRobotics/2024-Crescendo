@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.206958288175176,
-        "y": 0.7595790280548544
+        "x": 1.2879723980088535,
+        "y": 5.5410316277334815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.623180656895386,
-        "y": 2.2634771607408526
+        "x": 1.7764925786261827,
+        "y": 5.00977576314127
       },
       "isLocked": false,
-      "linkedName": "5"
+      "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 5.649596529962291,
-        "y": 1.8102551076897033
+        "x": 2.9973623024169127,
+        "y": 4.7992809831773515
       },
       "prevControl": {
-        "x": 5.879649716814357,
-        "y": 2.107091558353055
+        "x": 2.747390993528501,
+        "y": 4.803068427251419
       },
       "nextControl": {
-        "x": 5.496451560087841,
-        "y": 1.6126529361374808
+        "x": 3.691995076297845,
+        "y": 4.788756244179155
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.996912916902756,
-        "y": 1.147196550803357
+        "x": 8.153398228504642,
+        "y": 4.094123470298222
       },
       "prevControl": {
-        "x": 5.659197384974317,
-        "y": 1.3165217044518975
+        "x": 7.039673566958334,
+        "y": 4.270102658019636
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Preload Drop"
+      "linkedName": "3"
     }
   ],
   "rotationTargets": [],
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.87805,
-    "maxAcceleration": 4.87805,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -58,10 +58,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Source",
+  "folder": "P-3-B-A",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

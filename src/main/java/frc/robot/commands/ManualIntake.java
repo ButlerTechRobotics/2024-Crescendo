@@ -38,14 +38,14 @@ public class ManualIntake extends Command {
   @Override
   public void execute() {
     if (beamBreak.isShooterLoaded() || beamBreak.hasGamePiece()) {
-      intake.stop();
       magazine.stop();
+      intake.stop();
       return;
     }
 
     if (beamBreak.hasNoGamePiece()) {
-      intake.intake();
       magazine.intake();
+      intake.intake();
     }
   }
 
@@ -56,6 +56,6 @@ public class ManualIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return beamBreak.isShooterLoaded() || (timer.hasElapsed(3) && beamBreak.hasNoGamePiece());
+    return beamBreak.isShooterLoaded() || (timer.hasElapsed(5) && beamBreak.hasNoGamePiece());
   }
 }

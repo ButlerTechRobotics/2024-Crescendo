@@ -25,7 +25,7 @@ public final class DriveConstants {
       switch (Constants.getRobot()) {
         default ->
             new DrivetrainConfig(
-                Units.inchesToMeters(1.829), // double wheelRadius
+                Units.inchesToMeters(1.8799), // double wheelRadius
                 Units.inchesToMeters(22.0), // double trackwidthX
                 Units.inchesToMeters(22.0), // double trackwidthY
                 Units.feetToMeters(16.055), // double maxLinearVelocity
@@ -51,7 +51,7 @@ public final class DriveConstants {
   public static final double odometryFrequency =
       switch (Constants.getRobot()) {
         case SIMBOT -> 50.0;
-        case COMPBOT -> 100.0;
+        case COMPBOT -> 50.0;
       };
   public static Matrix<N3, N1> stateStdDevs =
       switch (Constants.getRobot()) {
@@ -85,25 +85,25 @@ public final class DriveConstants {
                   1,
                   2,
                   9,
-                  Rotation2d.fromRotations(-0.398193).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(0.097412).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   3,
                   4,
                   10,
-                  Rotation2d.fromRotations(0.024658).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(0.020508).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   5,
                   6,
                   11,
-                  Rotation2d.fromRotations(0.284180).plus(Rotation2d.fromDegrees(180)),
+                  Rotation2d.fromRotations(-0.219238).plus(Rotation2d.fromDegrees(0)),
                   true),
               new ModuleConfig(
                   7,
                   8,
                   12,
-                  Rotation2d.fromRotations(0.067383).plus(Rotation2d.fromDegrees(0)),
+                  Rotation2d.fromRotations(-0.429932).plus(Rotation2d.fromDegrees(180)),
                   true)
             };
           // .plus(Rotation2d.fromDegrees(180))
