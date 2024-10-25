@@ -32,27 +32,28 @@ public class ManualIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("ManualIntake command initialized.");
     timer.restart();
   }
 
   @Override
   public void execute() {
-    if (beamBreak.hasGamePiece() || beamBreak.isShooterLoaded()) {
+    if (beamBreak.hasGamePiece()) {
+      System.out.println("Game piece detected. Stopping intake and magazine.");
       magazine.stop();
       intake.stop();
-      return;
-    }
-
-    if (beamBreak.hasNoGamePiece()) {
+    } else {
+      System.out.println("No game piece detected. Running intake and magazine.");
       magazine.intake();
       intake.intake();
-      return;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("ManualIntake command ended. Interrupted: " + interrupted);
+  }
 
   // Returns true when the command should end.
   @Override

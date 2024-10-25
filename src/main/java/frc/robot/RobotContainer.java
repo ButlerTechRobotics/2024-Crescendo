@@ -255,6 +255,10 @@ public class RobotContainer {
         "S4 Fade Shot",
         new ManualShoot(arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(156), 4400, 1.0));
 
+    NamedCommands.registerCommand(
+        "AS Far Shot",
+        new ManualShoot(
+            arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(162.8), 4500, 1.0));
     // AUTON PATHS ========================
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -441,18 +445,6 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.FEED))
-                .alongWith(
-                    Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
-
-    // ================================================
-    // DRIVER CONTROLLER - A
-    // SET DRIVE MODE TO AMP
-    // ================================================
-    driverController
-        .povDown()
-        .onTrue(
-            Commands.runOnce(
-                    () -> SmartController.getInstance().setDriveMode(DriveModeType.GAMEPIECE))
                 .alongWith(
                     Commands.runOnce(() -> SmartController.getInstance().enableSmartControl())));
 

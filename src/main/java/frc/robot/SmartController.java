@@ -112,8 +112,8 @@ public class SmartController {
     feederSpeedMap.put(5.5, 3000.0);
     feederSpeedMap.put(6.0, 3000.0);
     feederSpeedMap.put(6.5, 3000.0);
-    feederSpeedMap.put(7.0, 3500.0);
-    feederSpeedMap.put(8.0, 3500.0);
+    feederSpeedMap.put(7.0, 3000.0);
+    feederSpeedMap.put(8.0, 3000.0);
 
     feederAngleMap.put(10.0, 5.0 + 128);
     feederAngleMap.put(9.0, 3.0 + 128);

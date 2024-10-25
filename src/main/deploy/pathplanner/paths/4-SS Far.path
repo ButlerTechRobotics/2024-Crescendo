@@ -8,40 +8,34 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.41775268165921,
-        "y": 2.1154725386373854
+        "x": 7.217782640693487,
+        "y": 1.9786509316608378
       },
       "isLocked": false,
       "linkedName": "4"
     },
     {
       "anchor": {
-        "x": 4.316550317560896,
-        "y": 2.356642625503519
+        "x": 4.123509375223878,
+        "y": 2.4248099741751092
       },
       "prevControl": {
-        "x": 5.91271500491719,
-        "y": 1.683958239711351
+        "x": 5.881140787922602,
+        "y": 1.3997902867600607
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "SS Far"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "pointTowardsZones": [
+  "rotationTargets": [
     {
-      "fieldPosition": {
-        "x": 0.4,
-        "y": 5.5
-      },
-      "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.25,
-      "maxWaypointRelativePos": 1.0,
-      "name": "Point Towards Zone"
+      "waypointRelativePos": 0.5807017543859726,
+      "rotationDegrees": -26.454
     }
   ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "SS Far Preroll",
@@ -65,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": -26.454
   },
   "reversed": false,
   "folder": null,

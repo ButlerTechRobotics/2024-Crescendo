@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4443268239791038,
-        "y": 5.736104161626681
+        "x": 1.681769927642419,
+        "y": 5.872804360993338
       },
       "isLocked": false,
       "linkedName": "S2"
@@ -20,8 +20,8 @@
         "y": 7.0200009117966955
       },
       "prevControl": {
-        "x": 2.607946959483662,
-        "y": 6.725308219847209
+        "x": 2.450075874510723,
+        "y": 6.6516350468598375
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,8 +34,8 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.35215946843854096,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 0.4,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -61,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 31.57
+    "rotation": 37.18470645323315
   },
   "reversed": false,
   "folder": null,
