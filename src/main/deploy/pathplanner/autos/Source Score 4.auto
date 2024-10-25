@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "5-SS Preload Drop"
+            "pathName": "4-SS Far"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SS Far-Center"
           }
         }
       ]

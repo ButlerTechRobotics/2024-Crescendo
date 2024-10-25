@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.206958288175176,
-        "y": 2.441739447581459
+        "x": 8.279994733180452,
+        "y": 2.4248099741751092
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.441935154075363,
-        "y": 2.2417655230144082
+        "x": 7.41775268165921,
+        "y": 2.1154725386373854
       },
       "isLocked": false,
       "linkedName": "4"
     },
     {
       "anchor": {
-        "x": 5.218082231036258,
-        "y": 1.7786808906951153
+        "x": 4.316550317560896,
+        "y": 2.356642625503519
       },
       "prevControl": {
-        "x": 6.410521968889634,
-        "y": 2.048841400173618
+        "x": 5.91271500491719,
+        "y": 1.683958239711351
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,10 +42,22 @@
       "name": "Point Towards Zone"
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "SS Far Preroll",
+      "waypointRelativePos": 0.25,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "SS Far Preroll"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

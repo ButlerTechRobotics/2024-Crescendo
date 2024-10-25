@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4397009306839128,
-        "y": 1.5155624157402166
+        "x": 1.4243070953520323,
+        "y": 4.060826342293255
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2597301954743347,
-        "y": 1.4438689153719986
+        "x": 2.074943368490092,
+        "y": 3.62987693420312
       },
       "isLocked": false,
       "linkedName": "S4"
     },
     {
       "anchor": {
-        "x": 8.206958288175176,
-        "y": 0.7595790280548544
+        "x": 8.357900274519409,
+        "y": 0.749840835387484
       },
       "prevControl": {
-        "x": 7.130693004219106,
-        "y": 0.9013634476450509
+        "x": 7.21497905674887,
+        "y": 1.031473765116972
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,24 +29,49 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
-  "pointTowardsZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.25,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 4.878,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.25,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "MiniBlurp",
-      "waypointRelativePos": 0.25,
+      "name": "S4 Fade Shot",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "MiniBlurp"
+          "name": "S4 Fade Shot"
         }
       }
     },
     {
       "name": "Intake",
-      "waypointRelativePos": 0.7446569178852648,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 0.75,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
@@ -57,7 +82,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -68,7 +93,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Source",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

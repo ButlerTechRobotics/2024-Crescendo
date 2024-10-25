@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.996912916902756,
-        "y": 1.147196550803357
+        "x": 4.316550317560896,
+        "y": 2.356642625503519
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.491195671979852,
-        "y": 1.5744180166395343
+        "x": 5.316550317560896,
+        "y": 2.356642625503519
       },
       "isLocked": false,
-      "linkedName": "SS Preload Drop"
+      "linkedName": "SS Far"
     },
     {
       "anchor": {
-        "x": 5.218082231036258,
+        "x": 8.280781279511277,
         "y": 1.7786808906951153
       },
       "prevControl": {
-        "x": 5.592885762726926,
-        "y": 1.479206058953466
+        "x": 7.280781279511277,
+        "y": 1.7786808906951155
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Far"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

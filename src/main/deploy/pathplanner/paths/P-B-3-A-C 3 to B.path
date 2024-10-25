@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.9824179221312184,
-        "y": 5.6
+        "x": 2.976312824420521,
+        "y": 5.5410316277334815
       },
       "prevControl": {
-        "x": 3.997440161053999,
-        "y": 5.341038482157287
+        "x": 3.9913350633433016,
+        "y": 5.2820701098907685
       },
       "nextControl": null,
       "isLocked": false,
@@ -60,7 +60,7 @@
   ],
   "eventMarkers": [
     {
-      "name": "PB3AC Preroll",
+      "name": "",
       "waypointRelativePos": 1.244739756367637,
       "endWaypointRelativePos": null,
       "command": {
@@ -70,7 +70,7 @@
             {
               "type": "named",
               "data": {
-                "name": "PB3AC Preroll"
+                "name": null
               }
             }
           ]
@@ -80,7 +80,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

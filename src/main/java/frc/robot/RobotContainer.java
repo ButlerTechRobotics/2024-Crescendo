@@ -131,30 +131,13 @@ public class RobotContainer {
         break;
 
       default:
-        // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {
-                  @Override
-                  public GyroIOInputs getInputs() {
-                    // Create a new GyroIOInputs object
-                    GyroIOInputs inputs = new GyroIOInputs();
-
-                    // Set the inputs values
-                    // Replace these with actual values from your gyro
-                    inputs.connected = true;
-                    inputs.yawPosition = new Rotation2d();
-                    inputs.yawVelocityRadPerSec = 0.0;
-                    inputs.xVelocity = 0.0;
-                    inputs.yVelocity = 0.0;
-
-                    return inputs;
-                  }
-                },
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {});
+      drive =
+      new Drive(
+          new GyroIOPigeon2(),
+          new ModuleIONeo(moduleConfigs[0]),
+          new ModuleIONeo(moduleConfigs[1]),
+          new ModuleIONeo(moduleConfigs[2]),
+          new ModuleIONeo(moduleConfigs[3]));
         shooter = new Shooter(new ShooterIO() {});
 
         arm = new Arm(new ArmIO() {});
@@ -172,21 +155,7 @@ public class RobotContainer {
     // ================================================
     // Register the Named Command Intake
     // ================================================
-    // NamedCommands.registerCommand("Intake", new InstantCommand(intake::enableIntakeRequest));
     NamedCommands.registerCommand("Intake", new ManualIntake(intake, magazine, beamBreak));
-
-    // ================================================
-    // Register the Named Command Shoot
-    // ================================================
-    NamedCommands.registerCommand(
-        "Shoot",
-        new ManualShoot(shooter, magazine, beamBreak, 0.0)
-            .andThen(
-                Commands.runOnce(
-                    () -> {
-                      shooter.setSetpoint(0, 0);
-                      arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
-                    })));
 
     // ================================================
     // Register the Named Command QuickShoot
@@ -200,26 +169,6 @@ public class RobotContainer {
                     Commands.defer(() -> new ShotVisualizer(drive, arm, shooter), Set.of()))));
 
     // // ================================================
-    // // Register the Named Command EnableSmartSpeaker
-    // // ================================================
-    NamedCommands.registerCommand(
-        "EnableSmartSpeaker",
-        Commands.sequence(
-            Commands.runOnce(
-                () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
-            Commands.runOnce(SmartController.getInstance()::enableSmartControl)));
-
-    NamedCommands.registerCommand(
-        "EnableSmartControl", Commands.runOnce(SmartController.getInstance()::enableSmartControl));
-
-    // // ================================================
-    // // Register the Named Command DisableSmartControl
-    // // ================================================
-    // NamedCommands.registerCommand(
-    // "DisableSmartControl",
-    // Commands.runOnce(SmartController.getInstance()::disableSmartControl));
-
-    // // ================================================
     // // Register the Named Command SmartShoot
     // // ================================================
     NamedCommands.registerCommand(
@@ -229,22 +178,6 @@ public class RobotContainer {
                 () -> SmartController.getInstance().setDriveMode(DriveModeType.SPEAKER)),
             new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5),
             Commands.runOnce(SmartController.getInstance()::disableSmartControl)));
-
-    // =========================%=======================
-    // Register the Named Command SmartIntake
-    // ================================================
-    NamedCommands.registerCommand(
-        "SmartIntake", new SmartIntake(intake, beamBreak, magazine, candle));
-
-    // =========================%=======================
-    // Register the Named Command SmartIntake
-    // ================================================
-    NamedCommands.registerCommand(
-        "SmartControl",
-        Commands.parallel(
-            new SmartShooter(shooter),
-            new SmartArm(arm),
-            new SmartIntake(intake, beamBreak, magazine, candle)));
 
     NamedCommands.registerCommand(
         "PreRollShoot",
@@ -274,9 +207,6 @@ public class RobotContainer {
                     })));
 
     NamedCommands.registerCommand(
-        "ManualUpCloseShot", Commands.sequence(new ManualShoot(shooter, magazine, beamBreak, 1)));
-
-    NamedCommands.registerCommand(
         "PreRollShootFast",
         Commands.deadline(
                 new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 0.5),
@@ -302,8 +232,6 @@ public class RobotContainer {
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
-    NamedCommands.registerCommand("Magazine", new ManualMagazine(magazine, beamBreak));
-
     NamedCommands.registerCommand(
         "Preload", new InstantCommand(() -> beamBreak.setGamePiece(true)));
 
@@ -316,24 +244,32 @@ public class RobotContainer {
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
 
     NamedCommands.registerCommand(
+        "PodiumShot", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
+
+    NamedCommands.registerCommand(
         "PB3AC Preroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(141), 3150));
 
     NamedCommands.registerCommand(
-        "P45 Preroll",
+        "AS Mid Preroll",
         new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(162.8), 4500));
 
     NamedCommands.registerCommand(
-        "PodiumShot", new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(129), 2500));
+        "AS Far Preroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(162.8), 4500));
 
     NamedCommands.registerCommand(
-        "PB3AC Note B",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(151.5), 3700)
-            .andThen(Commands.waitSeconds(0.5))
-            .andThen());
+        "SS Far Preroll",
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(160.8), 4500));
 
     NamedCommands.registerCommand(
-        "MiniBlurp", new MiniBlurp(arm, shooter, magazine, beamBreak, 0.5));
+        "SS Far Shot",
+        new ManualShoot(
+            arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(160.8), 4500, 1.0));
+
+    NamedCommands.registerCommand(
+        "S4 Fade Shot",
+        new ManualShoot(arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(156), 4400, 1.0));
 
     // AUTON PATHS ========================
 
@@ -385,23 +321,16 @@ public class RobotContainer {
     // ================================================
     Command threeNoteSourceP54 =
         Commands.sequence(
-            new PathPlannerAuto("Source Drop P Collect 5"), // Drop P, collect 1
+            new PathPlannerAuto("Source Score P Collect 5"), // Score P, collect 5
             Commands.either(
-                new PathPlannerAuto("Source Score 5 Collect 4"), // Score 1,
-                // collect 2
-                new PathPlannerAuto("Source Missed 5 Collect 4"), // Missed 1,
-                // collect 2
+                new PathPlannerAuto("Source Score 5 Collect 4"), // Score 5,
+                // collect 4
+                new PathPlannerAuto("Source Missed 5 Collect 4"), // Missed 5,
+                // collect 4
                 beamBreak::hasNoteForAuto),
-            Commands.either(
-                new PathPlannerAuto("Source Score 4 Collect P"), // Score 2,
-                // collect 3
-                new PathPlannerAuto("Source Missed 4 Collect P"), // Missed 2,
-                // collect 3
-                beamBreak::hasNoteForAuto),
-            Commands.either(
-                new PathPlannerAuto("Amp P-1-2-3 Score P"), // Score P
-                new PathPlannerAuto("Amp P-1-2-3 Missed P Sprint Source"),
-                beamBreak::hasNoteForAuto));
+            Commands.sequence(
+                new PathPlannerAuto("Source Score 4") // Score 4, go middle
+                ));
     autoChooser.addOption("3 Note Source P-5-4", threeNoteSourceP54);
 
     // Run SmartController updates in autonomous
@@ -459,15 +388,15 @@ public class RobotContainer {
     magazine.setDefaultCommand(new SmartMagazine(magazine, intake, beamBreak, candle));
 
     // ================================================
-    // DRIVER CONTROLLER - LEFT BUMPER
-    // RUN INTAKE IN
+    // DRIVER CONTROLLER - START
+    // RESET HEADING
     // ================================================
     driverController
         .start()
         .whileTrue(
             Commands.run(
                 () ->
-                    drive.setAutoStartPose(
+                    drive.setPose(
                         new Pose2d(new Translation2d(15.312, 5.57), Rotation2d.fromDegrees(180)))));
 
     // ================================================
@@ -537,7 +466,13 @@ public class RobotContainer {
     // ================================================
     driverController
         .rightTrigger()
-        .whileTrue(new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5));
+        .whileTrue(new SmartShoot(arm, shooter, magazine, beamBreak, drive::getPose, 1.5))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  shooter.setSetpoint(0, 0);
+                  arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
+                }));
     // ================================================
     // DRIVER CONTROLLER - DPAD UP
     // MOVE CLIMBER UP
@@ -549,6 +484,16 @@ public class RobotContainer {
     // MOVE CLIMBER DOWN
     // ================================================
     driverController.povDown().onTrue(new ManualClimb(climberLeft, climberRight, 0));
+
+    // ================================================
+    // DRIVER CONTROLLER - DPAD LEFT
+    // TEST MANUALSHOOT
+    // ================================================
+    driverController
+        .povLeft()
+        .whileTrue(
+            new ManualShoot(
+                arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(135), 2000, 1.0));
 
     // ================================================
     // DEMO CONTROLLER - LEFT BUMPER
@@ -572,20 +517,11 @@ public class RobotContainer {
     // ================================================
     demoController
         .rightTrigger()
-        .whileTrue(new ManualShoot(shooter, magazine, beamBreak, 0.5))
+        .whileTrue(
+            new ManualShoot(
+                arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(145), 1500.0, 1.0))
         .onFalse(
             Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.SAFE)));
-
-    // ================================================
-    // DEMO CONTROLLER - B
-    // PREPARE SHOOT
-    // ================================================
-    demoController
-        .b()
-        .onTrue(
-            Commands.runOnce(() -> SmartController.getInstance().setDriveMode(DriveModeType.DEMO))
-                .alongWith(
-                    Commands.runOnce(() -> SmartController.getInstance().disableSmartControl())));
 
     // ================================================
     // DEMO CONTROLLER - X

@@ -3,38 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.218082231036258,
-        "y": 1.7786808906951153
+        "x": 4.316550317560896,
+        "y": 2.356642625503519
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.438561899366408,
-        "y": 1.5760805024688422
+        "x": 4.707885829989315,
+        "y": 2.1461748047312703
       },
       "isLocked": false,
       "linkedName": "SS Far"
     },
     {
       "anchor": {
-        "x": 5.996912916902756,
-        "y": 1.147196550803357
+        "x": 8.357900274519409,
+        "y": 0.749840835387484
       },
       "prevControl": {
-        "x": 5.823788557997847,
-        "y": 1.3275516348840781
+        "x": 7.465313904956529,
+        "y": 1.0631889928265563
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SS Preload Drop"
+      "linkedName": "5"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.65,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.656
+    "rotation": -2.935673446421124
   },
   "reversed": false,
   "folder": null,
