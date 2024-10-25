@@ -64,7 +64,7 @@ public class ManualShoot extends Command {
     arm.setArmTargetAngle(armAngle.getDegrees());
     shooter.setSetpoint(flywheelSpeed, flywheelSpeed);
     // Check if the shooter is ready to shoot
-    if (flywheelTimer.hasElapsed(0.25) || flywheelTimer.hasElapsed(forceShootTimeout)) {
+    if (flywheelTimer.hasElapsed(1.0)) {
       // Run the magazine to shoot the game piece
       magazine.shoot();
 
@@ -79,12 +79,14 @@ public class ManualShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     magazine.stop();
+    arm.setArmTargetAngle(127);
+    shooter.setSetpoint(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     // End the command once the game piece has been shot and is no longer detected
-    return beamBreak.hasNoGamePiece() && beamBreak.timeSinceLastGamePiece() > 1.0;
+    return beamBreak.hasNoGamePiece();
   }
 }

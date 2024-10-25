@@ -250,7 +250,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "S4 Fade Shot",
-        new ManualShoot(arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(135), 2500, 1.0));
+        new ManualShoot(arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(156), 4400, 1.0));
 
     // AUTON PATHS ========================
 

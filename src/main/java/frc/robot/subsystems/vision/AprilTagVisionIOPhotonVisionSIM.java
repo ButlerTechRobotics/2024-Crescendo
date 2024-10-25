@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.util.FieldConstants;
-import frc.robot.util.LimelightHelpers.PoseEstimate;
+import frc.robot.util.VisionHelpers.PoseEstimate;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -38,14 +38,6 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
   private double lastEstTimestamp = 0;
   private final Supplier<Pose2d> poseSupplier;
 
-  /**
-   * Constructs a new AprilTagVisionIOPhotonVisionSIM instance.
-   *
-   * @param identifier The identifier of the PhotonCamera.
-   * @param robotToCamera The transform from the robot's coordinate system to the camera's
-   *     coordinate system.
-   * @param poseSupplier The supplier of the robot's pose.
-   */
   public AprilTagVisionIOPhotonVisionSIM(
       String identifier, Transform3d robotToCamera, Supplier<Pose2d> poseSupplier) {
     camera = new PhotonCamera(identifier);
@@ -80,11 +72,6 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
     this.poseSupplier = poseSupplier;
   }
 
-  /**
-   * Updates the inputs for AprilTag vision.
-   *
-   * @param inputs The AprilTagVisionIOInputs object containing the inputs.
-   */
   @Override
   public void updateInputs(AprilTagVisionIOInputs inputs) {
     visionSim.update(poseSupplier.get());
@@ -117,17 +104,11 @@ public class AprilTagVisionIOPhotonVisionSIM implements AprilTagVisionIO {
                 .getDistance(poseEstimation.getTranslation().toTranslation2d());
       }
       averageTagDistance /= tagIDs.length;
-      PoseEstimate poseEstimate = new PoseEstimate();
-      poseEstimate.pose = poseEstimation.toPose2d();
-      poseEstimate.timestampSeconds = timestamp;
-      poseEstimate.avgTagDist = averageTagDistance;
-      poseEstimate.tagCount = tagIDs.length;
-      poseEstimates.add(poseEstimate);
+      poseEstimates.add(new PoseEstimate(poseEstimation, timestamp, averageTagDistance, tagIDs));
+      inputs.poseEstimates = poseEstimates;
     }
-    inputs.poseEstimates = poseEstimates;
   }
 
-  /** Updates the PhotonPoseEstimator and returns the estimated global pose. */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
     var visionEst = photonEstimator.update();
     double latestTimestamp = camera.getLatestResult().getTimestampSeconds();
