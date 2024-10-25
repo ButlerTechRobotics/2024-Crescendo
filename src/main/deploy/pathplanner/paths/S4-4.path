@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.206958288175176,
-        "y": 2.441739447581459
+        "x": 8.279994733180452,
+        "y": 2.4248099741751092
       },
       "prevControl": {
-        "x": 4.628172482916733,
-        "y": 0.8180081840590738
+        "x": 4.701208927922009,
+        "y": 0.801078710652724
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.2611012433392513,
-      "rotationDegrees": -42.267644217288776
+      "rotationDegrees": -42.26764421728878
     }
   ],
   "constraintZones": [
@@ -61,11 +61,22 @@
           "name": "S4 Fade Shot"
         }
       }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.9,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake"
+        }
+      }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

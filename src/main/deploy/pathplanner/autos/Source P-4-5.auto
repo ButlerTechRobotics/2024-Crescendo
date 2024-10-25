@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SS Far Shot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "SS Far-5"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "5-SS Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SS Far Shot"
           }
         }
       ]

@@ -26,7 +26,7 @@ public class ManualIntake extends Command {
     this.magazine = magazine;
     this.beamBreak = beamBreak;
     this.timer = new Timer();
-    addRequirements(intake);
+    addRequirements(intake, magazine, beamBreak);
   }
 
   // Called when the command is initially scheduled.
@@ -37,7 +37,7 @@ public class ManualIntake extends Command {
 
   @Override
   public void execute() {
-    if (beamBreak.isShooterLoaded() || beamBreak.hasGamePiece()) {
+    if (beamBreak.hasGamePiece() || beamBreak.isShooterLoaded()) {
       magazine.stop();
       intake.stop();
       return;
@@ -46,6 +46,7 @@ public class ManualIntake extends Command {
     if (beamBreak.hasNoGamePiece()) {
       magazine.intake();
       intake.intake();
+      return;
     }
   }
 

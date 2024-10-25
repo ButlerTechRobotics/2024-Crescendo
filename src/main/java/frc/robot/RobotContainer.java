@@ -216,8 +216,6 @@ public class RobotContainer {
                       arm.setArmTargetAngle(ArmConstants.home.arm().getDegrees());
                     })));
 
-    NamedCommands.registerCommand("Magazine", new ManualMagazine(magazine, beamBreak));
-
     NamedCommands.registerCommand(
         "Preload", new InstantCommand(() -> beamBreak.setGamePiece(true)));
 
@@ -246,7 +244,12 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "SS Far Preroll",
-        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(162.8), 4500));
+        new AutoPreRoll(arm, shooter, beamBreak, Rotation2d.fromDegrees(160.8), 4500));
+
+    NamedCommands.registerCommand(
+        "SS Far Shot",
+        new ManualShoot(
+            arm, shooter, magazine, beamBreak, Rotation2d.fromDegrees(160.8), 4500, 1.0));
 
     NamedCommands.registerCommand(
         "S4 Fade Shot",
